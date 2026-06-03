@@ -2,7 +2,7 @@ site_name: AI戦略実践プロジェクト ドキュメント
 site_description: AI戦略実践プロジェクトのボキャブラリーリストとスタートガイド
 site_author: AI戦略実践プロジェクト
 # 公開URL（GitHub Pages）。<user>/<repo> に合わせて自動調整されます。
-site_url: https://mkuriyama.github.io/ai-strategy-docs/
+site_url: https://ai-strategy.antecanis.com/
 
 theme:
   name: material

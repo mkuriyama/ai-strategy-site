@@ -3,7 +3,7 @@
 AI戦略実践プロジェクトの参加者向けドキュメントサイトのソースです。
 「スタートガイド」と「ボキャブラリーリスト（用語集）」を公開しています。
 
-**公開サイト** → https://mkuriyama.github.io/ai-strategy-docs/
+**公開サイト** → https://ai-strategy.antecanis.com/
 
 ## このサイトについて
 
