@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://mkuriyama.github.io/ai-strategy-docs/</loc>
+         <loc>https://ai-strategy.antecanis.com/</loc>
          <lastmod>2026-06-03</lastmod>
     </url>
     <url>
-         <loc>https://mkuriyama.github.io/ai-strategy-docs/glossary/</loc>
+         <loc>https://ai-strategy.antecanis.com/glossary/</loc>
          <lastmod>2026-06-03</lastmod>
     </url>
     <url>
-         <loc>https://mkuriyama.github.io/ai-strategy-docs/start-guide/</loc>
+         <loc>https://ai-strategy.antecanis.com/start-guide/</loc>
          <lastmod>2026-06-03</lastmod>
     </url>
 </urlset>
