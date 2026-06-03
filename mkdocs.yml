@@ -4,11 +4,6 @@ site_author: AI戦略実践プロジェクト
 # 公開URL（GitHub Pages）。<user>/<repo> に合わせて自動調整されます。
 site_url: https://mkuriyama.github.io/ai-strategy-docs/
 
-# リポジトリ情報（右上の編集リンク等で利用）
-repo_name: mkuriyama/ai-strategy-docs
-repo_url: https://github.com/mkuriyama/ai-strategy-docs
-edit_uri: edit/main/docs/
-
 theme:
   name: material
   language: ja
@@ -42,8 +37,6 @@ theme:
     - search.highlight
     - search.share
     - toc.follow
-  icon:
-    repo: fontawesome/brands/github
 
 # 日本語（CJK）対応の abbreviations ツールチップを有効化する hook
 hooks:
@@ -92,10 +85,5 @@ nav:
   - ホーム: index.md
   - スタートガイド: start-guide.md
   - ボキャブラリーリスト（用語集）: glossary.md
-
-extra:
-  social:
-    - icon: fontawesome/brands/github
-      link: https://github.com/mkuriyama/ai-strategy-docs
 
 copyright: Copyright &copy; AI戦略実践プロジェクト
