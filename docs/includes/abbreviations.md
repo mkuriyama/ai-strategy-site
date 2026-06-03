@@ -1,14 +1,3 @@
-<!--
-  用語集ツールチップ定義ファイル（auto_append）
-
-  ここに `*[用語]: 定義` 形式で記載した用語は、全ページの本文中で
-  該当語にマウスを重ねるとツールチップとして説明が表示されます。
-  （mkdocs.yml の pymdownx.snippets.auto_append で全ページへ自動付与）
-
-  日本語（CJK）対応は hooks/abbr_cjk.py が担っています。
-  用語を追加・変更したら、用語集ページ（glossary.md）の定義と一致させてください。
--->
-
 *[生成AI]: 文章・画像・音声・プログラムなど、新しいコンテンツを「生成」できるAIの総称。ChatGPTやGemini、Claudeなどが代表例。
 *[LLM]: Large Language Model（大規模言語モデル）。大量の文章データから言語のパターンを学習した巨大なAIモデルで、生成AIの中核技術。
 *[基礎モデル]: GPT、Gemini、Claudeなど、AIサービスの土台となる大規模モデル（Foundation Model）。
