@@ -103,6 +103,7 @@ nav:
       - 背景と狙い: about/index.md
       - 設計思想: about/philosophy.md
       - 主催者プロフィール: about/profile.md
+      - このプロジェクトを紹介する: about/share.md
   - セッション:
       - 進め方と持ち帰るもの: sessions/index.md
       - 月次テーマ: sessions/themes.md
@@ -110,9 +111,9 @@ nav:
       - ダイジェスト:
           - 一覧: digests/index.md
           - Vol.1 第1回：人間の認知容量の解除: digests/vol-01.md
-  - はじめての方へ:
+  - ガイド・用語集:
       - スタートガイド: start-guide.md
-      - ボキャブラリーリスト（用語集）: glossary.md
+      - 用語集: glossary.md
   - 参加する:
       - 参加費と決済: join/index.md
       - 登録方法: join/register.md
