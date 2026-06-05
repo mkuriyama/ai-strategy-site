@@ -34,5 +34,9 @@
 
 ## 規約・ポリシー
 
-プライバシーポリシー／キャンセルポリシー／利用規約／特定商取引法に基づく表記は、
-登録フォームのページに記載しています。ご不明点は support@antecanis.com までお問い合わせください。
+- [プライバシーポリシー](https://www.antecanis.com/privacy/){ target=_blank }
+- [キャンセルポリシー](https://www.antecanis.com/cancelpolicy/){ target=_blank }
+- [利用規約](https://www.antecanis.com/terms/){ target=_blank }
+- [特定商取引法に基づく表記](https://www.antecanis.com/tokushoho/){ target=_blank }
+
+ご不明点は support@antecanis.com までお問い合わせください。
