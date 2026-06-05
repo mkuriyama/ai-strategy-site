@@ -1,0 +1,89 @@
+/* Noto Serif JP for headings (corporate, editorial tone) */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;600;700&display=swap');
+
+/* ---- Corporate palette (#004455 teal + gold accent) ---- */
+[data-md-color-primary="custom"] {
+  --md-primary-fg-color:        #004455;
+  --md-primary-fg-color--light: #0a5567;
+  --md-primary-fg-color--dark:  #00333f;
+  --md-primary-bg-color:        #ffffff;
+  --md-primary-bg-color--light: rgba(255,255,255,.7);
+}
+[data-md-color-accent="custom"] {
+  --md-accent-fg-color:             #b88a3e;
+  --md-accent-fg-color--transparent:rgba(184,138,62,.1);
+}
+
+/* Light scheme: warm paper background + teal links */
+[data-md-color-scheme="default"] {
+  --md-default-bg-color: #fcfbf8;
+  --md-typeset-a-color:  #0a5567;
+}
+
+/* Dark scheme keeps a lighter teal so headings stay readable */
+[data-md-color-scheme="slate"] {
+  --md-typeset-a-color: #7fb5c2;
+}
+
+/* ---- Serif teal headings ---- */
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3 {
+  font-family: "Noto Serif JP", serif;
+  color: var(--md-primary-fg-color);
+  font-weight: 600;
+  letter-spacing: .01em;
+}
+[data-md-color-scheme="slate"] .md-typeset h1,
+[data-md-color-scheme="slate"] .md-typeset h2,
+[data-md-color-scheme="slate"] .md-typeset h3 {
+  color: #9ccad6;
+}
+.md-typeset h2 {
+  border-bottom: 1px solid rgba(0,68,85,.14);
+  padding-bottom: .25em;
+  margin-top: 2.2em;
+}
+
+/* ---- Buttons (rounded, corporate) ---- */
+.md-typeset .md-button {
+  border-radius: 40px;
+  border-color: var(--md-primary-fg-color);
+  color: var(--md-primary-fg-color);
+}
+.md-typeset .md-button--primary {
+  background-color: var(--md-primary-fg-color);
+  border-color: var(--md-primary-fg-color);
+  color: #fff;
+}
+.md-typeset .md-button:hover {
+  background-color: var(--md-accent-fg-color);
+  border-color: var(--md-accent-fg-color);
+  color: #fff;
+}
+
+/* ---- Cards ---- */
+.md-typeset .grid.cards > ul > li,
+.md-typeset .grid.cards > ol > li {
+  border: 1px solid rgba(0,68,85,.14);
+  border-radius: 12px;
+}
+.md-typeset .grid.cards > ul > li:hover {
+  border-color: var(--md-accent-fg-color);
+  box-shadow: 0 8px 28px rgba(0,68,85,.10);
+}
+
+/* ---- Digest figures ---- */
+.md-typeset figure svg { width: 100%; height: auto; display: block; }
+.md-typeset figure figcaption {
+  font-size: .8rem;
+  color: var(--md-default-fg-color--light);
+  margin-top: .6rem;
+}
+/* Digest meta line under the title */
+.dg-meta {
+  display: flex; flex-wrap: wrap; gap: 8px 28px;
+  margin: .4rem 0 1.6rem; padding: 0; list-style: none;
+  color: var(--md-default-fg-color--light); font-size: .85rem;
+}
+.dg-meta b { color: var(--md-primary-fg-color); font-weight: 700; }
