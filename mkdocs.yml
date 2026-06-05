@@ -1,7 +1,6 @@
-site_name: AI戦略実践プロジェクト ドキュメント
-site_description: AI戦略実践プロジェクトのボキャブラリーリストとスタートガイド
+site_name: AI戦略実践プロジェクト
+site_description: 事業を動かす方々のための、AI戦略実装の型を月次で作る・動かす実践の場（主催：栗山実／株式会社アンテカニス）
 site_author: AI戦略実践プロジェクト
-# 公開URL（GitHub Pages）。<user>/<repo> に合わせて自動調整されます。
 site_url: https://ai-strategy.antecanis.com/
 
 theme:
@@ -28,6 +27,9 @@ theme:
     # 用語集ツールチップ（abbreviations）を有効化
     - content.tooltips
     - content.code.copy
+    # 上部タブ＋サイドバーのポータル型ナビゲーション
+    - navigation.tabs
+    - navigation.tabs.sticky
     - navigation.instant
     - navigation.tracking
     - navigation.top
@@ -83,7 +85,24 @@ exclude_docs: |
 
 nav:
   - ホーム: index.md
-  - スタートガイド: start-guide.md
-  - ボキャブラリーリスト（用語集）: glossary.md
+  - プロジェクトについて:
+      - 背景と狙い: about/index.md
+      - 設計思想: about/philosophy.md
+      - このプロジェクトが「何でないか」: about/not.md
+      - 主催者プロフィール: about/profile.md
+  - セッション:
+      - 進め方と持ち帰るもの: sessions/index.md
+      - 月次テーマ: sessions/themes.md
+      - 開催スケジュール: sessions/schedule.md
+  - ダイジェスト:
+      - 一覧: digests/index.md
+  - リソース:
+      - スタートガイド: start-guide.md
+      - ボキャブラリーリスト（用語集）: glossary.md
+  - 参加する:
+      - 参加費と決済: join/index.md
+      - 登録方法: join/register.md
+      - 法人の方へ: join/corporate.md
+  - お知らせ／次回開催: news/index.md
 
 copyright: "&copy; AI戦略実践プロジェクト／株式会社アンテカニス・栗山実"

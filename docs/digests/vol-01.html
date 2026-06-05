@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI戦略実践プロジェクト 第1回ダイジェスト</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal:#004455;
+    --teal-deep:#00333f;
+    --teal-soft:#0a5567;
+    --cream:#f7f4ee;
+    --paper:#fcfbf8;
+    --ink:#1c1c1a;
+    --muted:#5d6b6e;
+    --line:rgba(0,68,85,.14);
+    --gold:#b88a3e;
+    --gold-soft:#d8b878;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:"Noto Sans JP",sans-serif;
+    color:var(--ink);
+    background:var(--paper);
+    line-height:1.9;
+    font-weight:300;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 28px}
+  .serif{font-family:"Noto Serif JP",serif}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background:linear-gradient(160deg,var(--teal-deep) 0%,var(--teal) 55%,var(--teal-soft) 100%);
+    color:#fff;padding:92px 0 76px;position:relative;overflow:hidden;
+  }
+  .hero::after{
+    content:"";position:absolute;right:-120px;top:-120px;width:420px;height:420px;
+    border:1px solid rgba(255,255,255,.10);border-radius:50%;
+  }
+  .hero::before{
+    content:"";position:absolute;right:-40px;bottom:-180px;width:300px;height:300px;
+    border:1px solid rgba(255,255,255,.08);border-radius:50%;
+  }
+  .kicker{
+    font-size:.72rem;letter-spacing:.34em;text-transform:uppercase;
+    color:rgba(255,255,255,.62);font-weight:500;margin-bottom:26px;
+  }
+  .hero h1{
+    font-family:"Noto Serif JP",serif;font-weight:600;font-size:2.5rem;line-height:1.4;
+    letter-spacing:.01em;
+  }
+  .hero h1 .em{color:#ffe9c2}
+  .hero .lead{
+    margin-top:26px;font-size:1.02rem;color:rgba(255,255,255,.82);font-weight:300;max-width:560px;
+  }
+  .meta{
+    margin-top:40px;display:flex;gap:30px;flex-wrap:wrap;
+    font-size:.8rem;color:rgba(255,255,255,.7);letter-spacing:.04em;
+  }
+  .meta b{display:block;font-family:"Cormorant Garamond",serif;font-size:1.5rem;color:#fff;font-weight:600;letter-spacing:.02em}
+
+  /* ---------- SECTIONS ---------- */
+  section{padding:64px 0}
+  .eyebrow{
+    font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);
+    font-weight:700;margin-bottom:18px;
+  }
+  h2.serif{font-size:1.65rem;font-weight:600;line-height:1.5;color:var(--teal);margin-bottom:22px}
+  p{margin-bottom:18px;color:#2b302f}
+  p.muted{color:var(--muted);font-size:.95rem}
+  .rule{height:1px;background:var(--line);max-width:760px;margin:0 auto}
+
+  /* figure container */
+  .figure{margin:38px 0}
+  .figure svg{width:100%;height:auto;display:block}
+  .figcap{font-size:.78rem;color:var(--muted);text-align:center;margin-top:14px;letter-spacing:.04em}
+
+  /* tool->strategy band */
+  .shift{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:center;margin:30px 0;text-align:center}
+  .shift .card{background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:24px 18px}
+  .shift .card small{display:block;font-size:.7rem;letter-spacing:.18em;color:var(--muted);margin-bottom:8px;text-transform:uppercase}
+  .shift .card b{font-family:"Noto Serif JP",serif;color:var(--teal);font-size:1.05rem;font-weight:600;display:block;line-height:1.5}
+  .shift .arrow{font-size:1.6rem;color:var(--gold);font-family:serif}
+  .shift .card.hi{background:var(--teal);border-color:var(--teal)}
+  .shift .card.hi small{color:rgba(255,255,255,.55)}
+  .shift .card.hi b{color:#fff}
+
+  /* ---------- ARC / STEPS ---------- */
+  .step{margin:0 0 22px}
+  .step-head{display:flex;align-items:baseline;gap:16px;margin-bottom:8px}
+  .step-num{font-family:"Cormorant Garamond",serif;font-size:2rem;font-weight:600;color:var(--gold);line-height:1;min-width:46px}
+  .step-title{font-family:"Noto Serif JP",serif;font-size:1.22rem;font-weight:600;color:var(--teal)}
+  .step-body{padding-left:62px}
+  .step-body p{margin-bottom:12px}
+
+  /* ---------- CLOSING ---------- */
+  .closing{background:var(--teal-deep);color:#fff;padding:74px 0;text-align:center}
+  .closing h2{font-family:"Noto Serif JP",serif;font-size:1.6rem;line-height:1.6;font-weight:600;color:#fff;max-width:600px;margin:0 auto}
+  .closing p{max-width:560px;margin:24px auto 0;color:rgba(255,255,255,.78);font-weight:300;font-size:.98rem}
+
+  /* ---------- CTA ---------- */
+  .cta{background:var(--cream);padding:70px 0}
+  .cta h2{text-align:center;color:var(--teal);font-family:"Noto Serif JP",serif;font-size:1.55rem;font-weight:600;margin-bottom:36px}
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .opt{background:#fff;border:1px solid var(--line);border-radius:14px;padding:30px 26px;position:relative;transition:transform .25s ease,box-shadow .25s ease}
+  .opt:hover{transform:translateY(-4px);box-shadow:0 14px 40px rgba(0,68,85,.12)}
+  .opt .date{font-family:"Cormorant Garamond",serif;font-size:1.7rem;color:var(--teal);font-weight:600}
+  .opt .badge{display:inline-block;font-size:.66rem;letter-spacing:.14em;font-weight:700;padding:4px 12px;border-radius:20px;margin-bottom:14px;text-transform:uppercase}
+  .opt .badge.free{background:#e3efe6;color:#2f6b43}
+  .opt .badge.paid{background:#fbf0dd;color:#9a6b1e}
+  .opt h3{font-family:"Noto Serif JP",serif;font-size:1.12rem;color:var(--teal);margin:6px 0 10px;font-weight:600}
+  .opt p{font-size:.9rem;color:var(--muted);margin-bottom:0}
+  .btnrow{text-align:center;margin-top:40px}
+  .btn{display:inline-block;background:var(--teal);color:#fff;text-decoration:none;font-weight:500;
+    padding:16px 44px;border-radius:40px;letter-spacing:.08em;font-size:.95rem;transition:background .25s ease}
+  .btn:hover{background:var(--teal-soft)}
+  .cta .note{text-align:center;margin-top:18px;font-size:.8rem;color:var(--muted)}
+
+  footer{background:var(--teal-deep);color:rgba(255,255,255,.55);text-align:center;padding:34px 0;font-size:.78rem;letter-spacing:.06em}
+  footer .logo{font-family:"Cormorant Garamond",serif;font-size:1.2rem;color:#fff;letter-spacing:.1em;margin-bottom:6px;font-weight:600}
+
+  @media(max-width:620px){
+    .hero h1{font-size:1.9rem}
+    .shift{grid-template-columns:1fr;}
+    .shift .arrow{transform:rotate(90deg)}
+    .cards{grid-template-columns:1fr}
+    .step-body{padding-left:0}
+    section{padding:48px 0}
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">AI戦略実践プロジェクト ｜ 第1回ダイジェスト</div>
+    <h1 class="serif">AIを「便利な道具」から<br><span class="em">「事業構想の前提」</span>へ。</h1>
+    <p class="lead">第1回（パイロット・無償開催）では、参加者の皆さまご自身の手でAIを動かしながら、「AI×戦略×実践」の最初の一歩 ―― <strong style="color:#fff;font-weight:500">人間の認知容量の解除</strong> ―― を体感していただきました。当日参加できなかった方、途中から参加された方に、その全体の流れをお届けします。</p>
+    <div class="meta">
+      <div><b>60</b><span>名のご参加</span></div>
+      <div><b>2h</b><span>ハンズオン中心</span></div>
+      <div><b>1A</b><span>認知容量の解除</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- CORE MESSAGE -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">本日の起点 — 始まりの物語</div>
+    <h2 class="serif">「AI活用講座」を受けた人が、世界を変えるわけではない。</h2>
+    <p>1990年代、PCとインターネットが登場したとき、多くの人は「ExcelとWordの活用講座」「ブラウザの活用講座」に熱心に通いました。けれど、その後の30年で世界を変えたのは、講座の受講者ではなく、ネットを<em>前提に</em>事業そのものを構想した人たちでした。</p>
+    <p>いま生成AIで同じ構図が始まっています。「AIの便利活用講座」の延長線上に、世界を変える事業はおそらく無い ―― この問題意識が、本プロジェクト全体の出発点です。</p>
+
+    <div class="shift">
+      <div class="card">
+        <small>これまで</small>
+        <b>AI as a tool<br>便利ツールとしての活用</b>
+      </div>
+      <div class="arrow">→</div>
+      <div class="card hi">
+        <small>これから</small>
+        <b>AI as a strategy<br>AI前提の構想を<br>描き・実現する</b>
+      </div>
+    </div>
+
+    <p class="muted">この転換を、理論の解説ではなく「手を動かして体感する」かたちで進めたのが第1回です。本プロジェクトは、AIの戦略インパクトを3つの層で捉える <strong>5×5×5の枠組み</strong> を指針としています。</p>
+
+    <!-- FIGURE A: 3-layer framework -->
+    <div class="figure" aria-label="5×5×5の枠組み 3層構造">
+      <svg viewBox="0 0 680 318" xmlns="http://www.w3.org/2000/svg" role="img">
+        <defs>
+          <style>
+            .lyr{fill:#fff;stroke:var(--line);stroke:rgba(0,68,85,.18)}
+            .ltag{font-family:'Noto Sans JP',sans-serif;font-size:11px;letter-spacing:.18em;fill:#8a979a;font-weight:700}
+            .lname{font-family:'Noto Serif JP',serif;font-size:17px;fill:#004455;font-weight:600}
+            .lscale{font-family:'Noto Sans JP',sans-serif;font-size:11px;fill:#5d6b6e}
+            .chip{font-family:'Noto Sans JP',sans-serif;font-size:12px;fill:#0a5567;font-weight:500}
+            .axis{font-family:'Noto Sans JP',sans-serif;font-size:11px;fill:#8a979a;letter-spacing:.1em}
+          </style>
+        </defs>
+        <!-- scale axis -->
+        <line x1="26" y1="40" x2="26" y2="270" stroke="#b88a3e" stroke-width="1.5"/>
+        <polygon points="26,32 22,44 30,44" fill="#b88a3e"/>
+        <text class="axis" x="20" y="155" transform="rotate(-90 20,155)" text-anchor="middle">戦略インパクト・スケール</text>
+
+        <!-- L3 -->
+        <rect class="lyr" x="56" y="36" width="600" height="68" rx="9"/>
+        <text class="ltag" x="78" y="62">＜第3層＞ 戦略転換</text>
+        <text class="lname" x="78" y="86">産業・事業スケールの変化</text>
+        <rect x="430" y="50" width="208" height="40" rx="7" fill="#f7f4ee" stroke="rgba(0,68,85,.12)"/>
+        <text class="chip" x="446" y="66">[3A] 顧客価値の</text>
+        <text class="chip" x="446" y="82">　　　 シフト</text>
+
+        <!-- L2 -->
+        <rect class="lyr" x="56" y="118" width="600" height="68" rx="9"/>
+        <text class="ltag" x="78" y="144">＜第2層＞ 組織変革</text>
+        <text class="lname" x="78" y="168">事業組織スケールの変化</text>
+        <rect x="430" y="132" width="208" height="40" rx="7" fill="#f7f4ee" stroke="rgba(0,68,85,.12)"/>
+        <text class="chip" x="446" y="148">[2A] 情報流通の</text>
+        <text class="chip" x="446" y="164">　　　 血流化</text>
+
+        <!-- L1 highlighted -->
+        <rect x="56" y="200" width="600" height="74" rx="9" fill="#004455"/>
+        <text class="ltag" x="78" y="228" style="fill:rgba(255,255,255,.6)">＜第1層＞ 実装</text>
+        <text class="lname" x="78" y="252" style="fill:#fff">現場・個人スケールの変化</text>
+        <rect x="430" y="214" width="208" height="46" rx="7" fill="#b88a3e"/>
+        <text class="chip" x="446" y="232" style="fill:#fff;font-weight:700">[1A] 人間の認知</text>
+        <text class="chip" x="446" y="250" style="fill:#fff;font-weight:700">　　　 容量の解除</text>
+        <text x="78" y="296" style="font-family:'Noto Sans JP',sans-serif;font-size:12px;fill:#b88a3e;font-weight:700">↑ 第1回は、ここを起点に。</text>
+      </svg>
+      <div class="figcap">図1：AIの戦略インパクトを捉える3層構造。第1回は最下層の起点 [1A] を中心に扱いました。</div>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- THE ARC -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">当日の流れ — 5つのハンズオン</div>
+    <h2 class="serif">対話する → 作らせる → 仕組みにする</h2>
+    <p class="muted" style="margin-bottom:8px">「個人で便利使いする世界」から「事業戦略への組込みを構想・実装する世界」へ。参加者は実際に手元のAI（ChatGPT / Gemini / Claude）を動かしながら、一段ずつステップを上がっていきました。</p>
+
+    <!-- FIGURE B: 3 modes progression -->
+    <div class="figure" aria-label="AI活用の3つのモードの進行">
+      <svg viewBox="0 0 680 178" xmlns="http://www.w3.org/2000/svg" role="img">
+        <defs>
+          <style>
+            .node{fill:#f7f4ee;stroke:rgba(0,68,85,.18)}
+            .nt{font-family:'Noto Serif JP',serif;font-size:15px;fill:#004455;font-weight:600;text-anchor:middle}
+            .ns{font-family:'Noto Sans JP',sans-serif;font-size:11px;fill:#5d6b6e;text-anchor:middle}
+            .band{font-family:'Noto Sans JP',sans-serif;font-size:11.5px;fill:#8a979a;text-anchor:middle;letter-spacing:.05em}
+          </style>
+        </defs>
+        <!-- nodes -->
+        <rect class="node" x="20" y="36" width="190" height="64" rx="10"/>
+        <text class="nt" x="115" y="66">AIと対話する</text>
+        <text class="ns" x="115" y="86">チャットで使う</text>
+
+        <rect class="node" x="245" y="36" width="190" height="64" rx="10"/>
+        <text class="nt" x="340" y="66">AIに作らせる</text>
+        <text class="ns" x="340" y="86">コード・成果物を生成</text>
+
+        <rect x="470" y="36" width="190" height="64" rx="10" fill="#004455"/>
+        <text class="nt" x="565" y="66" style="fill:#fff">仕組みにする</text>
+        <text class="ns" x="565" y="86" style="fill:rgba(255,255,255,.72)">API・自動化で動かす</text>
+
+        <!-- arrows -->
+        <line x1="212" y1="68" x2="243" y2="68" stroke="#b88a3e" stroke-width="2"/>
+        <polygon points="243,68 234,63 234,73" fill="#b88a3e"/>
+        <line x1="437" y1="68" x2="468" y2="68" stroke="#b88a3e" stroke-width="2"/>
+        <polygon points="468,68 459,63 459,73" fill="#b88a3e"/>
+
+        <!-- transition band -->
+        <line x1="60" y1="134" x2="620" y2="134" stroke="#d8b878" stroke-width="1" stroke-dasharray="4 4"/>
+        <text class="band" x="115" y="156">個人の便利使い</text>
+        <polygon points="350,150 362,146 362,154" fill="#d8b878"/>
+        <line x1="200" y1="150" x2="356" y2="150" stroke="#d8b878" stroke-width="1"/>
+        <line x1="356" y1="150" x2="500" y2="150" stroke="#d8b878" stroke-width="1"/>
+        <text class="band" x="565" y="156" style="fill:#004455;font-weight:700">事業戦略への組込み</text>
+      </svg>
+      <div class="figcap">図2：3つのモードを上がるほど、「個人の便利使い」から「事業戦略への組込み」へと重心が移ります。</div>
+    </div>
+
+    <!-- step 1 -->
+    <div class="step">
+      <div class="step-head"><span class="step-num">01</span><span class="step-title">課題を言語化し、AIと比べる</span></div>
+      <div class="step-body">
+        <p>「自分の業界・部門における"人間の認知容量の限界"とは何か」をまず自分の言葉で書き、同じ問いをAIにも考えさせ、人間案とAI案を比較。"伝えられないものはAIも汲み取れない" ―― 言語化の重要性を体感する導入です。</p>
+      </div>
+    </div>
+
+    <!-- step 2 -->
+    <div class="step">
+      <div class="step-head"><span class="step-num">02</span><span class="step-title">世界のニュース100件を、AIに使わせる</span></div>
+      <div class="step-body">
+        <p>AIが取得した世界のビジネスニュース100件を題材に、「先読み」「人材育成」など目的を1つ選び、自分の業界・部門設定を添えて実行。同じデータでも、目的の置き方で引き出せる価値が変わることを確認しました。</p>
+      </div>
+    </div>
+
+    <!-- FIGURE C: information pipeline -->
+    <div class="figure" aria-label="情報の取得・活用・蓄積のパイプライン">
+      <svg viewBox="0 0 680 168" xmlns="http://www.w3.org/2000/svg" role="img">
+        <defs>
+          <style>
+            .pb{fill:#fff;stroke:rgba(0,68,85,.2)}
+            .pt{font-family:'Noto Serif JP',serif;font-size:15px;fill:#004455;font-weight:600;text-anchor:middle}
+            .ps{font-family:'Noto Sans JP',sans-serif;font-size:10.5px;fill:#5d6b6e;text-anchor:middle}
+            .lab{font-family:'Noto Sans JP',sans-serif;font-size:11px;fill:#b88a3e;font-weight:700;text-anchor:middle}
+          </style>
+        </defs>
+        <rect class="pb" x="24" y="30" width="180" height="58" rx="9"/>
+        <text class="pt" x="114" y="56">取得</text>
+        <text class="ps" x="114" y="76">input</text>
+
+        <rect class="pb" x="250" y="30" width="180" height="58" rx="9"/>
+        <text class="pt" x="340" y="56">活用</text>
+        <text class="ps" x="340" y="76">output</text>
+
+        <rect class="pb" x="476" y="30" width="180" height="58" rx="9"/>
+        <text class="pt" x="566" y="56">蓄積</text>
+        <text class="ps" x="566" y="76">store</text>
+
+        <line x1="206" y1="59" x2="248" y2="59" stroke="#0a5567" stroke-width="2"/>
+        <polygon points="248,59 239,54 239,64" fill="#0a5567"/>
+        <line x1="432" y1="59" x2="474" y2="59" stroke="#0a5567" stroke-width="2"/>
+        <polygon points="474,59 465,54 465,64" fill="#0a5567"/>
+
+        <!-- AI build layer -->
+        <rect x="24" y="108" width="632" height="44" rx="9" fill="#f7f4ee" stroke="rgba(184,138,62,.4)"/>
+        <text class="lab" x="340" y="129">この「仕組み自体」をAIで作れるか？</text>
+        <text x="340" y="145" style="font-family:'Noto Sans JP',sans-serif;font-size:10.5px;fill:#5d6b6e;text-anchor:middle">取得システムをAIコーディングで作る ／ 処理でAIをAPI経由で呼び出す</text>
+      </svg>
+      <div class="figcap">図3：情報を「取得→活用→蓄積」する流れ。鍵は、その仕組み自体を自分の手でAIに作らせられるか。</div>
+    </div>
+
+    <!-- step 3 -->
+    <div class="step">
+      <div class="step-head"><span class="step-num">03</span><span class="step-title">"ちょっとしたAIエンジニア"になってみる</span></div>
+      <div class="step-body">
+        <p>生成AIに書かせたPythonコードを Google Colab に貼り付け、APIキーを設定して実行。「素人でもこれだけ簡単に作れて、動かせる」 ―― 競争優位の源泉そのものがシフトしている感覚を、自分の手で確かめました。</p>
+      </div>
+    </div>
+
+    <!-- step 4 -->
+    <div class="step">
+      <div class="step-head"><span class="step-num">04</span><span class="step-title">15部署のニュースマップを描く</span></div>
+      <div class="step-body">
+        <p>大量の記事をAIに評価させ、「どの部署がどの記事を重視するか」を色分けした地図に可視化。リスク管理・CFO・マーケ…と、立場ごとに見える景色が違うことが一枚で立ち上がります。さらに、毎朝メールやSlackに自動配信する"仕組み化"までを提示しました。</p>
+      </div>
+    </div>
+
+    <!-- FIGURE D: news map schematic -->
+    <div class="figure" aria-label="部署別ニュースマップの模式図">
+      <svg viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg" role="img">
+        <defs>
+          <style>.cap{font-family:'Noto Sans JP',sans-serif;font-size:11px;fill:#5d6b6e}.dep{font-family:'Noto Sans JP',sans-serif;font-size:11px;fill:#004455;font-weight:500}</style>
+        </defs>
+        <!-- grid of colored cells -->
+        <g>
+          <!-- row generation: colors evoke department heatmap -->
+          <!-- We hand-place a 9x4 grid -->
+          <!-- palette: teal, gold, soft teal, muted -->
+          <g>
+            <!-- r1 --><rect x="40" y="24" width="30" height="30" rx="4" fill="#004455"/><rect x="74" y="24" width="30" height="30" rx="4" fill="#d8b878"/><rect x="108" y="24" width="30" height="30" rx="4" fill="#0a5567"/><rect x="142" y="24" width="30" height="30" rx="4" fill="#b88a3e"/><rect x="176" y="24" width="30" height="30" rx="4" fill="#004455"/><rect x="210" y="24" width="30" height="30" rx="4" fill="#9fb3b6"/><rect x="244" y="24" width="30" height="30" rx="4" fill="#d8b878"/><rect x="278" y="24" width="30" height="30" rx="4" fill="#0a5567"/><rect x="312" y="24" width="30" height="30" rx="4" fill="#b88a3e"/>
+            <!-- r2 --><rect x="40" y="58" width="30" height="30" rx="4" fill="#9fb3b6"/><rect x="74" y="58" width="30" height="30" rx="4" fill="#004455"/><rect x="108" y="58" width="30" height="30" rx="4" fill="#b88a3e"/><rect x="142" y="58" width="30" height="30" rx="4" fill="#0a5567"/><rect x="176" y="58" width="30" height="30" rx="4" fill="#d8b878"/><rect x="210" y="58" width="30" height="30" rx="4" fill="#004455"/><rect x="244" y="58" width="30" height="30" rx="4" fill="#0a5567"/><rect x="278" y="58" width="30" height="30" rx="4" fill="#9fb3b6"/><rect x="312" y="58" width="30" height="30" rx="4" fill="#d8b878"/>
+            <!-- r3 --><rect x="40" y="92" width="30" height="30" rx="4" fill="#d8b878"/><rect x="74" y="92" width="30" height="30" rx="4" fill="#0a5567"/><rect x="108" y="92" width="30" height="30" rx="4" fill="#004455"/><rect x="142" y="92" width="30" height="30" rx="4" fill="#9fb3b6"/><rect x="176" y="92" width="30" height="30" rx="4" fill="#b88a3e"/><rect x="210" y="92" width="30" height="30" rx="4" fill="#0a5567"/><rect x="244" y="92" width="30" height="30" rx="4" fill="#004455"/><rect x="278" y="92" width="30" height="30" rx="4" fill="#d8b878"/><rect x="312" y="92" width="30" height="30" rx="4" fill="#9fb3b6"/>
+            <!-- r4 --><rect x="40" y="126" width="30" height="30" rx="4" fill="#0a5567"/><rect x="74" y="126" width="30" height="30" rx="4" fill="#b88a3e"/><rect x="108" y="126" width="30" height="30" rx="4" fill="#9fb3b6"/><rect x="142" y="126" width="30" height="30" rx="4" fill="#004455"/><rect x="176" y="126" width="30" height="30" rx="4" fill="#0a5567"/><rect x="210" y="126" width="30" height="30" rx="4" fill="#d8b878"/><rect x="244" y="126" width="30" height="30" rx="4" fill="#9fb3b6"/><rect x="278" y="126" width="30" height="30" rx="4" fill="#004455"/><rect x="312" y="126" width="30" height="30" rx="4" fill="#b88a3e"/>
+          </g>
+        </g>
+        <!-- legend -->
+        <text class="cap" x="40" y="182">記事 × 部署の重視度を色で可視化</text>
+        <g>
+          <rect x="396" y="30" width="14" height="14" rx="3" fill="#004455"/><text class="dep" x="418" y="42">リスク管理</text>
+          <rect x="396" y="56" width="14" height="14" rx="3" fill="#b88a3e"/><text class="dep" x="418" y="68">CFO・財務</text>
+          <rect x="396" y="82" width="14" height="14" rx="3" fill="#0a5567"/><text class="dep" x="418" y="94">マーケティング</text>
+          <rect x="396" y="108" width="14" height="14" rx="3" fill="#d8b878"/><text class="dep" x="418" y="120">事業開発</text>
+          <rect x="396" y="134" width="14" height="14" rx="3" fill="#9fb3b6"/><text class="dep" x="418" y="146">その他部署 …（計15部署）</text>
+        </g>
+      </svg>
+      <div class="figcap">図4：同じニュース群でも、部署＝立場ごとに「重視する記事」は異なる。それを一枚の地図にしたイメージ。</div>
+    </div>
+
+    <!-- step 5 -->
+    <div class="step">
+      <div class="step-head"><span class="step-num">05</span><span class="step-title">そして、次への物語へ</span></div>
+      <div class="step-body">
+        <p>最後に冒頭の「始まりの物語」へ戻り、今日扱った技術が経営戦略にどう紐づき、どうスケールしていくのかを各自のストーリーとして展開。技術体験を、戦略の文脈に着地させて締めくくりました。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSING (no quote) -->
+<section class="closing">
+  <div class="wrap">
+    <h2 class="serif">技術の体験を、<br>戦略の文脈へ。</h2>
+    <p>第1回で扱ったのは、AIを自分の手で動かす"入口"です。ここで得た感覚を、皆さんご自身の業界・事業の構想にどうつなげていくか ―― 本編は、そこから始まります。</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="wrap">
+    <h2>続きは、ここから。</h2>
+    <div class="cards">
+      <div class="opt">
+        <span class="badge free">無償・同内容</span>
+        <div class="date">6 / 15</div>
+        <h3>第1回 リピート開催</h3>
+        <p>「もう一度ゆっくり聞きたい」「周りの方にも体験させたい」という声にお応えする、同内容の無償回です。</p>
+      </div>
+      <div class="opt">
+        <span class="badge paid">第2回・有償</span>
+        <div class="date">6 / 23</div>
+        <h3>本編 第2回</h3>
+        <p>パイロットを経て、いよいよ本編がスタート。第1回の体験を起点に、AI×戦略の実践を一段深めていきます。</p>
+      </div>
+    </div>
+    <div class="btnrow">
+      <a class="btn" href="../join/register/">メール登録はこちら</a>
+    </div>
+    <p class="note">メール配信は解除されない限り続きます。参加したくなったタイミングでいつでもご参加いただけます。</p>
+  </div>
+</section>
+
+<footer>
+  <div class="logo">Antecanis</div>
+  <div>AI戦略実践プロジェクト ／ Build the Future, Now.</div>
+</footer>
+
+</body>
+</html>
