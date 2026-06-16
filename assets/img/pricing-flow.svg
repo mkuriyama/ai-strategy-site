@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 780 430" xmlns="http://www.w3.org/2000/svg" font-family="'Noto Sans JP', sans-serif">
+<rect x="0" y="0" width="780" height="430" fill="#FFFFFF"/>
+<text x="40" y="50" font-family="'Noto Serif JP', serif" font-size="27" font-weight="700" fill="#004455">お申し込みから課金までの流れ</text>
+<text x="41" y="79" font-size="14" fill="#5E7378">例：6月〜7月上旬にお申し込みの場合（第2回コホート）</text>
+<rect x="39" y="104" width="168" height="104" rx="12" fill="#EAF1F2" stroke="#AEC6CA" stroke-width="1.5"/>
+<text x="123" y="128" text-anchor="middle" font-size="11" letter-spacing="1.5" font-weight="700" fill="#1C6E7C">STEP 1</text>
+<text x="123" y="154" text-anchor="middle" font-family="'Noto Serif JP', serif" font-size="20" font-weight="700" fill="#004455">お申し込み</text>
+<text x="123" y="182" text-anchor="middle" font-size="12.5" fill="#003A47">Stripeに登録（登録は無料）</text>
+<line x1="123" y1="208" x2="123" y2="252" stroke="#AEC6CA" stroke-width="1.5"/>
+<rect x="219" y="104" width="168" height="104" rx="12" fill="#F5ECD3" stroke="#E0C77E" stroke-width="1.5"/>
+<text x="303" y="128" text-anchor="middle" font-size="11" letter-spacing="1.5" font-weight="700" fill="#C0962F">STEP 2</text>
+<text x="303" y="154" text-anchor="middle" font-family="'Noto Serif JP', serif" font-size="20" font-weight="700" fill="#004455">第2回に参加</text>
+<text x="303" y="184" text-anchor="middle" font-family="'Noto Serif JP', serif" font-size="24" font-weight="700" fill="#C0962F">¥0 <tspan font-size="15">無料</tspan></text>
+<line x1="303" y1="208" x2="303" y2="252" stroke="#E0C77E" stroke-width="1.5"/>
+<rect x="397" y="104" width="168" height="104" rx="12" fill="#EAF1F2" stroke="#AEC6CA" stroke-width="1.5"/>
+<text x="481" y="128" text-anchor="middle" font-size="11" letter-spacing="1.5" font-weight="700" fill="#1C6E7C">STEP 3</text>
+<text x="481" y="154" text-anchor="middle" font-family="'Noto Serif JP', serif" font-size="20" font-weight="700" fill="#004455">初回の課金</text>
+<text x="481" y="182" text-anchor="middle" font-size="12.5" fill="#003A47">¥5,940（早期割引 5,400＋税）</text>
+<line x1="481" y1="208" x2="481" y2="252" stroke="#AEC6CA" stroke-width="1.5"/>
+<rect x="575" y="104" width="168" height="104" rx="12" fill="#EAF1F2" stroke="#AEC6CA" stroke-width="1.5"/>
+<text x="659" y="128" text-anchor="middle" font-size="11" letter-spacing="1.5" font-weight="700" fill="#1C6E7C">STEP 4</text>
+<text x="659" y="154" text-anchor="middle" font-family="'Noto Serif JP', serif" font-size="20" font-weight="700" fill="#004455">以降の課金</text>
+<text x="659" y="182" text-anchor="middle" font-size="12.5" fill="#003A47">毎月15日に自動更新</text>
+<line x1="659" y1="208" x2="659" y2="252" stroke="#AEC6CA" stroke-width="1.5"/>
+<text x="303" y="200" text-anchor="middle" font-size="11.5" fill="#5E7378">6/23 メイン・7/10 サブ</text>
+<line x1="40" y1="252" x2="748" y2="252" stroke="#1C6E7C" stroke-width="2"/>
+<polygon points="748,247 760,252 748,257" fill="#1C6E7C"/>
+<circle cx="123" cy="252" r="6.5" fill="#004455" stroke="#FFFFFF" stroke-width="2"/>
+<text x="123" y="276" text-anchor="middle" font-size="13" font-weight="700" fill="#004455">6月〜7月上旬</text>
+<circle cx="303" cy="252" r="6.5" fill="#C0962F" stroke="#FFFFFF" stroke-width="2"/>
+<text x="303" y="276" text-anchor="middle" font-size="13" font-weight="700" fill="#004455">6/23・7/10</text>
+<circle cx="481" cy="252" r="6.5" fill="#004455" stroke="#FFFFFF" stroke-width="2"/>
+<text x="481" y="276" text-anchor="middle" font-size="13" font-weight="700" fill="#004455">7/15</text>
+<circle cx="659" cy="252" r="6.5" fill="#004455" stroke="#FFFFFF" stroke-width="2"/>
+<text x="659" y="276" text-anchor="middle" font-size="13" font-weight="700" fill="#004455">毎月15日</text>
+<rect x="40" y="300" width="708" height="86" rx="12" fill="#EAF1F2" stroke="#AEC6CA" stroke-width="1.5"/>
+<rect x="40" y="300" width="6" height="86" rx="3" fill="#C0962F"/>
+<text x="64" y="332" font-family="'Noto Serif JP', serif" font-size="17" font-weight="700" fill="#004455">解約はいつでも。課金日の前日までなら、その月は¥0。</text>
+<text x="64" y="358" font-size="13.5" fill="#003A47">各課金日（毎月15日）の前日までに Stripe カスタマーポータルから解約すれば、その月の費用は発生しません。</text>
+<text x="64" y="378" font-size="13.5" fill="#5E7378">例）7/14 までに解約 → 費用ゼロ。 ／ カード情報は弊社で保持しません。</text>
+</svg>
