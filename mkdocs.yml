@@ -86,6 +86,11 @@ markdown_extensions:
   - admonition
   - toc:
       permalink: true
+      # CJK 見出しでも意味のあるアンカーを生成（Unicode保持）。
+      # 既定の slugify は非ASCIIを除去し _2 等になるため上書き。
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
   - pymdownx.details
   - pymdownx.superfences
   - pymdownx.highlight:
