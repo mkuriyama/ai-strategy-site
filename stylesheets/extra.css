@@ -98,9 +98,16 @@
 }
 .dg-meta b { color: var(--md-primary-fg-color); font-weight: 700; }
 
-/* Header wordmark logo: a touch taller than the default icon for legibility */
+/* Header wordmark logo (project lockup): taller than the default icon so the
+   horizontal lockup + sub-line stay legible. Slightly smaller on mobile. */
 .md-header__button.md-logo img,
-.md-nav__button.md-logo img { height: 1.5rem; width: auto; }
+.md-nav__button.md-logo img { height: 2.2rem; width: auto; }
+@media screen and (max-width: 44.9375em) {
+  .md-header__button.md-logo img { height: 1.9rem; }
+}
+/* Mobile drawer title: keep the site-name text as the drawer heading, but drop
+   the wordmark logo there so it doesn't duplicate the header lockup. */
+.md-nav--primary > .md-nav__title .md-logo { display: none; }
 
 /* Profile portrait */
 .md-typeset img.profile-photo {
