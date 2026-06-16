@@ -83,7 +83,11 @@
   box-shadow: 0 8px 28px rgba(0,68,85,.10);
 }
 
-/* ---- Digest figures ---- */
+/* ---- Data figures (digests / pricing): fill the content column ----
+   Material sets `figure{width:fit-content}`, which collapses an inline SVG that
+   has only a viewBox (no intrinsic width) to the ~300px CSS default. Force the
+   figure (and its SVG) to span the full content width so the diagrams stay legible. */
+.md-typeset figure { width: 100%; }
 .md-typeset figure svg { width: 100%; height: auto; display: block; }
 .md-typeset figure figcaption {
   font-size: .8rem;
