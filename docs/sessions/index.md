@@ -43,8 +43,25 @@
 ビジネスで多忙な方が、録画・資料での参加でもAI操作の体験を各自のタイミングで進められる
 よう設計しています。
 
+## セッションで使うアプリ（例）
+
+各回では、その場で手を動かすための実践アプリを用意します。下記は今後のセッションで
+提供を予定しているアプリの画面例です（クリックで拡大）。
+
+<figure markdown="span">
+![事業デザイン対抗戦アプリの制作画面](../assets/img/session-build.png)
+<figcaption>事業デザイン対抗戦 ── 市場の声を聞き、AIとキービジュアル・コピー・プロトタイプを作り込む。<br>第2回セッションで提供予定。</figcaption>
+</figure>
+
+<figure markdown="span">
+![AI戦略対抗戦の合議結果画面](../assets/img/session-result.png)
+<figcaption>AI戦略対抗戦 ── 複数のAI（Gemini／Claude／GPT）が多視点で評価・合議し、戦略案を採点する。<br>第2回セッションで提供予定。</figcaption>
+</figure>
+
 ## 関連ページ
 
 - **[月次テーマ](themes.md)** — 扱うテーマ領域の一覧（随時更新）
 - **[開催予定・次回案内](schedule.md)** — 直近の開催と今後の予定
 - **[スタートガイド](../start-guide.md)** — 参加準備・必要なもの
+
+{{ footer_cta("[月次テーマ](themes.md)", "[開催予定・次回案内](schedule.md)", "[参加する](../join/index.md)") }}

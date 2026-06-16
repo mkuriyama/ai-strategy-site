@@ -23,3 +23,5 @@
 [support@antecanis.com にメール](mailto:support@antecanis.com){ .md-button .md-button--primary }
 
 株式会社アンテカニス／AI戦略実践プロジェクト
+
+{{ footer_cta("[参加費と決済](index.md)", "[設計思想](../about/philosophy.md)", "[登録方法](register.md)") }}

@@ -38,3 +38,5 @@
 [紹介チラシを開く（印刷用・別タブ）](../assets/flyer.html){ .md-button target=_blank }
 
 ブラウザの印刷（Windows: `Ctrl + P` ／ Mac: `⌘ + P`）でA4印刷できます。
+
+{{ footer_cta("[背景と狙い](index.md)", "[開催予定・次回案内](../sessions/schedule.md)", "[参加する](../join/index.md)") }}

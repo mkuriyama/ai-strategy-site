@@ -270,3 +270,5 @@ APIはApplication Programming Interfaceの略で、プログラムからAIサー
 ---
 
 *本ガイドの内容は2026年6月時点の情報に基づいています。お問い合わせ: support@antecanis.com*
+
+{{ footer_cta("[用語集](glossary.md)", "[セッションの進め方](sessions/index.md)", "[参加する](join/index.md)") }}
