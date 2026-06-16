@@ -131,7 +131,8 @@ nav:
       - 開催予定・次回案内: sessions/schedule.md
       - ダイジェスト:
           - 一覧: digests/index.md
-          - Vol.1 第1回：人間の認知容量の解除: digests/vol-01.md
+          - Vol.1A 第1回（メイン回・5/26）：人間の認知容量の解除: digests/vol-01.md
+          - Vol.1B 第1回（追加開催・6/15）：人間の認知容量の解除: digests/vol-01b.md
   - ガイド・用語集:
       - スタートガイド: start-guide.md
       - 用語集: glossary.md
