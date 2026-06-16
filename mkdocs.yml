@@ -6,6 +6,7 @@ site_url: https://ai-strategy.antecanis.com/
 theme:
   name: material
   language: ja
+  custom_dir: overrides
   logo: assets/logo-header.png
   favicon: assets/favicon.png
   palette:
@@ -58,6 +59,21 @@ plugins:
       lang:
         - ja
         - en
+  # 変動情報の単一ソース化（extra: のデータ／main.py のマクロを各ページで参照）
+  - macros:
+      module_name: main
+  # スクリーンショット等をクリックで拡大
+  - glightbox:
+      auto_caption: false
+      touchNavigation: true
+  # OGP / ソーシャルカードの自動生成（SEO・共有）
+  # フォント取得にネットワークを要するため、生成は CI 等でのみ有効化する。
+  # ローカルビルドは `CARDS` 未設定＝無効（既定）。CI では env: CARDS: true。
+  - social:
+      cards: !ENV [CARDS, false]
+      cards_layout_options:
+        background_color: "#004455"
+        color: "#ffffff"
 
 markdown_extensions:
   # 用語集ツールチップ（*[TERM]: 定義 形式）
@@ -123,6 +139,32 @@ extra:
   analytics:
     provider: google
     property: G-2H53XSH9YC
+
+  # ────────────────────────────────────────────────────────────
+  # 変動情報の単一ソース（§3）。更新は毎回このブロックだけ。
+  # ホーム(overrides/home.html)・schedule・join 等が参照する。
+  # ────────────────────────────────────────────────────────────
+  register_url: https://mailchi.mp/antecanis/ai-strategy
+  # ヘッダー／導線で使う短縮表記（直近の本編回）
+  next_session_short: "6/23(火) 20:00〜"
+  # 次回回の配列（ラベル／種別 main|sub／日付／補足）
+  sessions:
+    - label: "本編 第2回"
+      kind: main
+      date: "6/23(火) 20:00〜"
+      note: "オンライン(Zoom)／登録後の初回は無料。パイロットを経た本編スタート。"
+    - label: "追加開催 サブ回"
+      kind: sub
+      date: "7/10(木) 20:00〜"
+      note: "第2回と同内容の追加開催。本編に都合が合わない方向け。"
+  # 参加費（home のティーザー／join の正本が参照）
+  pricing:
+    early_label: "早期参加枠"
+    early_monthly: "5,400円＋税"
+    early_monthly_incl: "5,940円"
+    list_monthly: "9,000円＋税"
+    list_monthly_incl: "9,900円"
+    early_target: "2026年6月申込対象"
 
 copyright: >-
   &copy; AI戦略実践プロジェクト／株式会社アンテカニス・栗山実

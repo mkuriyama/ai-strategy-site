@@ -33,8 +33,15 @@ jobs:
           restore-keys: |
             mkdocs-material-
 
+      # ソーシャルカード（OGP画像）生成に必要なシステムライブラリ
+      - name: Install image libraries (for social cards)
+        run: sudo apt-get update && sudo apt-get install -y libcairo2-dev libfreetype6-dev libffi-dev libjpeg-dev libpng-dev libz-dev
+
       - name: Install dependencies
         run: pip install -r requirements.txt
 
       - name: Build and deploy to gh-pages
+        env:
+          # OGP/ソーシャルカードの自動生成を有効化（Google Fontsへのアクセスが必要）
+          CARDS: "true"
         run: mkdocs gh-deploy --force --clean

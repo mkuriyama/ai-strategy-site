@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+<!--
+  全ページ共通のお知らせバー（ヘッダー上・全ページ常時表示の CTA）。
+  次回開催・登録URL は mkdocs.yml の extra: を単一ソースとして参照する。
+-->
+{% block announce %}
+  <a class="cta-announce" href="{{ config.extra.register_url }}" target="_blank" rel="noopener">
+    次回開催 <b>{{ config.extra.next_session_short }}</b>
+    <span class="cta-announce__sep">·</span>
+    参加・案内登録 →
+  </a>
+{% endblock %}

@@ -1,0 +1,201 @@
+{% extends "main.html" %}
+
+<!--
+  ホーム（縦長ランディング）。home-draft.html を Material 構造へ移植したもの。
+  - container ブロックを丸ごと差し替え、md-grid / md-typeset の制約を外した専用キャンバスにする。
+  - ヘッダー（グローバルナビ）・お知らせバー・フッター（規約リンク）は Material 標準を踏襲。
+  - 変動情報（次回開催・参加費・登録URL）は config.extra を参照（本文にハードコードしない）。
+  - スタイルは docs/stylesheets/extra.css の `.home-landing` 配下に定義。
+-->
+{% block container %}
+<main class="md-main" data-md-component="main">
+<div class="home-landing">
+
+  {# ① ヒーロー #}
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">
+          <svg class="cmark" viewBox="-1 -1 71 46" aria-hidden="true"><line x1="10" y1="34.04" x2="64.53" y2="4.0" stroke="#1C6E7C" stroke-width="3" stroke-linecap="round"/><circle cx="10" cy="34.04" r="10" fill="#1C6E7C"/><circle cx="64.53" cy="4.0" r="4.4" fill="#1C6E7C"/></svg>
+          <span class="was">AI as a tool</span> <span class="arw">→</span> <span class="now">AI as a strategy</span>
+        </span>
+        <h1>「AIを<span class="was">使う</span>」から、<br>「AI前提で<span class="now">事業戦略を作る</span>」へ。</h1>
+        <p class="lead">事業を動かす方々のための、AI戦略実装の「型」を月次で作り、動かす実践の場です。各回、戦略上の問いから出発し、AIを組み込んで動く仕組みを作り、自社・自業界の競争前提がどう書き換わるかまで踏み込みます。</p>
+        <div class="actions">
+          <a class="btn btn-gold" href="{{ config.extra.register_url }}" target="_blank" rel="noopener">参加・案内登録</a>
+          <a class="btn btn-outline" href="sessions/">セッションの中身を見る</a>
+        </div>
+        <div class="host">主催：栗山 実 ／ 株式会社アンテカニス</div>
+      </div>
+      <div class="shot">
+        <a class="glightbox" href="assets/img/session-build.png" data-title="事業デザイン対抗戦アプリの制作画面">
+          <img src="assets/img/session-build.png" alt="事業デザイン対抗戦アプリの制作画面">
+        </a>
+        <div class="cap">第2回セッションで提供する実践アプリ「事業デザイン対抗戦」。市場の声を聞き、AIと案を作り込む。</div>
+      </div>
+    </div>
+  </section>
+
+  {# ② ライブパネル：次回開催・最新情報（再訪者の着地点） #}
+  <div class="live wrap" id="live">
+    <div class="panel">
+      <div class="phead">
+        <svg class="cmark" viewBox="-1 -1 71 46" aria-hidden="true"><line x1="10" y1="34.04" x2="64.53" y2="4.0" stroke="#fff" stroke-width="3" stroke-linecap="round"/><circle cx="10" cy="34.04" r="10" fill="#fff"/><circle cx="64.53" cy="4.0" r="4.4" fill="#fff"/></svg>
+        <span class="lbl">次回開催・最新情報</span>
+        <span class="meta">このページは常に最新です（ブックマーク推奨）</span>
+      </div>
+      <div class="pbody">
+        {% for s in config.extra.sessions %}
+        <div class="col sess {{ s.kind }}">
+          <span class="tag">{{ s.label }}</span>
+          <div class="date">{{ s.date }}</div>
+          <div class="desc">{{ s.note }}</div>
+        </div>
+        {% endfor %}
+        <div class="col news">
+          <div class="nt">新着</div>
+          <ul>
+            <li>📄 <a href="digests/vol-01/">第1回ダイジェストを公開中</a></li>
+            <li>🗓 <a href="sessions/themes/">月次テーマを見る</a></li>
+            <li>✉️ <a href="{{ config.extra.register_url }}" target="_blank" rel="noopener">開催案内をメールで受け取る</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="pfoot">※ Zoomリンクはお申し込み（Stripe）の方へ、Circle／メールでご案内します。</div>
+    </div>
+  </div>
+
+  {# ③ これは何か #}
+  <section class="block" id="about">
+    <div class="wrap read">
+      <div class="seyebrow">これは何か</div>
+      <h2>「便利に使う」の、その先へ。</h2>
+      <p>生成AIの普及で「ツールとして便利に使う」用途は急速に広がっています。本プロジェクトが狙うのはその先——<strong>AIを前提に、事業戦略そのものを構想し、実装する</strong>への転換です。</p>
+      <p>1990年代、世界を変えたのは「インターネットの使い方講座」ではなく、ネット前提で作られたAmazonやNetflixのようなサービスでした。同じ問いに、いま私たちはAIで直面しています。</p>
+      <p>抽象論で終わらせません。毎回みずから手を動かし、動くものを作り、その戦略インパクトを体感する。AIの進化に合わせて、月次で更新し続ける場です。各回は独立したテーマで、途中からの参加も歓迎します。</p>
+      <p><a class="textlink" href="about/">背景と狙いを詳しく →</a></p>
+    </div>
+  </section>
+
+  {# ④ 何をするか（3フェーズ＋スクショ） #}
+  <section class="block alt" id="sessions">
+    <div class="wrap">
+      <div class="read">
+        <div class="seyebrow">セッションで実際に何をするか</div>
+        <h2>問いから始め、作り、戦略に戻す。</h2>
+        <p>各回は「戦略的な問いから出発し、手を動かして仕組みを作り、戦略インパクトを考える」一貫した流れで進みます（約2〜2.5時間＋交流タイム）。</p>
+      </div>
+      <div class="phase"><div class="n">問</div><div><h3>戦略的な問いから始める</h3><p>その回のテーマがなぜ戦略的に重要かを、自分の事業・業界の文脈で言語化。AIにも同じ問いを解かせ、比較します（Why before How）。</p></div></div>
+      <div class="phase"><div class="n">作</div><div><h3>手を動かして、動く仕組みを作る</h3><p>AIとの対話から、コード・コンテンツ・アプリへと段階的に発展。プログラミング経験は前提としません。各自の事業文脈に合わせて動的に組み立てます。</p></div></div>
+      <div class="phase"><div class="n">戦</div><div><h3>戦略視座に立ち戻る</h3><p>作ったものを自社にどう適用し、産業・組織構造の転換にどう効くかまで視野を広げます。便利使いで終わらせません。</p></div></div>
+      <div class="figrow">
+        <div class="fig">
+          <a class="glightbox" href="assets/img/session-build.png" data-title="事業デザイン対抗戦アプリ">
+            <img src="assets/img/session-build.png" alt="事業デザイン対抗戦アプリの制作画面">
+          </a>
+          <div class="cap"><b>事業デザイン対抗戦。</b>市場の声を聞き、AIと一緒にキービジュアル・コピー・プロトタイプを作り込む。<span class="note">第2回セッションで提供</span></div>
+        </div>
+        <div class="fig">
+          <a class="glightbox" href="assets/img/session-result.png" data-title="AI戦略対抗戦の合議結果画面">
+            <img src="assets/img/session-result.png" alt="AI戦略対抗戦の合議結果画面">
+          </a>
+          <div class="cap"><b>AI戦略対抗戦。</b>複数のAI（Gemini／Claude／GPT）が多視点で評価・合議し、戦略案を採点する。<span class="note">第2回セッションで提供</span></div>
+        </div>
+      </div>
+      <div class="read" style="margin-top:26px"><a class="textlink" href="sessions/">進め方と持ち帰るものを詳しく →</a></div>
+    </div>
+  </section>
+
+  {# ⑤ 持ち帰るもの #}
+  <section class="block">
+    <div class="wrap read">
+      <div class="seyebrow">持ち帰るもの</div>
+      <h2>各回のあとに、手元に残るもの。</h2>
+      <div class="chips">
+        <span class="chip"><span class="s"></span>当日の映写資料</span>
+        <span class="chip"><span class="s"></span>実行・改変できるサンプルコード（Python・Colab）</span>
+        <span class="chip"><span class="s"></span>使用したプロンプト・データ一式</span>
+        <span class="chip"><span class="s"></span>発展版アプリのデモと解説</span>
+        <span class="chip"><span class="s"></span>各自で広げる自習ガイド</span>
+        <span class="chip"><span class="s"></span>Zoom録画（全登録者へ共有）</span>
+      </div>
+      <p class="muted-note">多忙な方が録画・資料での参加でも、各自のタイミングでAI操作を追体験できるよう設計しています。</p>
+    </div>
+  </section>
+
+  {# ⑥ 続く場（Circle） #}
+  <section class="block alt">
+    <div class="wrap community">
+      <div>
+        <div class="seyebrow">セッションのあとも続く場</div>
+        <h2>一度きりの講座では、ない。</h2>
+        <p>参加者向けコミュニティ（Circle）で、過去回のアーカイブ、AI戦略関連ニュースの解説、参加者同士のディスカッションが続きます。AI時代の戦略の引き出しを、継続して積み重ねる場です。</p>
+        <a class="btn btn-teal" href="join/#参加者コミュニティcircle">続く場について</a>
+      </div>
+      <div class="fig">
+        <a class="glightbox" href="assets/img/community-circle.png" data-title="参加者向けコミュニティ（Circle）">
+          <img src="assets/img/community-circle.png" alt="参加者向けコミュニティ（Circle）の画面">
+        </a>
+        <div class="cap">お知らせ・セッションアーカイブ・AI戦略関連ニュース・ディスカッションのスペースを用意。</div>
+      </div>
+    </div>
+  </section>
+
+  {# ⑦ 参加費とリスクのなさ #}
+  <section class="block" id="join">
+    <div class="wrap">
+      <div class="read">
+        <div class="seyebrow">参加のしかたと、リスクのなさ</div>
+        <h2>合わなければ、いつでも、費用ゼロで離れられる。</h2>
+      </div>
+      <div class="prices">
+        <div class="price"><h3>申込月の回は無料</h3><p>お申し込みいただいた当月のセッションは費用がかかりません。</p></div>
+        <div class="price"><h3>いつでも自分で解約</h3><p>課金日（毎月15日）の前日までに解約すれば、その月は¥0。</p></div>
+        <div class="price"><h3>早期参加枠は据え置き</h3><p>先に申し込んだ方の月額は当面そのまま。後からの割引は段階的に縮小予定。</p></div>
+      </div>
+      <div class="pricefoot">
+        <div><span class="amt">月額 {{ config.extra.pricing.early_monthly }}〜</span> <span class="sm">（{{ config.extra.pricing.early_label }}）</span></div>
+        <div class="sm">クレジット決済（Stripe／カード情報は弊社で保持しません）。適格請求書の発行可。</div>
+        <a class="btn btn-outline pricefoot__more" href="join/#料金課金のしくみ">料金・課金のしくみを図で見る →</a>
+      </div>
+    </div>
+  </section>
+
+  {# ⑧ 主催者 #}
+  <section class="block alt">
+    <div class="wrap read">
+      <div class="seyebrow">主催者</div>
+      <div class="host-card">
+        <img class="av-photo" src="assets/profile.jpg" alt="主催者 栗山 実">
+        <div>
+          <h3>栗山 実 ／ Minoru Kuriyama</h3>
+          <p>株式会社アンテカニス 代表取締役。多摩大学大学院特任教授、グロービス経営大学院教員。マッキンゼー・アンド・カンパニーで戦略コンサルティングに従事後、独立。AI・データ戦略の企業助言、人材育成、スタートアップの事業創造・経営に携わる。東京大学理学部物理学科卒・同大学院修士課程修了。</p>
+          <p style="margin-top:8px"><a class="textlink" href="about/profile/">プロフィール詳細 →</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# ⑨ ファイナルCTA＋目的別の入口 #}
+  <section class="block">
+    <div class="wrap">
+      <div class="finalcta">
+        <div>
+          <h2>次回は {{ config.extra.next_session_short }}。まずは案内を受け取る。</h2>
+          <div class="sub">すぐの参加が難しい方も歓迎。開催案内と結果をメールでお送りします。</div>
+        </div>
+        <a class="btn btn-gold btn-lg" href="{{ config.extra.register_url }}" target="_blank" rel="noopener">参加・案内登録へ</a>
+      </div>
+      <div class="seyebrow" style="margin-top:48px">目的別の入口</div>
+      <div class="cards">
+        <div class="card"><div class="k">はじめての方</div><h3>プロジェクトについて</h3><p>背景・狙い、設計思想、主催者を知る。</p><a href="about/">→ 詳しく見る</a></div>
+        <div class="card"><div class="k">参加を検討</div><h3>参加する</h3><p>参加費・決済、登録方法、法人のご利用。</p><a href="join/">→ 参加方法</a></div>
+        <div class="card"><div class="k">受講中の方</div><h3>スタートガイド・用語集</h3><p>当日の準備と進め方、用語の確認。</p><a href="start-guide/">→ ガイドへ</a></div>
+        <div class="card"><div class="k">内容を見たい</div><h3>セッション・ダイジェスト</h3><p>各回のテーマと過去回の公開ダイジェスト。</p><a href="digests/">→ ダイジェスト</a></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+</main>
+{% endblock %}
