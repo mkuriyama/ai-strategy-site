@@ -201,7 +201,7 @@
 }
 
 /* live panel */
-.home-landing .live { margin: -30px auto 0; position: relative; z-index: 5; }
+.home-landing .live { margin: -30px auto 0; position: relative; z-index: 1; }
 .home-landing .live .panel {
   background: #fff; border: 1px solid var(--line); border-radius: 16px;
   box-shadow: 0 20px 50px -34px rgba(0,48,57,.5); overflow: hidden;
