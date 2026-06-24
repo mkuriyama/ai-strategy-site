@@ -158,42 +158,42 @@ p{ text-wrap:pretty; }
 
 /* ===================== PAGE 2 (裏面・詳細) ===================== */
 .p2{ }
-.p2 .head{ border-bottom:1.2pt solid var(--line); padding-bottom:2.5mm; margin-bottom:3mm; }
+.p2 .head{ border-bottom:1.2pt solid var(--line); padding-bottom:2mm; margin-bottom:2mm; }
 .p2 .head .t{ font-family:var(--gothic); font-size:17.5pt; color:var(--teal); font-weight:700; letter-spacing:.02em; }
 .p2 .head .s{ font-size:9pt; color:var(--muted); margin-top:1.5mm; }
-.p2 .body{ font-size:9.2pt; line-height:1.56; }
-.p2 .sec-label{ padding-bottom:1mm; margin-bottom:2mm; }
+.p2 .body{ font-size:9.2pt; line-height:1.5; }
+.p2 .sec-label{ padding-bottom:1mm; margin-bottom:1.6mm; }
 
-.block{ margin-bottom:2.6mm; }
+.block{ margin-bottom:1.8mm; }
 .bg-pull{                       /* ★明朝（主張その2） */
-  font-family:var(--serif); color:var(--teal); font-size:12pt; line-height:1.45;
-  font-weight:600; margin:2mm 0 0; text-wrap:balance; }
+  font-family:var(--serif); color:var(--teal); font-size:12pt; line-height:1.4;
+  font-weight:600; margin:1.2mm 0 0; text-wrap:balance; }
 
 .layers{ display:grid; grid-template-columns:1fr; }
 .layer{ display:grid; grid-template-columns:32mm 1fr; gap:4mm; align-items:baseline;
-  padding:1.0mm 0; border-top:1pt solid var(--line-soft); }
+  padding:0.7mm 0; border-top:1pt solid var(--line-soft); }
 .layer:first-child{ border-top:none; }
 .layer .lz{ font-size:9.2pt; font-weight:700; color:var(--teal); }
 .layer .lz small{ display:block; font-size:7.4pt; color:var(--muted); font-weight:600; letter-spacing:.16em; margin-top:.5mm;}
 .layer .ld{ font-size:8.6pt; line-height:1.42; color:var(--ink); }
 
-.tags{ display:flex; flex-wrap:wrap; gap:2mm 2.2mm; margin-top:2mm; }
+.tags{ display:flex; flex-wrap:wrap; gap:1.6mm 2mm; margin-top:1.5mm; }
 .tag{ font-size:8.3pt; color:var(--teal); background:var(--tint); border:1pt solid var(--line-soft);
-  border-radius:6mm; padding:1mm 3.2mm; line-height:1.4; }
-.done{ font-size:8.5pt; line-height:1.48; color:var(--ink); margin-top:1.5mm; }
+  border-radius:6mm; padding:0.8mm 3mm; line-height:1.35; }
+.done{ font-size:8.5pt; line-height:1.45; color:var(--ink); margin-top:1.2mm; }
 .done b{ color:var(--teal); }
 
 .cols2{ display:grid; grid-template-columns:1fr 1fr; gap:7mm; }
 .steps{ counter-reset:s; margin:0; padding:0; }
 .steps li{ list-style:none; counter-increment:s; position:relative;
-  padding:0 0 1.3mm 8mm; font-size:8.6pt; line-height:1.44; color:var(--ink); }
+  padding:0 0 1.0mm 8mm; font-size:8.6pt; line-height:1.42; color:var(--ink); }
 .steps li::before{ content:counter(s,decimal-leading-zero); position:absolute; left:0; top:.3mm;
   font-size:10pt; color:var(--teal); font-weight:700; }
 .deliv{ font-size:8.5pt; line-height:1.45; color:var(--ink); }
 .steps-2col{ columns:2; column-gap:8mm; }
 .steps-2col li{ break-inside:avoid; }
 
-.notwhat{ background:var(--tint); border-radius:1.5mm; padding:2.2mm 4.5mm; }
+.notwhat{ background:var(--tint); border-radius:1.5mm; padding:1.8mm 4.5mm; }
 .notwhat .ti{ font-size:9pt; font-weight:700; color:var(--teal); margin-bottom:1.6mm; }
 .notwhat ul{ margin:0; padding:0; list-style:none; columns:2; column-gap:7mm; }
 .notwhat li{ font-size:8.4pt; line-height:1.4; color:var(--ink); padding-left:5mm; position:relative; margin-bottom:.6mm; break-inside:avoid;}
@@ -201,7 +201,7 @@ p{ text-wrap:pretty; }
 
 .req{ font-size:8.5pt; line-height:1.45; color:var(--ink); }
 
-.sched{ background:var(--tint2); border-radius:1.5mm; padding:3.5mm 4.5mm; }
+.sched{ background:var(--tint2); border-radius:1.5mm; padding:2.8mm 4.5mm; }
 .sched .ti{ font-size:9pt; font-weight:700; color:var(--teal); margin-bottom:1.4mm; }
 .sched .dates{ font-family:var(--gothic); font-size:10.5pt; font-weight:700; color:var(--teal); letter-spacing:.04em; line-height:1.5;}
 .sched .note{ font-size:7.8pt; color:var(--muted); margin-top:1.4mm; line-height:1.45;}
@@ -272,7 +272,7 @@ p{ text-wrap:pretty; }
       <dt>形式</dt>
       <dd>オンライン（Zoom）／毎月火曜 20:00〜（本編 約2〜2.5時間 ＋ 交流〜60分）。各回は独立したテーマ。</dd>
       <dt>参加費</dt>
-      <dd class="price">申込当月回は<b>無料</b>、翌月回から月額制。<br>早期割 <b>5,940円</b>（税込・2026年6月申込対象）<br>定価 9,900円（税込）。<br><span class="nb">Stripe決済</span>（カード情報は弊社で保持しません）。いつでも解約可・適格請求書PDF発行。</dd>
+      <dd class="price">申込当月回は<b>無料</b>、翌月回から月額制。<br>早期割 <b>5,940円</b>（税込・第2回〔6/23・7/10〕からの参加者対象）<br>定価 9,900円（税込）。<br><span class="nb">Stripe決済</span>（カード情報は弊社で保持しません）。いつでも解約可・適格請求書PDF発行。</dd>
     </dl>
   </div>
 
@@ -287,8 +287,8 @@ p{ text-wrap:pretty; }
       <div class="qtxt">
         <div class="free">まずは、無料で体験できます。</div>
         <div class="dates2">
-          <div><span class="dl">第2回セッション（本編）</span><span class="dv">6/23(火) 20:00</span></div>
-          <div><span class="dl">第2回 サブ回（同内容・追加開催）</span><span class="dv">7/10(木) 20:00</span></div>
+          <div><span class="dl">第2回（追加日程・再演）</span><span class="dv">7/10(金) 20:00</span></div>
+          <div><span class="dl">第3回セッション</span><span class="dv">7/21(火) 20:00</span></div>
         </div>
         <div class="reg"><span class="act">QRから「メール登録」</span>で、開催のご案内を順次お送りします。</div>
         <div class="mail">法人・社内でのご検討、ご紹介のご相談：<b>support@antecanis.com</b></div>
@@ -344,8 +344,9 @@ p{ text-wrap:pretty; }
       <span class="tag">最適な組み合わせを見つける</span>
       <span class="tag">顧客心理・組織判断を捉える</span>
       <span class="tag">複数AIを束ねる</span>
+      <span class="tag">組織の知と人を再設計する</span>
     </div>
-    <div class="done"><b>第1回（実施済）</b>　人間の認知容量の解除 ── 情報×AIの戦略インパクト。<br><b>第2回（6/23・予定）</b>　AI時代の戦略の大転換を、AIと共に考える（Design the AI strategy with AI）。</div>
+    <div class="done"><b>第1回（実施済）</b>　人間の認知容量の解除 ── 情報×AIの戦略インパクト。<br><b>第2回（6/23実施・7/10再演）</b>　AI時代の戦略の大転換を、AIと共に考える（Design the AI strategy with AI）。<br><b>第3回（7/21・予定）</b>　組織変革 ── 情報流通・人材・組織知をAIで再設計する。</div>
   </div>
 
   <div class="block">
@@ -383,8 +384,8 @@ p{ text-wrap:pretty; }
       <!-- UPDATE: 開催予定リスト -->
       <div class="sched">
         <div class="ti">今後の開催予定</div>
-        <div class="dates">6/23・7/21・8/18・9/15<br>10/20・11/17・12/15</div>
-        <div class="note">いずれも火曜・20:00開始予定。各回は独立したテーマで、途中参加も歓迎します。</div>
+        <div class="dates">7/21・8/18・9/15<br>10/20・11/17・12/15</div>
+        <div class="note">いずれも火曜・20:00開始予定。追加のサブ回（例：7/10〔金〕）も随時開催。各回は独立テーマで途中参加も歓迎します。</div>
       </div>
     </div>
   </div>

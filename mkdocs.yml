@@ -131,6 +131,7 @@ nav:
       - 開催予定・次回案内: sessions/schedule.md
       - ダイジェスト:
           - 一覧: digests/index.md
+          - Vol.2 第2回（6/23）：戦略の大転換をAIと考える: digests/vol-02.md
           - Vol.1A 第1回（メイン回・5/26）：人間の認知容量の解除: digests/vol-01.md
           - Vol.1B 第1回（追加開催・6/15）：人間の認知容量の解除: digests/vol-01b.md
   - ガイド・用語集:
@@ -151,18 +152,18 @@ extra:
   # ホーム(overrides/home.html)・schedule・join 等が参照する。
   # ────────────────────────────────────────────────────────────
   register_url: https://mailchi.mp/antecanis/ai-strategy
-  # ヘッダー／導線で使う短縮表記（直近の本編回）
-  next_session_short: "6/23(火) 20:00〜"
+  # ヘッダー／導線で使う短縮表記（直近に開催される回）
+  next_session_short: "7/10(金) 20:00〜"
   # 次回回の配列（ラベル／種別 main|sub／日付／補足）
   sessions:
-    - label: "本編 第2回"
-      kind: main
-      date: "6/23(火) 20:00〜"
-      note: "オンライン(Zoom)／登録後の初回は無料。パイロットを経た本編スタート。"
-    - label: "追加開催 サブ回"
+    - label: "追加開催 第2回サブ"
       kind: sub
-      date: "7/10(木) 20:00〜"
-      note: "第2回と同内容の追加開催。本編に都合が合わない方向け。"
+      date: "7/10(金) 20:00〜"
+      note: "第2回と同内容の追加開催。6/23の本編に都合が合わなかった方向け。登録後の初回は無料。"
+    - label: "本編 第3回"
+      kind: main
+      date: "7/21(火) 20:00〜"
+      note: "オンライン(Zoom)／新テーマの本編（テーマは準備中）。各回は独立で途中参加歓迎。"
   # 参加費（home のティーザー／join の正本が参照）
   pricing:
     early_label: "早期参加枠"
@@ -170,7 +171,7 @@ extra:
     early_monthly_incl: "5,940円"
     list_monthly: "9,000円＋税"
     list_monthly_incl: "9,900円"
-    early_target: "2026年6月申込対象"
+    early_target: "2026年7月申込対象"
 
 copyright: >-
   &copy; AI戦略実践プロジェクト／株式会社アンテカニス・栗山実
