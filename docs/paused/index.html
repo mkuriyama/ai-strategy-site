@@ -9,9 +9,10 @@
     :root{--bg:#f8f5f0;--ink:#004455;--accent:#C75A3C;--muted:#5E7378;}
     *{box-sizing:border-box;}
     body{font-family:-apple-system,"Noto Sans JP",sans-serif;background:var(--bg);
-         color:var(--ink);margin:0;min-height:100vh;display:flex;align-items:center;
-         justify-content:center;padding:24px;line-height:1.85;-webkit-font-smoothing:antialiased;}
-    .card{max-width:560px;width:100%;text-align:center;}
+         color:var(--ink);margin:0;padding:48px 24px 64px;line-height:1.85;
+         -webkit-font-smoothing:antialiased;}
+    .card{max-width:560px;width:100%;margin:0 auto;text-align:center;}
+    .logo{height:40px;width:auto;display:block;margin:0 auto 32px;}
     h1{font-size:23px;font-weight:700;margin:0 0 22px;letter-spacing:.02em;line-height:1.4;}
     p{font-size:15px;margin:0 0 16px;text-align:left;}
     p.lead{text-align:center;font-size:16px;}
@@ -24,6 +25,7 @@
 </head>
 <body>
   <div class="card">
+    <img class="logo" src="/assets/logo-mincho-dark.svg" alt="AI戦略実践プロジェクト">
     <h1>お申し込みは完了していません</h1>
     <p class="lead">決済手続きが中断されました。お申し込みはまだ完了していません。</p>
     <p>ご準備ができましたら、お送りしているメール内のお申し込みボタンから、いつでも再開

@@ -25,8 +25,8 @@ def define_env(env):
         return "\n".join(out)
 
     @env.macro
-    def register_button(label="参加・案内登録へ"):
-        """登録（Mailchimp）ボタン。URL は単一ソースから。"""
+    def register_button(label="案内メールを受け取る（無料登録）"):
+        """案内メール配信（Mailchimp）への登録ボタン。URL は単一ソースから。"""
         url = extra.get("register_url", "#")
         return (
             f"[{label}]({url})"
@@ -47,10 +47,10 @@ def define_env(env):
             lines.append("**関連ページ:** " + " ・ ".join(related))
             lines.append("")
         if nxt:
-            lines.append(f"次回開催は **{nxt}**。継続的な開催案内はメール登録から受け取れます。")
+            lines.append(f"次回開催は **{nxt}**。継続的な開催案内はメール配信登録から受け取れます。")
             lines.append("")
         lines.append(
-            f"[参加・案内登録へ]({url})"
+            f"[案内メールを受け取る（無料登録）]({url})"
             "{ .md-button .md-button--primary target=_blank rel=noopener }"
         )
         lines.append("")
