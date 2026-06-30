@@ -6,15 +6,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>お申し込みありがとうございます｜AI戦略実践プロジェクト</title>
   <style>
-    :root{--bg:#f8f5f0;--ink:#004455;--accent:#C75A3C;--muted:#5E7378;}
+    :root{--bg:#f8f5f0;--ink:#004455;--accent:#C75A3C;--muted:#5E7378;--line:rgba(0,68,85,.18);}
     *{box-sizing:border-box;}
     body{font-family:-apple-system,"Noto Sans JP",sans-serif;background:var(--bg);
-         color:var(--ink);margin:0;min-height:100vh;display:flex;align-items:center;
-         justify-content:center;padding:24px;line-height:1.85;-webkit-font-smoothing:antialiased;}
-    .card{max-width:600px;width:100%;text-align:center;}
+         color:var(--ink);margin:0;padding:48px 24px 64px;line-height:1.85;
+         -webkit-font-smoothing:antialiased;}
+    .card{max-width:600px;width:100%;margin:0 auto;text-align:center;}
+    .logo{height:40px;width:auto;display:block;margin:0 auto 32px;}
     h1{font-size:24px;font-weight:700;margin:0 0 22px;letter-spacing:.02em;line-height:1.4;}
     p{font-size:15px;margin:0 0 16px;text-align:left;}
     p.lead{text-align:center;font-size:16px;}
+    .notice{background:#fffdf9;border:1px solid var(--line);border-left:4px solid var(--accent);
+            border-radius:8px;padding:16px 18px;margin:0 0 18px;text-align:left;font-size:14px;line-height:1.8;}
+    .mailbox{background:#fff;border:1px solid var(--line);border-radius:8px;
+             padding:18px 20px;margin:0 0 18px;text-align:left;}
+    .mailbox h2{font-size:15px;font-weight:700;margin:0 0 12px;}
+    .mailbox dl{margin:0;font-size:14px;line-height:1.75;}
+    .mailbox dt{font-weight:700;color:var(--ink);margin-top:10px;}
+    .mailbox dt:first-child{margin-top:0;}
+    .mailbox dd{margin:2px 0 0;color:#2c4046;}
+    .mailbox .mono{font-size:13.5px;}
     .actions{margin:30px 0 6px;display:flex;flex-direction:column;gap:14px;align-items:center;}
     .btn{display:inline-block;background:var(--accent);color:#fff;text-decoration:none;
          font-weight:700;padding:13px 30px;border-radius:8px;font-size:15px;}
@@ -22,11 +33,13 @@
     .link{color:var(--ink);font-weight:600;text-decoration:none;border-bottom:1px solid rgba(0,68,85,.35);}
     .link:hover{border-bottom-color:var(--ink);}
     .note{font-size:13px;color:var(--muted);margin:26px 0 0;text-align:center;}
+    a.mail{color:var(--accent);}
     .note a{color:var(--accent);}
   </style>
 </head>
 <body>
   <div class="card">
+    <img class="logo" src="/assets/logo-mincho-dark.svg" alt="AI戦略実践プロジェクト">
     <h1>お申し込みありがとうございます</h1>
     <p class="lead">「AI戦略実践プロジェクト」へのお申し込みを受け付けました。</p>
     <p><strong>今後の流れ</strong><br>
@@ -34,8 +47,32 @@
       オンライン会場（Zoom）リンクや当日資料は、主に Circle 内でご案内します。
       あわせて、開催前後のご案内をメールでもお送りします。
       お手元に届くまで少しお時間をいただく場合があります。</p>
+
+    <div class="notice">
+      ご案内とコミュニティ（Circle）へのご招待は、お申し込み時のメールアドレス宛にお送りします。
+      「迷惑メール」「プロモーション」フォルダに振り分けられることがあるため、併せてご確認ください。
+      <a class="mail" href="mailto:support@antecanis.com">support@antecanis.com</a> と
+      <span class="mono">no-reply@notification.circle.so</span>
+      を受信できるよう設定いただくと確実です。
+    </div>
+
+    <div class="mailbox">
+      <h2>まもなく届くメールについて</h2>
+      <dl>
+        <dt>差出人</dt>
+        <dd class="mono">AI戦略実践 &lt;no-reply@notification.circle.so&gt;</dd>
+        <dt>件名</dt>
+        <dd>「AI戦略実践プロジェクト」コミュニティ（会員サイト）への参加手続き (Circle)</dd>
+        <dt>本文</dt>
+        <dd>メール内の「Accept invitation」ボタンから参加手続きにお進みください。
+          数日内に見当たらない場合は、迷惑メール／プロモーションフォルダをご確認のうえ、
+          <a class="mail" href="mailto:support@antecanis.com">support@antecanis.com</a> までご連絡ください。</dd>
+      </dl>
+    </div>
+
     <p>初回のご決済は、お申し込み月に応じた毎月15日が目安です。無料参加期間中に解約された
       場合は、ご決済は発生しません。</p>
+
     <div class="actions">
       <a class="btn" href="https://ai-strategy.antecanis.com/start-guide/">当日までの準備・進め方を見る</a>
       <a class="link" href="https://ai-strategy.antecanis.com/sessions/schedule/">次回の開催日程・内容はこちら →</a>
