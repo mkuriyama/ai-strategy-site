@@ -40,7 +40,7 @@ description: 参加費と決済のしくみ。早期参加枠・課金の流れ�
 <svg viewBox="0 0 780 430" xmlns="http://www.w3.org/2000/svg" font-family="'Noto Sans JP', sans-serif" role="img" aria-label="お申し込みから課金までの流れ">
 <rect x="0" y="0" width="780" height="430" fill="#FFFFFF"/>
 <text x="40" y="50" font-family="'Noto Serif JP', serif" font-size="27" font-weight="700" fill="#004455">お申し込みから課金までの流れ</text>
-<text x="41" y="79" font-size="14" fill="#5E7378">例：7月〜8月上旬にお申し込みの場合（第3回コホート）</text>
+<text x="41" y="79" font-size="14" fill="#5E7378">例：8月〜9月上旬にお申し込みの場合（第4回コホート）</text>
 <rect x="39" y="104" width="168" height="104" rx="12" fill="#EAF1F2" stroke="#AEC6CA" stroke-width="1.5"/>
 <text x="123" y="128" text-anchor="middle" font-size="11" letter-spacing="1.5" font-weight="700" fill="#1C6E7C">STEP 1</text>
 <text x="123" y="154" text-anchor="middle" font-family="'Noto Serif JP', serif" font-size="20" font-weight="700" fill="#004455">お申し込み</text>
@@ -48,7 +48,7 @@ description: 参加費と決済のしくみ。早期参加枠・課金の流れ�
 <line x1="123" y1="208" x2="123" y2="252" stroke="#AEC6CA" stroke-width="1.5"/>
 <rect x="219" y="104" width="168" height="104" rx="12" fill="#F5ECD3" stroke="#E0C77E" stroke-width="1.5"/>
 <text x="303" y="128" text-anchor="middle" font-size="11" letter-spacing="1.5" font-weight="700" fill="#C0962F">STEP 2</text>
-<text x="303" y="154" text-anchor="middle" font-family="'Noto Serif JP', serif" font-size="20" font-weight="700" fill="#004455">第3回に参加</text>
+<text x="303" y="154" text-anchor="middle" font-family="'Noto Serif JP', serif" font-size="20" font-weight="700" fill="#004455">第4回に参加</text>
 <text x="303" y="184" text-anchor="middle" font-family="'Noto Serif JP', serif" font-size="24" font-weight="700" fill="#C0962F">¥0 <tspan font-size="15">無料</tspan></text>
 <line x1="303" y1="208" x2="303" y2="252" stroke="#E0C77E" stroke-width="1.5"/>
 <rect x="397" y="104" width="168" height="104" rx="12" fill="#EAF1F2" stroke="#AEC6CA" stroke-width="1.5"/>
@@ -61,24 +61,24 @@ description: 参加費と決済のしくみ。早期参加枠・課金の流れ�
 <text x="659" y="154" text-anchor="middle" font-family="'Noto Serif JP', serif" font-size="20" font-weight="700" fill="#004455">以降の課金</text>
 <text x="659" y="182" text-anchor="middle" font-size="12.5" fill="#003A47">毎月15日に自動更新</text>
 <line x1="659" y1="208" x2="659" y2="252" stroke="#AEC6CA" stroke-width="1.5"/>
-<text x="303" y="200" text-anchor="middle" font-size="11.5" fill="#5E7378">7/21 A・8/3 B</text>
+<text x="303" y="200" text-anchor="middle" font-size="11.5" fill="#5E7378">8/18 A・9/3 B</text>
 <line x1="40" y1="252" x2="748" y2="252" stroke="#1C6E7C" stroke-width="2"/>
 <polygon points="748,247 760,252 748,257" fill="#1C6E7C"/>
 <circle cx="123" cy="252" r="6.5" fill="#004455" stroke="#FFFFFF" stroke-width="2"/>
-<text x="123" y="276" text-anchor="middle" font-size="13" font-weight="700" fill="#004455">7月〜8月上旬</text>
+<text x="123" y="276" text-anchor="middle" font-size="13" font-weight="700" fill="#004455">8月〜9月上旬</text>
 <circle cx="303" cy="252" r="6.5" fill="#C0962F" stroke="#FFFFFF" stroke-width="2"/>
-<text x="303" y="276" text-anchor="middle" font-size="13" font-weight="700" fill="#004455">7/21・8/3</text>
+<text x="303" y="276" text-anchor="middle" font-size="13" font-weight="700" fill="#004455">8/18・9/3</text>
 <circle cx="481" cy="252" r="6.5" fill="#004455" stroke="#FFFFFF" stroke-width="2"/>
-<text x="481" y="276" text-anchor="middle" font-size="13" font-weight="700" fill="#004455">8/15</text>
+<text x="481" y="276" text-anchor="middle" font-size="13" font-weight="700" fill="#004455">9/15</text>
 <circle cx="659" cy="252" r="6.5" fill="#004455" stroke="#FFFFFF" stroke-width="2"/>
 <text x="659" y="276" text-anchor="middle" font-size="13" font-weight="700" fill="#004455">毎月15日</text>
 <rect x="40" y="300" width="708" height="86" rx="12" fill="#EAF1F2" stroke="#AEC6CA" stroke-width="1.5"/>
 <rect x="40" y="300" width="6" height="86" rx="3" fill="#C0962F"/>
 <text x="64" y="332" font-family="'Noto Serif JP', serif" font-size="17" font-weight="700" fill="#004455">解約はいつでも。課金日の前日までなら、その月は¥0。</text>
 <text x="64" y="358" font-size="13.5" fill="#003A47">各課金日（毎月15日）の前日までに Stripe カスタマーポータルから解約すれば、その月の費用は発生しません。</text>
-<text x="64" y="378" font-size="13.5" fill="#5E7378">例）8/14 までに解約 → 費用ゼロ。 ／ カード情報は弊社で保持しません。</text>
+<text x="64" y="378" font-size="13.5" fill="#5E7378">例）9/14 までに解約 → 費用ゼロ。 ／ カード情報は弊社で保持しません。</text>
 </svg>
-<figcaption>図1：お申し込みから課金までの流れ（第3回コホートの例）</figcaption>
+<figcaption>図1：お申し込みから課金までの流れ（第4回コホートの例）</figcaption>
 </figure>
 
 <figure markdown="span">
@@ -111,7 +111,7 @@ description: 参加費と決済のしくみ。早期参加枠・課金の流れ�
 <line x1="158" y1="362" x2="748" y2="362" stroke="#004455" stroke-width="3.4"/>
 <circle cx="216" cy="362" r="7.5" fill="#C0962F" stroke="#FFFFFF" stroke-width="2"/>
 <rect x="202" y="376" width="186" height="40" rx="9" fill="#F5ECD3" stroke="#E0C77E" stroke-width="1.3"/>
-<text x="212" y="393" font-size="12" font-weight="700" fill="#C0962F">いまここ：第3回コホート</text>
+<text x="212" y="393" font-size="12" font-weight="700" fill="#C0962F">いまここ：第4回コホート</text>
 <text x="212" y="410" font-size="11.5" fill="#003A47">当面 ¥5,400／月 のまま</text>
 <text x="744" y="352" text-anchor="end" font-size="12.5" font-weight="700" fill="#004455">お申し込み済みの方は据え置き</text>
 <line x1="158" y1="462" x2="190" y2="462" stroke="#004455" stroke-width="3.4"/>
