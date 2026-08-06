@@ -131,12 +131,12 @@ nav:
       - 開催予定・次回案内: sessions/schedule.md
       - ダイジェスト:
           - 一覧: digests/index.md
-          - Vol.3A 第3回（A日程・7/21）：AI戦略 × 組織レイヤー: digests/vol-03.md
           - Vol.3B 第3回（B日程・8/3）：AI戦略 × 組織レイヤー: digests/vol-03b.md
-          - Vol.2A 第2回（A日程・6/23）：戦略の大転換をAIと考える: digests/vol-02.md
+          - Vol.3A 第3回（A日程・7/21）：AI戦略 × 組織レイヤー: digests/vol-03.md
           - Vol.2B 第2回（B日程・7/10）：戦略の大転換をAIと考える: digests/vol-02b.md
-          - Vol.1A 第1回（メイン回・5/26）：人間の認知容量の解除: digests/vol-01.md
+          - Vol.2A 第2回（A日程・6/23）：戦略の大転換をAIと考える: digests/vol-02.md
           - Vol.1B 第1回（追加開催・6/15）：人間の認知容量の解除: digests/vol-01b.md
+          - Vol.1A 第1回（メイン回・5/26）：人間の認知容量の解除: digests/vol-01.md
   - ガイド・用語集:
       - スタートガイド: start-guide.md
       - 用語集: glossary.md
