@@ -25,19 +25,21 @@ def define_env(env):
         return "\n".join(out)
 
     @env.macro
-    def register_button(label="案内メールを受け取る（無料登録）", primary=True):
+    def register_button(label="案内メールを受け取る（無料登録）"):
         """案内メール配信（Mailchimp）への登録ボタン。URL は単一ソースから。
 
-        primary=False は、申込ボタンが「主」になるページ（register）で
-        メール登録を視覚的に控えめにするためのアウトライン表示。
+        色は金（gold）で固定。サイト全体で「金＝メール登録／ティール＝申込」を守り、
+        2つの入口がひと目で区別できるようにする（ホームの btn-gold と同じ役割）。
         """
         url = extra.get("register_url", "#")
-        style = " .md-button--primary" if primary else ""
-        return f"[{label}]({url})" + "{ .md-button" + style + " target=_blank rel=noopener }"
+        return (
+            f"[{label}]({url})"
+            "{ .md-button .md-button--gold target=_blank rel=noopener }"
+        )
 
     @env.macro
     def join_button(label="今すぐ申し込む（申込月無料）"):
-        """申込（Stripe）への直リンクボタン。URL は単一ソースから。"""
+        """申込（Stripe）への直リンクボタン。URL は単一ソースから。色はティール。"""
         url = extra.get("join_url", "#")
         return (
             f"[{label}]({url})"
@@ -60,9 +62,9 @@ def define_env(env):
         related には整形済みの Markdown リンク文字列を渡す。
         例: {{ footer_cta("[背景と狙い](../about/index.md)", "[設計思想](philosophy.md)") }}
 
-        CTA はサイトの2本立てに揃える。主＝参加費とお申し込み（join）、
-        従＝案内メールの無料登録。join ページ自身では自己リンクになるため、
-        join_cta=False でメール登録のみを表示する。
+        CTA はサイトの2本立てを常にボタン2つで見せる。ティール＝参加費とお申し込み
+        （join）、金＝案内メールの無料登録。join ページ自身は申込ボタンが本文中に
+        あるため、join_cta=False でメール登録のみを表示する。
         """
         url = extra.get("register_url", "#")
         nxt = extra.get("next_session_short", "")
@@ -71,22 +73,21 @@ def define_env(env):
             lines.append("**関連ページ:** " + " ・ ".join(related))
             lines.append("")
         if nxt:
-            lines.append(f"次回開催は **{nxt}**。")
+            lines.append(f"次回開催は **{nxt}**。参加を決めた方も、まず情報だけ受け取りたい方も、"
+                         "下のいずれかからどうぞ。" if join_cta else f"次回開催は **{nxt}**。")
             lines.append("")
+        lines.append('<div class="cta-pair" markdown>')
+        lines.append("")
         if join_cta:
             lines.append(
                 f"[参加費とお申し込みを見る →]({_rel('join/')})"
                 "{ .md-button .md-button--primary }"
             )
-            lines.append("")
-            lines.append(
-                f"まだ検討中の方は、[案内メールだけ受け取る（無料登録）]({url})"
-                "{ target=_blank rel=noopener } こともできます。"
-            )
-        else:
-            lines.append(
-                f"[案内メールを受け取る（無料登録）]({url})"
-                "{ .md-button .md-button--primary target=_blank rel=noopener }"
-            )
+        lines.append(
+            f"[案内メールを受け取る（無料登録）]({url})"
+            "{ .md-button .md-button--gold target=_blank rel=noopener }"
+        )
+        lines.append("")
+        lines.append("</div>")
         lines.append("")
         return "\n".join(lines)

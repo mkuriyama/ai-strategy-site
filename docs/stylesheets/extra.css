@@ -71,6 +71,18 @@
   border-color: var(--md-accent-fg-color);
   color: #fff;
 }
+/* 金＝案内メールの無料登録。ティール(--primary)＝申込（Stripe）。
+   ホーム（.home-landing の btn-gold / btn-teal）と役割・配色を揃える。 */
+.md-typeset .md-button--gold,
+.md-typeset .md-button--gold:hover {
+  background-color: var(--gold);
+  border-color: var(--gold);
+  color: #23303a;
+}
+.md-typeset .md-button--gold:hover { background-color: #d4a838; border-color: #d4a838; }
+/* 2つの入口を並べるとき、折り返しても間隔が保たれるように */
+.md-typeset .cta-pair { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.md-typeset .cta-pair .md-button { margin: 0; }
 
 /* ---- Cards ---- */
 .md-typeset .grid.cards > ul > li,

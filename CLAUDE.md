@@ -146,11 +146,13 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
   `register_url` をここで定義し、**本文（.md）にハードコードしない**。
 - **マクロ（`main.py`）**:
   - `{{ session_cards() }}` … `extra.sessions` から「次回開催」カードを描画（schedule で使用）
-  - `{{ register_button("ラベル", primary=False) }}` … メール登録ボタン（primary=False で控えめ表示）
-  - `{{ join_button("ラベル") }}` … 申込（Stripe）ボタン。**join ページの「お申し込み」節でのみ使う**
-  - `{{ footer_cta("リンク1", …, join_cta=False) }}` … 全ページ末尾の共通動線。主CTA＝
-    「参加費とお申し込みを見る →」（join への相対リンク・深さ自動計算）、従＝メール登録の
-    テキストリンク。join ページ自身は自己リンクを避けるため `join_cta=False` を渡す
+  - `{{ register_button("ラベル") }}` … メール登録ボタン（**金**・`.md-button--gold`）
+  - `{{ join_button("ラベル") }}` … 申込（Stripe）ボタン（**ティール**・`.md-button--primary`）。
+    **join ページでのみ使う**
+  - `{{ footer_cta("リンク1", …, join_cta=False) }}` … 全ページ末尾の共通動線。2つの入口を
+    ボタン2つで並べる（ティール＝「参加費とお申し込みを見る →」／金＝メール登録）。join への
+    リンクはページ深さから相対パスを自動計算。join ページ自身は申込ボタンが本文中にあるため
+    `join_cta=False` でメール登録のみ表示
   - マクロは**全 .md ページが Jinja2 で処理される**ことを意味する。本文に素の `{{ ` `{%` `{#` を
     書かない（特に attr_list の `{#id}` は Jinja コメントと衝突する。見出しIDは付けず、
     CJK見出しは `toc.slugify`(Unicode保持) が生成するアンカーを使う）。
@@ -194,6 +196,11 @@ mkdocs build --strict                  # リンク切れ等を含め検証（公
   `extra.join_url` が単一ソース）。他ページから直リンクは張らず、ホーム等は join ページへ
   誘導する（課金条件を一度目に入れてもらうため）。入口は「情報を受け取りたい人＝無料メール登録」
   「参加を決めた人＝Stripe申込」の2本立てで、文言もこの2択で統一する。
+- **ボタンの色は役割で固定する**：**金＝案内メールの無料登録**、**ティール（塗り）＝申込
+  （Stripe）または申込ページへの遷移**、**アウトライン＝回遊**。ホーム（`.btn-gold` /
+  `.btn-teal` / `.btn-outline`）と本文ページ（`.md-button--gold` / `.md-button--primary` /
+  `.md-button`）で同じ意味になるよう対応させている。2つの入口を並べるときは
+  `<div class="cta-pair" markdown>` で囲む。**同じ見た目のボタンに別の行き先を割り当てない。**
 - **「コホート」はユーザー向けの文言に出さない**（回ごとの参加者管理は裏側の運用概念）。
 - **大きい元画像**は `mkdocs.yml` の `exclude_docs` で配信から除外（リポジトリにはソースとして保持）。
 - `hooks/abbr_cjk.py` は日本語ツールチップの要。**触らない**。
