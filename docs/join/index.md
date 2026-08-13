@@ -22,8 +22,8 @@ description: 参加費と決済のしくみ。早期参加枠・課金の流れ�
 ## 決済方式
 
 - クレジットカード等を利用できる **Stripe** での決済です（**カード情報は弊社で保持しません**）。
-- **決済リンクは、ご登録いただいた方にメールでご案内します**（公開ページには掲載しません）。
-  月ごとの参加コホートに応じて、初回決済日や限定クーポンなどを個別にご案内するためです。
+- **お申し込みは [登録方法](register.md) のページからいつでも行えます。** 情報を受け取りながら
+  検討したい方は無料のメール登録から、参加を決めた方はそのままお申し込みへお進みください。
 - Stripe決済を完了された方を対象に、当月回のZoomリンク・資料等をご案内します。
 - **申込当月回の参加は無料**、翌月回から課金が開始されます。
 - **いつでもご自身で解約できます。** 申込後の当月回に参加後、翌月の課金発生日までに解約
@@ -40,7 +40,7 @@ description: 参加費と決済のしくみ。早期参加枠・課金の流れ�
 <svg viewBox="0 0 780 430" xmlns="http://www.w3.org/2000/svg" font-family="'Noto Sans JP', sans-serif" role="img" aria-label="お申し込みから課金までの流れ">
 <rect x="0" y="0" width="780" height="430" fill="#FFFFFF"/>
 <text x="40" y="50" font-family="'Noto Serif JP', serif" font-size="27" font-weight="700" fill="#004455">お申し込みから課金までの流れ</text>
-<text x="41" y="79" font-size="14" fill="#5E7378">例：8月〜9月上旬にお申し込みの場合（第4回コホート）</text>
+<text x="41" y="79" font-size="14" fill="#5E7378">例：8月〜9月上旬にお申し込みの場合</text>
 <rect x="39" y="104" width="168" height="104" rx="12" fill="#EAF1F2" stroke="#AEC6CA" stroke-width="1.5"/>
 <text x="123" y="128" text-anchor="middle" font-size="11" letter-spacing="1.5" font-weight="700" fill="#1C6E7C">STEP 1</text>
 <text x="123" y="154" text-anchor="middle" font-family="'Noto Serif JP', serif" font-size="20" font-weight="700" fill="#004455">お申し込み</text>
@@ -78,7 +78,7 @@ description: 参加費と決済のしくみ。早期参加枠・課金の流れ�
 <text x="64" y="358" font-size="13.5" fill="#003A47">各課金日（毎月15日）の前日までに Stripe カスタマーポータルから解約すれば、その月の費用は発生しません。</text>
 <text x="64" y="378" font-size="13.5" fill="#5E7378">例）9/14 までに解約 → 費用ゼロ。 ／ カード情報は弊社で保持しません。</text>
 </svg>
-<figcaption>図1：お申し込みから課金までの流れ（第4回コホートの例）</figcaption>
+<figcaption>図1：お申し込みから課金までの流れ（8月〜9月上旬にお申し込みの場合）</figcaption>
 </figure>
 
 <figure markdown="span">
@@ -111,7 +111,7 @@ description: 参加費と決済のしくみ。早期参加枠・課金の流れ�
 <line x1="158" y1="362" x2="748" y2="362" stroke="#004455" stroke-width="3.4"/>
 <circle cx="216" cy="362" r="7.5" fill="#C0962F" stroke="#FFFFFF" stroke-width="2"/>
 <rect x="202" y="376" width="186" height="40" rx="9" fill="#F5ECD3" stroke="#E0C77E" stroke-width="1.3"/>
-<text x="212" y="393" font-size="12" font-weight="700" fill="#C0962F">いまここ：第4回コホート</text>
+<text x="212" y="393" font-size="12" font-weight="700" fill="#C0962F">いまここ：現在の早期参加枠</text>
 <text x="212" y="410" font-size="11.5" fill="#003A47">当面 ¥5,400／月 のまま</text>
 <text x="744" y="352" text-anchor="end" font-size="12.5" font-weight="700" fill="#004455">お申し込み済みの方は据え置き</text>
 <line x1="158" y1="462" x2="190" y2="462" stroke="#004455" stroke-width="3.4"/>

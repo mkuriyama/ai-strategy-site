@@ -97,6 +97,7 @@ requirements.txt                material[imaging] / macros / glightbox
 | 参加費の金額 | **`mkdocs.yml` の `extra.pricing` の1か所のみ**（ホーム・join へ自動反映）。ただし `join` の料金図SVGは画像内テキストなので別途手修正が必要 |
 | 用語の定義 | `docs/glossary.md` と `docs/includes/abbreviations.md` の**両方**（定義文を一致させる） |
 | 登録フォームURL | **`mkdocs.yml` の `extra.register_url` の1か所のみ**（通常は固定: `https://mailchi.mp/antecanis/ai-strategy`） |
+| 申込（Stripe）URL | **`mkdocs.yml` の `extra.join_url` の1か所のみ**（固定リンク: `https://go.antecanis.com/ai-strategy-join`。リンク先の差し替えはStripe側で行う） |
 
 ---
 
@@ -174,7 +175,11 @@ mkdocs build --strict                  # リンク切れ等を含め検証（公
   強調には使わない＝色の濃淡＋細い下線で表現。home-draft 準拠）。
 - **フッタの規約リンク**（プライバシー/キャンセル/利用規約/特商法/お問い合わせ）は
   `mkdocs.yml` の `copyright:` にHTMLで記載。URLは `https://www.antecanis.com/...`。
-- **決済（Stripe）リンクは公開ページに載せない**。コホート管理のうえメールで個別案内する方針。
+- **決済（Stripe）リンクは `docs/join/register.md` の「今すぐ申し込む」節にのみ掲載**（URLは
+  `extra.join_url` が単一ソース）。他ページから直リンクは張らず、ホーム等は register ページへ
+  誘導する（課金条件を一度目に入れてもらうため）。入口は「情報を受け取りたい人＝無料メール登録」
+  「参加を決めた人＝Stripe申込」の2本立てで、文言もこの2択で統一する。
+- **「コホート」はユーザー向けの文言に出さない**（回ごとの参加者管理は裏側の運用概念）。
 - **大きい元画像**は `mkdocs.yml` の `exclude_docs` で配信から除外（リポジトリにはソースとして保持）。
 - `hooks/abbr_cjk.py` は日本語ツールチップの要。**触らない**。
 - チラシ(`flyer.html`)とダイジェストの元デザインHTMLはテーマCSSと独立。チラシは
@@ -184,5 +189,6 @@ mkdocs build --strict                  # リンク切れ等を含め検証（公
 
 ## やらないこと
 
-- 会員限定情報（Zoomリンク・当日資料・録画URL・決済リンク）は**サイトに載せない**。
+- 会員限定情報（Zoomリンク・当日資料・録画URL）は**サイトに載せない**。
+  ※申込（Stripe）リンクは2026年8月に方針変更し、register ページにのみ掲載する。
 - PRの作成は依頼があったときのみ。

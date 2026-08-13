@@ -28,7 +28,7 @@
 <line x1="158" y1="362" x2="748" y2="362" stroke="#004455" stroke-width="3.4"/>
 <circle cx="216" cy="362" r="7.5" fill="#C0962F" stroke="#FFFFFF" stroke-width="2"/>
 <rect x="202" y="376" width="186" height="40" rx="9" fill="#F5ECD3" stroke="#E0C77E" stroke-width="1.3"/>
-<text x="212" y="393" font-size="12" font-weight="700" fill="#C0962F">いまここ：第2回コホート</text>
+<text x="212" y="393" font-size="12" font-weight="700" fill="#C0962F">いまここ：現在の早期参加枠</text>
 <text x="212" y="410" font-size="11.5" fill="#003A47">当面 ¥5,400／月 のまま</text>
 <text x="744" y="352" text-anchor="end" font-size="12.5" font-weight="700" fill="#004455">お申し込み済みの方は据え置き</text>
 <line x1="158" y1="462" x2="190" y2="462" stroke="#004455" stroke-width="3.4"/>
