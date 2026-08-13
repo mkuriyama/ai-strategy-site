@@ -28,4 +28,4 @@ description: 法人でのご利用。複数名利用・請求書払い・個別�
 
 株式会社アンテカニス／AI戦略実践プロジェクト
 
-{{ footer_cta("[参加費と決済](index.md)", "[設計思想](../about/philosophy.md)", "[登録方法](register.md)") }}
+{{ footer_cta("[参加費とお申し込み](index.md)", "[設計思想](../about/philosophy.md)", "[背景と狙い](../about/index.md)") }}

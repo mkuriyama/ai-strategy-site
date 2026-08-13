@@ -30,4 +30,4 @@ VISITS Technologies株式会社 取締役・共同創業者、株式会社souco 
 「**実装する力**」を同じ人間の中で統合することが、AI時代の新しい職能の核になるという考察の
 もとに設計しています。
 
-{{ footer_cta("[背景と狙い](index.md)", "[設計思想](philosophy.md)", "[参加する](../join/index.md)") }}
+{{ footer_cta("[背景と狙い](index.md)", "[設計思想](philosophy.md)", "[セッションの進め方](../sessions/index.md)") }}

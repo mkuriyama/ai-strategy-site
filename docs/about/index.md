@@ -74,4 +74,4 @@ ChatGPT・Gemini・Claudeの普及により、誰もがシステムを実装で�
 - **[設計思想](philosophy.md)** — 3つのコアコンセプトと、各回を貫く3層の視座（5×5×5の枠組み）
 - **[主催者プロフィール](profile.md)** — 栗山実について
 
-{{ footer_cta("[設計思想](philosophy.md)", "[セッションの進め方](../sessions/index.md)", "[参加する](../join/index.md)") }}
+{{ footer_cta("[設計思想](philosophy.md)", "[セッションの進め方](../sessions/index.md)", "[主催者プロフィール](profile.md)") }}

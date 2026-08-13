@@ -43,4 +43,4 @@ description: AI戦略実践プロジェクトを紹介するためのURL・例�
 
 ブラウザの印刷（Windows: `Ctrl + P` ／ Mac: `⌘ + P`）でA4印刷できます。
 
-{{ footer_cta("[背景と狙い](index.md)", "[開催予定・次回案内](../sessions/schedule.md)", "[参加する](../join/index.md)") }}
+{{ footer_cta("[背景と狙い](index.md)", "[開催予定・次回案内](../sessions/schedule.md)", "[設計思想](philosophy.md)") }}
