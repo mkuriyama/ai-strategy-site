@@ -25,9 +25,20 @@ def define_env(env):
         return "\n".join(out)
 
     @env.macro
-    def register_button(label="案内メールを受け取る（無料登録）"):
-        """案内メール配信（Mailchimp）への登録ボタン。URL は単一ソースから。"""
+    def register_button(label="案内メールを受け取る（無料登録）", primary=True):
+        """案内メール配信（Mailchimp）への登録ボタン。URL は単一ソースから。
+
+        primary=False は、申込ボタンが「主」になるページ（register）で
+        メール登録を視覚的に控えめにするためのアウトライン表示。
+        """
         url = extra.get("register_url", "#")
+        style = " .md-button--primary" if primary else ""
+        return f"[{label}]({url})" + "{ .md-button" + style + " target=_blank rel=noopener }"
+
+    @env.macro
+    def join_button(label="今すぐ申し込む（申込月無料）"):
+        """申込（Stripe）への直リンクボタン。URL は単一ソースから。"""
+        url = extra.get("join_url", "#")
         return (
             f"[{label}]({url})"
             "{ .md-button .md-button--primary target=_blank rel=noopener }"

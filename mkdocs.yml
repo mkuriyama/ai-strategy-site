@@ -155,6 +155,8 @@ extra:
   # ホーム(overrides/home.html)・schedule・join 等が参照する。
   # ────────────────────────────────────────────────────────────
   register_url: https://mailchi.mp/antecanis/ai-strategy
+  # 申込（Stripe）の直リンク。独自ドメイン配下に統一（リンク先の差し替えはStripe側で行う）
+  join_url: https://go.antecanis.com/ai-strategy-join
   # ヘッダー／導線で使う短縮表記（直近に開催される回）
   next_session_short: "8/18(火) 20:00〜"
   # 次回回の配列（ラベル／種別 main|sub／日付／補足）
