@@ -156,17 +156,17 @@ extra:
   # ────────────────────────────────────────────────────────────
   register_url: https://mailchi.mp/antecanis/ai-strategy
   # ヘッダー／導線で使う短縮表記（直近に開催される回）
-  next_session_short: "8/18(火) 20:00〜"
+  next_session_short: "9/3(木) 20:00〜"
   # 次回回の配列（ラベル／種別 main|sub／日付／補足）
   sessions:
-    - label: "第4回 A日程"
-      kind: main
-      date: "8/18(火) 20:00〜"
-      note: "オンライン(Zoom)／火曜開催のメイン日程。テーマは「物理世界との接地（Sense→Think→Act）」を構想中。登録後の初回は無料。"
     - label: "第4回 B日程"
       kind: sub
       date: "9/3(木) 20:00〜"
-      note: "第4回と同内容の追加開催。A日程に都合が合わない方向け。"
+      note: "第4回（8/18）と同内容の追加開催。A日程に都合が合わなかった方向け。登録後の初回は無料。"
+    - label: "第5回 A日程"
+      kind: main
+      date: "9/15(火) 20:00〜"
+      note: "オンライン(Zoom)／火曜開催のメイン日程。各回は独立で途中参加歓迎。"
   # 参加費（home のティーザー／join の正本が参照）
   pricing:
     early_label: "早期参加枠"
