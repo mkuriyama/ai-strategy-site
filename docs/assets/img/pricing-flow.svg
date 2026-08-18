@@ -2,7 +2,7 @@
 <svg viewBox="0 0 780 430" xmlns="http://www.w3.org/2000/svg" font-family="'Noto Sans JP', sans-serif">
 <rect x="0" y="0" width="780" height="430" fill="#FFFFFF"/>
 <text x="40" y="50" font-family="'Noto Serif JP', serif" font-size="27" font-weight="700" fill="#004455">お申し込みから課金までの流れ</text>
-<text x="41" y="79" font-size="14" fill="#5E7378">例：6月〜7月上旬にお申し込みの場合（第2回コホート）</text>
+<text x="41" y="79" font-size="14" fill="#5E7378">例：6月〜7月上旬にお申し込みの場合</text>
 <rect x="39" y="104" width="168" height="104" rx="12" fill="#EAF1F2" stroke="#AEC6CA" stroke-width="1.5"/>
 <text x="123" y="128" text-anchor="middle" font-size="11" letter-spacing="1.5" font-weight="700" fill="#1C6E7C">STEP 1</text>
 <text x="123" y="154" text-anchor="middle" font-family="'Noto Serif JP', serif" font-size="20" font-weight="700" fill="#004455">お申し込み</text>

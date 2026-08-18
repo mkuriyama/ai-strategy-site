@@ -32,8 +32,14 @@ docs/
 ├─ digests/
 │   ├─ index.md                 ダイジェスト一覧
 │   └─ vol-01.md                第1回ダイジェスト（テーマ内・SVG図解）
+├─ join/
+│   ├─ index.md                 参加費とお申し込み（費用・課金図・申込・メール登録の統合ページ）
+│   └─ corporate.md             法人の方へ
 ├─ start-guide.md               スタートガイド（受講準備・進め方）
 ├─ glossary.md                  用語集
+├─ apply/index.html             申込リンクの転送用（スタンドアロン・navに載せない）
+├─ welcome/index.html           決済完了後の着地ページ（Stripeのsuccess URL）
+├─ paused/index.html            決済中断時の着地ページ（Stripeのcancel URL）
 ├─ includes/abbreviations.md    用語ツールチップ定義（全ページに自動付与）
 ├─ stylesheets/extra.css        コーポレート配色・見出し等
 └─ assets/
@@ -54,8 +60,14 @@ overrides/
 main.py                         mkdocs-macros のマクロ定義（単一ソースを各ページへ流し込む）
 mkdocs.yml                      設定・ナビ(nav)・配色・copyright・**extra:（単一ソースデータ）**
 hooks/abbr_cjk.py               日本語の用語ツールチップを成立させる（変更不要）
-requirements.txt                material[imaging] / macros / glightbox
+requirements.txt                material[imaging] / macros / glightbox / redirects
 ```
+
+> 📄 **join の統合（2026年8月）**: 旧 `join/register.md`（登録方法）は `join/index.md` に統合。
+> 「参加費 → 課金と解約のしくみ → お申し込み → 法人 → 規約」の1ページで完結させ、広告・紹介の
+> 着地先を1つのURLに揃えた。旧URL `/join/register/` は `redirects` プラグインで `/join/` へ転送
+> （`mkdocs.yml` の `plugins.redirects.redirect_maps`）。**この転送設定は消さないこと**（メール等で
+> 配布済みのリンクが切れる）。参加者コミュニティ（Circle）の説明は `sessions/index.md` に集約。
 
 ナビ（タブ）: ホーム / プロジェクトについて / セッション / ガイド・用語集 / 参加する
 
@@ -97,6 +109,7 @@ requirements.txt                material[imaging] / macros / glightbox
 | 参加費の金額 | **`mkdocs.yml` の `extra.pricing` の1か所のみ**（ホーム・join へ自動反映）。ただし `join` の料金図SVGは画像内テキストなので別途手修正が必要 |
 | 用語の定義 | `docs/glossary.md` と `docs/includes/abbreviations.md` の**両方**（定義文を一致させる） |
 | 登録フォームURL | **`mkdocs.yml` の `extra.register_url` の1か所のみ**（通常は固定: `https://mailchi.mp/antecanis/ai-strategy`） |
+| 申込（Stripe）URL | **`mkdocs.yml` の `extra.join_url` の1か所のみ**（固定リンク: `https://go.antecanis.com/ai-strategy-join`。リンク先の差し替えはStripe側で行う） |
 
 ---
 
@@ -133,8 +146,13 @@ requirements.txt                material[imaging] / macros / glightbox
   `register_url` をここで定義し、**本文（.md）にハードコードしない**。
 - **マクロ（`main.py`）**:
   - `{{ session_cards() }}` … `extra.sessions` から「次回開催」カードを描画（schedule で使用）
-  - `{{ register_button("ラベル") }}` … 登録URLボタン
-  - `{{ footer_cta("リンク1", "リンク2", …) }}` … 全ページ末尾の共通動線（関連リンク＋登録CTA）
+  - `{{ register_button("ラベル") }}` … メール登録ボタン（**金**・`.md-button--gold`）
+  - `{{ join_button("ラベル") }}` … 申込（Stripe）ボタン（**ティール**・`.md-button--primary`）。
+    **join ページでのみ使う**
+  - `{{ footer_cta("リンク1", …, join_cta=False) }}` … 全ページ末尾の共通動線。2つの入口を
+    ボタン2つで並べる（ティール＝「参加費とお申し込みを見る →」／金＝メール登録）。join への
+    リンクはページ深さから相対パスを自動計算。join ページ自身は申込ボタンが本文中にあるため
+    `join_cta=False` でメール登録のみ表示
   - マクロは**全 .md ページが Jinja2 で処理される**ことを意味する。本文に素の `{{ ` `{%` `{#` を
     書かない（特に attr_list の `{#id}` は Jinja コメントと衝突する。見出しIDは付けず、
     CJK見出しは `toc.slugify`(Unicode保持) が生成するアンカーを使う）。
@@ -174,7 +192,16 @@ mkdocs build --strict                  # リンク切れ等を含め検証（公
   強調には使わない＝色の濃淡＋細い下線で表現。home-draft 準拠）。
 - **フッタの規約リンク**（プライバシー/キャンセル/利用規約/特商法/お問い合わせ）は
   `mkdocs.yml` の `copyright:` にHTMLで記載。URLは `https://www.antecanis.com/...`。
-- **決済（Stripe）リンクは公開ページに載せない**。コホート管理のうえメールで個別案内する方針。
+- **決済（Stripe）リンクは `docs/join/index.md` の「お申し込み」節にのみ掲載**（URLは
+  `extra.join_url` が単一ソース）。他ページから直リンクは張らず、ホーム等は join ページへ
+  誘導する（課金条件を一度目に入れてもらうため）。入口は「情報を受け取りたい人＝無料メール登録」
+  「参加を決めた人＝Stripe申込」の2本立てで、文言もこの2択で統一する。
+- **ボタンの色は役割で固定する**：**金＝案内メールの無料登録**、**ティール（塗り）＝申込
+  （Stripe）または申込ページへの遷移**、**アウトライン＝回遊**。ホーム（`.btn-gold` /
+  `.btn-teal` / `.btn-outline`）と本文ページ（`.md-button--gold` / `.md-button--primary` /
+  `.md-button`）で同じ意味になるよう対応させている。2つの入口を並べるときは
+  `<div class="cta-pair" markdown>` で囲む。**同じ見た目のボタンに別の行き先を割り当てない。**
+- **「コホート」はユーザー向けの文言に出さない**（回ごとの参加者管理は裏側の運用概念）。
 - **大きい元画像**は `mkdocs.yml` の `exclude_docs` で配信から除外（リポジトリにはソースとして保持）。
 - `hooks/abbr_cjk.py` は日本語ツールチップの要。**触らない**。
 - チラシ(`flyer.html`)とダイジェストの元デザインHTMLはテーマCSSと独立。チラシは
@@ -184,5 +211,6 @@ mkdocs build --strict                  # リンク切れ等を含め検証（公
 
 ## やらないこと
 
-- 会員限定情報（Zoomリンク・当日資料・録画URL・決済リンク）は**サイトに載せない**。
+- 会員限定情報（Zoomリンク・当日資料・録画URL）は**サイトに載せない**。
+  ※申込（Stripe）リンクは2026年8月に方針変更し、join ページにのみ掲載する。
 - PRの作成は依頼があったときのみ。
