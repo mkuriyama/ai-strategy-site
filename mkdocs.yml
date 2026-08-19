@@ -135,6 +135,7 @@ nav:
       - 開催予定・次回案内: sessions/schedule.md
       - ダイジェスト:
           - 一覧: digests/index.md
+          - Vol.4A 第4回（A日程・8/18）：物理世界との接地: digests/vol-04.md
           - Vol.3B 第3回（B日程・8/3）：AI戦略 × 組織レイヤー: digests/vol-03b.md
           - Vol.3A 第3回（A日程・7/21）：AI戦略 × 組織レイヤー: digests/vol-03.md
           - Vol.2B 第2回（B日程・7/10）：戦略の大転換をAIと考える: digests/vol-02b.md
