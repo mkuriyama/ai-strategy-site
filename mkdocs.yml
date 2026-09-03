@@ -177,9 +177,9 @@ extra:
   pricing:
     early_label: "早期参加枠"
     early_monthly: "6,300円＋税"
-    early_monthly_incl: "6,930円"
+    early_monthly_incl: "6,930"
     list_monthly: "9,000円＋税"
-    list_monthly_incl: "9,900円"
+    list_monthly_incl: "9,900"
     early_target: "2026年9月4日以降のお申し込み対象"
 
 copyright: >-
