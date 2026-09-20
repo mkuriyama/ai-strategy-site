@@ -30,7 +30,12 @@ docs/
 │   ├─ themes.md                月次テーマ（開催済み＋今後の領域）
 │   ├─ schedule.md              開催予定・次回案内（次回＋月次予定表）
 │   └─ history.md               開催履歴（`extra.history` を history_cards() で描画。本文は書かない）
-├─ digests/
+├─ digests/                     **載せないが、URLを知っていれば開ける**（2026年9月〜）。
+│                               ページは前のURLのまま。案内メールで配ったリンクと、
+│                               Circle の詳細版からの「簡易版はこちら」が生きているため。
+│                               nav・本文リンク・sitemap・llms.txt・サイト内検索からは
+│                               外し、noindex を付けている。叙述と図は今後 B に作る
+│                               会員限定の場所へ移す。
 │   ├─ index.md                 ダイジェスト一覧（カードは最新順）
 │   ├─ vol-01.md / vol-01b.md   第1回 A日程(5/26) / B日程(6/15)
 │   ├─ vol-02.md / vol-02b.md   第2回 A日程(6/23) / B日程(7/10)
@@ -76,8 +81,11 @@ main.py                         mkdocs-macros のマクロ定義（単一ソー�
 mkdocs.yml                      設定・ナビ(nav)・配色・copyright・**extra:（単一ソースデータ）**
 hooks/abbr_cjk.py               日本語の用語ツールチップを成立させる（変更不要）
 hooks/seo_files.py              AIO 用 `llms.txt` をビルド時に生成（extra: と各ページの description から）
-hooks/export_data.py            ダイジェストの**描画済み本文**を `site/data/digests.json` に出力。
-                                B の回ページ(`/context/S0N/`)が図と叙述をそのまま載せるため。
+hooks/export_data.py            3つの役割。①`site/data/rounds.json`（回の表題・領域・開催日・
+                                要約）を公開 ― B が回ページの見出しに使う。②sitemap から
+                                ダイジェストを外す。③ダイジェストの本文を `.build/digests.json`
+                                （`site/` の外＝**公開されない置き場**）へ書き出す ― 会員限定の
+                                場所へ運ぶ材料。
                                 あわせて `extra:` に真偽値として読まれたキーが無いか検査する
 requirements.txt                material[imaging] / macros / glightbox / redirects
 ```
@@ -89,6 +97,7 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
 > 配布済みのリンクが切れる）。参加者コミュニティ（Circle）の説明は `sessions/index.md` に集約。
 
 ナビ（タブ）: ホーム / プロジェクトについて / セッション（開催履歴を含む） / ガイド・用語集 / 参加する
+（ダイジェストは nav から外した。ページは残っており、URLを知っていれば開ける）
 （`mkdocs.yml` にコメントアウトで「読む」＝ニュースサイトへの外部タブを用意してある。B の公開後に有効化）
 
 ---
@@ -129,6 +138,8 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
    - 開催した回を「開催済みのテーマ」に**先頭（最新順）**で追記（ダイジェストへのリンクも）
    - 「今後のテーマ領域」から消化済みを調整
 4. **ダイジェスト**（新しい回の分） … 下記「ダイジェストの追加手順」
+   ※**nav・一覧・本文リンクには載せない。** front-matter に `search: exclude: true` を
+   付け、`extra.history` の `digests:` に対応表を足す。URLは案内メール・Circle から使う。
 5. **紹介チラシ** `docs/assets/flyer.html`
    - **単一ソースと連動しないので手動更新**。更新箇所は「次回開催枠の2日程」「今後の開催予定の
      月次リスト（過去日を除去）」「テーマ欄（実施済表記）」「参加費欄の金額・対象」
@@ -146,7 +157,7 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
 | 情報 | 載っているファイル |
 |---|---|
 | 次回開催の日程 | **`mkdocs.yml` の `extra.sessions` / `extra.next_session_short`**（ホーム・schedule・お知らせバー・JSON-LD・llms.txt へ自動反映。`date` と `start` の両方）＋ **`docs/sessions/schedule.md` の月次表**（※開催済の付与）＋ **`docs/assets/flyer.html`**（手動） |
-| 終わった回の記録 | **`mkdocs.yml` の `extra.history`**（開催履歴ページへ自動反映）＋ `extra.latest_digest`（ホームの新着）＋ `docs/sessions/themes.md` の該当回 |
+| 終わった回の記録 | **`mkdocs.yml` の `extra.history`**（開催履歴ページ・`rounds.json`・B の回ページの見出しへ自動反映）＋ `extra.latest_digest`（ホームの新着）＋ `docs/sessions/themes.md` の該当回 |
 | 参加費の金額 | **`mkdocs.yml` の `extra.pricing`**（ホームのティーザー・join の価格表へ自動反映）＋ **`join/index.md` の inline SVG 2点**（図1の金額・日付、図2の「いまここ」＝手動）＋ **`flyer.html` の参加費欄**（手動） |
 | 用語の定義 | `docs/glossary.md` と `docs/includes/abbreviations.md` の**両方**（定義文を一致させる） |
 | 登録フォームURL | **`mkdocs.yml` の `extra.register_url` の1か所のみ**（通常は固定: `https://mailchi.mp/antecanis/ai-strategy`） |
@@ -179,6 +190,23 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
    `extra.history`（開催履歴）、`docs/sessions/schedule.md` の「これまでの回を振り返る」、
    `docs/sessions/themes.md` の該当回
 
+> 🔒 **ダイジェストは「載せないが、URLを知っていれば開ける」**（2026年9月〜）。
+> 登録前の人に過去回の詳細を大量に見せないため、辿り着く経路は塞ぐ。一方でページ自体は
+> 前のURLのまま残す ―― 案内メールで配ったリンクと、Circle の詳細版記事からの
+> 「簡易版はこちら」が生きているため。塞いでいるのは5か所:
+> **nav** / **本文リンク**（月次テーマ・開催スケジュール・開催履歴カード・ホームの新着）/
+> **noindex**（`overrides/main.html`）/ **sitemap・llms.txt**（hooks）/
+> **サイト内検索**（各 .md の `search: exclude: true`）。
+>
+> ⚠ これは**アクセス制御ではない**。URLを知っていれば誰でも読める。本当に閉じるには
+> 認証が要る（B に作る会員限定の場所）。
+> ⚠ `robots.txt` で `Disallow: /digests/` に**しないこと**。クロールを止めると noindex が
+> 読まれず、すでに索引された分が消えない。
+>
+> 公開サイトで案内するのは開催履歴のカード（テーマ・領域・開催日・2〜3行の要約・図1点）まで。
+> 叙述と図は、今後 B に作る**会員限定の場所**（メール認証を通した先。過去の文脈から
+> シナリオやケースを組み立てる機能を置く）で使う。材料は `.build/digests.json`。
+>
 > 💡 **詳細版ダイジェストは公開しない**。**セッション文脈パック**（登壇者の発言録＝主催者自身の
 > 講義発言のみを収録）の原本はデータリポジトリ `ai-strategy-news-data` の `context/packs/` にあり、
 > 公開はニュースサイト（B）の文脈ライブラリー経由で行う。**本サイトには転載しない**。

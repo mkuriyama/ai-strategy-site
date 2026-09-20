@@ -74,7 +74,6 @@ def define_env(env):
             dates = _html.escape(str(r.get("dates", "")))
             summary = _html.escape(str(r.get("summary", "")))
             image = r.get("image")
-            digests = r.get("digests", []) or []
             out.append('<article class="history-card">')
             if image:
                 out.append(
@@ -91,13 +90,6 @@ def define_env(env):
                 out.append(f'<div class="history-card__area">{area}</div>')
             if summary:
                 out.append(f'<p class="history-card__summary">{summary}</p>')
-            if digests:
-                labels = ["A日程", "B日程"]
-                links = []
-                for i, d in enumerate(digests):
-                    url = _rel(str(d).replace(".md", "/").replace("index/", ""))
-                    links.append(f'<a href="{url}">{labels[i] if i < 2 else f"日程{i+1}"}のダイジェスト</a>')
-                out.append('<div class="history-card__links">' + " ／ ".join(links) + "</div>")
             out.append("</div></article>")
         out.append("</div>")
         return "\n".join(out)

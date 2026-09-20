@@ -24,6 +24,9 @@ def on_page_context(context, page, config, nav):
     """描画された各ページの title / description / URL を集める。"""
     if not page.abs_url and not page.url:
         return context
+    # ダイジェストは索引に載せない（公開はしているが、案内するのはリンクを持つ人にだけ）
+    if (page.file.src_uri or "").startswith("digests/"):
+        return context
     site_url = (config.get("site_url") or "").rstrip("/") + "/"
     url = site_url + page.url
     title = "ホーム" if page.is_homepage else (page.meta.get("title") or page.title or "")
