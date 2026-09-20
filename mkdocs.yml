@@ -69,17 +69,6 @@ plugins:
   - redirects:
       redirect_maps:
         join/register.md: join/index.md
-        # ダイジェストは公開サイトから引っ込めた（会員限定の場所へ移す予定）。
-        # 配布済み・索引済みのURLを切らさないよう、開催履歴へ送る。
-        digests/index.md: sessions/history.md
-        digests/vol-01.md: sessions/history.md
-        digests/vol-01b.md: sessions/history.md
-        digests/vol-02.md: sessions/history.md
-        digests/vol-02b.md: sessions/history.md
-        digests/vol-03.md: sessions/history.md
-        digests/vol-03b.md: sessions/history.md
-        digests/vol-04.md: sessions/history.md
-        digests/vol-04b.md: sessions/history.md
   # スクリーンショット等をクリックで拡大
   - glightbox:
       auto_caption: false

@@ -1,6 +1,24 @@
-"""ビルド時のデータ書き出しと、`extra:` の検査。
+"""ビルド時のデータ書き出しと、公開範囲の調整、`extra:` の検査。
 
-## 2つの書き出し
+## ダイジェストの扱い（2026年9月〜）
+
+**「載せないが、URLを知っていれば開ける」。** ページは前のURLのまま残す ――
+案内メールで配ったリンクと、Circle の詳細版記事からの「簡易版はこちら」が
+生きているため。一方で、登録前の人が辿り着く経路は塞ぐ:
+
+  - nav から外す（`mkdocs.yml`）
+  - 本文ページ（月次テーマ・開催スケジュール・開催履歴・ホームの新着）から
+    リンクを外す
+  - `<meta name="robots" content="noindex">`（`overrides/main.html`）
+  - sitemap.xml から除く（この hook の `on_post_build`）
+  - `llms.txt` から除く（`hooks/seo_files.py`）
+  - サイト内検索から除く（各 .md の front-matter `search: exclude: true`）
+
+⚠ これは**アクセス制御ではない**。URLを知っていれば誰でも読める。本当に閉じるには
+認証が要る（ニュースサイト側に作る会員限定の場所）。robots.txt で `Disallow` に
+しないこと ―― クロールを止めると noindex が読まれず、既に索引された分が消えない。
+
+## 書き出し
 
 **`site/data/rounds.json`（公開）** … 各回の表題・領域・開催日・要約。開催履歴ページ
 に出しているのと同じ内容を機械可読にしたもの。ニュースサイト（B）が回ページの
@@ -8,21 +26,8 @@
 含む運用の文字列で、読み手に見せる名前ではないため。
 
 **`.build/digests.json`（公開しない）** … ダイジェストの描画済み本文（図の inline SVG・
-用語ツールチップ込み）。**既定のビルドでは作られない。**
-
-## ダイジェストを公開サイトから外している理由
-
-登録前の人に、過去回の詳細を大量に見せないため。叙述と図は、今後 B に作る
-**会員限定の場所**（メール認証を通した先。過去の文脈を使ってシナリオやケースを
-組み立てる機能を置く）で使う。原稿は `docs/digests/` にそのまま残してあり、
-下の `on_files` がビルドから外しているだけなので、いつでも戻せる。
-
-    mkdocs build                      # 公開用。ダイジェストは含まれない
-    DIGEST_EXPORT=1 mkdocs build      # 書き出し用。ダイジェストを描画し
-                                      # .build/digests.json を作る
-
-⚠ `DIGEST_EXPORT=1` で作った `site/` を**デプロイしないこと**（ダイジェストのページが
-入っている）。CI は付けていない。
+用語ツールチップ込み）。`site/` の外に置くので GitHub Pages は配らない。会員限定の
+場所へ運ぶときの材料。
 """
 
 from __future__ import annotations
@@ -34,13 +39,10 @@ import pathlib
 import re
 from urllib.parse import urljoin
 
-EXPORT = os.environ.get("DIGEST_EXPORT") == "1"
-
 # src_uri（例 "digests/vol-04.md"） -> (絶対URL, 加工済みHTML, title, description)
 _pages: dict[str, tuple[str, str, str, str]] = {}
 
 _DIGEST = re.compile(r"^digests/(vol-[0-9a-z-]+)\.md$")
-_DIGEST_DIR = re.compile(r"^digests/")
 _HEADERLINK = re.compile(r'<a class="headerlink".*?</a>', re.S)
 _H = re.compile(r"<(/?)h([1-6])([^>]*)>")
 _H1 = re.compile(r"<h1[^>]*>.*?</h1>\s*", re.S)
@@ -81,19 +83,6 @@ def on_config(config):
             + "\n  ".join(bad)
         )
     return config
-
-
-def on_files(files, config):
-    """ダイジェストを公開サイトから外す。
-
-    ファイル自体は `docs/digests/` に残る（会員限定の場所へ移すときの原稿）。
-    `DIGEST_EXPORT=1` のときだけビルドに含め、本文を書き出せるようにする。
-    """
-    if EXPORT:
-        return files
-    kept = [f for f in files if not _DIGEST_DIR.match(f.src_uri or "")]
-    files._files = kept  # noqa: SLF001 — Files は list ラッパー
-    return files
 
 
 def on_pre_build(config):
@@ -164,7 +153,7 @@ def _links(html: str, page_url: str, digest_urls: dict[str, str]) -> str:
 
 
 def on_page_context(context, page, config, nav):
-    if not EXPORT or not _DIGEST.match(page.file.src_uri or ""):
+    if not _DIGEST.match(page.file.src_uri or ""):
         return context
     site_url = (config.get("site_url") or "").rstrip("/") + "/"
     _pages[page.file.src_uri] = (
@@ -226,6 +215,27 @@ def _digests(config) -> list[dict]:
     return out
 
 
+def _strip_digests_from_sitemap(config) -> None:
+    """sitemap.xml からダイジェストの行を落とす。
+
+    MkDocs は全ページを sitemap に入れる。noindex を付けてあるので索引はされないが、
+    「載せない」と決めたものを自分から申告する理由がない。
+    """
+    import gzip
+
+    path = pathlib.Path(config["site_dir"]) / "sitemap.xml"
+    if not path.is_file():
+        return
+    xml = path.read_text(encoding="utf-8")
+    kept = re.sub(r"\s*<url>\s*<loc>[^<]*/digests/[^<]*</loc>.*?</url>", "", xml, flags=re.S)
+    if kept == xml:
+        return
+    path.write_text(kept, encoding="utf-8")
+    gz = path.with_suffix(".xml.gz")
+    if gz.is_file():
+        gz.write_bytes(gzip.compress(kept.encode("utf-8")))
+
+
 def on_post_build(config):
     now = datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")
     site_url = (config.get("site_url") or "").rstrip("/") + "/"
@@ -236,8 +246,8 @@ def on_post_build(config):
         json.dump({"generated": now, "site": site_url, "rounds": _rounds(config)},
                   f, ensure_ascii=False, separators=(",", ":"))
 
-    if not EXPORT:
-        return
+    _strip_digests_from_sitemap(config)
+
     # **`site/` の外へ置く。** ここに入れると GitHub Pages がそのまま配ってしまう。
     path = pathlib.Path(config["config_file_path"]).parent / ".build" / "digests.json"
     path.parent.mkdir(parents=True, exist_ok=True)

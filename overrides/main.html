@@ -21,6 +21,14 @@
 -->
 {% block extrahead %}
   {{ super() }}
+  {#- ダイジェストは「載せないが、URLを知っていれば開ける」扱い。
+      メール・Circle から配ったリンクを切らさないためページは残し、
+      検索・サイト内検索・sitemap・llms.txt からは外す。
+      robots.txt では Disallow にしないこと ―― クロールを止めると
+      noindex が読まれず、既に索引された分が消えない。 -#}
+  {%- if page and page.file and page.file.src_uri.startswith('digests/') %}
+  <meta name="robots" content="noindex, follow">
+  {%- endif %}
   {%- set site_url = config.site_url | default('') -%}
   <script type="application/ld+json">
   {{ {
