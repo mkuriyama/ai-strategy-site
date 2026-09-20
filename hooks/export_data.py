@@ -25,6 +25,15 @@
 見出しに使う。パックの `theme` は「〜（実装・第1層 [1E]…）」のように枠組みの注記まで
 含む運用の文字列で、読み手に見せる名前ではないため。
 
+**`site/data/glossary.json`（公開）** … 用語集（セクション・用語・定義）。**正本はこの
+サイトの `docs/glossary.md`**（用語の追加手順も `docs/includes/abbreviations.md` と
+セットのまま）。B はこれを読んで自前の用語集ページを描く。取得元を差し替えたく
+なったら B 側の `PROJECT_DATA_BASE` 1か所。
+
+**`site/data/areas.json`（公開）** … 5×5×5 の枠組み（3層 × 5切り口＝15領域）。**正本は
+`docs/about/philosophy.md` の表**。B が「どの領域を扱ってきたか」の地図を描くのに使う。
+15 個そろわなければビルドを止める（表の書式を変えたときに、片側だけ静かに減るのを防ぐ）。
+
 **`.build/digests.json`（公開しない）** … ダイジェストの描画済み本文（図の inline SVG・
 用語ツールチップ込み）。`site/` の外に置くので GitHub Pages は配らない。会員限定の
 場所へ運ぶときの材料。
@@ -40,9 +49,23 @@ import re
 from urllib.parse import urljoin
 
 # src_uri（例 "digests/vol-04.md"） -> (絶対URL, 加工済みHTML, title, description)
+# **ダイジェストだけを入れる。** 下の `_digests()` が全要素に `_DIGEST.match()` を
+# 当てるので、別の種類のページを混ぜると落ちる（用語集を入れて実際に落とした）。
 _pages: dict[str, tuple[str, str, str, str]] = {}
 
+# 用語集・設計思想の描画済み本文。`_pages` とは別に持つ（上のとおり）
+_glossary_html = ""
+_philosophy_html = ""
+
 _DIGEST = re.compile(r"^digests/(vol-[0-9a-z-]+)\.md$")
+_GLOSSARY = "glossary.md"
+_PHILOSOPHY = "about/philosophy.md"
+_ABBR = re.compile(r"<abbr[^>]*>(.*?)</abbr>", re.S)
+_TAG = re.compile(r"<[^>]+>")
+_SECTION = re.compile(r"<h2[^>]*>(.*?)</h2>(.*?)(?=<h2|\Z)", re.S)
+_LEAD = re.compile(r"<p>(.*?)</p>", re.S)
+_TERM = re.compile(r"<dt>(.*?)</dt>\s*<dd>(.*?)</dd>", re.S)
+_NUM = re.compile(r"^\s*\d+\.\s*")
 _HEADERLINK = re.compile(r'<a class="headerlink".*?</a>', re.S)
 _H = re.compile(r"<(/?)h([1-6])([^>]*)>")
 _H1 = re.compile(r"<h1[^>]*>.*?</h1>\s*", re.S)
@@ -153,7 +176,16 @@ def _links(html: str, page_url: str, digest_urls: dict[str, str]) -> str:
 
 
 def on_page_context(context, page, config, nav):
-    if not _DIGEST.match(page.file.src_uri or ""):
+    src = page.file.src_uri or ""
+    if src == _GLOSSARY:
+        global _glossary_html
+        _glossary_html = page.content or ""
+        return context
+    if src == _PHILOSOPHY:
+        global _philosophy_html
+        _philosophy_html = page.content or ""
+        return context
+    if not _DIGEST.match(src):
         return context
     site_url = (config.get("site_url") or "").rstrip("/") + "/"
     _pages[page.file.src_uri] = (
@@ -215,6 +247,88 @@ def _digests(config) -> list[dict]:
     return out
 
 
+def _plain(html: str) -> str:
+    """素のテキストにする。
+
+    ツールチップの殻（`<abbr>`）と permalink（`¶` のリンク）を先に落とす ――
+    タグだけ剥がすと `¶` が文字として残り、見出しが「AI・生成AIの基本¶」になる。
+    """
+    return _TAG.sub("", _ABBR.sub(r"\1", _HEADERLINK.sub("", html))).strip()
+
+
+def _glossary(config) -> list[dict]:
+    """描画済みの用語集を、セクション → 用語 → 定義 に畳む。
+
+    Markdown を読み直さず `page.content` から取るのは、定義リスト（`:   ` 記法）の
+    解釈を2箇所に持たないため。定義の中の**ツールチップの殻だけ外す** ―― 用語集の
+    中で用語集の語にツールチップが付くのは入れ子で、運んだ先では邪魔になる。
+    """
+    if not _glossary_html:
+        return []
+    body = _unwrap(_strip_footer(_glossary_html))
+    out = []
+    for m in _SECTION.finditer(body):
+        title = _NUM.sub("", _plain(m.group(1)))
+        block = m.group(2)
+        lead = _LEAD.search(block.split("<dl>")[0]) if "<dl>" in block else None
+        terms = [{"term": _plain(t), "definition": _plain(d)}
+                 for t, d in _TERM.findall(block)]
+        if terms:
+            out.append({"title": title,
+                        "lead": _plain(lead.group(1)) if lead else "",
+                        "terms": terms})
+    return out
+
+
+_ROW = re.compile(r"<tr>\s*<td[^>]*>(.*?)</td>\s*<td[^>]*>(.*?)</td>\s*</tr>", re.S)
+_AREA = re.compile(r"\[(\d[A-Z])\]\s*(.*?)\s*──\s*(.*)", re.S)
+
+
+def _areas() -> list[dict]:
+    """5×5×5 の枠組みを、設計思想ページの表から読む。
+
+    **正本は `docs/about/philosophy.md` の表**。ここで別に定義し直すと、表を直した
+    ときに片側だけが古くなる ―― 15行を2箇所に書く価値はない。
+
+    表の各行は「層」と「5つの切り口」の2列で、切り口は `<br>` 区切りの
+    `**[1A]** 名前 ── 説明` という形をしている。
+    """
+    if not _philosophy_html:
+        return []
+    out = []
+    for layer_cell, areas_cell in _ROW.findall(_unwrap(_philosophy_html)):
+        # 「**第1層**<br>実装方法<br>（業務・施策）」→ 第1層 / 実装方法（業務・施策）
+        parts = [_plain(x) for x in re.split(r"<br\s*/?>", layer_cell)]
+        parts = [x for x in parts if x]
+        if not parts:
+            continue
+        layer, kind = parts[0], "".join(parts[1:])
+        for seg in re.split(r"<br\s*/?>", areas_cell):
+            m = _AREA.search(_plain(seg))
+            if m:
+                out.append({"code": m.group(1), "layer": layer, "layer_kind": kind,
+                            "name": m.group(2), "description": m.group(3)})
+    return out
+
+
+def _check_areas(areas: list[dict]) -> None:
+    """15領域そろっているか。**足りなければビルドを止める。**
+
+    表の書式を変えると、この読み取りは静かに件数を減らす。減ったまま配ると、
+    B の地図から領域が消えるだけで、どちらの画面にもエラーは出ない。
+    """
+    codes = [a["code"] for a in areas]
+    want = [f"{n}{c}" for n in (1, 2, 3) for c in "ABCDE"]
+    if codes != want:
+        from mkdocs.exceptions import PluginError
+
+        raise PluginError(
+            "areas.json: 5×5×5 の枠組みを 15 領域そろって読めませんでした"
+            f"（読めたのは {len(codes)} 個: {codes}）。"
+            f"{_PHILOSOPHY} の表の書式（`**[1A]** 名前 ── 説明` を `<br>` 区切り、"
+            "層と切り口の2列）が変わっていないか確認してください")
+
+
 def _strip_digests_from_sitemap(config) -> None:
     """sitemap.xml からダイジェストの行を落とす。
 
@@ -245,6 +359,22 @@ def on_post_build(config):
     with open(os.path.join(out_dir, "rounds.json"), "w", encoding="utf-8") as f:
         json.dump({"generated": now, "site": site_url, "rounds": _rounds(config)},
                   f, ensure_ascii=False, separators=(",", ":"))
+
+    sections = _glossary(config)
+    with open(os.path.join(out_dir, "glossary.json"), "w", encoding="utf-8") as f:
+        json.dump({"generated": now, "site": site_url,
+                   "source": site_url + "glossary/", "sections": sections},
+                  f, ensure_ascii=False, separators=(",", ":"))
+    print(f"[export] data/glossary.json に {len(sections)}節・"
+          f"{sum(len(x['terms']) for x in sections)}語")
+
+    areas = _areas()
+    _check_areas(areas)
+    with open(os.path.join(out_dir, "areas.json"), "w", encoding="utf-8") as f:
+        json.dump({"generated": now, "site": site_url,
+                   "source": site_url + "about/philosophy/", "areas": areas},
+                  f, ensure_ascii=False, separators=(",", ":"))
+    print(f"[export] data/areas.json に {len(areas)}領域")
 
     _strip_digests_from_sitemap(config)
 
