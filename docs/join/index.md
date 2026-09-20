@@ -32,7 +32,7 @@ description: 参加費とお申し込み。早期参加枠の料金、課金と�
 <svg viewBox="0 0 780 430" xmlns="http://www.w3.org/2000/svg" font-family="'Noto Sans JP', sans-serif" role="img" aria-label="お申し込みから課金までの流れ">
 <rect x="0" y="0" width="780" height="430" fill="#FFFFFF"/>
 <text x="40" y="50" font-family="'Noto Serif JP', serif" font-size="27" font-weight="700" fill="#004455">お申し込みから課金までの流れ</text>
-<text x="41" y="79" font-size="14" fill="#5E7378">例：9月中旬〜10月上旬にお申し込みの場合</text>
+<text x="41" y="79" font-size="14" fill="#5E7378">例：9月中にお申し込みの場合</text>
 <rect x="39" y="104" width="168" height="104" rx="12" fill="#EAF1F2" stroke="#AEC6CA" stroke-width="1.5"/>
 <text x="123" y="128" text-anchor="middle" font-size="11" letter-spacing="1.5" font-weight="700" fill="#1C6E7C">STEP 1</text>
 <text x="123" y="154" text-anchor="middle" font-family="'Noto Serif JP', serif" font-size="20" font-weight="700" fill="#004455">お申し込み</text>
@@ -53,13 +53,13 @@ description: 参加費とお申し込み。早期参加枠の料金、課金と�
 <text x="659" y="154" text-anchor="middle" font-family="'Noto Serif JP', serif" font-size="20" font-weight="700" fill="#004455">以降の課金</text>
 <text x="659" y="182" text-anchor="middle" font-size="12.5" fill="#003A47">毎月15日に自動更新</text>
 <line x1="659" y1="208" x2="659" y2="252" stroke="#AEC6CA" stroke-width="1.5"/>
-<text x="303" y="200" text-anchor="middle" font-size="11.5" fill="#5E7378">9/15 A・10/2 B</text>
+<text x="303" y="200" text-anchor="middle" font-size="11.5" fill="#5E7378">10/2（B日程）</text>
 <line x1="40" y1="252" x2="748" y2="252" stroke="#1C6E7C" stroke-width="2"/>
 <polygon points="748,247 760,252 748,257" fill="#1C6E7C"/>
 <circle cx="123" cy="252" r="6.5" fill="#004455" stroke="#FFFFFF" stroke-width="2"/>
-<text x="123" y="276" text-anchor="middle" font-size="13" font-weight="700" fill="#004455">9月中旬〜10月上旬</text>
+<text x="123" y="276" text-anchor="middle" font-size="13" font-weight="700" fill="#004455">9月中</text>
 <circle cx="303" cy="252" r="6.5" fill="#C0962F" stroke="#FFFFFF" stroke-width="2"/>
-<text x="303" y="276" text-anchor="middle" font-size="13" font-weight="700" fill="#004455">9/15・10/2</text>
+<text x="303" y="276" text-anchor="middle" font-size="13" font-weight="700" fill="#004455">10/2</text>
 <circle cx="481" cy="252" r="6.5" fill="#004455" stroke="#FFFFFF" stroke-width="2"/>
 <text x="481" y="276" text-anchor="middle" font-size="13" font-weight="700" fill="#004455">10/15</text>
 <circle cx="659" cy="252" r="6.5" fill="#004455" stroke="#FFFFFF" stroke-width="2"/>
@@ -70,7 +70,7 @@ description: 参加費とお申し込み。早期参加枠の料金、課金と�
 <text x="64" y="358" font-size="13.5" fill="#003A47">各課金日（毎月15日）の前日までに Stripe カスタマーポータルから解約すれば、その月の費用は発生しません。</text>
 <text x="64" y="378" font-size="13.5" fill="#5E7378">例）10/14 までに解約 → 費用ゼロ。 ／ カード情報は弊社で保持しません。</text>
 </svg>
-<figcaption>図1：お申し込みから課金までの流れ（9月中旬〜10月上旬にお申し込みの場合）</figcaption>
+<figcaption>図1：お申し込みから課金までの流れ（9月中にお申し込みの場合）</figcaption>
 </figure>
 
 <figure markdown="span">
