@@ -1,0 +1,48 @@
+# AI戦略実践プロジェクト
+
+> 事業を動かす方々のための、AI戦略実装の型を月次で作る・動かす実践の場（主催：栗山実／株式会社アンテカニス）
+
+主催: 栗山実／株式会社アンテカニス（https://www.antecanis.com/）
+形式: オンライン（Zoom）・月次開催。各回は独立したテーマで、途中参加可。
+
+## 次回開催
+
+- 第5回 B日程: 10/2(金) 20:00〜 ── 第5回（9/15）と同内容の追加開催。A日程に都合が合わない方向け。登録後の初回は無料。
+- 第6回 A日程: 10/20(火) 20:00〜 ── オンライン(Zoom)／火曜開催のメイン日程。各回は独立で途中参加歓迎。
+
+## 参加費
+
+- 早期参加枠: 月額 6,300円＋税（税込 6,930円）
+- 定価: 月額 9,000円＋税（税込 9,900円）
+- 申込月のセッションは無料。課金日（毎月15日）の前日までに解約すればその月は0円。
+
+## 入口
+
+- 開催案内メール（無料登録）: https://mailchi.mp/antecanis/ai-strategy
+- 参加費とお申し込み: https://ai-strategy.antecanis.com/join/
+- 法人の方へ: https://ai-strategy.antecanis.com/join/corporate/
+
+## ページ一覧
+
+- [ホーム](https://ai-strategy.antecanis.com/): 「AIを便利に使う」から「AI前提で事業戦略を作る」へ。事業を動かす方々のための、AI戦略実装の型を月次で作り・動かす実践の場（主催：栗山実／株式会社アンテカニス）。
+- [背景と狙い](https://ai-strategy.antecanis.com/about/): AI戦略実践プロジェクトの背景と狙い、1990年代との相似、「何でないか」、想定参加者。
+- [設計思想](https://ai-strategy.antecanis.com/about/philosophy/): 設計思想：3つのコアコンセプトと、各回を貫く3層の視座（5×5×5の枠組み）。
+- [主催者プロフィール](https://ai-strategy.antecanis.com/about/profile/): 主催者・栗山実のプロフィール（株式会社アンテカニス代表、経営大学院教員ほか）。
+- [このプロジェクトを紹介する](https://ai-strategy.antecanis.com/about/share/): AI戦略実践プロジェクトを紹介するためのURL・例文・印刷用チラシ。
+- [一覧](https://ai-strategy.antecanis.com/digests/): 各回セッションの公開ダイジェスト一覧。
+- [Vol.1A 第1回（メイン回・5/26）：人間の認知容量の解除](https://ai-strategy.antecanis.com/digests/vol-01/): 第1回（メイン回・5/26）ダイジェスト：人間の認知容量の解除 ──情報×AIの戦略インパクト。
+- [Vol.1B 第1回（追加開催・6/15）：人間の認知容量の解除](https://ai-strategy.antecanis.com/digests/vol-01b/): 第1回（追加開催・6/15）ダイジェスト：人間の認知容量の解除 ──メイン回（5/26）をベースに産業転換の具体例などを追加した改良回。
+- [Vol.2A 第2回（A日程・6/23）：戦略の大転換をAIと考える](https://ai-strategy.antecanis.com/digests/vol-02/): 第2回（A日程・6/23）ダイジェスト：AIと共に、戦略の大転換を考える ──競争のルールがAIで書き換わるとき、勝ち筋はどう変わるか。
+- [Vol.2B 第2回（B日程・7/10）：戦略の大転換をAIと考える](https://ai-strategy.antecanis.com/digests/vol-02b/): 第2回（B日程・追加開催・7/10）ダイジェスト：AIと共に、戦略の大転換を考える ──A日程（6/23）と同内容の追加開催。
+- [Vol.3A 第3回（A日程・7/21）：AI戦略 × 組織レイヤー](https://ai-strategy.antecanis.com/digests/vol-03/): 第3回（A日程・7/21）ダイジェスト：AI戦略 × 組織レイヤーへのインパクト ──集合知・人材マッチ・AI人的資本戦略。
+- [Vol.3B 第3回（B日程・8/3）：AI戦略 × 組織レイヤー](https://ai-strategy.antecanis.com/digests/vol-03b/): 第3回（B日程・追加開催・8/3）ダイジェスト：AI戦略 × 組織レイヤーへのインパクト ──A日程（7/21）に挑戦セット・挑戦ボードと戦略ディスカッションを加えた回。
+- [Vol.4A 第4回（A日程・8/18）：物理世界との接地](https://ai-strategy.antecanis.com/digests/vol-04/): 第4回（A日程・8/18）ダイジェスト：物理世界に接地したAIは、競争のルールをどう書き換えるか ──Sense→Think→Act。
+- [Vol.4B 第4回（B日程・9/3）：物理世界との接地](https://ai-strategy.antecanis.com/digests/vol-04b/): 第4回（B日程・追加開催・9/3）ダイジェスト：物理世界に接地したAIは、競争のルールをどう書き換えるか ──A日程（8/18）に「まず素のAIで、次に作り込んだプロトタイプ」の2段階比較を加えた回。
+- [用語集](https://ai-strategy.antecanis.com/glossary/): セッションで登場するAI・技術・戦略の用語を平易にまとめた用語集。
+- [参加費とお申し込み](https://ai-strategy.antecanis.com/join/): 参加費とお申し込み。早期参加枠の料金、課金と解約のしくみ、無料メール登録と直接申し込みの2つの入口。
+- [法人の方へ](https://ai-strategy.antecanis.com/join/corporate/): 法人でのご利用。複数名利用・請求書払い・個別開催・テーマカスタマイズに対応。
+- [進め方と持ち帰るもの](https://ai-strategy.antecanis.com/sessions/): セッションの進め方と各回で手元に残るもの。問いから始め、作り、戦略に戻す一貫した流れ。
+- [開催履歴](https://ai-strategy.antecanis.com/sessions/history/): AI戦略実践プロジェクトの開催履歴。各回のテーマ・扱った領域・開催日の一覧（2026年5月〜）。
+- [開催予定・次回案内](https://ai-strategy.antecanis.com/sessions/schedule/): 直近の開催情報と今後の月次スケジュール、次回開催・追加開催の案内。
+- [月次テーマ](https://ai-strategy.antecanis.com/sessions/themes/): 月次テーマの一覧。開催済みテーマと今後のテーマ領域（随時更新）。
+- [スタートガイド](https://ai-strategy.antecanis.com/start-guide/): 参加準備と進め方のスタートガイド。初参加でもスムーズに臨むための要点。

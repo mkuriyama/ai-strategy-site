@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 680 250" xmlns="http://www.w3.org/2000/svg" role="img">
+  <g font-family="'Noto Sans JP', sans-serif">
+  <text x="20" y="26" font-family="'Noto Serif JP', serif" font-size="13" fill="#5d6b6e">前提の変化（インターネット登場）に対して…</text>
+  <rect x="20" y="40" width="300" height="78" rx="10" fill="#fff" stroke="rgba(0,68,85,.18)"/>
+  <text x="40" y="66" font-family="'Noto Serif JP', serif" font-size="14" fill="#5d6b6e" font-weight="700">販売経路だけをデジタル化</text>
+  <text x="40" y="90" font-size="11.5" fill="#5d6b6e">旧来の旅行ツアーをオンラインで売る</text>
+  <text x="40" y="108" font-size="11.5" fill="#5d6b6e">店頭レンタルをネット注文に置換</text>
+  <text x="338" y="84" font-size="22" fill="#b06a4a">→</text>
+  <rect x="372" y="40" width="288" height="78" rx="10" fill="#f7f4ee" stroke="rgba(176,106,74,.4)"/>
+  <text x="392" y="84" font-family="'Noto Serif JP', serif" font-size="15" fill="#b06a4a" font-weight="700">淘汰された</text>
+  <text x="500" y="80" font-size="11.5" fill="#5d6b6e">（旧来型旅行会社・</text>
+  <text x="500" y="98" font-size="11.5" fill="#5d6b6e">　 CDレンタル大手）</text>
+  <rect x="20" y="132" width="300" height="86" rx="10" fill="#fff" stroke="rgba(0,68,85,.18)"/>
+  <text x="40" y="158" font-family="'Noto Serif JP', serif" font-size="14" fill="#004455" font-weight="700">前提から事業を作り直し</text>
+  <text x="40" y="182" font-size="11.5" fill="#5d6b6e">ネット前提で別の商品・体験を設計</text>
+  <text x="40" y="200" font-size="11.5" fill="#5d6b6e">所有→アクセス、単位の再定義</text>
+  <text x="338" y="180" font-size="22" fill="#004455">→</text>
+  <rect x="372" y="132" width="288" height="86" rx="10" fill="#004455"/>
+  <text x="392" y="176" font-family="'Noto Serif JP', serif" font-size="15" fill="#fff" font-weight="700">勝者になった</text>
+  <text x="500" y="172" font-size="11.5" fill="rgba(255,255,255,.8)">（Booking.com /</text>
+  <text x="500" y="190" font-size="11.5" fill="rgba(255,255,255,.8)">　 Expedia / 配信)</text>
+  </g>
+</svg>
