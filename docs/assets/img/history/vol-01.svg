@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 680 318" xmlns="http://www.w3.org/2000/svg" role="img">
+        <defs>
+          <style>
+            .lyr{fill:#fff;stroke:var(--line);stroke:rgba(0,68,85,.18)}
+            .ltag{font-family:'Noto Sans JP',sans-serif;font-size:11px;letter-spacing:.18em;fill:#8a979a;font-weight:700}
+            .lname{font-family:'Noto Serif JP',serif;font-size:17px;fill:#004455;font-weight:600}
+            .lscale{font-family:'Noto Sans JP',sans-serif;font-size:11px;fill:#5d6b6e}
+            .chip{font-family:'Noto Sans JP',sans-serif;font-size:12px;fill:#0a5567;font-weight:500}
+            .axis{font-family:'Noto Sans JP',sans-serif;font-size:11px;fill:#8a979a;letter-spacing:.1em}
+          </style>
+        </defs>
+        <!-- scale axis -->
+        <line x1="26" y1="40" x2="26" y2="270" stroke="#b88a3e" stroke-width="1.5"/>
+        <polygon points="26,32 22,44 30,44" fill="#b88a3e"/>
+        <text class="axis" x="20" y="155" transform="rotate(-90 20,155)" text-anchor="middle">戦略インパクト・スケール</text>
+
+        <!-- L3 -->
+        <rect class="lyr" x="56" y="36" width="600" height="68" rx="9"/>
+        <text class="ltag" x="78" y="62">＜第3層＞ 戦略転換</text>
+        <text class="lname" x="78" y="86">産業・事業スケールの変化</text>
+        <rect x="430" y="50" width="208" height="40" rx="7" fill="#f7f4ee" stroke="rgba(0,68,85,.12)"/>
+        <text class="chip" x="446" y="66">[3A] 顧客価値の</text>
+        <text class="chip" x="446" y="82">　　　 シフト</text>
+
+        <!-- L2 -->
+        <rect class="lyr" x="56" y="118" width="600" height="68" rx="9"/>
+        <text class="ltag" x="78" y="144">＜第2層＞ 組織変革</text>
+        <text class="lname" x="78" y="168">事業組織スケールの変化</text>
+        <rect x="430" y="132" width="208" height="40" rx="7" fill="#f7f4ee" stroke="rgba(0,68,85,.12)"/>
+        <text class="chip" x="446" y="148">[2A] 情報流通の</text>
+        <text class="chip" x="446" y="164">　　　 血流化</text>
+
+        <!-- L1 highlighted -->
+        <rect x="56" y="200" width="600" height="74" rx="9" fill="#004455"/>
+        <text class="ltag" x="78" y="228" style="fill:rgba(255,255,255,.6)">＜第1層＞ 実装</text>
+        <text class="lname" x="78" y="252" style="fill:#fff">現場・個人スケールの変化</text>
+        <rect x="430" y="214" width="208" height="46" rx="7" fill="#b88a3e"/>
+        <text class="chip" x="446" y="232" style="fill:#fff;font-weight:700">[1A] 人間の認知</text>
+        <text class="chip" x="446" y="250" style="fill:#fff;font-weight:700">　　　 容量の解除</text>
+        <text x="78" y="296" style="font-family:'Noto Sans JP',sans-serif;font-size:12px;fill:#b88a3e;font-weight:700">↑ 第1回は、ここを起点に。</text>
+      </svg>

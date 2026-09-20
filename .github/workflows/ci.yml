@@ -40,6 +40,11 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      # リンク切れ・未解決の参照があればここで止める（壊れた版を公開しない）。
+      # ソーシャルカードは次の gh-deploy で生成するので、ここでは CARDS を付けず速く回す。
+      - name: Validate build (strict)
+        run: mkdocs build --strict --site-dir /tmp/site-strict
+
       - name: Build and deploy to gh-pages
         env:
           # OGP/ソーシャルカードの自動生成を有効化（Google Fontsへのアクセスが必要）

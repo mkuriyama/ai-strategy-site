@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg" role="img">
+  <g font-family="'Noto Sans JP', sans-serif">
+  <text x="20" y="24" font-family="'Noto Serif JP', serif" font-size="13" fill="#5d6b6e">AIの使い方の展開</text>
+  <rect x="20" y="40" width="150" height="96" rx="10" fill="#fff" stroke="rgba(0,68,85,.18)"/>
+  <text x="95" y="66" font-family="'Noto Serif JP', serif" font-size="13" fill="#5d6b6e" font-weight="700" text-anchor="middle">対話・指示待ち型</text>
+  <text x="95" y="90" font-size="10.5" fill="#8a979a" text-anchor="middle">「○○について教えて」</text>
+  <text x="95" y="110" font-size="10.5" fill="#8a979a" text-anchor="middle">→ 説明を返す</text>
+  <text x="95" y="128" font-size="10" fill="#9fb3b6" text-anchor="middle">1対1の一問一答</text>
+  <rect x="188" y="40" width="150" height="96" rx="10" fill="#fff" stroke="rgba(0,68,85,.18)"/>
+  <text x="263" y="66" font-family="'Noto Serif JP', serif" font-size="13" fill="#0a5567" font-weight="700" text-anchor="middle">半自動・連携型</text>
+  <text x="263" y="90" font-size="10.5" fill="#5d6b6e" text-anchor="middle">「調べておいて」</text>
+  <text x="263" y="110" font-size="10.5" fill="#5d6b6e" text-anchor="middle">→ AIチームで調べる</text>
+  <text x="263" y="128" font-size="10" fill="#9fb3b6" text-anchor="middle">AI同士が分担</text>
+  <rect x="356" y="40" width="150" height="96" rx="10" fill="#f7f4ee" stroke="rgba(0,68,85,.2)"/>
+  <text x="431" y="66" font-family="'Noto Serif JP', serif" font-size="13" fill="#004455" font-weight="700" text-anchor="middle">黒子型</text>
+  <text x="431" y="90" font-size="10.5" fill="#5d6b6e" text-anchor="middle">会議した／資料を作った</text>
+  <text x="431" y="110" font-size="10.5" fill="#5d6b6e" text-anchor="middle">→ AIが裏で拾い整理</text>
+  <text x="431" y="128" font-size="10" fill="#9fb3b6" text-anchor="middle">指示がなくとも働く</text>
+  <rect x="524" y="40" width="136" height="96" rx="10" fill="#004455"/>
+  <text x="592" y="66" font-family="'Noto Serif JP', serif" font-size="13" fill="#fff" font-weight="700" text-anchor="middle">エージェンティック</text>
+  <text x="592" y="92" font-size="10.5" fill="rgba(255,255,255,.82)" text-anchor="middle">自発的に情報を整理・</text>
+  <text x="592" y="110" font-size="10.5" fill="rgba(255,255,255,.82)" text-anchor="middle">検討し、必要な時に連絡</text>
+  <text x="592" y="128" font-size="10" fill="rgba(255,255,255,.6)" text-anchor="middle">人に伴走する</text>
+  <line x1="172" y1="88" x2="186" y2="88" stroke="#b88a3e" stroke-width="2"/><polygon points="186,88 178,84 178,92" fill="#b88a3e"/>
+  <line x1="340" y1="88" x2="354" y2="88" stroke="#b88a3e" stroke-width="2"/><polygon points="354,88 346,84 346,92" fill="#b88a3e"/>
+  <line x1="508" y1="88" x2="522" y2="88" stroke="#b88a3e" stroke-width="2"/><polygon points="522,88 514,84 514,92" fill="#b88a3e"/>
+  <rect x="20" y="158" width="640" height="44" rx="9" fill="#f7f4ee" stroke="rgba(184,138,62,.4)"/>
+  <text x="340" y="179" font-size="11.5" fill="#b88a3e" font-weight="700" text-anchor="middle">Human-AI Interaction ―― 人間チームとAIチームが、直接にも間接にも協働する世界へ</text>
+  <text x="340" y="195" font-size="10.5" fill="#5d6b6e" text-anchor="middle">人間が資料や議事録に落とした情報を、AIが拾って整理し続ける</text>
+  </g>
+</svg>

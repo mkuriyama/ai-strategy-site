@@ -56,6 +56,53 @@ def define_env(env):
         return "../" * depth + target
 
     @env.macro
+    def history_cards():
+        """開催履歴（sessions/history.md）。`extra.history` を新しい順にカードで描画する。
+
+        各回：回番号・開催日・テーマ・扱った領域・2〜3行の要約・図1点・ダイジェストへのリンク。
+        「実績のある取り組みだと一目で分かる」ためのページなので、内容の詳細は載せない
+        （詳細はダイジェスト側）。画像・リンクはページ深さから相対パスを自動計算する。
+        """
+        import html as _html
+
+        rounds = extra.get("history", []) or []
+        out = ['<div class="history">']
+        for r in rounds:
+            no = r.get("no", "")
+            title = _html.escape(str(r.get("title", "")))
+            area = _html.escape(str(r.get("area", "")))
+            dates = _html.escape(str(r.get("dates", "")))
+            summary = _html.escape(str(r.get("summary", "")))
+            image = r.get("image")
+            digests = r.get("digests", []) or []
+            out.append('<article class="history-card">')
+            if image:
+                out.append(
+                    f'<div class="history-card__fig"><img src="{_rel(image)}" '
+                    f'alt="第{no}回の図" loading="lazy"></div>'
+                )
+            out.append('<div class="history-card__body">')
+            out.append(
+                f'<div class="history-card__meta"><span class="history-card__no">第{no}回</span>'
+                f'<span class="history-card__dates">{dates}</span></div>'
+            )
+            out.append(f'<h3 class="history-card__title">{title}</h3>')
+            if area:
+                out.append(f'<div class="history-card__area">{area}</div>')
+            if summary:
+                out.append(f'<p class="history-card__summary">{summary}</p>')
+            if digests:
+                labels = ["A日程", "B日程"]
+                links = []
+                for i, d in enumerate(digests):
+                    url = _rel(str(d).replace(".md", "/").replace("index/", ""))
+                    links.append(f'<a href="{url}">{labels[i] if i < 2 else f"日程{i+1}"}のダイジェスト</a>')
+                out.append('<div class="history-card__links">' + " ／ ".join(links) + "</div>")
+            out.append("</div></article>")
+        out.append("</div>")
+        return "\n".join(out)
+
+    @env.macro
     def footer_cta(*related, join_cta=True):
         """全ページ末尾の共通動線ブロック（関連ページ＋次回開催＋CTA）。
 

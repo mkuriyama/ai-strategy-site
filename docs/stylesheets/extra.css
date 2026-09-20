@@ -114,6 +114,32 @@
 }
 .dg-meta b { color: var(--md-primary-fg-color); font-weight: 700; }
 
+/* ---- 開催履歴（sessions/history.md、history_cards() マクロが描画） ----
+   1回＝1カード。図（ダイジェストの図1）を左、要点を右。狭い画面では縦積み。 */
+.md-typeset .history { display: grid; gap: 1.1rem; margin: 1.2rem 0 1.6rem; }
+.md-typeset .history-card {
+  display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 1.1rem;
+  align-items: start; padding: 1rem 1.1rem;
+  border: 1px solid var(--line); border-radius: 12px; background: var(--paper);
+}
+[data-md-color-scheme="slate"] .md-typeset .history-card {
+  background: var(--md-code-bg-color); border-color: rgba(255,255,255,.12);
+}
+.md-typeset .history-card__fig img { width: 100%; height: auto; display: block; border-radius: 8px;
+  background: #fff; }
+.md-typeset .history-card__meta { display: flex; gap: .7rem; align-items: baseline; flex-wrap: wrap;
+  font-size: .82rem; color: var(--md-default-fg-color--light); }
+.md-typeset .history-card__no { font-family: var(--serif); font-weight: 700; font-size: .95rem;
+  color: var(--md-primary-fg-color); }
+.md-typeset .history-card__title { margin: .25rem 0 .35rem; font-size: 1.05rem; line-height: 1.5; }
+.md-typeset .history-card__area { font-size: .8rem; color: var(--md-primary-fg-color);
+  margin-bottom: .45rem; }
+.md-typeset .history-card__summary { font-size: .88rem; line-height: 1.8; margin: 0 0 .5rem; }
+.md-typeset .history-card__links { font-size: .85rem; }
+@media screen and (max-width: 44.9375em) {
+  .md-typeset .history-card { grid-template-columns: 1fr; }
+}
+
 /* Header wordmark logo (project lockup): taller than the default icon so the
    horizontal lockup + sub-line stay legible. Slightly smaller on mobile. */
 .md-header__button.md-logo img,

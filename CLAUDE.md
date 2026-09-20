@@ -28,7 +28,8 @@ docs/
 ├─ sessions/
 │   ├─ index.md                 進め方と持ち帰るもの
 │   ├─ themes.md                月次テーマ（開催済み＋今後の領域）
-│   └─ schedule.md              開催予定・次回案内（次回＋月次予定表）
+│   ├─ schedule.md              開催予定・次回案内（次回＋月次予定表）
+│   └─ history.md               開催履歴（`extra.history` を history_cards() で描画。本文は書かない）
 ├─ digests/
 │   ├─ index.md                 ダイジェスト一覧（カードは最新順）
 │   ├─ vol-01.md / vol-01b.md   第1回 A日程(5/26) / B日程(6/15)
@@ -45,6 +46,7 @@ docs/
 ├─ welcome/index.html           決済完了後の着地ページ（Stripeのsuccess URL）
 ├─ paused/index.html            決済中断時の着地ページ（Stripeのcancel URL）
 ├─ includes/abbreviations.md    用語ツールチップ定義（全ページに自動付与）
+├─ robots.txt                   クローラ方針（全許可＋AIクローラ明示）と sitemap の場所。静的
 ├─ stylesheets/extra.css        コーポレート配色・見出し等
 └─ assets/
     ├─ logo-mincho-white.svg     **現行のヘッダーロゴ**（濃ティール背景用に白へ単色反転）
@@ -58,12 +60,14 @@ docs/
     │   ├─ session-build.png       事業デザイン対抗戦の制作画面（ヒーロー/セッション）
     │   ├─ session-result.png      AI戦略対抗戦の合議結果画面（セッション/テーマ）
     │   ├─ community-circle.png    参加者コミュニティ(Circle)。※日付写込みあり＝GitHub Pages専用
+    │   ├─ history/vol-0N.svg       開催履歴の図。各回ダイジェスト（A日程）の図1を切り出したもの
     │   └─ pricing-flow.svg / pricing-tiers.svg  料金図の**元SVG。現在どこからも参照されていない**
     │                              （join の図は .md に inline 埋め込み済。修正は join/index.md 側）
     └─ antecanis_*.png / profile_*.jpg   元画像（配信からは exclude_docs で除外）
 
 overrides/
-├─ main.html                    全ページ共通のお知らせバーCTA（announceブロック）
+├─ main.html                    全ページ共通のお知らせバーCTA（announceブロック）＋
+                                構造化データ JSON-LD（extrahead ブロック。Organization／Event／BreadcrumbList）
 ├─ home.html                    ホーム（縦長ランディング）の専用テンプレート
 └─ partials/header.html         Material の header partial を上書き。ヘッダーのタイトル文字を
                                 site_name ではなく**ページ自身のタイトル**（トップは「ホーム」）に
@@ -71,6 +75,7 @@ overrides/
 main.py                         mkdocs-macros のマクロ定義（単一ソースを各ページへ流し込む）
 mkdocs.yml                      設定・ナビ(nav)・配色・copyright・**extra:（単一ソースデータ）**
 hooks/abbr_cjk.py               日本語の用語ツールチップを成立させる（変更不要）
+hooks/seo_files.py              AIO 用 `llms.txt` をビルド時に生成（extra: と各ページの description から）
 requirements.txt                material[imaging] / macros / glightbox / redirects
 ```
 
@@ -80,7 +85,8 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
 > （`mkdocs.yml` の `plugins.redirects.redirect_maps`）。**この転送設定は消さないこと**（メール等で
 > 配布済みのリンクが切れる）。参加者コミュニティ（Circle）の説明は `sessions/index.md` に集約。
 
-ナビ（タブ）: ホーム / プロジェクトについて / セッション / ガイド・用語集 / 参加する
+ナビ（タブ）: ホーム / プロジェクトについて / セッション（開催履歴を含む） / ガイド・用語集 / 参加する
+（`mkdocs.yml` にコメントアウトで「読む」＝ニュースサイトへの外部タブを用意してある。B の公開後に有効化）
 
 ---
 
@@ -100,8 +106,13 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
      終わった回を落とし、「次に来る2つ」を並べる（例：第4回B日程が終わったら
      「第5回 A日程(9/15)」＋「第5回 B日程(10/2)」）。`kind: main`=A日程（金タグ）、`sub`=B日程
    - `extra.pricing`（早期枠・定価の金額）… 後述「料金改定の運用」を参照
+   - 各回の `start`（ISO 日時。例 `2026-09-15T20:00:00+09:00`）… 構造化データ Event の開催日時。
+     `date` と食い違わないように同時に更新する
    - これだけで、ホームのライブパネル・お知らせバー・schedule の「次回開催」カード・join の
-     価格表が更新される。
+     価格表・JSON-LD・`llms.txt` が更新される。
+   - **終わった回は `extra.history` の先頭に追加**（回番号・テーマ・領域・開催日・要約・図・
+     ダイジェスト）。図は A日程ダイジェストの図1を `assets/img/history/vol-0N.svg` に切り出す。
+     `extra.latest_digest` を新しいダイジェストに向ける（ホームの「新着」）。
 2. **開催スケジュールの月次表** `docs/sessions/schedule.md`
    - 表は **A日程（メイン）/ B日程（追加開催・同内容）の2列構成**。終了した日程に「※開催済」を付ける
    - 「次回開催」カードは `{{ session_cards() }}` マクロ（手編集不要）。
@@ -127,7 +138,8 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
 
 | 情報 | 載っているファイル |
 |---|---|
-| 次回開催の日程 | **`mkdocs.yml` の `extra.sessions` / `extra.next_session_short`**（ホーム・schedule・お知らせバーへ自動反映）＋ **`docs/sessions/schedule.md` の月次表**（※開催済の付与）＋ **`docs/assets/flyer.html`**（手動） |
+| 次回開催の日程 | **`mkdocs.yml` の `extra.sessions` / `extra.next_session_short`**（ホーム・schedule・お知らせバー・JSON-LD・llms.txt へ自動反映。`date` と `start` の両方）＋ **`docs/sessions/schedule.md` の月次表**（※開催済の付与）＋ **`docs/assets/flyer.html`**（手動） |
+| 終わった回の記録 | **`mkdocs.yml` の `extra.history`**（開催履歴ページへ自動反映）＋ `extra.latest_digest`（ホームの新着）＋ `docs/sessions/themes.md` の該当回 |
 | 参加費の金額 | **`mkdocs.yml` の `extra.pricing`**（ホームのティーザー・join の価格表へ自動反映）＋ **`join/index.md` の inline SVG 2点**（図1の金額・日付、図2の「いまここ」＝手動）＋ **`flyer.html` の参加費欄**（手動） |
 | 用語の定義 | `docs/glossary.md` と `docs/includes/abbreviations.md` の**両方**（定義文を一致させる） |
 | 登録フォームURL | **`mkdocs.yml` の `extra.register_url` の1か所のみ**（通常は固定: `https://mailchi.mp/antecanis/ai-strategy`） |
@@ -156,11 +168,15 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
 3. `mkdocs.yml` の `nav:` → セッション → ダイジェスト に **最新順（先頭）** で追加
    `- Vol.5A 第5回（A日程・9/15）：（テーマ名）: digests/vol-05.md`
    - **並び順は時系列の降順**（例：4B → 4A → 3B → 3A → …）。同じ回ならB日程が先（日付が新しいため）
-4. **導線の更新**：`overrides/home.html` の新着リンク（`digests/vol-0N…/`）、
-   `docs/sessions/schedule.md` の「これまでの回を振り返る」、`docs/sessions/themes.md` の該当回
+4. **導線の更新**：`mkdocs.yml` の `extra.latest_digest`（ホームの「新着」リンク）と
+   `extra.history`（開催履歴）、`docs/sessions/schedule.md` の「これまでの回を振り返る」、
+   `docs/sessions/themes.md` の該当回
 
-> 💡 **詳細版ダイジェスト・セッション文脈パックは公開しない**。提供された場合は、そこから
-> **一般化できる用語・概念だけ**を用語集へ反映する（発言録・社内議論・特定回の運用詳細は載せない）。
+> 💡 **詳細版ダイジェストは公開しない**。**セッション文脈パック**（登壇者の発言録＝主催者自身の
+> 講義発言のみを収録）の原本はデータリポジトリ `ai-strategy-news-data` の `context/packs/` にあり、
+> 公開はニュースサイト（B）の文脈ライブラリー経由で行う。**本サイトには転載しない**。
+> 提供された場合は、**一般化できる用語・概念だけ**を用語集へ反映する（社内議論・特定回の運用
+> 詳細は載せない）。
 
 ---
 
@@ -185,6 +201,7 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
   `register_url` をここで定義し、**本文（.md）にハードコードしない**。
 - **マクロ（`main.py`）**:
   - `{{ session_cards() }}` … `extra.sessions` から「次回開催」カードを描画（schedule で使用）
+  - `{{ history_cards() }}` … `extra.history` から開催履歴カードを描画（sessions/history で使用）
   - `{{ register_button("ラベル") }}` … メール登録ボタン（**金**・`.md-button--gold`）
   - `{{ join_button("ラベル") }}` … 申込（Stripe）ボタン（**ティール**・`.md-button--primary`）。
     **join ページでのみ使う**
@@ -199,6 +216,13 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
   （`template: home.html` と `hide: [navigation, toc]`、`description`）のみ。セクションのコピーは
   テンプレート内、スタイルは `extra.css` の `.home-landing` 配下。
 - **お知らせバーCTA**は `overrides/main.html` の `announce` ブロックで全ページに表示。
+- **構造化データ（JSON-LD）**も `overrides/main.html` の `extrahead` ブロックで生成。
+  Organization は全ページ、Event は `extra.sessions` の `start` がある回をホーム・schedule・join に、
+  BreadcrumbList はホーム以外。手編集しない（`extra:` を直せば追随する）。
+- **`llms.txt`** は `hooks/seo_files.py` がビルド時に `site/llms.txt` へ生成。`extra:` と各ページの
+  `description` が材料なので、新しいページには必ず `description` を付ける。
+- ホームからの深いリンクは、CJK 見出しの自動スラッグに依存させず、本文側に `<a id="…"></a>` を
+  置いてそこへ張る（例：`sessions/index.md` の `monthly-challenge`）。
 - **OGP/ソーシャルカード**（`social` プラグイン）はフォント取得にネットワークが要るため、
   **ローカルでは無効（既定）／CI でのみ有効**（`.github/workflows/ci.yml` が `CARDS=true` と
   画像ライブラリ導入を行う）。ローカルで試すには `CARDS=true mkdocs build`（要ネット接続）。
@@ -266,7 +290,10 @@ python3 -m mkdocs build --strict       # リンク切れ等を含め検証（公
 ```
 
 - 作業用ブランチで編集 → コミット → プッシュ → **`main` にマージ**すると、GitHub Actions
-  （`.github/workflows/ci.yml`）が `mkdocs gh-deploy` で自動デプロイします。
+  （`.github/workflows/ci.yml`）が **`mkdocs build --strict` で検証してから** `mkdocs gh-deploy` で
+  自動デプロイします（リンク切れがあるとデプロイ前に止まる）。
+- デプロイは「新しい版を作ってから切り替える」ので**ダウンタイムは生じない**。本番が変わるのは
+  `main` へのマージ時だけ。
 - **デプロイ確認**：Actions のジョブは apt インストールに数分かかることがある（過去に5分超の例）。
   確実なのは **`gh-pages` ブランチの最新コミットメッセージ**を見ること。
   `Deployed <push した main の短縮SHA> with MkDocs version: …` になっていれば反映完了。
@@ -323,19 +350,23 @@ python3 -m mkdocs build --strict       # リンク切れ等を含め検証（公
 - **sitemap.xml** を自動生成（MkDocs標準）
 - **OGP / Twitter カード**：`social` プラグインで自動生成（**CIでのみ生成**。ローカルは既定オフ）
 - 日本語検索（`search.lang: ja`）、意味の通るURL構造（`/join/`, `/sessions/schedule/` 等）
-- 旧URL `/join/register/` → `/join/` の **301リダイレクト**（`redirects` プラグイン）
+- 旧URL `/join/register/` → `/join/` のリダイレクト（`redirects` プラグイン。GitHub Pages は
+  HTTP 301 を出せないので、実体は meta refresh ＋ canonical の HTML ページ）
 - 用語集＋全ページ自動付与のツールチップ（用語の網羅性そのものは資産になり得る）
+- `robots.txt`（全許可＋AIクローラ明示＋sitemap の場所）… `docs/robots.txt`
+- 構造化データ JSON-LD（Organization／Event／BreadcrumbList）… `overrides/main.html`
+- `llms.txt`（AIO）… `hooks/seo_files.py` がビルド時に生成
+- 開催履歴ページ（`sessions/history/`）… 実績を1ページで示す。ダイジェスト8本は将来ニュースサイト
+  （B）の回ページへ移し、本サイトはここに集約する予定
+- CI の `mkdocs build --strict`（リンク切れで止まる）
 
 **未着手・検討候補**
 
-- **`robots.txt` が無い**（sitemap の場所明示、クローラ方針の宣言）
-- **構造化データ（JSON-LD）なし** … `Organization` / `Course` / `Event`（各回の開催）/ `FAQPage` /
-  `BreadcrumbList` などが候補。開催日程は `extra.sessions` が単一ソースなので**マクロで生成可能**
 - **キーワード設計・内部リンク設計が未検討**（現状は運用の都合で自然発生した構造）
-- **AIO（AIアシスタント経由の発見性）が未着手** … 用語集・ダイジェストは引用されやすい資産。
-  `llms.txt` の設置、要約しやすい見出し構造、事実の明示（主催者・料金・日程）などが論点
-- ダイジェストは**回を追うごとに増える主力コンテンツ**（現在8本）。一覧の導線・タイトル設計・
-  内部リンクは、流入と回遊の両面で伸びしろがある
+- ニュースサイト（B: `ai-strategy-news.antecanis.com`）の公開後に、nav の「読む」タブを有効化し、
+  `extra.news_site_url` を設定して `llms.txt` に関連サイトを載せる
+- ダイジェスト・用語集の B への移設と、旧URLのリダイレクト（B が検索に載ってから。移設前に GA4 の
+  ランディングページ報告で `/glossary/` `/digests/` の自然流入を確認する）
 - 計測は GA4（`extra.analytics` に設定済み）のみ。Search Console 連携状況は未確認
 
 > ⚠ SEO/AIO の施策を入れるときも、本ファイルの既存方針（単一ソース原則・ボタンの役割固定・
