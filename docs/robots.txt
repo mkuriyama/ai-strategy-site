@@ -1,0 +1,18 @@
+# AI戦略実践プロジェクト — 公開サイト
+# 全ページを検索エンジン・AIクローラに開放する（会員限定情報はサイトに載せていない）。
+# 会員向けページの実体は Circle 側にあり、ここには無い。
+
+User-agent: *
+Allow: /
+
+# AI アシスタント系クローラも明示的に許可（AIO）
+User-agent: GPTBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://ai-strategy.antecanis.com/sitemap.xml

@@ -50,8 +50,10 @@ extra_css:
   - stylesheets/extra.css
 
 # 日本語（CJK）対応の abbreviations ツールチップを有効化する hook
+# seo_files.py は AIO 用の llms.txt をビルド時に生成する（extra: と各ページの description から）
 hooks:
   - hooks/abbr_cjk.py
+  - hooks/seo_files.py
 
 # 日本語検索対応（CJK 分割に対応）
 plugins:
@@ -133,6 +135,7 @@ nav:
       - 進め方と持ち帰るもの: sessions/index.md
       - 月次テーマ: sessions/themes.md
       - 開催予定・次回案内: sessions/schedule.md
+      - 開催履歴: sessions/history.md
       - ダイジェスト:
           - 一覧: digests/index.md
           - Vol.4B 第4回（B日程・9/3）：物理世界との接地: digests/vol-04b.md
@@ -149,6 +152,8 @@ nav:
   - 参加する:
       - 参加費とお申し込み: join/index.md
       - 法人の方へ: join/corporate.md
+  # ニュースサイト（B）が検索に公開されたら有効化する（外部URLはタブとして描画される）
+  # - 読む: https://ai-strategy-news.antecanis.com/d/
 
 extra:
   analytics:
@@ -164,16 +169,53 @@ extra:
   join_url: https://go.antecanis.com/ai-strategy-join
   # ヘッダー／導線で使う短縮表記（直近に開催される回）
   next_session_short: "9/15(火) 20:00〜"
-  # 次回回の配列（ラベル／種別 main|sub／日付／補足）
+  # 次回回の配列（ラベル／種別 main|sub／日付／補足／start=ISO日時。start は構造化データ Event 用）
   sessions:
     - label: "第5回 A日程"
       kind: main
       date: "9/15(火) 20:00〜"
+      start: "2026-09-15T20:00:00+09:00"
       note: "オンライン(Zoom)／火曜開催のメイン日程。登録後の初回は無料。各回は独立で途中参加歓迎。"
     - label: "第5回 B日程"
       kind: sub
       date: "10/2(金) 20:00〜"
+      start: "2026-10-02T20:00:00+09:00"
       note: "第5回（9/15）と同内容の追加開催。A日程に都合が合わない方向け。"
+  # ホーム「新着」の先頭リンク（新しいダイジェストを載せたらここを更新）
+  latest_digest:
+    url: "digests/vol-04b/"
+    label: "第4回ダイジェストを公開中"
+  # 開催履歴（sessions/history.md が history_cards() で描画。新しい回が終わったら先頭に追加）
+  # image は docs/ 基準のパス。各回ダイジェストの図1を assets/img/history/ に切り出してある。
+  history:
+    - no: 4
+      title: "物理世界に接地したAIは、競争のルールをどう書き換えるか"
+      area: "[1E] 物理世界との接地と作用"
+      dates: "8/18(火)・9/3(木)"
+      summary: "航空写真をAIが読み進めて候補地を探す実践アプリと、Sense→Think→Actのループを通じて、誰でも簡単に作れる時代の競争優位がどこに宿るのかを架空企業のストーリーで考えた回。"
+      image: "assets/img/history/vol-04.svg"
+      digests: ["digests/vol-04.md", "digests/vol-04b.md"]
+    - no: 3
+      title: "AI戦略 × 組織レイヤーへのインパクト"
+      area: "[2A] 情報流通の血流化／[2D] 経営の知的オペレーション機構化／[2E] 事業戦略と組織戦略の共転換"
+      dates: "7/21(火)・8/3(月)"
+      summary: "暗黙知の表出化、人材と課題の意味マッチング、集合知のリアルタイム構造化、そして「250名分の仕事が浮く」設定で利害の衝突に向き合う人材戦略デザインゲーム。組織変革レイヤーを実地で扱った回。"
+      image: "assets/img/history/vol-03.svg"
+      digests: ["digests/vol-03.md", "digests/vol-03b.md"]
+    - no: 2
+      title: "AIと共に、戦略の大転換を考える"
+      area: "[3A] 顧客価値／[3B] 顧客接点／[3C] 差別化資産のシフト"
+      dates: "6/23(火)・7/10(金)"
+      summary: "AI戦略対抗戦とAI事業デザインゲームの2つを通じて、競争のルール（顧客価値・顧客接点・差別化資産）がAIでどう書き換わるかを体験。戦略を「AIと共に、AIを前提に」描き直した回。"
+      image: "assets/img/history/vol-02.svg"
+      digests: ["digests/vol-02.md", "digests/vol-02b.md"]
+    - no: 1
+      title: "人間の認知容量の解除 ── 情報×AIの戦略インパクト"
+      area: "[1A] 人間の認知容量の解除"
+      dates: "5/26(火)・6/15(月)"
+      summary: "世界のビジネスニュースを題材に、人間の認知容量の限界が事業戦略上のボトルネックになる場面を言語化し、情報取得から分析・可視化・自動配信・アプリ化までを段階的に体験したパイロット回。"
+      image: "assets/img/history/vol-01.svg"
+      digests: ["digests/vol-01.md", "digests/vol-01b.md"]
   # 参加費（home のティーザー／join の正本が参照）
   pricing:
     early_label: "早期参加枠"

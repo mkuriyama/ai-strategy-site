@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 680 290" xmlns="http://www.w3.org/2000/svg" role="img">
+  <g font-family="'Noto Sans JP', sans-serif">
+  <text x="20" y="22" font-size="11" fill="#8a979a" font-weight="700">LLM以前（〜2022）　タスクごとの「専用AI」</text>
+  <text x="392" y="22" font-size="11" fill="#004455" font-weight="700">LLM以後（2022〜）　理解・推論する「汎用モデル」</text>
+  <rect x="20" y="34" width="330" height="46" rx="8" fill="#fff" stroke="rgba(0,68,85,.16)"/>
+  <text x="36" y="54" font-size="12" fill="#5d6b6e" font-weight="600">従来の言語処理（NLP）</text>
+  <text x="36" y="71" font-size="10.5" fill="#8a979a">抽出・分類まで。1タスク1モデル</text>
+  <rect x="20" y="88" width="330" height="46" rx="8" fill="#fff" stroke="rgba(0,68,85,.16)"/>
+  <text x="36" y="108" font-size="12" fill="#5d6b6e" font-weight="600">画像認識（CNN など）</text>
+  <text x="36" y="125" font-size="10.5" fill="#8a979a">「これは猫」とラベルを付けるまで</text>
+  <rect x="20" y="142" width="330" height="46" rx="8" fill="#fff" stroke="rgba(0,68,85,.16)"/>
+  <text x="36" y="162" font-size="12" fill="#5d6b6e" font-weight="600">音声認識（ASR）</text>
+  <text x="36" y="179" font-size="10.5" fill="#8a979a">文字起こしまで。内容は考えない</text>
+  <rect x="20" y="196" width="330" height="46" rx="8" fill="#fff" stroke="rgba(0,68,85,.16)"/>
+  <text x="36" y="216" font-size="12" fill="#5d6b6e" font-weight="600">従来の自動化・制御</text>
+  <text x="36" y="233" font-size="10.5" fill="#8a979a">決められた動きの繰り返しだけ</text>
+  <rect x="392" y="34" width="268" height="46" rx="8" fill="#f7f4ee" stroke="rgba(0,68,85,.2)"/>
+  <text x="408" y="54" font-size="12" fill="#004455" font-weight="700">LLM ＝ 言語脳</text>
+  <text x="408" y="71" font-size="10.5" fill="#5d6b6e">推論・知識・対話の土台</text>
+  <rect x="392" y="88" width="268" height="46" rx="8" fill="#f7f4ee" stroke="rgba(0,68,85,.2)"/>
+  <text x="408" y="108" font-size="12" fill="#004455" font-weight="700">VLM ＝ ＋目</text>
+  <text x="408" y="125" font-size="10.5" fill="#5d6b6e">画像を見て、考えて、言葉で答える</text>
+  <rect x="392" y="142" width="268" height="46" rx="8" fill="#f7f4ee" stroke="rgba(0,68,85,.2)"/>
+  <text x="408" y="162" font-size="12" fill="#004455" font-weight="700">マルチモーダル ＝ ＋耳・口</text>
+  <text x="408" y="179" font-size="10.5" fill="#5d6b6e">音声・動画も理解。生成もできる</text>
+  <rect x="392" y="196" width="268" height="46" rx="8" fill="#004455"/>
+  <text x="408" y="216" font-size="12" fill="#fff" font-weight="700">VLA ＝ ＋手足</text>
+  <text x="408" y="233" font-size="10.5" fill="rgba(255,255,255,.78)">見て・考えて・動く。物理世界へ</text>
+  <line x1="356" y1="138" x2="386" y2="138" stroke="#b88a3e" stroke-width="2"/>
+  <polygon points="386,138 377,133 377,143" fill="#b88a3e"/>
+  <text x="371" y="124" font-size="10" fill="#b88a3e" font-weight="700" text-anchor="middle">思考の獲得</text>
+  <text x="340" y="266" font-size="11" fill="#5d6b6e" text-anchor="middle">縦（上→下）＝感覚の拡張：言語 → 目 → 耳 → 手足</text>
+  <text x="340" y="282" font-size="11" fill="#004455" text-anchor="middle" font-weight="700">「これは猫だ」から、「この写真から、こんなことが考えられる」へ</text>
+  </g>
+</svg>

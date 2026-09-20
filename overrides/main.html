@@ -11,3 +11,62 @@
     案内メールを受け取る →
   </a>
 {% endblock %}
+
+<!--
+  構造化データ（JSON-LD）。検索・AI検索が「誰の・何の・いつの」を読めるようにする。
+  - Organization: 全ページ
+  - Event: 次回開催（extra.sessions の start がある回のみ）。ホーム・開催予定・申込ページに出す
+  - BreadcrumbList: ホーム以外
+  すべて extra:（単一ソース）から生成するので、回ごとの手編集は不要。
+-->
+{% block extrahead %}
+  {{ super() }}
+  {%- set site_url = config.site_url | default('') -%}
+  <script type="application/ld+json">
+  {{ {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": config.site_name,
+    "url": site_url,
+    "logo": site_url ~ "assets/logo-mincho-light.svg",
+    "description": config.site_description,
+    "parentOrganization": {"@type": "Organization", "name": "株式会社アンテカニス", "url": "https://www.antecanis.com/"},
+    "founder": {"@type": "Person", "name": "栗山 実", "url": site_url ~ "about/profile/"},
+    "email": "support@antecanis.com"
+  } | tojson }}
+  </script>
+  {%- if page and page.url is defined and (page.is_homepage or page.url in ("sessions/schedule/", "join/")) -%}
+  {%- set price = (config.extra.pricing.early_monthly_incl | default('')) | replace(',', '') -%}
+  {%- for s in config.extra.sessions if s.start -%}
+  <script type="application/ld+json">
+  {{ {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    "name": config.site_name ~ " " ~ s.label,
+    "startDate": s.start,
+    "description": s.note,
+    "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
+    "eventStatus": "https://schema.org/EventScheduled",
+    "location": {"@type": "VirtualLocation", "url": site_url ~ "join/"},
+    "organizer": {"@type": "Organization", "name": "株式会社アンテカニス", "url": "https://www.antecanis.com/"},
+    "performer": {"@type": "Person", "name": "栗山 実"},
+    "offers": {"@type": "Offer", "url": site_url ~ "join/", "priceCurrency": "JPY", "price": price, "availability": "https://schema.org/InStock"},
+    "inLanguage": "ja"
+  } | tojson }}
+  </script>
+  {%- endfor -%}
+  {%- endif -%}
+  {#- 404.html など page の無いテンプレートでも落ちないように、url と title の存在を見る -#}
+  {%- if page and page.url is defined and page.url and page.title and not page.is_homepage -%}
+  <script type="application/ld+json">
+  {{ {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "ホーム", "item": site_url},
+      {"@type": "ListItem", "position": 2, "name": page.title | string, "item": site_url ~ page.url}
+    ]
+  } | tojson }}
+  </script>
+  {%- endif -%}
+{% endblock %}
