@@ -81,9 +81,11 @@ main.py                         mkdocs-macros のマクロ定義（単一ソー�
 mkdocs.yml                      設定・ナビ(nav)・配色・copyright・**extra:（単一ソースデータ）**
 hooks/abbr_cjk.py               日本語の用語ツールチップを成立させる（変更不要）
 hooks/seo_files.py              AIO 用 `llms.txt` をビルド時に生成（extra: と各ページの description から）
-hooks/export_data.py            3つの役割。①`site/data/rounds.json`（回の表題・領域・開催日・
-                                要約）を公開 ― B が回ページの見出しに使う。②sitemap から
-                                ダイジェストを外す。③ダイジェストの本文を `.build/digests.json`
+hooks/export_data.py            4つの役割。①`site/data/rounds.json`（回の表題・領域・開催日・
+                                要約）を公開 ― B が回ページの見出しに使う。②`site/data/
+                                glossary.json`（用語集）を公開 ― B の `/terms/` が読む。
+                                **正本は本サイトの `docs/glossary.md` のまま**。③sitemap から
+                                ダイジェストを外す。④ダイジェストの本文を `.build/digests.json`
                                 （`site/` の外＝**公開されない置き場**）へ書き出す ― 会員限定の
                                 場所へ運ぶ材料。
                                 あわせて `extra:` に真偽値として読まれたキーが無いか検査する
@@ -159,7 +161,7 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
 | 次回開催の日程 | **`mkdocs.yml` の `extra.sessions` / `extra.next_session_short`**（ホーム・schedule・お知らせバー・JSON-LD・llms.txt へ自動反映。`date` と `start` の両方）＋ **`docs/sessions/schedule.md` の月次表**（※開催済の付与）＋ **`docs/assets/flyer.html`**（手動） |
 | 終わった回の記録 | **`mkdocs.yml` の `extra.history`**（開催履歴ページ・`rounds.json`・B の回ページの見出しへ自動反映）＋ `extra.latest_digest`（ホームの新着）＋ `docs/sessions/themes.md` の該当回 |
 | 参加費の金額 | **`mkdocs.yml` の `extra.pricing`**（ホームのティーザー・join の価格表へ自動反映）＋ **`join/index.md` の inline SVG 2点**（図1の金額・日付、図2の「いまここ」＝手動）＋ **`flyer.html` の参加費欄**（手動） |
-| 用語の定義 | `docs/glossary.md` と `docs/includes/abbreviations.md` の**両方**（定義文を一致させる） |
+| 用語の定義 | `docs/glossary.md` と `docs/includes/abbreviations.md` の**両方**（定義文を一致させる）。**正本はこの2つだけ**。ニュースサイト（B）の `/terms/` は `site/data/glossary.json` をビルド時に取りに来るので、B 側に書き足す必要はない（書き足すと片方だけ古くなる） |
 | 登録フォームURL | **`mkdocs.yml` の `extra.register_url` の1か所のみ**（通常は固定: `https://mailchi.mp/antecanis/ai-strategy`） |
 | 申込（Stripe）URL | **`mkdocs.yml` の `extra.join_url` の1か所のみ**（固定リンク: `https://go.antecanis.com/ai-strategy-join`。リンク先の差し替えはStripe側で行う） |
 
@@ -227,6 +229,13 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
    - 短いカナ語が**別の語の一部に誤マッチ**することがある。例：「セル」は「キャン**セル**」に
      一致してしまうため、ツールチップ対象からは除外している（用語集には掲載）。
      新規の短い語を入れる前に、よくある単語の一部にならないか確認する
+
+> 📖 **用語集はニュースサイト（B）の `/terms/` にも同じ内容で出ている**（2026年9月〜）。
+> B は本サイトの `site/data/glossary.json` をビルド時に取りに来るだけなので、**増やす場所は
+> 上の2ファイルのまま**。B 側の用語集は `noindex` ＋ canonical が本サイトの `/glossary/` を
+> 指しており、正本がこちらだと申告している。将来この用語集を B へ移すときは、
+> B の `noindex` と canonical を外し、こちらを B へ転送する（その前に GA4 で `/glossary/` の
+> 自然検索流入を確認すること）。
 
 ---
 

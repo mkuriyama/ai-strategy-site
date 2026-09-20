@@ -25,6 +25,11 @@
 見出しに使う。パックの `theme` は「〜（実装・第1層 [1E]…）」のように枠組みの注記まで
 含む運用の文字列で、読み手に見せる名前ではないため。
 
+**`site/data/glossary.json`（公開）** … 用語集（セクション・用語・定義）。**正本はこの
+サイトの `docs/glossary.md`**（用語の追加手順も `docs/includes/abbreviations.md` と
+セットのまま）。B はこれを読んで自前の用語集ページを描く。取得元を差し替えたく
+なったら B 側の `PROJECT_DATA_BASE` 1か所。
+
 **`.build/digests.json`（公開しない）** … ダイジェストの描画済み本文（図の inline SVG・
 用語ツールチップ込み）。`site/` の外に置くので GitHub Pages は配らない。会員限定の
 場所へ運ぶときの材料。
@@ -40,9 +45,21 @@ import re
 from urllib.parse import urljoin
 
 # src_uri（例 "digests/vol-04.md"） -> (絶対URL, 加工済みHTML, title, description)
+# **ダイジェストだけを入れる。** 下の `_digests()` が全要素に `_DIGEST.match()` を
+# 当てるので、別の種類のページを混ぜると落ちる（用語集を入れて実際に落とした）。
 _pages: dict[str, tuple[str, str, str, str]] = {}
 
+# 用語集の描画済み本文。`_pages` とは別に持つ（上のとおり）
+_glossary_html = ""
+
 _DIGEST = re.compile(r"^digests/(vol-[0-9a-z-]+)\.md$")
+_GLOSSARY = "glossary.md"
+_ABBR = re.compile(r"<abbr[^>]*>(.*?)</abbr>", re.S)
+_TAG = re.compile(r"<[^>]+>")
+_SECTION = re.compile(r"<h2[^>]*>(.*?)</h2>(.*?)(?=<h2|\Z)", re.S)
+_LEAD = re.compile(r"<p>(.*?)</p>", re.S)
+_TERM = re.compile(r"<dt>(.*?)</dt>\s*<dd>(.*?)</dd>", re.S)
+_NUM = re.compile(r"^\s*\d+\.\s*")
 _HEADERLINK = re.compile(r'<a class="headerlink".*?</a>', re.S)
 _H = re.compile(r"<(/?)h([1-6])([^>]*)>")
 _H1 = re.compile(r"<h1[^>]*>.*?</h1>\s*", re.S)
@@ -153,7 +170,12 @@ def _links(html: str, page_url: str, digest_urls: dict[str, str]) -> str:
 
 
 def on_page_context(context, page, config, nav):
-    if not _DIGEST.match(page.file.src_uri or ""):
+    src = page.file.src_uri or ""
+    if src == _GLOSSARY:
+        global _glossary_html
+        _glossary_html = page.content or ""
+        return context
+    if not _DIGEST.match(src):
         return context
     site_url = (config.get("site_url") or "").rstrip("/") + "/"
     _pages[page.file.src_uri] = (
@@ -215,6 +237,39 @@ def _digests(config) -> list[dict]:
     return out
 
 
+def _plain(html: str) -> str:
+    """素のテキストにする。
+
+    ツールチップの殻（`<abbr>`）と permalink（`¶` のリンク）を先に落とす ――
+    タグだけ剥がすと `¶` が文字として残り、見出しが「AI・生成AIの基本¶」になる。
+    """
+    return _TAG.sub("", _ABBR.sub(r"\1", _HEADERLINK.sub("", html))).strip()
+
+
+def _glossary(config) -> list[dict]:
+    """描画済みの用語集を、セクション → 用語 → 定義 に畳む。
+
+    Markdown を読み直さず `page.content` から取るのは、定義リスト（`:   ` 記法）の
+    解釈を2箇所に持たないため。定義の中の**ツールチップの殻だけ外す** ―― 用語集の
+    中で用語集の語にツールチップが付くのは入れ子で、運んだ先では邪魔になる。
+    """
+    if not _glossary_html:
+        return []
+    body = _unwrap(_strip_footer(_glossary_html))
+    out = []
+    for m in _SECTION.finditer(body):
+        title = _NUM.sub("", _plain(m.group(1)))
+        block = m.group(2)
+        lead = _LEAD.search(block.split("<dl>")[0]) if "<dl>" in block else None
+        terms = [{"term": _plain(t), "definition": _plain(d)}
+                 for t, d in _TERM.findall(block)]
+        if terms:
+            out.append({"title": title,
+                        "lead": _plain(lead.group(1)) if lead else "",
+                        "terms": terms})
+    return out
+
+
 def _strip_digests_from_sitemap(config) -> None:
     """sitemap.xml からダイジェストの行を落とす。
 
@@ -245,6 +300,14 @@ def on_post_build(config):
     with open(os.path.join(out_dir, "rounds.json"), "w", encoding="utf-8") as f:
         json.dump({"generated": now, "site": site_url, "rounds": _rounds(config)},
                   f, ensure_ascii=False, separators=(",", ":"))
+
+    sections = _glossary(config)
+    with open(os.path.join(out_dir, "glossary.json"), "w", encoding="utf-8") as f:
+        json.dump({"generated": now, "site": site_url,
+                   "source": site_url + "glossary/", "sections": sections},
+                  f, ensure_ascii=False, separators=(",", ":"))
+    print(f"[export] data/glossary.json に {len(sections)}節・"
+          f"{sum(len(x['terms']) for x in sections)}語")
 
     _strip_digests_from_sitemap(config)
 
