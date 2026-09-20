@@ -30,6 +30,10 @@
 セットのまま）。B はこれを読んで自前の用語集ページを描く。取得元を差し替えたく
 なったら B 側の `PROJECT_DATA_BASE` 1か所。
 
+**`site/data/areas.json`（公開）** … 5×5×5 の枠組み（3層 × 5切り口＝15領域）。**正本は
+`docs/about/philosophy.md` の表**。B が「どの領域を扱ってきたか」の地図を描くのに使う。
+15 個そろわなければビルドを止める（表の書式を変えたときに、片側だけ静かに減るのを防ぐ）。
+
 **`.build/digests.json`（公開しない）** … ダイジェストの描画済み本文（図の inline SVG・
 用語ツールチップ込み）。`site/` の外に置くので GitHub Pages は配らない。会員限定の
 場所へ運ぶときの材料。
@@ -49,11 +53,13 @@ from urllib.parse import urljoin
 # 当てるので、別の種類のページを混ぜると落ちる（用語集を入れて実際に落とした）。
 _pages: dict[str, tuple[str, str, str, str]] = {}
 
-# 用語集の描画済み本文。`_pages` とは別に持つ（上のとおり）
+# 用語集・設計思想の描画済み本文。`_pages` とは別に持つ（上のとおり）
 _glossary_html = ""
+_philosophy_html = ""
 
 _DIGEST = re.compile(r"^digests/(vol-[0-9a-z-]+)\.md$")
 _GLOSSARY = "glossary.md"
+_PHILOSOPHY = "about/philosophy.md"
 _ABBR = re.compile(r"<abbr[^>]*>(.*?)</abbr>", re.S)
 _TAG = re.compile(r"<[^>]+>")
 _SECTION = re.compile(r"<h2[^>]*>(.*?)</h2>(.*?)(?=<h2|\Z)", re.S)
@@ -175,6 +181,10 @@ def on_page_context(context, page, config, nav):
         global _glossary_html
         _glossary_html = page.content or ""
         return context
+    if src == _PHILOSOPHY:
+        global _philosophy_html
+        _philosophy_html = page.content or ""
+        return context
     if not _DIGEST.match(src):
         return context
     site_url = (config.get("site_url") or "").rstrip("/") + "/"
@@ -270,6 +280,55 @@ def _glossary(config) -> list[dict]:
     return out
 
 
+_ROW = re.compile(r"<tr>\s*<td[^>]*>(.*?)</td>\s*<td[^>]*>(.*?)</td>\s*</tr>", re.S)
+_AREA = re.compile(r"\[(\d[A-Z])\]\s*(.*?)\s*──\s*(.*)", re.S)
+
+
+def _areas() -> list[dict]:
+    """5×5×5 の枠組みを、設計思想ページの表から読む。
+
+    **正本は `docs/about/philosophy.md` の表**。ここで別に定義し直すと、表を直した
+    ときに片側だけが古くなる ―― 15行を2箇所に書く価値はない。
+
+    表の各行は「層」と「5つの切り口」の2列で、切り口は `<br>` 区切りの
+    `**[1A]** 名前 ── 説明` という形をしている。
+    """
+    if not _philosophy_html:
+        return []
+    out = []
+    for layer_cell, areas_cell in _ROW.findall(_unwrap(_philosophy_html)):
+        # 「**第1層**<br>実装方法<br>（業務・施策）」→ 第1層 / 実装方法（業務・施策）
+        parts = [_plain(x) for x in re.split(r"<br\s*/?>", layer_cell)]
+        parts = [x for x in parts if x]
+        if not parts:
+            continue
+        layer, kind = parts[0], "".join(parts[1:])
+        for seg in re.split(r"<br\s*/?>", areas_cell):
+            m = _AREA.search(_plain(seg))
+            if m:
+                out.append({"code": m.group(1), "layer": layer, "layer_kind": kind,
+                            "name": m.group(2), "description": m.group(3)})
+    return out
+
+
+def _check_areas(areas: list[dict]) -> None:
+    """15領域そろっているか。**足りなければビルドを止める。**
+
+    表の書式を変えると、この読み取りは静かに件数を減らす。減ったまま配ると、
+    B の地図から領域が消えるだけで、どちらの画面にもエラーは出ない。
+    """
+    codes = [a["code"] for a in areas]
+    want = [f"{n}{c}" for n in (1, 2, 3) for c in "ABCDE"]
+    if codes != want:
+        from mkdocs.exceptions import PluginError
+
+        raise PluginError(
+            "areas.json: 5×5×5 の枠組みを 15 領域そろって読めませんでした"
+            f"（読めたのは {len(codes)} 個: {codes}）。"
+            f"{_PHILOSOPHY} の表の書式（`**[1A]** 名前 ── 説明` を `<br>` 区切り、"
+            "層と切り口の2列）が変わっていないか確認してください")
+
+
 def _strip_digests_from_sitemap(config) -> None:
     """sitemap.xml からダイジェストの行を落とす。
 
@@ -308,6 +367,14 @@ def on_post_build(config):
                   f, ensure_ascii=False, separators=(",", ":"))
     print(f"[export] data/glossary.json に {len(sections)}節・"
           f"{sum(len(x['terms']) for x in sections)}語")
+
+    areas = _areas()
+    _check_areas(areas)
+    with open(os.path.join(out_dir, "areas.json"), "w", encoding="utf-8") as f:
+        json.dump({"generated": now, "site": site_url,
+                   "source": site_url + "about/philosophy/", "areas": areas},
+                  f, ensure_ascii=False, separators=(",", ":"))
+    print(f"[export] data/areas.json に {len(areas)}領域")
 
     _strip_digests_from_sitemap(config)
 
