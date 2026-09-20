@@ -69,6 +69,17 @@ plugins:
   - redirects:
       redirect_maps:
         join/register.md: join/index.md
+        # ダイジェストは公開サイトから引っ込めた（会員限定の場所へ移す予定）。
+        # 配布済み・索引済みのURLを切らさないよう、開催履歴へ送る。
+        digests/index.md: sessions/history.md
+        digests/vol-01.md: sessions/history.md
+        digests/vol-01b.md: sessions/history.md
+        digests/vol-02.md: sessions/history.md
+        digests/vol-02b.md: sessions/history.md
+        digests/vol-03.md: sessions/history.md
+        digests/vol-03b.md: sessions/history.md
+        digests/vol-04.md: sessions/history.md
+        digests/vol-04b.md: sessions/history.md
   # スクリーンショット等をクリックで拡大
   - glightbox:
       auto_caption: false
@@ -137,16 +148,6 @@ nav:
       - 月次テーマ: sessions/themes.md
       - 開催予定・次回案内: sessions/schedule.md
       - 開催履歴: sessions/history.md
-      - ダイジェスト:
-          - 一覧: digests/index.md
-          - Vol.4B 第4回（B日程・9/3）：物理世界との接地: digests/vol-04b.md
-          - Vol.4A 第4回（A日程・8/18）：物理世界との接地: digests/vol-04.md
-          - Vol.3B 第3回（B日程・8/3）：AI戦略 × 組織レイヤー: digests/vol-03b.md
-          - Vol.3A 第3回（A日程・7/21）：AI戦略 × 組織レイヤー: digests/vol-03.md
-          - Vol.2B 第2回（B日程・7/10）：戦略の大転換をAIと考える: digests/vol-02b.md
-          - Vol.2A 第2回（A日程・6/23）：戦略の大転換をAIと考える: digests/vol-02.md
-          - Vol.1B 第1回（追加開催・6/15）：人間の認知容量の解除: digests/vol-01b.md
-          - Vol.1A 第1回（メイン回・5/26）：人間の認知容量の解除: digests/vol-01.md
   - ガイド・用語集:
       - スタートガイド: start-guide.md
       - 用語集: glossary.md
@@ -182,12 +183,14 @@ extra:
       date: "10/20(火) 20:00〜"
       start: "2026-10-20T20:00:00+09:00"
       note: "オンライン(Zoom)／火曜開催のメイン日程。各回は独立で途中参加歓迎。"
-  # ホーム「新着」の先頭リンク（新しいダイジェストを載せたらここを更新）
+  # ホーム「新着」の先頭リンク（新しい回が終わったらここを更新）
   latest_digest:
-    url: "digests/vol-04b/"
-    label: "第4回ダイジェストを公開中"
+    url: "sessions/history/"
+    label: "第4回までの開催履歴を公開中"
   # 開催履歴（sessions/history.md が history_cards() で描画。新しい回が終わったら先頭に追加）
   # image は docs/ 基準のパス。各回ダイジェストの図1を assets/img/history/ に切り出してある。
+  # digests は**リンクではなく対応表**。公開ページからは外してあり、
+  # `DIGEST_EXPORT=1` のビルドで本文を書き出すときだけ使う（会員限定の場所へ運ぶ材料）。
   history:
     - round: 4
       title: "物理世界に接地したAIは、競争のルールをどう書き換えるか"

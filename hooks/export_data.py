@@ -1,29 +1,28 @@
-"""ダイジェストの**描画済み本文**を `site/data/digests.json` に書き出す MkDocs hook。
+"""ビルド時のデータ書き出しと、`extra:` の検査。
 
-## なぜ要るか
+## 2つの書き出し
 
-ニュースサイト（B）の「回のページ」（`/context/S0N/`）に、各回の図と叙述をそのまま
-載せるため。文章は書き直さず、ここで作ったものを運ぶ。
+**`site/data/rounds.json`（公開）** … 各回の表題・領域・開催日・要約。開催履歴ページ
+に出しているのと同じ内容を機械可読にしたもの。ニュースサイト（B）が回ページの
+見出しに使う。パックの `theme` は「〜（実装・第1層 [1E]…）」のように枠組みの注記まで
+含む運用の文字列で、読み手に見せる名前ではないため。
 
-## なぜ Markdown ではなく HTML を渡すのか
+**`.build/digests.json`（公開しない）** … ダイジェストの描画済み本文（図の inline SVG・
+用語ツールチップ込み）。**既定のビルドでは作られない。**
 
-**描画のコードを2つ持たないため。** ダイジェストの本文は素の Markdown ではなく、
-`!!! info` の囲み・`<figure markdown="span">`・`<ul class="dg-meta">`・用語ツールチップ
-（`hooks/abbr_cjk.py` が付ける `<abbr>`）が混ざっている。B 側で Markdown を解釈し直すと、
-同じ拡張構成を2箇所に持つことになり、必ず片方だけが直される。**すでに正しく描けている
-このビルドの出力をそのまま渡す。**
+## ダイジェストを公開サイトから外している理由
 
-## 渡す前にやる加工
+登録前の人に、過去回の詳細を大量に見せないため。叙述と図は、今後 B に作る
+**会員限定の場所**（メール認証を通した先。過去の文脈を使ってシナリオやケースを
+組み立てる機能を置く）で使う。原稿は `docs/digests/` にそのまま残してあり、
+下の `on_files` がビルドから外しているだけなので、いつでも戻せる。
 
-- 末尾の `{{ footer_cta(...) }}` ブロックを落とす（B には B の導線がある）
-- `<h1>` を落とし、見出しを1段下げる（B のページでは日程が `<h2>` になるため）
-- 見出しの `id` と `¶` のリンクを落とす（同じページに2日程が並ぶので id が衝突する）
-- 相対リンクを絶対URLにする。ただし**同じ回のもう一方の日程へのリンクだけは
-  `#digest:vol-04b` の形**に置き換える。B 側では同一ページ内なので、そちらで
-  ページ内アンカーに解決する（A の URL 文字列を B に覚えさせない）
+    mkdocs build                      # 公開用。ダイジェストは含まれない
+    DIGEST_EXPORT=1 mkdocs build      # 書き出し用。ダイジェストを描画し
+                                      # .build/digests.json を作る
 
-出力先は `site/data/digests.json`。B のビルドが HTTP で取りに来る。
-用語集を B へ渡すときも、この hook に足して同じ場所から配る。
+⚠ `DIGEST_EXPORT=1` で作った `site/` を**デプロイしないこと**（ダイジェストのページが
+入っている）。CI は付けていない。
 """
 
 from __future__ import annotations
@@ -31,13 +30,17 @@ from __future__ import annotations
 import datetime
 import json
 import os
+import pathlib
 import re
 from urllib.parse import urljoin
+
+EXPORT = os.environ.get("DIGEST_EXPORT") == "1"
 
 # src_uri（例 "digests/vol-04.md"） -> (絶対URL, 加工済みHTML, title, description)
 _pages: dict[str, tuple[str, str, str, str]] = {}
 
 _DIGEST = re.compile(r"^digests/(vol-[0-9a-z-]+)\.md$")
+_DIGEST_DIR = re.compile(r"^digests/")
 _HEADERLINK = re.compile(r'<a class="headerlink".*?</a>', re.S)
 _H = re.compile(r"<(/?)h([1-6])([^>]*)>")
 _H1 = re.compile(r"<h1[^>]*>.*?</h1>\s*", re.S)
@@ -80,6 +83,19 @@ def on_config(config):
     return config
 
 
+def on_files(files, config):
+    """ダイジェストを公開サイトから外す。
+
+    ファイル自体は `docs/digests/` に残る（会員限定の場所へ移すときの原稿）。
+    `DIGEST_EXPORT=1` のときだけビルドに含め、本文を書き出せるようにする。
+    """
+    if EXPORT:
+        return files
+    kept = [f for f in files if not _DIGEST_DIR.match(f.src_uri or "")]
+    files._files = kept  # noqa: SLF001 — Files は list ラッパー
+    return files
+
+
 def on_pre_build(config):
     _pages.clear()
 
@@ -89,7 +105,7 @@ def _unwrap(html: str) -> str:
 
     用語ツールチップの hook が本文を HTML として解析し直すため、`page.content` は
     断片ではなく1枚の文書の形で返ってくる。テーマのテンプレートは中身だけを使うので
-    サイト上は問題ないが、そのまま B へ渡すと文書の中に文書が入る。
+    サイト上は問題ないが、そのまま渡すと文書の中に文書が入る。
     """
     for head in ("<html><head></head><body>", "<html><body>"):
         if html.startswith(head):
@@ -118,8 +134,8 @@ def _strip_footer(html: str) -> str:
 def _demote(html: str) -> str:
     """見出しを1段下げ、id と permalink を落とす。
 
-    B の回ページでは「A日程」「B日程」が `<h2>`。ダイジェスト側の `<h2>` をそのまま
-    置くと日程と同じ高さになり、文書の階層が崩れる（見出しの構造は検索側も読む）。
+    運ぶ先では日程が `<h2>` になる。ダイジェスト側の `<h2>` をそのまま置くと
+    日程と同じ高さになり、文書の階層が崩れる。
     """
     html = _HEADERLINK.sub("", html)
     html = _H1.sub("", html, count=1)
@@ -148,13 +164,11 @@ def _links(html: str, page_url: str, digest_urls: dict[str, str]) -> str:
 
 
 def on_page_context(context, page, config, nav):
-    m = _DIGEST.match(page.file.src_uri or "")
-    if not m:
+    if not EXPORT or not _DIGEST.match(page.file.src_uri or ""):
         return context
     site_url = (config.get("site_url") or "").rstrip("/") + "/"
-    url = urljoin(site_url, page.url)
     _pages[page.file.src_uri] = (
-        url,
+        urljoin(site_url, page.url),
         page.content or "",
         page.meta.get("title") or page.title or "",
         (page.meta.get("description") or "").strip(),
@@ -162,64 +176,74 @@ def on_page_context(context, page, config, nav):
     return context
 
 
-def on_post_build(config):
-    if not _pages:
-        return
+def _rounds(config) -> list[dict]:
     site_url = (config.get("site_url") or "").rstrip("/") + "/"
-    history = (config.get("extra", {}) or {}).get("history") or []
-
-    # 「この URL はどのダイジェストか」の対応表。リンク書き換えで使う。
-    digest_urls = {url: _DIGEST.match(src).group(1) for src, (url, *_ ) in _pages.items()}
-
-    rounds = []
-    for entry in history:
-        digests = []
-        for src in entry.get("digests") or []:
-            got = _pages.get(src)
-            if not got:
-                continue
-            url, html, title, desc = got
-            slug = _DIGEST.match(src).group(1)
-            html = _links(_demote(_strip_footer(_unwrap(html))), url, digest_urls)
-            digests.append({
-                "slug": slug,
-                # `vol-0Nb` が追加開催（B日程）。A 側の命名規則そのまま
-                "kind": "sub" if slug.endswith("b") else "main",
-                "url": url,
-                "title": title,
-                "description": desc,
-                "html": html.strip(),
-            })
-        if not digests:
-            continue
-        rounds.append({
+    out = []
+    for entry in (config.get("extra", {}) or {}).get("history") or []:
+        out.append({
             "session_no": entry.get("round"),
             "title": entry.get("title") or "",
             "area": entry.get("area") or "",
             "dates": entry.get("dates") or "",
             "summary": entry.get("summary") or "",
             "image": urljoin(site_url, entry["image"]) if entry.get("image") else "",
-            "digests": digests,
         })
+    return out
 
-    # 加工し損ねたものを黙って配らない。B 側で気づくのは「ページが変」になってから。
-    for r in rounds:
-        for d in r["digests"]:
+
+def _digests(config) -> list[dict]:
+    site_url = (config.get("site_url") or "").rstrip("/") + "/"
+    digest_urls = {url: _DIGEST.match(src).group(1) for src, (url, *_) in _pages.items()}
+    out = []
+    for entry in (config.get("extra", {}) or {}).get("history") or []:
+        items = []
+        for src in entry.get("digests") or []:
+            got = _pages.get(src)
+            if not got:
+                continue
+            url, html, title, desc = got
+            slug = _DIGEST.match(src).group(1)
+            html = _links(_demote(_strip_footer(_unwrap(html))), url, digest_urls).strip()
             for token, why in (("<html", "文書の殻が残っている"),
                                ("cta-pair", "footer_cta を落とし損ねている"),
                                ("<h1", "h1 が残っている"),
                                ("headerlink", "permalink の ¶ が残っている")):
-                if token in d["html"]:
+                if token in html:
                     from mkdocs.exceptions import PluginError
 
-                    raise PluginError(f"digests.json: {d['slug']} の本文に {why}（{token}）")
+                    raise PluginError(f"digests.json: {slug} の本文に {why}（{token}）")
+            items.append({
+                "slug": slug,
+                # `vol-0Nb` が追加開催（B日程）。命名規則そのまま
+                "kind": "sub" if slug.endswith("b") else "main",
+                "url": url,
+                "title": title,
+                "description": desc,
+                "html": html,
+            })
+        if items:
+            out.append({"session_no": entry.get("round"), "digests": items})
+    return out
+
+
+def on_post_build(config):
+    now = datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")
+    site_url = (config.get("site_url") or "").rstrip("/") + "/"
 
     out_dir = os.path.join(config["site_dir"], "data")
     os.makedirs(out_dir, exist_ok=True)
-    payload = {
-        "generated": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"),
-        "site": site_url,
-        "rounds": rounds,
-    }
-    with open(os.path.join(out_dir, "digests.json"), "w", encoding="utf-8") as f:
-        json.dump(payload, f, ensure_ascii=False, separators=(",", ":"))
+    with open(os.path.join(out_dir, "rounds.json"), "w", encoding="utf-8") as f:
+        json.dump({"generated": now, "site": site_url, "rounds": _rounds(config)},
+                  f, ensure_ascii=False, separators=(",", ":"))
+
+    if not EXPORT:
+        return
+    # **`site/` の外へ置く。** ここに入れると GitHub Pages がそのまま配ってしまう。
+    path = pathlib.Path(config["config_file_path"]).parent / ".build" / "digests.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    rounds = _digests(config)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump({"generated": now, "site": site_url, "rounds": rounds},
+                  f, ensure_ascii=False, separators=(",", ":"))
+    n = sum(len(r["digests"]) for r in rounds)
+    print(f"[export] {path} に {len(rounds)}回・{n}本（公開されない置き場）")
