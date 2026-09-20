@@ -68,7 +68,7 @@ def define_env(env):
         rounds = extra.get("history", []) or []
         out = ['<div class="history">']
         for r in rounds:
-            no = r.get("no", "")
+            no = r.get("round", "")
             title = _html.escape(str(r.get("title", "")))
             area = _html.escape(str(r.get("area", "")))
             dates = _html.escape(str(r.get("dates", "")))

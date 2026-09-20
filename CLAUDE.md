@@ -76,6 +76,9 @@ main.py                         mkdocs-macros のマクロ定義（単一ソー�
 mkdocs.yml                      設定・ナビ(nav)・配色・copyright・**extra:（単一ソースデータ）**
 hooks/abbr_cjk.py               日本語の用語ツールチップを成立させる（変更不要）
 hooks/seo_files.py              AIO 用 `llms.txt` をビルド時に生成（extra: と各ページの description から）
+hooks/export_data.py            ダイジェストの**描画済み本文**を `site/data/digests.json` に出力。
+                                B の回ページ(`/context/S0N/`)が図と叙述をそのまま載せるため。
+                                あわせて `extra:` に真偽値として読まれたキーが無いか検査する
 requirements.txt                material[imaging] / macros / glightbox / redirects
 ```
 
@@ -110,9 +113,13 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
      `date` と食い違わないように同時に更新する
    - これだけで、ホームのライブパネル・お知らせバー・schedule の「次回開催」カード・join の
      価格表・JSON-LD・`llms.txt` が更新される。
-   - **終わった回は `extra.history` の先頭に追加**（回番号・テーマ・領域・開催日・要約・図・
-     ダイジェスト）。図は A日程ダイジェストの図1を `assets/img/history/vol-0N.svg` に切り出す。
+   - **終わった回は `extra.history` の先頭に追加**（`round:`＝回番号・テーマ・領域・開催日・
+     要約・図・ダイジェスト）。図は A日程ダイジェストの図1を
+     `assets/img/history/vol-0N.svg` に切り出す。
      `extra.latest_digest` を新しいダイジェストに向ける（ホームの「新着」）。
+     - ⚠ 回番号のキーは **`round:`**。`no:` は **YAML が真偽値として読む**ため使えない
+       （2026年9月に実際に踏み、開催履歴が「第回」と表示されていた）。`hooks/export_data.py`
+       が同種のキーを検出してビルドを止める。
 2. **開催スケジュールの月次表** `docs/sessions/schedule.md`
    - 表は **A日程（メイン）/ B日程（追加開催・同内容）の2列構成**。終了した日程に「※開催済」を付ける
    - 「次回開催」カードは `{{ session_cards() }}` マクロ（手編集不要）。
@@ -273,6 +280,7 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
 | 症状 | 原因と対処 |
 |---|---|
 | 税込金額が「6,930**円円**」になる | `extra.pricing` の値に「円」を含めている。値は数字のみ（テンプレートが「円」を付ける） |
+| 開催履歴が「第**回**」と番号抜けで出る | `extra:` のキーに `no:` `yes:` `on:` `off:` を使うと YAML が真偽値として読み、`r.get("no")` が静かに `None` を返す。**エラーにならず表示だけ欠ける**。キーは `round:` のように別の語にする（`hooks/export_data.py` が検出してビルドを止める） |
 | ダイジェストや料金図のSVGが極端に小さい | Material の `figure{width:fit-content}` が、`viewBox` だけで幅指定のないinline SVGを潰す。`extra.css` の `.md-typeset figure{width:100%}` で対処済み（消さないこと） |
 | 用語集の見出しを文字列grepしても一致しない | 見出し内の用語が `<abbr>` で囲まれ文字列が分断されるため。検証は用語単体か `<abbr title=...>` で行う |
 | ローカルで `mkdocs: command not found` | コンテナ再起動で依存が消えている。`pip install -q -r requirements.txt` で復旧（`python3 -m mkdocs` で実行） |
