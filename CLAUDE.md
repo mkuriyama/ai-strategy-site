@@ -26,10 +26,13 @@ docs/
 │   ├─ profile.md               主催者プロフィール（顔写真・会社リンク）
 │   └─ share.md                 このプロジェクトを紹介する（チラシへの導線）
 ├─ sessions/
-│   ├─ index.md                 進め方と持ち帰るもの
-│   ├─ themes.md                月次テーマ（開催済み＋今後の領域）
-│   ├─ schedule.md              開催予定・次回案内（次回＋月次予定表）
+│   ├─ index.md                 セッションの進め方と開催予定。構成例・持ち帰るもの・
+│   │                           **次回開催・今後の月次予定**・毎月の挑戦・使うアプリ・今後の展開。
+│   │                           2026年9月に schedule.md を吸収した
 │   └─ history.md               開催履歴（`extra.history` を history_cards() で描画。本文は書かない）
+│   ※ themes.md（月次テーマ）と schedule.md（開催予定）は2026年9月に廃止。
+│     themes は history と同じ内容を手書きで持っていただけ（→ history へ転送）。
+│     schedule は index へ吸収（→ index へ転送）。**転送設定は消さないこと**
 ├─ digests/                     **載せないが、URLを知っていれば開ける**（2026年9月〜）。
 │                               ページは前のURLのまま。案内メールで配ったリンクと、
 │                               Circle の詳細版からの「簡易版はこちら」が生きているため。
@@ -145,14 +148,12 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
      - ⚠ 回番号のキーは **`round:`**。`no:` は **YAML が真偽値として読む**ため使えない
        （2026年9月に実際に踏み、開催履歴が「第回」と表示されていた）。`hooks/export_data.py`
        が同種のキーを検出してビルドを止める。
-2. **開催スケジュールの月次表** `docs/sessions/schedule.md`
+2. **開催スケジュールの月次表** `docs/sessions/index.md` の「今後の月次予定」
    - 表は **A日程（メイン）/ B日程（追加開催・同内容）の2列構成**。終了した日程に「※開催済」を付ける
-   - 「次回開催」カードは `{{ session_cards() }}` マクロ（手編集不要）。
-   - 「これまでの回を振り返る」のダイジェストリンクを更新
+   - 同ページの「次回開催」カードは `{{ session_cards() }}` マクロ（手編集不要）。
    - ※ホームの「次回開催」は overrides/home.html が `extra.sessions` を直接描画（手編集不要）。
-3. **月次テーマ** `docs/sessions/themes.md`
-   - 開催した回を「開催済みのテーマ」に**先頭（最新順）**で追記（ダイジェストへのリンクも）
-   - 「今後のテーマ領域」から消化済みを調整
+3. ~~月次テーマ~~ … **廃止**（2026年9月）。各回の記録は `extra.history` → 開催履歴に一本化。
+   同じ内容を2か所に手書きしていたのをやめた
 4. **ダイジェスト**（新しい回の分） … 下記「ダイジェストの追加手順」
    ※**nav・一覧・本文リンクには載せない。** front-matter に `search: exclude: true` を
    付け、`extra.history` の `digests:` に対応表を足す。URLは案内メール・Circle から使う。
@@ -172,8 +173,8 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
 
 | 情報 | 載っているファイル |
 |---|---|
-| 次回開催の日程 | **`mkdocs.yml` の `extra.sessions` / `extra.next_session_short`**（ホーム・schedule・お知らせバー・JSON-LD・llms.txt へ自動反映。`date` と `start` の両方）＋ **`docs/sessions/schedule.md` の月次表**（※開催済の付与）＋ **`docs/assets/flyer.html`**（手動） |
-| 終わった回の記録 | **`mkdocs.yml` の `extra.history`**（開催履歴ページ・`rounds.json`・B の回ページの見出しへ自動反映）＋ `extra.latest_digest`（ホームの新着）＋ `docs/sessions/themes.md` の該当回 |
+| 次回開催の日程 | **`mkdocs.yml` の `extra.sessions` / `extra.next_session_short`**（ホーム・セッションページ・お知らせバー・JSON-LD・llms.txt へ自動反映。`date` と `start` の両方）＋ **`docs/sessions/index.md` の月次表**（※開催済の付与）＋ **`docs/assets/flyer.html`**（手動） |
+| 終わった回の記録 | **`mkdocs.yml` の `extra.history` の1か所だけ**（開催履歴ページ・`rounds.json`・B の回ページの見出し・B の領域マップへ自動反映）。2026年9月に月次テーマpage を廃止して一本化した |
 | 参加費の金額 | **`mkdocs.yml` の `extra.pricing`**（ホームのティーザー・join の価格表へ自動反映）＋ **`join/index.md` の inline SVG 2点**（図1の金額・日付、図2の「いまここ」＝手動）＋ **`flyer.html` の参加費欄**（手動） |
 | 用語の定義 | `docs/glossary.md` と `docs/includes/abbreviations.md` の**両方**（定義文を一致させる）。**正本はこの2つだけ**。ライブラリー（B）の `/terms/` は `site/data/glossary.json` をビルド時に取りに来るので、B 側に書き足す必要はない（書き足すと片方だけ古くなる）。掲載場所は B だが、**編集する場所はここ** |
 | 5×5×5 の 15 領域 | **`docs/about/philosophy.md` の表だけ**（B の領域マップは `site/data/areas.json` を取りに来る）。⚠ 表の書式（`**[1A]** 名前 ── 説明` を `<br>` 区切り／層と切り口の2列）を変えると読み取りが減る。15個そろわなければ `hooks/export_data.py` がビルドを止める |
@@ -264,7 +265,7 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
 - **変動情報の正本は `mkdocs.yml` の `extra:`**。`sessions` / `next_session_short` / `pricing` /
   `register_url` をここで定義し、**本文（.md）にハードコードしない**。
 - **マクロ（`main.py`）**:
-  - `{{ session_cards() }}` … `extra.sessions` から「次回開催」カードを描画（schedule で使用）
+  - `{{ session_cards() }}` … `extra.sessions` から「次回開催」カードを描画（`sessions/index.md` で使用）
   - `{{ history_cards() }}` … `extra.history` から開催履歴カードを描画（sessions/history で使用）
   - `{{ register_button("ラベル") }}` … メール登録ボタン（**金**・`.md-button--gold`）
   - `{{ join_button("ラベル") }}` … 申込（Stripe）ボタン（**ティール**・`.md-button--primary`）。
@@ -281,7 +282,7 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
   テンプレート内、スタイルは `extra.css` の `.home-landing` 配下。
 - **お知らせバーCTA**は `overrides/main.html` の `announce` ブロックで全ページに表示。
 - **構造化データ（JSON-LD）**も `overrides/main.html` の `extrahead` ブロックで生成。
-  Organization は全ページ、Event は `extra.sessions` の `start` がある回をホーム・schedule・join に、
+  Organization は全ページ、Event は `extra.sessions` の `start` がある回をホーム・`sessions/`・join に、
   BreadcrumbList はホーム以外。手編集しない（`extra:` を直せば追随する）。
 - **`llms.txt`** は `hooks/seo_files.py` がビルド時に `site/llms.txt` へ生成。`extra:` と各ページの
   `description` が材料なので、新しいページには必ず `description` を付ける。

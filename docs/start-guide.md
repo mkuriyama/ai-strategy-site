@@ -293,4 +293,4 @@ APIはApplication Programming Interfaceの略で、プログラムからAIサー
 
 *本ガイドの内容は2026年9月時点の情報に基づいています。お問い合わせ: support@antecanis.com*
 
-{{ footer_cta("[セッションの進め方](sessions/index.md)", "[開催予定・次回案内](sessions/schedule.md)", "[開催履歴](sessions/history.md)") }}
+{{ footer_cta("[セッションの進め方と開催予定](sessions/index.md)", "[セッションの進め方と開催予定](sessions/index.md)", "[開催履歴](sessions/history.md)") }}

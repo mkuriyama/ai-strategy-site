@@ -73,4 +73,4 @@ search:
     サンプルコード・録画などの教材一式は、参加登録者にメールで共有しています。参加方法は
     **[参加する](../join/index.md)** をご覧ください。
 
-{{ footer_cta("[月次テーマ](../sessions/themes.md)", "[セッションの進め方](../sessions/index.md)", "[ダイジェスト一覧](index.md)") }}
+{{ footer_cta("[開催履歴](../sessions/history.md)", "[セッションの進め方と開催予定](../sessions/index.md)", "[ダイジェスト一覧](index.md)") }}

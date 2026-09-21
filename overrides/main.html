@@ -46,7 +46,7 @@
     "email": "support@antecanis.com"
   } | tojson }}
   </script>
-  {%- if page and page.url is defined and (page.is_homepage or page.url in ("sessions/schedule/", "join/")) -%}
+  {%- if page and page.url is defined and (page.is_homepage or page.url in ("sessions/", "join/")) -%}
   {%- set price = (config.extra.pricing.early_monthly_incl | default('')) | replace(',', '') -%}
   {%- for s in config.extra.sessions if s.start -%}
   <script type="application/ld+json">

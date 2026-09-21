@@ -219,4 +219,4 @@ Colabでコードを動かします。
 接地（Sense→Think→Act）」を構想中で、地図・衛星写真での場所探索や画像認識でのAI接客などを
 検討しています。
 
-{{ footer_cta("[A日程（7/21）のダイジェスト](vol-03.md)", "[ダイジェスト一覧](index.md)", "[開催予定・次回案内](../sessions/schedule.md)") }}
+{{ footer_cta("[A日程（7/21）のダイジェスト](vol-03.md)", "[ダイジェスト一覧](index.md)", "[セッションの進め方と開催予定](../sessions/index.md)") }}

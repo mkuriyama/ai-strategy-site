@@ -85,4 +85,4 @@ AI関連イベントの一覧や用語集も同じ場所に置いています。
 - **[設計思想](philosophy.md)** — 3つのコアコンセプトと、各回を貫く3層の視座（5×5×5の枠組み）
 - **[主催者プロフィール](profile.md)** — 栗山実について
 
-{{ footer_cta("[設計思想](philosophy.md)", "[セッションの進め方](../sessions/index.md)", "[主催者プロフィール](profile.md)") }}
+{{ footer_cta("[設計思想](philosophy.md)", "[セッションの進め方と開催予定](../sessions/index.md)", "[主催者プロフィール](profile.md)") }}

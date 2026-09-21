@@ -178,4 +178,4 @@ description: 参加費とお申し込み。早期参加枠の料金、課金と�
 ページ下部のフッターから常時ご確認いただけます。ご不明点は
 [support@antecanis.com](mailto:support@antecanis.com) までお問い合わせください。
 
-{{ footer_cta("[進め方と持ち帰るもの](../sessions/index.md)", "[開催予定・次回案内](../sessions/schedule.md)", "[法人の方へ](corporate.md)", join_cta=False) }}
+{{ footer_cta("[セッションの進め方と開催予定](../sessions/index.md)", "[セッションの進め方と開催予定](../sessions/index.md)", "[法人の方へ](corporate.md)", join_cta=False) }}
