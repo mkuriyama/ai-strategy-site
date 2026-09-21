@@ -143,8 +143,8 @@ nav:
   - 参加する:
       - 参加費とお申し込み: join/index.md
       - 法人の方へ: join/corporate.md
-  # ニュースサイト（B）が検索に公開されたら有効化する（外部URLはタブとして描画される）
-  # - 読む: https://ai-strategy-news.antecanis.com/d/
+  # ニュースサイト（B）＝AI戦略ライブラリー。外部URLはタブとして描画される
+  - 読む: https://ai-strategy-news.antecanis.com/d/?utm_source=project-site&utm_medium=referral
 
 extra:
   analytics:
@@ -156,6 +156,8 @@ extra:
   # ホーム(overrides/home.html)・schedule・join 等が参照する。
   # ────────────────────────────────────────────────────────────
   register_url: https://mailchi.mp/antecanis/ai-strategy
+  # ニュースサイト（B）。nav の「読む」タブと llms.txt の「関連サイト」が参照する
+  news_site_url: https://ai-strategy-news.antecanis.com/d/
   # 申込（Stripe）の直リンク。独自ドメイン配下に統一（リンク先の差し替えはStripe側で行う）
   join_url: https://go.antecanis.com/ai-strategy-join
   # ヘッダー／導線で使う短縮表記（直近に開催される回）
