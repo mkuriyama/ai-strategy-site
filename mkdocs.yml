@@ -73,6 +73,10 @@ plugins:
         sessions/themes.md: sessions/history.md
         # 開催予定はセッションページに吸収（2026年9月）
         sessions/schedule.md: sessions/index.md
+        # スタートガイドはライブラリー（B）の /guide/ へ移設（2026年9月）。
+        # **外部URLへの転送**（プラグインが対応している）。案内メール・決済完了
+        # ページ・Circle から配ったリンクが生きているので、この設定は消さないこと
+        start-guide.md: https://ai-strategy-news.antecanis.com/guide/getting-started/
   # スクリーンショット等をクリックで拡大
   - glightbox:
       auto_caption: false
@@ -142,7 +146,9 @@ nav:
       - 主催者プロフィール: about/profile.md
   # 用語集はライブラリー（B）の /terms/ に移した。ページは前のURLのまま残して
   # あるが、nav・検索・sitemap・llms.txt からは外している（ダイジェストと同じ扱い）
-  - スタートガイド: start-guide.md
+  # スタートガイドもライブラリー（B）の /guide/ に移した（2026年9月）。あちらは
+  # **参加している方の手元**という位置づけで、今後ガイドを増やしていく置き場。
+  # こちらは転送だけ残す（下の redirect_maps）。nav には戻さない。
   - 参加する:
       - 参加費とお申し込み: join/index.md
       - 法人の方へ: join/corporate.md

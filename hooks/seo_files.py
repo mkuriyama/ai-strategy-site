@@ -92,7 +92,14 @@ def on_post_build(config):
         lines.append("")
         lines.append("## 関連サイト")
         lines.append("")
-        lines.append(f"- ニュース・イベント・WHYの種（毎日更新）: {news}")
+        # ライブラリー（B）には、日々の読み解きのほかに用語集・セッションの記録・
+        # 参加者向けガイドが載っている。**掲載場所があちらに移ったものは、ここから
+        # 辿れるようにしておく**（本サイトの nav には戻さない方針のため）。
+        site = news.rstrip("/").rsplit("/d", 1)[0]
+        lines.append(f"- AI戦略ライブラリー（毎日の読み解き・AI関連イベント）: {news}")
+        lines.append(f"- 用語集: {site}/terms/")
+        lines.append(f"- 参加ガイド（当日の流れ・手元の準備）: {site}/guide/")
+        lines.append(f"- セッションの記録（各回で語られた論点）: {site}/context/")
 
     out = os.path.join(config["site_dir"], "llms.txt")
     with open(out, "w", encoding="utf-8") as f:

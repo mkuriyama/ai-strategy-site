@@ -48,7 +48,9 @@ docs/
 ├─ join/
 │   ├─ index.md                 参加費とお申し込み（費用・課金図・申込・メール登録の統合ページ）
 │   └─ corporate.md             法人の方へ
-├─ start-guide.md               スタートガイド（参加準備・進め方）
+│  ※ start-guide.md（スタートガイド）は2026年9月に**ライブラリー（B）の `/guide/` へ移設**。
+│    あちらは「参加している方の手元」という位置づけで、原稿は B の `content/guide/*.md`。
+│    本サイトは転送のみ（`redirect_maps` の `start-guide.md` → 外部URL）。**消さないこと**
 ├─ glossary.md                  用語集。**掲載場所はライブラリー（B）の /terms/ に移した**
 │                               （2026年9月）。ダイジェストと同じ「載せないが、URLを
 │                               知っていれば開ける」扱い ―― nav・検索・sitemap・llms.txt
@@ -107,8 +109,9 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
 > （`mkdocs.yml` の `plugins.redirects.redirect_maps`）。**この転送設定は消さないこと**（メール等で
 > 配布済みのリンクが切れる）。参加者コミュニティ（Circle）の説明は `sessions/index.md` に集約。
 
-ナビ（タブ）: ホーム / プロジェクトについて / セッション（開催履歴を含む） / スタートガイド / 参加する
-（ダイジェスト・用語集は nav から外した。ページは残っており、URLを知っていれば開ける）
+ナビ（タブ）: **ホーム / プロジェクトについて / 参加する** の3つだけ
+（ダイジェスト・用語集は nav から外した。ページは残っており、URLを知っていれば開ける。
+スタートガイドはライブラリー（B）へ移設し、旧URLは転送）
 
 > 🎯 **このサイトの目的は「広告で来た人を申込へ運ぶこと」。ナビに項目を足さない。**
 >
@@ -164,7 +167,7 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
 6. **用語集 ＋ ツールチップ**（新しい用語が出た回） … 下記「用語の追加手順」
 7. **日付スタンプ**の確認
    - `docs/glossary.md` 末尾「◯年◯月時点」
-   - `docs/start-guide.md` 末尾「◯年◯月時点」
+   - ガイドの `updated:`（ライブラリー（B）の `content/guide/*.md` の前書き）
 8. **ビルド確認 → コミット → プッシュ → mainにマージ → デプロイ確認**（下記「ビルドと公開」）
 
 ---
@@ -260,6 +263,20 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
 
 ---
 
+## ガイドの置き場（2026年9月〜）
+
+**スタートガイドはライブラリー（B）の `/guide/` に移した。** 用語集と違い、**正本も
+B 側**（`ai-strategy-news-app` の `content/guide/*.md`）。本サイトには転送だけが残る。
+
+- 位置づけが変わった：申込前の人向けの読み物 → **参加している方の手元**（未参加でも読める）
+- 2本に分けた：`/guide/getting-started/`（当日の流れ）／`/guide/dev-setup/`（Colab・APIキー）
+- ガイドを増やすときは B の `content/guide/` に `.md` を1本足すだけ（`order:` 順に並ぶ）。
+  今後、AI駆動開発のツール・リポジトリの使い方・構想の読み解きなどを足していく想定
+- 本サイトから重複して持ってこない。1990年代との相似は `about/index.md`、5×5×5 の表は
+  `about/philosophy.md`（`areas.json` の正本）にあり、B のガイドはそこへリンクしている
+
+---
+
 ## 単一ソース運用とホームの仕組み（重要）
 
 - **変動情報の正本は `mkdocs.yml` の `extra:`**。`sessions` / `next_session_short` / `pricing` /
@@ -311,7 +328,8 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
 - **挑戦セット**：戦略レーン（コード不要）／実践レーン（手順書つき）の2レーン × 3段階〈守・破・離〉
 - **挑戦ボード**：Circle上に記録を持ち寄り、次回冒頭で紹介する
 - **参加者の発表枠**（第4回〜・先着）
-- ホームの「続く場（Circle）」節と `start-guide.md` からも言及している。回ごとの更新は不要。
+- ホームの「続く場（Circle）」節と、ライブラリー（B）のガイド
+  （`content/guide/getting-started.md`）からも言及している。回ごとの更新は不要。
 
 ## 料金改定の運用
 
