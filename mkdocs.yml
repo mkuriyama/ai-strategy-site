@@ -143,8 +143,9 @@ nav:
   - 参加する:
       - 参加費とお申し込み: join/index.md
       - 法人の方へ: join/corporate.md
-  # ニュースサイト（B）＝AI戦略ライブラリー。外部URLはタブとして描画される
-  - 読む: https://ai-strategy-news.antecanis.com/d/?utm_source=project-site&utm_medium=referral
+  # ⚠ ライブラリー（B）へのタブは**置かない**。このサイトは広告からの申込
+  # コンバージョンが目的で、グローバルナビの項目は申込導線から目を逸らす。
+  # B への導線は「プロジェクトについて」の本文とフッタに置く（下記 §導線の方針）。
 
 extra:
   analytics:
