@@ -31,10 +31,8 @@
 - [このプロジェクトを紹介する](https://ai-strategy.antecanis.com/about/share/): AI戦略実践プロジェクトを紹介するためのURL・例文・印刷用チラシ。
 - [参加費とお申し込み](https://ai-strategy.antecanis.com/join/): 参加費とお申し込み。早期参加枠の料金、課金と解約のしくみ、無料メール登録と直接申し込みの2つの入口。
 - [法人の方へ](https://ai-strategy.antecanis.com/join/corporate/): 法人でのご利用。複数名利用・請求書払い・個別開催・テーマカスタマイズに対応。
-- [進め方と持ち帰るもの](https://ai-strategy.antecanis.com/sessions/): セッションの進め方と各回で手元に残るもの。問いから始め、作り、戦略に戻す一貫した流れ。
+- [セッションの進め方と開催予定](https://ai-strategy.antecanis.com/sessions/): セッションの進め方と各回で手元に残るもの、今後の月次開催予定。問いから始め、作り、戦略に戻す一貫した流れ。
 - [開催履歴](https://ai-strategy.antecanis.com/sessions/history/): AI戦略実践プロジェクトの開催履歴。各回のテーマ・扱った領域・開催日の一覧（2026年5月〜）。
-- [開催予定・次回案内](https://ai-strategy.antecanis.com/sessions/schedule/): 直近の開催情報と今後の月次スケジュール、次回開催・追加開催の案内。
-- [月次テーマ](https://ai-strategy.antecanis.com/sessions/themes/): 月次テーマの一覧。開催済みテーマと今後のテーマ領域（随時更新）。
 - [スタートガイド](https://ai-strategy.antecanis.com/start-guide/): 参加準備と進め方のスタートガイド。初参加でもスムーズに臨むための要点。
 
 ## 関連サイト
