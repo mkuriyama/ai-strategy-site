@@ -26,6 +26,7 @@
 
 - [ホーム](https://ai-strategy.antecanis.com/): 「AIを便利に使う」から「AI前提で事業戦略を作る」へ。事業を動かす方々のための、AI戦略実装の型を月次で作り・動かす実践の場（主催：栗山実／株式会社アンテカニス）。
 - [背景と狙い](https://ai-strategy.antecanis.com/about/): AI戦略実践プロジェクトの背景と狙い、1990年代との相似、「何でないか」、想定参加者。
+- [関連リンク](https://ai-strategy.antecanis.com/about/links/): AI戦略実践プロジェクトの関連サイト一覧。公開ライブラリー、主催会社、参加者向けのメンバーサイト。
 - [設計思想](https://ai-strategy.antecanis.com/about/philosophy/): 設計思想：3つのコアコンセプトと、各回を貫く3層の視座（5×5×5の枠組み）。
 - [主催者プロフィール](https://ai-strategy.antecanis.com/about/profile/): 主催者・栗山実のプロフィール（株式会社アンテカニス代表、経営大学院教員ほか）。
 - [このプロジェクトを紹介する](https://ai-strategy.antecanis.com/about/share/): AI戦略実践プロジェクトを紹介するためのURL・例文・印刷用チラシ。
