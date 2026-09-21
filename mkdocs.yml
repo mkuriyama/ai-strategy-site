@@ -75,8 +75,10 @@ plugins:
         sessions/schedule.md: sessions/index.md
         # スタートガイドはライブラリー（B）の /guide/ へ移設（2026年9月）。
         # **外部URLへの転送**（プラグインが対応している）。案内メール・決済完了
-        # ページ・Circle から配ったリンクが生きているので、この設定は消さないこと
-        start-guide.md: https://ai-strategy-news.antecanis.com/guide/getting-started/
+        # ページ・Circle から配ったリンクが生きているので、この設定は消さないこと。
+        # ⚠ 行き先のホストは2026年9月に ai-strategy-news → ai-strategy-library へ改称。
+        # 旧ホストも同じ配信先に付いたままなので、古い転送先でも開けはする
+        start-guide.md: https://ai-strategy-library.antecanis.com/guide/getting-started/
   # スクリーンショット等をクリックで拡大
   - glightbox:
       auto_caption: false
@@ -170,7 +172,7 @@ extra:
   # ────────────────────────────────────────────────────────────
   register_url: https://mailchi.mp/antecanis/ai-strategy
   # ニュースサイト（B）。nav の「読む」タブと llms.txt の「関連サイト」が参照する
-  news_site_url: https://ai-strategy-news.antecanis.com/d/
+  news_site_url: https://ai-strategy-library.antecanis.com/d/
   # 申込（Stripe）の直リンク。独自ドメイン配下に統一（リンク先の差し替えはStripe側で行う）
   join_url: https://go.antecanis.com/ai-strategy-join
   # ヘッダー／導線で使う短縮表記（直近に開催される回）

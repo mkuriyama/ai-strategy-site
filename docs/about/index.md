@@ -79,7 +79,7 @@ AI関連イベントの一覧・用語集・参加ガイド（当日の流れと
 セッションで扱った視点が、日々のニュースの読み方としてどう効いてくるか——参加と並行して
 使っていただくためのものですが、申し込み前でもご覧いただけます。
 
-- [AI戦略ライブラリーを見る](https://ai-strategy-news.antecanis.com/d/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" }
+- [AI戦略ライブラリーを見る](https://ai-strategy-library.antecanis.com/d/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" }
   （[関連リンク](links.md)に、メンバーサイトや主催会社もまとめています）
 
 ## さらに詳しく

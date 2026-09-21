@@ -7,7 +7,7 @@ search:
 # 用語集
 
 !!! info "用語集は AI戦略ライブラリー に移りました"
-    最新の用語集は **[AI戦略ライブラリーの用語集](https://ai-strategy-news.antecanis.com/terms/?utm_source=project-site&utm_medium=referral)** でご覧いただけます
+    最新の用語集は **[AI戦略ライブラリーの用語集](https://ai-strategy-library.antecanis.com/terms/?utm_source=project-site&utm_medium=referral)** でご覧いただけます
     （節ごとの飛び先と絞り込みが使えます）。このページは以前のURLで開けるように
     残してありますが、内容は同じです。
 
