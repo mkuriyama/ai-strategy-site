@@ -304,6 +304,10 @@
   font-size: 13.5px; color: var(--ink); display: flex; align-items: center; gap: 9px;
 }
 .home-landing .chip .s { width: 7px; height: 7px; border-radius: 50%; background: var(--teal2); flex: 0 0 auto; }
+/* リンクになったチップ（ライブラリーへの入口）。**アウトライン＝回遊**の役割なので、
+   ボタンの金／ティールとは色で区別する（§デザイン・規約「ボタンの色は役割で固定する」）。 */
+a.chip { text-decoration: none; }
+a.chip:hover { border-color: var(--teal2); background: var(--pale); }
 
 .home-landing .community { display: grid; grid-template-columns: 1fr 1.1fr; gap: 40px; align-items: center; }
 

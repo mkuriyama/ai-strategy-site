@@ -37,3 +37,7 @@
 - [開催予定・次回案内](https://ai-strategy.antecanis.com/sessions/schedule/): 直近の開催情報と今後の月次スケジュール、次回開催・追加開催の案内。
 - [月次テーマ](https://ai-strategy.antecanis.com/sessions/themes/): 月次テーマの一覧。開催済みテーマと今後のテーマ領域（随時更新）。
 - [スタートガイド](https://ai-strategy.antecanis.com/start-guide/): 参加準備と進め方のスタートガイド。初参加でもスムーズに臨むための要点。
+
+## 関連サイト
+
+- ニュース・イベント・WHYの種（毎日更新）: https://ai-strategy-news.antecanis.com/d/
