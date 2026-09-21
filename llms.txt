@@ -33,8 +33,10 @@
 - [法人の方へ](https://ai-strategy.antecanis.com/join/corporate/): 法人でのご利用。複数名利用・請求書払い・個別開催・テーマカスタマイズに対応。
 - [セッションの進め方と開催予定](https://ai-strategy.antecanis.com/sessions/): セッションの進め方と各回で手元に残るもの、今後の月次開催予定。問いから始め、作り、戦略に戻す一貫した流れ。
 - [開催履歴](https://ai-strategy.antecanis.com/sessions/history/): AI戦略実践プロジェクトの開催履歴。各回のテーマ・扱った領域・開催日の一覧（2026年5月〜）。
-- [スタートガイド](https://ai-strategy.antecanis.com/start-guide/): 参加準備と進め方のスタートガイド。初参加でもスムーズに臨むための要点。
 
 ## 関連サイト
 
-- ニュース・イベント・WHYの種（毎日更新）: https://ai-strategy-news.antecanis.com/d/
+- AI戦略ライブラリー（毎日の読み解き・AI関連イベント）: https://ai-strategy-news.antecanis.com/d/
+- 用語集: https://ai-strategy-news.antecanis.com/terms/
+- 参加ガイド（当日の流れ・手元の準備）: https://ai-strategy-news.antecanis.com/guide/
+- セッションの記録（各回で語られた論点）: https://ai-strategy-news.antecanis.com/context/
