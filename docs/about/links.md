@@ -13,11 +13,11 @@ description: AI戦略実践プロジェクトの関連サイト一覧。公開�
 参加後の体験を深めるための場所です。その日のビジネス・AIニュースを、過去のセッションで
 実際に語られた論点につないで読み解いています。どなたでもご覧いただけます。
 
-- **[AI戦略ライブラリー](https://ai-strategy-news.antecanis.com/d/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" }** — 毎朝の読み解き
-  <br><span class="lnk-sub">[AI関連イベント](https://ai-strategy-news.antecanis.com/events/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" } ／
-  [セッションの記録](https://ai-strategy-news.antecanis.com/context/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" } ／
-  [用語集](https://ai-strategy-news.antecanis.com/terms/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" } ／
-  [ガイド](https://ai-strategy-news.antecanis.com/guide/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" }</span>
+- **[AI戦略ライブラリー](https://ai-strategy-library.antecanis.com/d/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" }** — 毎朝の読み解き
+  <br><span class="lnk-sub">[AI関連イベント](https://ai-strategy-library.antecanis.com/events/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" } ／
+  [セッションの記録](https://ai-strategy-library.antecanis.com/context/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" } ／
+  [用語集](https://ai-strategy-library.antecanis.com/terms/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" } ／
+  [ガイド](https://ai-strategy-library.antecanis.com/guide/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" }</span>
 
 ## 参加者コミュニティ（要ログイン）
 

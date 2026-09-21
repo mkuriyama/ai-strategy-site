@@ -3,7 +3,7 @@
 AI戦略実践プロジェクトのポータルサイトです。プロジェクトの背景と狙い、
 セッションの進め方と開催予定、開催履歴、参加費とお申し込みを掲載しています。
 
-参加後に使うガイドと用語集は、**AI戦略ライブラリー**（<https://ai-strategy-news.antecanis.com/>）の
+参加後に使うガイドと用語集は、**AI戦略ライブラリー**（<https://ai-strategy-library.antecanis.com/>）の
 `/guide/` と `/terms/` に移しました（用語集の定義の正本は本リポジトリの
 `docs/glossary.md` のままです）。
 

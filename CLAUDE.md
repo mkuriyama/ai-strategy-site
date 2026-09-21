@@ -270,6 +270,25 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
 
 ---
 
+## ライブラリー（B）の住所（2026年9月に改称）
+
+**`https://ai-strategy-library.antecanis.com/`**（旧 `ai-strategy-news.…`）。
+`-news` が実態と合わなくなったため（毎朝の読み解きに加えて、AI関連イベント・
+セッションの記録・用語集・ガイドが載っている）。**旧ホストも同じ配信先に付いたまま**
+なので、配布済みのリンクは開く。canonical は新ホストを指す。
+
+本サイト側で住所を書いている場所は5つ。**増やさないこと**（`extra.news_site_url` を
+見ている `llms.txt` は自動で追随する）:
+
+| 場所 | 用途 |
+|---|---|
+| `mkdocs.yml` の `extra.news_site_url` | `llms.txt` の関連サイト |
+| `mkdocs.yml` の `redirect_maps` の `start-guide.md` | 旧スタートガイドの転送先 |
+| `docs/about/links.md` | 関連リンク（5本） |
+| `docs/about/index.md` | 「セッションの文脈は、外にも積み上がっています」節 |
+| `docs/welcome/index.html` | 決済完了ページのボタン |
+| `docs/glossary.md` | 冒頭の案内 |
+
 ## ガイドの置き場（2026年9月〜）
 
 **スタートガイドはライブラリー（B）の `/guide/` に移した。** 用語集と違い、**正本も
