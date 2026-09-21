@@ -37,7 +37,7 @@
 
 ## 関連サイト
 
-- AI戦略ライブラリー（毎日の読み解き・AI関連イベント）: https://ai-strategy-news.antecanis.com/d/
-- 用語集: https://ai-strategy-news.antecanis.com/terms/
-- 参加ガイド（当日の流れ・手元の準備）: https://ai-strategy-news.antecanis.com/guide/
-- セッションの記録（各回で語られた論点）: https://ai-strategy-news.antecanis.com/context/
+- AI戦略ライブラリー（毎日の読み解き・AI関連イベント）: https://ai-strategy-library.antecanis.com/d/
+- 用語集: https://ai-strategy-library.antecanis.com/terms/
+- 参加ガイド（当日の流れ・手元の準備）: https://ai-strategy-library.antecanis.com/guide/
+- セッションの記録（各回で語られた論点）: https://ai-strategy-library.antecanis.com/context/
