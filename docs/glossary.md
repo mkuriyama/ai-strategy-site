@@ -346,4 +346,4 @@ AI時代の事業戦略を議論する際に出てくる言葉
 本用語集の内容は2026年9月時点の情報に基づいています。AI分野は変化が速いため、
 用語の意味や位置づけが変わることがあります。
 
-{{ footer_cta("[スタートガイド](start-guide.md)", "[セッションの進め方](sessions/index.md)", "[スタートガイド](start-guide.md)") }}
+{{ footer_cta("[スタートガイド](start-guide.md)", "[セッションの進め方と開催予定](sessions/index.md)", "[スタートガイド](start-guide.md)") }}

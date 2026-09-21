@@ -56,4 +56,4 @@ description: 設計思想：3つのコアコンセプトと、各回を貫く3�
 テーマ設定そのものを、本プロジェクトの中心的な価値の一つと位置づけています。汎用ツールに
 「何を作らせるべきか」を見出す判断眼を、各回を通じて各々の手元に積み上げていきます。
 
-{{ footer_cta("[背景と狙い](index.md)", "[セッションの進め方](../sessions/index.md)", "[月次テーマ](../sessions/themes.md)") }}
+{{ footer_cta("[背景と狙い](index.md)", "[セッションの進め方と開催予定](../sessions/index.md)", "[開催履歴](../sessions/history.md)") }}

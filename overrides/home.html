@@ -24,7 +24,7 @@
         <div class="actions">
           <a class="btn btn-gold" href="{{ config.extra.register_url }}" target="_blank" rel="noopener">案内メールを受け取る（無料登録）</a>
           <a class="btn btn-teal" href="join/">参加を申し込む →</a>
-          <a class="btn btn-outline" href="sessions/">セッションの中身を見る</a>
+          <a class="btn btn-outline" href="sessions/">セッションの中身と日程を見る</a>
         </div>
         <div class="host">主催：栗山 実 ／ 株式会社アンテカニス</div>
       </div>
@@ -57,7 +57,7 @@
           <div class="nt">新着</div>
           <ul>
             <li>📄 <a href="{{ config.extra.latest_digest.url }}">{{ config.extra.latest_digest.label }}</a></li>
-            <li>🗓 <a href="sessions/themes/">月次テーマを見る</a></li>
+            <li>🗓 <a href="sessions/history/">これまでの開催を見る</a></li>
             <li>✉️ <a href="{{ config.extra.register_url }}" target="_blank" rel="noopener">開催案内をメールで受け取る</a></li>
           </ul>
         </div>
@@ -103,7 +103,7 @@
           <div class="cap"><b>AI戦略対抗戦。</b>複数のAI（Gemini／Claude／GPT）が多視点で評価・合議し、戦略案を採点する。</div>
         </div>
       </div>
-      <div class="read" style="margin-top:26px"><a class="textlink" href="sessions/">進め方と持ち帰るものを詳しく →</a></div>
+      <div class="read" style="margin-top:26px"><a class="textlink" href="sessions/">進め方・持ち帰るもの・今後の予定 →</a></div>
     </div>
   </section>
 
@@ -124,24 +124,8 @@
     </div>
   </section>
 
-  {# ⑤-b 公開ライブラリー（B）。参加前の人が、中身を確かめられる唯一の場所 #}
-  <section class="block alt">
-    <div class="wrap read">
-      <div class="seyebrow">毎日更新・誰でも読める</div>
-      <h2>このプロジェクトが何を見ているかは、毎朝公開しています。</h2>
-      <p><strong>AI戦略ライブラリー</strong>では、その日のビジネス・AIニュースを、過去のセッションで実際に語られた論点につないで読み解いています。AI関連イベントの一覧、セッションの記録、用語集も同じ場所にあります。<strong>登録も申込も要りません。</strong></p>
-      <div class="chips">
-        <a class="chip" href="{{ config.extra.news_site_url }}?utm_source=project-site&amp;utm_medium=referral"><span class="s"></span>今日の読み解き</a>
-        <a class="chip" href="https://ai-strategy-news.antecanis.com/context/?utm_source=project-site&amp;utm_medium=referral"><span class="s"></span>セッションの記録</a>
-        <a class="chip" href="https://ai-strategy-news.antecanis.com/events/?utm_source=project-site&amp;utm_medium=referral"><span class="s"></span>AI関連イベント</a>
-        <a class="chip" href="https://ai-strategy-news.antecanis.com/terms/?utm_source=project-site&amp;utm_medium=referral"><span class="s"></span>用語集</a>
-      </div>
-      <p class="muted-note">セッションの記録に載せているのは、登壇者（栗山）の講義中の発言のみです。参加者の発言は含みません。</p>
-    </div>
-  </section>
-
   {# ⑥ 続く場（Circle） #}
-  <section class="block">
+  <section class="block alt">
     <div class="wrap community">
       <div>
         <div class="seyebrow">セッションのあとも続く場</div>
@@ -159,7 +143,7 @@
   </section>
 
   {# ⑦ 参加費とリスクのなさ #}
-  <section class="block alt" id="join">
+  <section class="block" id="join">
     <div class="wrap">
       <div class="read">
         <div class="seyebrow">参加のしかたと、リスクのなさ</div>
