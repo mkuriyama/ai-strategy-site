@@ -9,7 +9,7 @@ description: 参加準備と進め方のスタートガイド。初参加でも�
 当日のセッションにスムーズに臨めるようにまとめたものです。
 
 本文中の専門用語にはカーソルを重ねると説明が表示されます。詳しい定義は
-[用語集](glossary.md)を参照してください。
+[AI戦略ライブラリーの用語集](https://ai-strategy-news.antecanis.com/terms/?utm_source=project-site&utm_medium=referral)を参照してください。
 
 ---
 
@@ -286,11 +286,11 @@ APIはApplication Programming Interfaceの略で、プログラムからAIサー
 | Grok (xAI) | `grok.com` | Xアカウントと連携。最新情報の反映が速い。 |
 
 セッションで登場するAI・技術・戦略関連の用語を平易にまとめた
-[用語集](glossary.md)も用意しています。セッション中に知らない言葉が
-出てきた際にご参照ください。
+[用語集](https://ai-strategy-news.antecanis.com/terms/?utm_source=project-site&utm_medium=referral)を AI戦略ライブラリー に用意しています。セッション中に
+知らない言葉が出てきた際にご参照ください。
 
 ---
 
 *本ガイドの内容は2026年9月時点の情報に基づいています。お問い合わせ: support@antecanis.com*
 
-{{ footer_cta("[用語集](glossary.md)", "[セッションの進め方](sessions/index.md)", "[開催予定・次回案内](sessions/schedule.md)") }}
+{{ footer_cta("[セッションの進め方](sessions/index.md)", "[開催予定・次回案内](sessions/schedule.md)", "[開催履歴](sessions/history.md)") }}

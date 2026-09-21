@@ -24,8 +24,11 @@ def on_page_context(context, page, config, nav):
     """描画された各ページの title / description / URL を集める。"""
     if not page.abs_url and not page.url:
         return context
-    # ダイジェストは索引に載せない（公開はしているが、案内するのはリンクを持つ人にだけ）
-    if (page.file.src_uri or "").startswith("digests/"):
+    # ダイジェストと用語集は索引に載せない（公開はしているが、案内はしない）。
+    # 用語集の掲載場所はライブラリー（B）の /terms/ ―― `extra.news_site_url` の
+    # 関連サイトから辿れる。
+    src = page.file.src_uri or ""
+    if src.startswith("digests/") or src == "glossary.md":
         return context
     site_url = (config.get("site_url") or "").rstrip("/") + "/"
     url = site_url + page.url

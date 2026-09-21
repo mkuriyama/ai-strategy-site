@@ -46,7 +46,11 @@ docs/
 │   ├─ index.md                 参加費とお申し込み（費用・課金図・申込・メール登録の統合ページ）
 │   └─ corporate.md             法人の方へ
 ├─ start-guide.md               スタートガイド（参加準備・進め方）
-├─ glossary.md                  用語集
+├─ glossary.md                  用語集。**掲載場所はライブラリー（B）の /terms/ に移した**
+│                               （2026年9月）。ダイジェストと同じ「載せないが、URLを
+│                               知っていれば開ける」扱い ―― nav・検索・sitemap・llms.txt
+│                               から外し noindex。**ファイルは正本として残す**（B が読む
+│                               `site/data/glossary.json` の生成元。用語の追加手順も同じ）
 ├─ apply/index.html             申込リンクの転送用（スタンドアロン・navに載せない）
 ├─ welcome/index.html           決済完了後の着地ページ（Stripeのsuccess URL）
 ├─ paused/index.html            決済中断時の着地ページ（Stripeのcancel URL）
@@ -100,7 +104,7 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
 > （`mkdocs.yml` の `plugins.redirects.redirect_maps`）。**この転送設定は消さないこと**（メール等で
 > 配布済みのリンクが切れる）。参加者コミュニティ（Circle）の説明は `sessions/index.md` に集約。
 
-ナビ（タブ）: ホーム / プロジェクトについて / セッション（開催履歴を含む） / ガイド・用語集 / 参加する / **読む**
+ナビ（タブ）: ホーム / プロジェクトについて / セッション（開催履歴を含む） / スタートガイド / 参加する / **読む**
 （ダイジェストは nav から外した。ページは残っており、URLを知っていれば開ける）
 （「読む」はニュースサイト（B）＝**AI戦略ライブラリー**への外部リンク。2026年9月に有効化。
 URLは `extra.news_site_url` と揃える）
@@ -164,7 +168,7 @@ URLは `extra.news_site_url` と揃える）
 | 次回開催の日程 | **`mkdocs.yml` の `extra.sessions` / `extra.next_session_short`**（ホーム・schedule・お知らせバー・JSON-LD・llms.txt へ自動反映。`date` と `start` の両方）＋ **`docs/sessions/schedule.md` の月次表**（※開催済の付与）＋ **`docs/assets/flyer.html`**（手動） |
 | 終わった回の記録 | **`mkdocs.yml` の `extra.history`**（開催履歴ページ・`rounds.json`・B の回ページの見出しへ自動反映）＋ `extra.latest_digest`（ホームの新着）＋ `docs/sessions/themes.md` の該当回 |
 | 参加費の金額 | **`mkdocs.yml` の `extra.pricing`**（ホームのティーザー・join の価格表へ自動反映）＋ **`join/index.md` の inline SVG 2点**（図1の金額・日付、図2の「いまここ」＝手動）＋ **`flyer.html` の参加費欄**（手動） |
-| 用語の定義 | `docs/glossary.md` と `docs/includes/abbreviations.md` の**両方**（定義文を一致させる）。**正本はこの2つだけ**。ニュースサイト（B）の `/terms/` は `site/data/glossary.json` をビルド時に取りに来るので、B 側に書き足す必要はない（書き足すと片方だけ古くなる） |
+| 用語の定義 | `docs/glossary.md` と `docs/includes/abbreviations.md` の**両方**（定義文を一致させる）。**正本はこの2つだけ**。ライブラリー（B）の `/terms/` は `site/data/glossary.json` をビルド時に取りに来るので、B 側に書き足す必要はない（書き足すと片方だけ古くなる）。掲載場所は B だが、**編集する場所はここ** |
 | 5×5×5 の 15 領域 | **`docs/about/philosophy.md` の表だけ**（B の領域マップは `site/data/areas.json` を取りに来る）。⚠ 表の書式（`**[1A]** 名前 ── 説明` を `<br>` 区切り／層と切り口の2列）を変えると読み取りが減る。15個そろわなければ `hooks/export_data.py` がビルドを止める |
 | 登録フォームURL | **`mkdocs.yml` の `extra.register_url` の1か所のみ**（通常は固定: `https://mailchi.mp/antecanis/ai-strategy`） |
 | 申込（Stripe）URL | **`mkdocs.yml` の `extra.join_url` の1か所のみ**（固定リンク: `https://go.antecanis.com/ai-strategy-join`。リンク先の差し替えはStripe側で行う） |
@@ -234,12 +238,17 @@ URLは `extra.news_site_url` と揃える）
      一致してしまうため、ツールチップ対象からは除外している（用語集には掲載）。
      新規の短い語を入れる前に、よくある単語の一部にならないか確認する
 
-> 📖 **用語集はニュースサイト（B）の `/terms/` にも同じ内容で出ている**（2026年9月〜）。
-> B は本サイトの `site/data/glossary.json` をビルド時に取りに来るだけなので、**増やす場所は
-> 上の2ファイルのまま**。B 側の用語集は `noindex` ＋ canonical が本サイトの `/glossary/` を
-> 指しており、正本がこちらだと申告している。将来この用語集を B へ移すときは、
-> B の `noindex` と canonical を外し、こちらを B へ転送する（その前に GA4 で `/glossary/` の
-> 自然検索流入を確認すること）。
+> 📖 **用語集の掲載場所はライブラリー（B）の `/terms/` に移った**（2026年9月）。
+> ただし**正本は本サイトの上の2ファイルのまま**で、B は `site/data/glossary.json` を
+> ビルド時に取りに来るだけ。**用語を増やす手順は何も変わらない。**
+>
+> 本サイトの `/glossary/` は、ダイジェストと同じ「載せないが、URLを知っていれば開ける」
+> 扱いにした（nav・サイト内検索・sitemap・`llms.txt` から外し、noindex）。転送にしないのは、
+> 旧URLを踏んだ人が**動く用語集に着地するほう**がよいため。検索では noindex により
+> B に一本化される。
+>
+> ⚠ `docs/glossary.md` を**消さないこと**。消すと B の用語集が止まる（`glossary.json` の
+> 生成元がこのファイル）。
 
 ---
 
@@ -323,7 +332,8 @@ URLは `extra.news_site_url` と揃える）
 | 税込金額が「6,930**円円**」になる | `extra.pricing` の値に「円」を含めている。値は数字のみ（テンプレートが「円」を付ける） |
 | 開催履歴が「第**回**」と番号抜けで出る | `extra:` のキーに `no:` `yes:` `on:` `off:` を使うと YAML が真偽値として読み、`r.get("no")` が静かに `None` を返す。**エラーにならず表示だけ欠ける**。キーは `round:` のように別の語にする（`hooks/export_data.py` が検出してビルドを止める） |
 | ダイジェストや料金図のSVGが極端に小さい | Material の `figure{width:fit-content}` が、`viewBox` だけで幅指定のないinline SVGを潰す。`extra.css` の `.md-typeset figure{width:100%}` で対処済み（消さないこと） |
-| 用語集の見出しを文字列grepしても一致しない | 見出し内の用語が `<abbr>` で囲まれ文字列が分断されるため。検証は用語単体か `<abbr title=...>` で行う |
+| 用語集の見出しを文字列grepしても一致しない | 見出し内の用語が `<abbr>` で囲まれ文字列が分断されるため。検証は用語単体か `<abbr title=...>` で行う。**サイト名「AI戦略ライブラリー」も同じ理由で grep に引っかからないことがある** |
+| サイト名「AI戦略ライブラリー」の途中にツールチップが出る | `abbreviations.md` に「ライブラリ」があると名前の中に一致する（「セル」＝「キャンセル」と同じ）。2026年9月にツールチップから外した（用語集には残している） |
 | ローカルで `mkdocs: command not found` | コンテナ再起動で依存が消えている。`pip install -q -r requirements.txt` で復旧（`python3 -m mkdocs` で実行） |
 | `git push origin main` が rejected | 別セッションの変更が先に入っている。**force push は禁止**。`git fetch` → 差分確認 → `git merge` で統合してから push（過去に実際に発生し、マージで解決） |
 | ビルド時の「MkDocs may break…」警告 | `redirects` プラグインが出す将来予告。ビルドは正常（無視してよい） |
@@ -415,8 +425,9 @@ python3 -m mkdocs build --strict       # リンク切れ等を含め検証（公
 - ~~nav の「読む」タブ・`extra.news_site_url`~~ … 2026年9月に有効化済み（`llms.txt` の
   「関連サイト」にも出る）。ホームにも「公開ライブラリー」節を置き、今日の読み解き・
   セッションの記録・AI関連イベントへ直接入れるようにした
-- ダイジェスト・用語集の B への移設と、旧URLのリダイレクト（B が検索に載ってから。移設前に GA4 の
-  ランディングページ報告で `/glossary/` `/digests/` の自然流入を確認する）
+- ~~用語集の B への移設~~ … 2026年9月に完了（B の `/terms/` を検索に開き、本サイトの
+  `/glossary/` を nav・検索・sitemap・llms.txt から外して noindex）。ダイジェストの B への
+  移設は、会員限定の場所ができてから
 - 計測は GA4（`extra.analytics` に設定済み）のみ。Search Console 連携状況は未確認
 
 > ⚠ SEO/AIO の施策を入れるときも、本ファイルの既存方針（単一ソース原則・ボタンの役割固定・

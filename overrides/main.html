@@ -26,7 +26,10 @@
       検索・サイト内検索・sitemap・llms.txt からは外す。
       robots.txt では Disallow にしないこと ―― クロールを止めると
       noindex が読まれず、既に索引された分が消えない。 -#}
-  {%- if page and page.file and page.file.src_uri.startswith('digests/') %}
+  {#- 用語集も同じ扱い（2026年9月〜）。掲載場所はライブラリー（B）の /terms/ に
+      移したが、旧URLを踏んだ人が**動く用語集に着地する**ほうがよいのでページは残す。 -#}
+  {%- if page and page.file and (page.file.src_uri.startswith('digests/')
+                                 or page.file.src_uri == 'glossary.md') %}
   <meta name="robots" content="noindex, follow">
   {%- endif %}
   {%- set site_url = config.site_url | default('') -%}
