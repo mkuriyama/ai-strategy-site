@@ -342,6 +342,8 @@ def _strip_digests_from_sitemap(config) -> None:
         return
     xml = path.read_text(encoding="utf-8")
     kept = re.sub(r"\s*<url>\s*<loc>[^<]*/digests/[^<]*</loc>.*?</url>", "", xml, flags=re.S)
+    # 用語集も同じ（掲載場所はライブラリー側の /terms/。あちらの sitemap に載っている）
+    kept = re.sub(r"\s*<url>\s*<loc>[^<]*/glossary/</loc>.*?</url>", "", kept, flags=re.S)
     if kept == xml:
         return
     path.write_text(kept, encoding="utf-8")

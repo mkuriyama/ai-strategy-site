@@ -137,9 +137,9 @@ nav:
       - 月次テーマ: sessions/themes.md
       - 開催予定・次回案内: sessions/schedule.md
       - 開催履歴: sessions/history.md
-  - ガイド・用語集:
-      - スタートガイド: start-guide.md
-      - 用語集: glossary.md
+  # 用語集はライブラリー（B）の /terms/ に移した。ページは前のURLのまま残して
+  # あるが、nav・検索・sitemap・llms.txt からは外している（ダイジェストと同じ扱い）
+  - スタートガイド: start-guide.md
   - 参加する:
       - 参加費とお申し込み: join/index.md
       - 法人の方へ: join/corporate.md
