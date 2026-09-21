@@ -29,7 +29,6 @@
 - [設計思想](https://ai-strategy.antecanis.com/about/philosophy/): 設計思想：3つのコアコンセプトと、各回を貫く3層の視座（5×5×5の枠組み）。
 - [主催者プロフィール](https://ai-strategy.antecanis.com/about/profile/): 主催者・栗山実のプロフィール（株式会社アンテカニス代表、経営大学院教員ほか）。
 - [このプロジェクトを紹介する](https://ai-strategy.antecanis.com/about/share/): AI戦略実践プロジェクトを紹介するためのURL・例文・印刷用チラシ。
-- [用語集](https://ai-strategy.antecanis.com/glossary/): セッションで登場するAI・技術・戦略の用語を平易にまとめた用語集。
 - [参加費とお申し込み](https://ai-strategy.antecanis.com/join/): 参加費とお申し込み。早期参加枠の料金、課金と解約のしくみ、無料メール登録と直接申し込みの2つの入口。
 - [法人の方へ](https://ai-strategy.antecanis.com/join/corporate/): 法人でのご利用。複数名利用・請求書払い・個別開催・テーマカスタマイズに対応。
 - [進め方と持ち帰るもの](https://ai-strategy.antecanis.com/sessions/): セッションの進め方と各回で手元に残るもの。問いから始め、作り、戦略に戻す一貫した流れ。
