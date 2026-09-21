@@ -378,3 +378,9 @@ a.chip:hover { border-color: var(--teal2); background: var(--pale); }
   .home-landing .card { transition: none; }
   .home-landing .shot { transform: none; }
 }
+
+/* 関連リンク（about/links.md）。親のリンクの下に、行き先の内訳を小さく添える。
+   同じ大きさのリンクを8本並べると煩雑になるので、親子で段を付ける。 */
+.md-typeset .lnk-sub { font-size: .78em; color: var(--muted); }
+.md-typeset .lnk-sub a { color: var(--muted); }
+.md-typeset .lnk-sub a:hover { color: var(--teal); }
