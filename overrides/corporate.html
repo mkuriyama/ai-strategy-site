@@ -1,14 +1,12 @@
 {% extends "main.html" %}
 {% import "partials/lp.html" as lp with context %}
 
-<!--
+{#-
   /join/corporate/（法人の方へ・問い合わせ）。URL は従来どおり。
-  - 送信は docs/javascripts/forms.js → ゲートウェイ /api/corporate-inquiry → 専用 GAS
-    （シート「AISIA_法人問い合わせ」に1行＋support@ へ通知）。問い合わせ者への自動受付メールは送らない
+  - 送信は docs/javascripts/forms.js → ゲートウェイ /api/corporate-inquiry。問い合わせ者への自動受付メールは送らない
   - 送信後はページ内で完了表示に切り替える（data-form-done）
   - mailto の導線はフォームと併記して残す（JavaScript が無効でも連絡できる）
-  - Mailchimp には自動で入れない（法人契約で複数名が参加する場合は、従来どおり一括で登録する運用）
--->
+-#}
 {% block container %}
 {%- set ex = config.extra -%}
 {%- set st = ex.stats -%}

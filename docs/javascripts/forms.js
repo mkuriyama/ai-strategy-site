@@ -6,7 +6,7 @@
  *   同じタブのあいだは最初の UTM を送れるようにする（sessionStorage）。
  * - Material の navigation.instant ではページ遷移で <script> が読み直されないので、
  *   初期化は document$（ページが描かれるたびに流れる）に載せる。
- * - 送信先はゲートウェイ（aisia-ops の gateway/forms.py）。フォームの data-endpoint。
+ * - 送信先はゲートウェイ（go.antecanis.com）。フォームの data-endpoint。
  * - Turnstile（Cloudflare）は明示描画。トークンは1回きりなので、失敗したら作り直す。
  * - 計測は GA4 の generate_lead を送信成功の1回だけ（メール登録は完了ページの表示時）。
  */

@@ -1,13 +1,12 @@
 {% extends "main.html" %}
 {% import "partials/lp.html" as lp with context %}
 
-<!--
-  /subscribe/thanks/（メール登録の完了ページ）。シングルオプトインなので、送信した時点で登録は完了し、
-  Mailchimp のオートメーション（タグ AISIA_registration が合図）がご案内メールを送る。
+{#-
+  /subscribe/thanks/（メール登録の完了ページ）。送信した時点で登録は完了し、ご案内メールが届く。
   - ナビに載せず noindex（overrides/main.html）。sitemap・llms.txt・サイト内検索からも外す
   - 計測（GA4 generate_lead）は forms.js が、送信直後に着いたときだけ1回送る（data-lead-page）
   - 追加の質問は置かない。ライブラリーのカードは、ライブラリーの一般公開まで置かない
--->
+-#}
 {% block container %}
 {%- set ex = config.extra -%}
 {%- set pr = ex.pricing -%}

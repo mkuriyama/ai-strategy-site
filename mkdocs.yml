@@ -185,12 +185,12 @@ extra:
   register_url: subscribe/
   # フォームの送信先・Turnstile・ご案内メールの件名（/subscribe/・/join/corporate/ が参照）
   forms:
-    # ゲートウェイ（aisia-ops の gateway/）。検証用リビジョンで試すときは
+    # ゲートウェイ（go.antecanis.com）。検証用リビジョンで試すときは
     # FORMS_API_BASE=https://staging---… python3 -m mkdocs serve
     api_base: !ENV [FORMS_API_BASE, "https://go.antecanis.com"]
     # Cloudflare Turnstile のサイトキー（公開してよい値）。⚠ 未設定のままでは送信が 403 になる
     turnstile_sitekey: !ENV [TURNSTILE_SITEKEY, ""]
-    # 登録直後に届くご案内メールの件名（Mailchimp のオートメーションと一致させる。thanks に表示）
+    # 登録直後に届くご案内メールの件名（実際のメールと一致させる。thanks に表示）
     welcome_subject: "【AI戦略実践PJ】メール登録ありがとうございます"
     # JavaScript が無効な方の代替（旧LP。過去の投稿からもリンクされているので残してある）
     noscript_url: https://mailchi.mp/antecanis/ai-strategy

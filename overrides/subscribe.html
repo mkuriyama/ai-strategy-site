@@ -1,14 +1,14 @@
 {% extends "main.html" %}
 {% import "partials/lp.html" as lp with context %}
 
-<!--
+{#-
   /subscribe/（広告の着地ページ・メール登録）。ホームの home.html と同じ方式で、
   container を差し替えた専用キャンバス（.home-landing）に描く。ヘッダー・タブ・フッターは標準のまま。
+  （Jinja のコメントにしてある ―― HTML コメントだと公開ページのソースに出るため）
   - 次回開催・参加費・実績数値・直近の回は config.extra（単一ソース）から差し込む
   - 送信は docs/javascripts/forms.js（ゲートウェイの /api/subscribe へ fetch → /subscribe/thanks/ へ）
-  - 仕様：aisia-ops の docs/site/subscribe-2026-09/（SPEC.md・PLAN.md）
   - 過去の開催報告へのリンクや見本画像は置かない（報告が読めると申込の意味が薄れるため）
--->
+-#}
 {% block container %}
 {%- set ex = config.extra -%}
 {%- set st = ex.stats -%}
@@ -99,7 +99,7 @@
           </div>
           <p>月1回のオンライン実践セッションへの参加に加え、録画と資料のアーカイブ、メンバー限定コミュニティをご利用いただけます。更新日（毎月15日）の前日までに解約すれば、その月の費用はかかりません。セッションは平日20:00〜、Zoomで約2〜2.5時間。</p>
           {{ lp.sessions() }}
-          {# 価格・初月無料・更新日の条件がこのカードに並んでいるので、ここだけ申込（Stripe）へ直接つなぐ（SPEC §6.1②） #}
+          {# 価格・初月無料・更新日の条件がこのカードに並んでいるので、ここだけ申込（Stripe）へ直接つなぐ #}
           <a class="lp-plan__link" {{ lp.href(ex.join_url) }}>有償メンバーに申し込む（初月無料）→</a>
         </div>
       </div>
