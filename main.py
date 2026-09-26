@@ -19,26 +19,30 @@ def define_env(env):
             out.append("")
             out.append("    ---")
             out.append("")
-            out.append(f'    **{s["date"]}** ／ {s["note"]}')
+            theme = f'（{s["theme"]}）' if s.get("theme") else ""
+            out.append(f'    **{s["date"]}**{theme} ／ {s["note"]}')
             out.append("")
         out.append("</div>")
         return "\n".join(out)
 
+    def _link(url, classes):
+        """Markdown のリンク。外部URLだけ新しいタブで開く（サイト内は相対パスに直す）。"""
+        if url.startswith("http"):
+            return f"({url}){{ {classes} target=_blank rel=noopener }}"
+        return f"({_rel(url)}){{ {classes} }}"
+
     @env.macro
-    def register_button(label="案内メールを受け取る（無料登録）"):
-        """案内メール配信（Mailchimp）への登録ボタン。URL は単一ソースから。
+    def register_button(label="案内メールを受け取る（無料のメール登録）"):
+        """メール登録ボタン。行き先は単一ソース（`extra.register_url`＝サイト内の /subscribe/）。
 
         色は金（gold）で固定。サイト全体で「金＝メール登録／ティール＝申込」を守り、
         2つの入口がひと目で区別できるようにする（ホームの btn-gold と同じ役割）。
         """
         url = extra.get("register_url", "#")
-        return (
-            f"[{label}]({url})"
-            "{ .md-button .md-button--gold target=_blank rel=noopener }"
-        )
+        return f"[{label}]" + _link(url, ".md-button .md-button--gold")
 
     @env.macro
-    def join_button(label="今すぐ申し込む（申込月無料）"):
+    def join_button(label="有償メンバーに申し込む（初月無料）"):
         """申込（Stripe）への直リンクボタン。URL は単一ソースから。色はティール。"""
         url = extra.get("join_url", "#")
         return (
@@ -102,7 +106,7 @@ def define_env(env):
         例: {{ footer_cta("[背景と狙い](../about/index.md)", "[設計思想](philosophy.md)") }}
 
         CTA はサイトの2本立てを常にボタン2つで見せる。ティール＝参加費とお申し込み
-        （join）、金＝案内メールの無料登録。join ページ自身は申込ボタンが本文中に
+        （join）、金＝無料のメール登録。join ページ自身は申込ボタンが本文中に
         あるため、join_cta=False でメール登録のみを表示する。
         """
         url = extra.get("register_url", "#")
@@ -122,10 +126,7 @@ def define_env(env):
                 f"[参加費とお申し込みを見る →]({_rel('join/')})"
                 "{ .md-button .md-button--primary }"
             )
-        lines.append(
-            f"[案内メールを受け取る（無料登録）]({url})"
-            "{ .md-button .md-button--gold target=_blank rel=noopener }"
-        )
+        lines.append("[案内メールを受け取る（無料のメール登録）]" + _link(url, ".md-button .md-button--gold"))
         lines.append("")
         lines.append("</div>")
         lines.append("")

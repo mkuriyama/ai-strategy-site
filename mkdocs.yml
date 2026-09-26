@@ -49,6 +49,11 @@ theme:
 extra_css:
   - stylesheets/extra.css
 
+# フォーム（/subscribe/・/join/corporate/）の送信、UTM の保持、送信成功の計測。
+# 全ページで読み込むが、フォームの無いページでは UTM を覚えるだけ
+extra_javascript:
+  - javascripts/forms.js
+
 # 日本語（CJK）対応の abbreviations ツールチップを有効化する hook
 # seo_files.py は AIO 用の llms.txt をビルド時に生成する（extra: と各ページの description から）
 hooks:
@@ -79,6 +84,11 @@ plugins:
         # ⚠ 行き先のホストは2026年9月に ai-strategy-news → ai-strategy-library へ改称。
         # 旧ホストも同じ配信先に付いたままなので、古い転送先でも開けはする
         start-guide.md: https://ai-strategy-library.antecanis.com/guide/getting-started/
+        # 旧来の申込リンク /apply/（送信済みの案内メールに残っている）。以前は GAS を
+        # 直に開く静的HTMLだったが、申込（Stripe）の入口 extra.join_url へ転送する。
+        # 行き先は下の extra.join_url と**同じ値**（YAML のアンカー &join_url を
+        # extra.join_url が *join_url で参照）。申込URLを変えるときはここ1か所。消さないこと
+        apply/index.md: &join_url https://go.antecanis.com/ai-strategy-join
   # スクリーンショット等をクリックで拡大
   - glightbox:
       auto_caption: false
@@ -170,20 +180,45 @@ extra:
   # 変動情報の単一ソース（§3）。更新は毎回このブロックだけ。
   # ホーム(overrides/home.html)・schedule・join 等が参照する。
   # ────────────────────────────────────────────────────────────
-  register_url: https://mailchi.mp/antecanis/ai-strategy
+  # メール登録の入口。**サイト内のページ**（2026年9月〜。以前は Mailchimp のホスト型LP）。
+  # サイト相対で書く（テンプレートとマクロが各ページからの相対パスに直す）
+  register_url: subscribe/
+  # フォームの送信先・Turnstile・ご案内メールの件名（/subscribe/・/join/corporate/ が参照）
+  forms:
+    # ゲートウェイ（go.antecanis.com）。検証用リビジョンで試すときは
+    # FORMS_API_BASE=https://staging---… python3 -m mkdocs serve
+    api_base: !ENV [FORMS_API_BASE, "https://go.antecanis.com"]
+    # Cloudflare Turnstile のサイトキー（公開してよい値）。⚠ 未設定のままでは送信が 403 になる
+    turnstile_sitekey: !ENV [TURNSTILE_SITEKEY, ""]
+    # 登録直後に届くご案内メールの件名（実際のメールと一致させる。thanks に表示）
+    welcome_subject: "【AI戦略実践PJ】メール登録ありがとうございます"
+    # JavaScript が無効な方の代替（旧LP。過去の投稿からもリンクされているので残してある）
+    noscript_url: https://mailchi.mp/antecanis/ai-strategy
+  # 実績数値（/subscribe/・/join/corporate/ の実績帯とチップが参照）。
+  # satisfaction は新しい回のアンケートが加わるたびに再計算する（未回答も分母に含める）
+  stats:
+    paid_members: "80名超"
+    rounds_label: "第5回"
+    rounds_note: "まで開催（2026年5月〜）"
+    subscribers: "約200名"
+    satisfaction: "97%"
+    satisfaction_note: "第1〜5回の参加者アンケート（延べ117件）で「参加・視聴して良かった」に「とてもそう思う」「ややそう思う」と回答した割合。"
   # ニュースサイト（B）。nav の「読む」タブと llms.txt の「関連サイト」が参照する
   news_site_url: https://ai-strategy-library.antecanis.com/d/
-  # 申込（Stripe）の直リンク。独自ドメイン配下に統一（リンク先の差し替えはStripe側で行う）
-  join_url: https://go.antecanis.com/ai-strategy-join
+  # 申込（Stripe）の直リンク。独自ドメイン配下に統一（リンク先の差し替えはゲートウェイ側で行う）
+  # ⚠ 値は plugins.redirects の apply/index.md に書いてある（YAML アンカー）。/apply/ の転送先と一致させるため
+  join_url: *join_url
   # ヘッダー／導線で使う短縮表記（直近に開催される回）
   next_session_short: "10/2(金) 20:00〜"
   # 次回回の配列（ラベル／種別 main|sub／日付／補足／start=ISO日時。start は構造化データ Event 用）
+  # theme は任意。決まっているときだけ日付の下に出る（直前まで決めきれないことが多いので空でよい）
   sessions:
     - label: "第5回 B日程"
       kind: sub
       date: "10/2(金) 20:00〜"
       start: "2026-10-02T20:00:00+09:00"
-      note: "第5回（9/15）と同内容の追加開催。A日程に都合が合わない方向け。登録後の初回は無料。"
+      theme: "AI戦略の未来シナリオ"
+      note: "第5回（9/15）と同内容の追加開催。A日程に都合が合わない方向け。有償メンバーは初月無料。"
     - label: "第6回 A日程"
       kind: main
       date: "10/20(火) 20:00〜"
@@ -192,12 +227,25 @@ extra:
   # ホーム「新着」の先頭リンク（新しい回が終わったらここを更新）
   latest_digest:
     url: "sessions/history/"
-    label: "第4回までの開催履歴を公開中"
+    label: "第5回までの開催履歴を公開中"
   # 開催履歴（sessions/history.md が history_cards() で描画。新しい回が終わったら先頭に追加）
   # image は docs/ 基準のパス。各回ダイジェストの図1を assets/img/history/ に切り出してある。
   # digests は**リンクではなく対応表**。公開ページからは外してあり、
   # `DIGEST_EXPORT=1` のビルドで本文を書き出すときだけ使う（会員限定の場所へ運ぶ材料）。
+  # highlight（2〜4文）・highlight_image・highlight_caption・month は任意。/subscribe/ の
+  # 「直近の回から」が**先頭の回**の値を出す（highlight が無ければ summary、画像が無ければ画像なし）
   history:
+    - round: 5
+      title: "AI戦略の未来シナリオ"
+      area: "[3D] 時間軸戦略のシフト／[3E] 収益構造と戦場のシフト"
+      # ⚠ B日程（10/2）が終わったら「開催予定」を外す
+      dates: "9/15(火)・10/2(金・開催予定)"
+      month: "2026年9月"
+      summary: "AIによって産業構造が激変する未来シナリオを描けるか、対話AIに聞く以上の広さと深さでシナリオを出し切れるか、自社の判断によって分かれる道筋を描けるかに挑戦した。"
+      image: "assets/img/history/vol-05-highlight.gif"
+      highlight: "業界の未来シナリオと、自社の判断で分かれる道筋を、数十ページのレポートとして各自がAIで描きました。簡易的な試作とはいえ、かつて戦略コンサルが数ヶ月をかけた規模の作業が、約10分・API費用数百円で形になります。では、誰もが使えるいま、差はどこでつくのか。そこまでを議論しました。"
+      highlight_image: "assets/img/history/vol-05-highlight.gif"
+      highlight_caption: "参加者がAIで生成したシナリオレポートの一部"
     - round: 4
       title: "物理世界に接地したAIは、競争のルールをどう書き換えるか"
       area: "[1E] 物理世界との接地と作用"

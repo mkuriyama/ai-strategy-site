@@ -1,0 +1,255 @@
+{% extends "main.html" %}
+{% import "partials/lp.html" as lp with context %}
+
+{#-
+  /subscribe/（広告の着地ページ・メール登録）。ホームの home.html と同じ方式で、
+  container を差し替えた専用キャンバス（.home-landing）に描く。ヘッダー・タブ・フッターは標準のまま。
+  （Jinja のコメントにしてある ―― HTML コメントだと公開ページのソースに出るため）
+  - 次回開催・参加費・実績数値・直近の回は config.extra（単一ソース）から差し込む
+  - 送信は docs/javascripts/forms.js（ゲートウェイの /api/subscribe へ fetch → /subscribe/thanks/ へ）
+  - 過去の開催報告へのリンクや見本画像は置かない（報告が読めると申込の意味が薄れるため）
+-#}
+{% block container %}
+{%- set ex = config.extra -%}
+{%- set st = ex.stats -%}
+{%- set pr = ex.pricing -%}
+{%- set fm = ex.forms -%}
+{%- set nxt = ex.sessions[0] -%}
+{%- set latest = ex.history[0] -%}
+<main class="md-main" data-md-component="main">
+<div class="home-landing lp lp--sticky">
+
+  {# ① ヒーロー：左に訴求、右にフォーム（スマホでは画像の直後にフォーム） #}
+  <section class="lp-hero">
+    <div class="wrap lp-hero__grid">
+      <div class="lp-hero__copy">
+        <span class="lp-eyebrow" data-library-eyebrow="このライブラリーを運営しているプロジェクトです">{{ lp.cmark() }}<span>無料の案内メール</span></span>
+        <h1>AIを「使う人」から、<br>AIで<span class="lp-u">事業を変える人</span>へ。</h1>
+        <p class="lp-lead">インターネットの普及期に世界を変えたのは、Excel教室に通った人ではなく、GoogleやAmazonを生み出した人でした。AIでも、同じことが起きようとしています。</p>
+        <p class="lp-place">「AI前提で事業戦略を作る」ための場です。月1回・平日夜のオンライン実践セッションを開催しています。各回の報告と次回のご案内は、無料のメールでお届けします。</p>
+        <div class="lp-chips">
+          <span class="lp-chip">有償メンバー<strong>{{ st.paid_members }}</strong></span>
+          <span class="lp-chip">「参加して良かった」<strong>{{ st.satisfaction }}</strong></span>
+          <span class="lp-chip">毎回<strong>AIで動くものを作る</strong></span>
+        </div>
+      </div>
+      <figure class="lp-hero__shot">
+        <img src="{{ 'assets/img/session-build.png' | url }}" alt="実践アプリ「事業デザイン対抗戦」の画面" width="956" height="683">
+        <figcaption>実践アプリ「事業デザイン対抗戦」。市場の声を聞き、AIと案を作り込む。</figcaption>
+      </figure>
+      <div class="lp-hero__host">
+        <img src="{{ 'assets/profile.jpg' | url }}" alt="栗山 実" width="52" height="52">
+        <div>主催：栗山 実 ／ 株式会社アンテカニス<br>経営大学院教員・スタートアップ役員 ほか</div>
+      </div>
+
+      <div class="lp-card lp-formcard" id="form">
+        <h2>無料で案内を受け取る</h2>
+        <form id="subscribe-form" class="lp-form" data-aisia-form="subscribe"
+              data-endpoint="{{ fm.api_base }}/api/subscribe"
+              data-success="{{ 'subscribe/thanks/' | url }}"
+              data-sitekey="{{ fm.turnstile_sitekey }}">
+          <div class="lp-field">
+            <label for="sub-email">メールアドレス{{ lp.req() }}</label>
+            <input id="sub-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="name@example.com" required maxlength="254">
+          </div>
+          <div class="lp-field">
+            <label for="sub-name">お名前{{ lp.req() }}</label>
+            <input id="sub-name" name="name" type="text" autocomplete="name" placeholder="山田 花子" required maxlength="100">
+          </div>
+          <div class="lp-field">
+            <label for="sub-source">このプロジェクトを知ったきっかけ{{ lp.req() }}</label>
+            {{ lp.source_select("sub-source") }}
+          </div>
+          {{ lp.hidden_fields() }}
+          <button type="submit" class="lp-btn lp-btn--gold lp-btn--block" data-busy-label="送信しています…">無料で案内を受け取る</button>
+          <p class="lp-form__error" role="alert" hidden></p>
+          <ul class="lp-checks">
+            <li>{{ lp.check() }}メール登録は無料です</li>
+            <li>{{ lp.check() }}いつでもワンクリックで配信停止できます</li>
+            <li>{{ lp.check() }}次回（{{ lp.short_date(nxt) }}）の開催後から、月2回ほど届きます</li>
+          </ul>
+          <p class="lp-small">送信するとすぐに登録され、support@antecanis.com からご案内メールが届きます。</p>
+          <p class="lp-small lp-muted">ご入力の情報は本プロジェクトのご案内にのみ使用します。<a href="https://www.antecanis.com/privacy/" target="_blank" rel="noopener">プライバシーポリシー</a></p>
+        </form>
+        <noscript><p class="lp-small">フォームの送信には JavaScript が必要です。<a href="{{ fm.noscript_url }}">こちらのページからメール登録できます</a>。</p></noscript>
+        <div class="lp-formcard__foot">有償メンバーをご希望の方は　<a href="{{ 'join/' | url }}">お申し込み（初月無料）→</a></div>
+      </div>
+    </div>
+  </section>
+
+  {# ② 無料と有償の区別 #}
+  <section class="lp-block lp-block--tight">
+    <div class="wrap">
+      <h2>メール登録は無料。有償メンバーは月額制です。</h2>
+      <div class="lp-compare">
+        <div class="lp-card lp-plan">
+          <span class="lp-tag">まずは無料で</span>
+          <h3>案内メール</h3>
+          <p>各回の報告と次回のご案内が届きます。メール登録は無料で、いつでも配信を停止できます。有償メンバーになるかどうかは、読んでから決められます。</p>
+          <a class="lp-plan__link" href="#form">案内メールを受け取る →</a>
+        </div>
+        <div class="lp-compare__arrow" aria-hidden="true"><svg viewBox="0 0 22 22" fill="none"><path d="M5 11h12M12 6l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="lp-card lp-plan lp-plan--member">
+          <span class="lp-tag lp-tag--gold">メンバーになるなら</span>
+          <div class="lp-plan__head">
+            <h3>有償メンバー</h3>
+            <span class="lp-plan__price">月額 {{ pr.early_monthly }}</span>
+            <span class="lp-badge">初月無料</span>
+            <span class="lp-muted lp-small">（{{ pr.early_label }}）</span>
+          </div>
+          <p>月1回のオンライン実践セッションへの参加に加え、録画と資料のアーカイブ、メンバー限定コミュニティをご利用いただけます。更新日（毎月15日）の前日までに解約すれば、その月の費用はかかりません。セッションは平日20:00〜、Zoomで約2〜2.5時間。</p>
+          {{ lp.sessions() }}
+          {# 価格・初月無料・更新日の条件がこのカードに並んでいるので、ここだけ申込（Stripe）へ直接つなぐ #}
+          <a class="lp-plan__link" {{ lp.href(ex.join_url) }}>有償メンバーに申し込む（初月無料）→</a>
+        </div>
+      </div>
+      <div class="lp-corpband">
+        <div>
+          <strong>法人でのご利用をご検討の方へ</strong>
+          <span>複数名でのご参加や、請求書払い（適格請求書の発行）のご相談を承ります。</span>
+        </div>
+        <a class="lp-btn lp-btn--outline" href="{{ 'join/corporate/' | url }}">法人のお問い合わせ →</a>
+      </div>
+    </div>
+  </section>
+
+  {# ③ 届くもの（過去の報告へのリンクや見本画像は置かない） #}
+  <section class="lp-block">
+    <div class="wrap">
+      <div class="seyebrow">届くもの</div>
+      <h2>開催ごとに、こんなメールが届きます。</h2>
+      <p class="lp-sub">開催にあわせて、月2回ほど。読むだけでも、この場で何が起きているかがわかる内容です。</p>
+      <div class="lp-three">
+        <div><span class="lp-num">01</span><h3>当日の報告</h3><p>その回の問い、作った仕組みやアプリの画面、議論で見えた論点を、画像付きで振り返ります。</p></div>
+        <div><span class="lp-num">02</span><h3>次回のご案内</h3><p>次のテーマと日程をお知らせします。有償メンバーとしてセッションに参加するかどうかは、内容を見てから決められます。</p></div>
+        <div><span class="lp-num">03</span><h3>プロジェクトの広がり</h3><p>新しい実践アプリや公開資料など、場の動きをお知らせします。</p></div>
+      </div>
+    </div>
+  </section>
+
+  {# ④ どんな場か ＋ ⑤ 直近の回から #}
+  <section class="lp-block">
+    <div class="wrap">
+      <div class="seyebrow">どんな場か</div>
+      <h2>問いから始め、作り、戦略に戻す。</h2>
+      <p class="lp-sub">各回約2〜2.5時間、オンライン（Zoom）で開催します。戦略上の問いから出発し、AIを組み込んで動く仕組みを作り、自社・自業界の競争の前提がどう変わるかまで考えます。</p>
+      <div class="lp-place-grid">
+        <div>
+          <div class="phase"><div class="n">問</div><div><h3>戦略的な問いから始める</h3><p>その回のテーマがなぜ重要かを、自分の事業の文脈で言語化します。</p></div></div>
+          <div class="phase"><div class="n">作</div><div><h3>手を動かして、動く仕組みを作る</h3><p>AIとの対話から、コードやアプリへと段階的に発展させます。</p></div></div>
+          <div class="phase"><div class="n">戦</div><div><h3>戦略視座に立ち戻る</h3><p>作ったものを自社にどう適用し、競争のルールがどう変わるかまで考えます。</p></div></div>
+        </div>
+        <figure class="lp-fig">
+          <img src="{{ 'assets/img/session-result.png' | url }}" alt="AI戦略対抗戦の合議結果画面" loading="lazy">
+          <figcaption>AI戦略対抗戦。複数のAI（Gemini／Claude／GPT）が多視点で評価・合議し、戦略案を採点する。</figcaption>
+        </figure>
+      </div>
+
+      {%- set hl_img = latest.highlight_image %}
+      <div class="lp-latest{% if not hl_img %} lp-latest--noimg{% endif %}">
+        <div class="lp-latest__text">
+          <span class="lp-latest__k">直近の回から</span>
+          <h3>第{{ latest.round }}回「{{ latest.title }}」{% if latest.month %}（{{ latest.month }}）{% endif %}</h3>
+          {%- if hl_img %}
+          <figure class="lp-latest__fig lp-latest__fig--sp">
+            <img src="{{ hl_img | url }}" alt="{{ latest.highlight_caption or ('第' ~ latest.round ~ '回の画面') }}" loading="lazy">
+            {%- if latest.highlight_caption %}<figcaption>{{ latest.highlight_caption }}</figcaption>{% endif %}
+          </figure>
+          {%- endif %}
+          <p>{{ latest.highlight or latest.summary }}</p>
+          <a href="{{ 'sessions/history/' | url }}">これまでの開催履歴を見る →</a>
+        </div>
+        {%- if hl_img %}
+        <figure class="lp-latest__fig lp-latest__fig--pc">
+          <img src="{{ hl_img | url }}" alt="{{ latest.highlight_caption or ('第' ~ latest.round ~ '回の画面') }}" loading="lazy">
+          {%- if latest.highlight_caption %}<figcaption>{{ latest.highlight_caption }}</figcaption>{% endif %}
+        </figure>
+        {%- endif %}
+      </div>
+    </div>
+  </section>
+
+  {# ⑥ 実績帯（年代は書かない：ファクトチェックしていないため） #}
+  <section class="lp-stats">
+    <div class="wrap">
+      <div class="lp-stats__grid">
+        <div class="lp-stats__item"><span class="lp-stats__v">{{ st.paid_members }}</span><span class="lp-stats__k">有償メンバー</span></div>
+        <div class="lp-stats__item"><span class="lp-stats__v">{{ st.rounds_label }}</span><span class="lp-stats__k">{{ st.rounds_note }}</span></div>
+        <div class="lp-stats__item"><span class="lp-stats__v">{{ st.subscribers }}</span><span class="lp-stats__k">案内メールの登録者</span></div>
+        <div class="lp-stats__item"><span class="lp-stats__v">{{ st.satisfaction }}</span><span class="lp-stats__k">「参加して良かった」</span></div>
+      </div>
+      <p class="lp-stats__lead">大企業などでAI推進を担う方、コンサルタント、個人事業主など、さまざまな立場のビジネスパーソンが参加しています。</p>
+      <p class="lp-stats__note">※ {{ st.satisfaction }}は、{{ st.satisfaction_note }}</p>
+    </div>
+  </section>
+
+  {# ⑦ 参加者の声（アンケートの実回答を束ねた再構成。人物属性は付けない。注記は必ず出す） #}
+  <section class="lp-block">
+    <div class="wrap">
+      <h2>参加者の声</h2>
+      <p class="lp-muted lp-small lp-voices__note">第1〜5回の参加者アンケートの自由記述をもとに、趣旨を変えずに要約・再構成しています。</p>
+      <div class="lp-voices">
+        {%- for h, t in [
+          ("「便利ツール」から「戦略」へ", "AIは議事録や資料づくりの便利ツールだと思っていました。事業の戦略や意思決定に組み込むという発想そのものが新鮮でした。"),
+          ("初めて、手元で動かせた", "普段はAIに相談する程度でしたが、AIに仕組みを作らせて手元で動かす体験ができました。「もしかしたら自分にもできるかも」と思えたのが大きかったです。"),
+          ("危機感と、手がかりと", "ここまで来ているのかと、良くも悪くも危機感を持ちました。同時に、自分の業務でどう活かすかを考えるきっかけをもらいました。"),
+          ("社内でのAI推進にも", "社内でAI活用を広げようとしていましたが、なかなか速度が上がらずにいました。身近な題材で考え方を体験でき、社内での広げ方のヒントになりました。"),
+        ] %}
+        <figure class="lp-card lp-voice">
+          <figcaption><svg viewBox="0 0 28 22" fill="none" aria-hidden="true"><path d="M2 20V12C2 6 5 2.5 11 2M16 20V12C16 6 19 2.5 25 2" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>{{ h }}</figcaption>
+          <blockquote>「{{ t }}」</blockquote>
+        </figure>
+        {%- endfor %}
+      </div>
+    </div>
+  </section>
+
+  {# ⑧ 主催者（略歴はホームと同じ短縮版） #}
+  <section class="lp-block">
+    <div class="wrap">
+      <h2>主催者</h2>
+      <div class="lp-host">
+        <img src="{{ 'assets/profile.jpg' | url }}" alt="栗山 実" loading="lazy">
+        <div>
+          <h3>栗山 実 <span class="lp-host__en">Minoru Kuriyama</span></h3>
+          <p class="lp-host__role">株式会社アンテカニス 代表取締役 ／ 多摩大学大学院 特任教授 ／ グロービス経営大学院 教員</p>
+          <p>マッキンゼー・アンド・カンパニーで戦略コンサルティングに従事後、独立。AI・データ戦略の企業助言、人材育成、スタートアップの事業創造・経営に携わる。東京大学理学部物理学科卒・同大学院修士課程修了。</p>
+          <a href="{{ 'about/profile/' | url }}">プロフィール詳細 →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# ⑨ よくあるご質問 #}
+  <section class="lp-block">
+    <div class="wrap">
+      <h2>よくあるご質問</h2>
+      <dl class="lp-faq">
+        <dt>Q. メール登録すると、有償メンバーへの勧誘がありますか？</dt>
+        <dd>メール登録だけで費用はかかりません。個別の勧誘もありません。有償メンバーを希望される場合のみ、ご自身で申込ページからお申し込みください。</dd>
+        <dt>Q. 有償メンバーとしてセッションに参加するには？</dt>
+        <dd><a href="{{ 'join/' | url }}">申込ページ</a>からクレジットカードでお申し込みいただけます。初月は無料で、更新日（毎月15日）の前日までに解約すれば、その月の費用はかかりません。</dd>
+        <dt>Q. 法人として利用できますか？</dt>
+        <dd>複数名でのご参加や、請求書払い（適格請求書の発行）のご相談を承ります。<a href="{{ 'join/corporate/' | url }}">法人のお問い合わせ</a>からご連絡ください。</dd>
+      </dl>
+    </div>
+  </section>
+
+  {# ⑩ 締めのCTA #}
+  <section class="lp-final">
+    <div class="wrap">
+      <h2>まずは、次回の案内から。</h2>
+      <p>まずは様子を見たい方も歓迎です。</p>
+      <a class="lp-btn lp-btn--gold lp-btn--lg" href="#form" data-scroll-to-form>無料で案内を受け取る</a>
+      <p class="lp-small">有償メンバーをご希望の方は <a href="{{ 'join/' | url }}">お申し込み（初月無料）→</a></p>
+    </div>
+  </section>
+
+  {# スマホ：画面下の固定ボタン。フォームが見えている間は forms.js が隠す #}
+  <div class="lp-sticky" data-sticky-cta hidden>
+    <a class="lp-btn lp-btn--gold lp-btn--block" href="#form" data-scroll-to-form>無料で案内を受け取る</a>
+  </div>
+
+</div>
+</main>
+{% endblock %}

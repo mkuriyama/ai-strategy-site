@@ -4,7 +4,7 @@
 手書きにすると次回開催・参加費が本文と二重管理になるので、`mkdocs.yml` の `extra:`
 （単一ソース）と各ページの `description` から毎回生成する。
 
-- 変動情報（次回開催・参加費・登録URL）は `extra` から
+- 変動情報（次回開催・参加費・メール登録の行き先）は `extra` から
 - ページ一覧は、ビルドで描画された全ページの title / description / 絶対URL から
 - `robots.txt` は静的（docs/robots.txt）。ここでは触らない
 """
@@ -28,7 +28,8 @@ def on_page_context(context, page, config, nav):
     # 用語集の掲載場所はライブラリー（B）の /terms/ ―― `extra.news_site_url` の
     # 関連サイトから辿れる。
     src = page.file.src_uri or ""
-    if src.startswith("digests/") or src == "glossary.md":
+    # メール登録の完了ページも載せない（送信した人だけが見る。noindex）
+    if src.startswith("digests/") or src == "glossary.md" or src.startswith("subscribe/thanks/"):
         return context
     site_url = (config.get("site_url") or "").rstrip("/") + "/"
     url = site_url + page.url
@@ -67,13 +68,16 @@ def on_post_build(config):
             f"（税込 {pricing.get('early_monthly_incl', '')}円）"
         )
         lines.append(f"- 定価: 月額 {pricing.get('list_monthly', '')}（税込 {pricing.get('list_monthly_incl', '')}円）")
-        lines.append("- 申込月のセッションは無料。課金日（毎月15日）の前日までに解約すればその月は0円。")
+        lines.append("- 有償メンバーは初月無料。更新日（毎月15日）の前日までに解約すればその月は0円。")
 
     lines.append("")
     lines.append("## 入口")
     lines.append("")
     if extra.get("register_url"):
-        lines.append(f"- 開催案内メール（無料登録）: {extra['register_url']}")
+        # register_url はサイト相対（subscribe/）。llms.txt では絶対URLにする
+        reg = extra["register_url"]
+        reg = reg if reg.startswith("http") else site_url + reg.lstrip("/")
+        lines.append(f"- 案内メール（無料のメール登録）: {reg}")
     lines.append(f"- 参加費とお申し込み: {site_url}join/")
     lines.append(f"- 法人の方へ: {site_url}join/corporate/")
 
