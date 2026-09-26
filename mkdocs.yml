@@ -79,6 +79,11 @@ plugins:
         # ⚠ 行き先のホストは2026年9月に ai-strategy-news → ai-strategy-library へ改称。
         # 旧ホストも同じ配信先に付いたままなので、古い転送先でも開けはする
         start-guide.md: https://ai-strategy-library.antecanis.com/guide/getting-started/
+        # 旧来の申込リンク /apply/（送信済みの案内メールに残っている）。以前は GAS を
+        # 直に開く静的HTMLだったが、申込（Stripe）の入口 extra.join_url へ転送する。
+        # 行き先は下の extra.join_url と**同じ値**（YAML のアンカー &join_url を
+        # extra.join_url が *join_url で参照）。申込URLを変えるときはここ1か所。消さないこと
+        apply/index.md: &join_url https://go.antecanis.com/ai-strategy-join
   # スクリーンショット等をクリックで拡大
   - glightbox:
       auto_caption: false
@@ -173,8 +178,9 @@ extra:
   register_url: https://mailchi.mp/antecanis/ai-strategy
   # ニュースサイト（B）。nav の「読む」タブと llms.txt の「関連サイト」が参照する
   news_site_url: https://ai-strategy-library.antecanis.com/d/
-  # 申込（Stripe）の直リンク。独自ドメイン配下に統一（リンク先の差し替えはStripe側で行う）
-  join_url: https://go.antecanis.com/ai-strategy-join
+  # 申込（Stripe）の直リンク。独自ドメイン配下に統一（リンク先の差し替えはゲートウェイ側で行う）
+  # ⚠ 値は plugins.redirects の apply/index.md に書いてある（YAML アンカー）。/apply/ の転送先と一致させるため
+  join_url: *join_url
   # ヘッダー／導線で使う短縮表記（直近に開催される回）
   next_session_short: "10/2(金) 20:00〜"
   # 次回回の配列（ラベル／種別 main|sub／日付／補足／start=ISO日時。start は構造化データ Event 用）
