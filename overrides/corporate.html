@@ -1,0 +1,155 @@
+{% extends "main.html" %}
+{% import "partials/lp.html" as lp with context %}
+
+<!--
+  /join/corporate/（法人の方へ・問い合わせ）。URL は従来どおり。
+  - 送信は docs/javascripts/forms.js → ゲートウェイ /api/corporate-inquiry → 専用 GAS
+    （シート「AISIA_法人問い合わせ」に1行＋support@ へ通知）。問い合わせ者への自動受付メールは送らない
+  - 送信後はページ内で完了表示に切り替える（data-form-done）
+  - mailto の導線はフォームと併記して残す（JavaScript が無効でも連絡できる）
+  - Mailchimp には自動で入れない（法人契約で複数名が参加する場合は、従来どおり一括で登録する運用）
+-->
+{% block container %}
+{%- set ex = config.extra -%}
+{%- set st = ex.stats -%}
+{%- set fm = ex.forms -%}
+<main class="md-main" data-md-component="main">
+<div class="home-landing lp">
+
+  <section class="lp-hero">
+    <div class="wrap lp-hero__grid lp-hero__grid--corp">
+      <div class="lp-hero__copy">
+        <span class="lp-eyebrow">{{ lp.cmark() }}<span>法人の方へ</span></span>
+        <h1>組織に、<br>AI前提で戦略を考える<br>視座を。</h1>
+        <p class="lp-lead">事業組織・社員にAI戦略の視座を持たせ、実行力のあるAI・DX組織を目指す。そうした法人でのご利用にも対応しています。</p>
+        <div class="lp-offers">
+          <span class="lp-offers__k">ご提供できること</span>
+          {%- for h, t in [
+            ("複数名でのご参加", "チームや部門単位での有償メンバー参加に対応します。"),
+            ("お見積書・請求書払い", "勤務先での購買・経費処理に対応。適格請求書（インボイス）を発行します。"),
+            ("個別開催・テーマカスタマイズ", "貴社の事業・業界の文脈に合わせたテーマ設計で開催します（費用別途）。"),
+            ("AI戦略アドバイザリー", "貴社のAI戦略の構想や実装を支援します（費用別途）。"),
+          ] %}
+          <div class="lp-offer">{{ lp.check() }}<div><strong>{{ h }}</strong><span>{{ t }}</span></div></div>
+          {%- endfor %}
+        </div>
+      </div>
+      <div class="lp-hero__host">
+        <img src="{{ 'assets/profile.jpg' | url }}" alt="栗山 実" width="52" height="52">
+        <div>ご相談には主催者の栗山が対応します<br>株式会社アンテカニス 代表取締役</div>
+      </div>
+
+      <div class="lp-card lp-formcard" id="form">
+        <h2>法人でのご利用のご相談</h2>
+        <p class="lp-formcard__lead">内容を確認し、support@antecanis.com から主催者の栗山がご返信します。</p>
+        <form id="corporate-form" class="lp-form" data-aisia-form="corporate"
+              data-endpoint="{{ fm.api_base }}/api/corporate-inquiry"
+              data-sitekey="{{ fm.turnstile_sitekey }}">
+          <div class="lp-row2">
+            <div class="lp-field">
+              <label for="corp-company">会社名{{ lp.req() }}</label>
+              <input id="corp-company" name="company" type="text" autocomplete="organization" placeholder="株式会社〇〇" required maxlength="200">
+            </div>
+            <div class="lp-field">
+              <label for="corp-title">部署・役職{{ lp.opt() }}</label>
+              <input id="corp-title" name="title" type="text" autocomplete="organization-title" placeholder="経営企画部 課長" maxlength="200">
+            </div>
+          </div>
+          <div class="lp-row2">
+            <div class="lp-field">
+              <label for="corp-name">お名前{{ lp.req() }}</label>
+              <input id="corp-name" name="name" type="text" autocomplete="name" placeholder="山田 花子" required maxlength="100">
+            </div>
+            <div class="lp-field">
+              <label for="corp-email">メールアドレス{{ lp.req() }}</label>
+              <input id="corp-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="name@company.co.jp" required maxlength="254">
+            </div>
+          </div>
+          <fieldset class="lp-fieldset">
+            <legend class="lp-legend">ご検討の内容{{ lp.opt("いくつでも") }}</legend>
+            <div class="lp-checkgrid">
+              {%- for o in ["複数名での参加", "お見積書・請求書払い", "個別開催・テーマカスタマイズ", "AI戦略アドバイザリー", "まだ決めていない・情報収集"] %}
+              <label><input type="checkbox" name="interests" value="{{ o }}">{{ o }}</label>
+              {%- endfor %}
+            </div>
+          </fieldset>
+          <div class="lp-row2">
+            <div class="lp-field">
+              <label for="corp-headcount">ご検討の人数（目安）{{ lp.opt() }}</label>
+              <select id="corp-headcount" name="headcount">
+                <option value="">選択してください</option>
+                {%- for o in ["1〜4名", "5〜9名", "10〜29名", "30名以上", "未定"] %}
+                <option>{{ o }}</option>
+                {%- endfor %}
+              </select>
+            </div>
+            <div class="lp-field">
+              <label for="corp-source">このプロジェクトを知ったきっかけ{{ lp.req() }}</label>
+              {{ lp.source_select("corp-source") }}
+            </div>
+          </div>
+          <div class="lp-field">
+            <label for="corp-message">ご相談内容{{ lp.opt() }}</label>
+            <textarea id="corp-message" name="message" rows="4" maxlength="4000" placeholder="例：部門の10名程度で参加を検討しています。請求書払いの手続きを知りたいです。"></textarea>
+          </div>
+          {{ lp.hidden_fields() }}
+          <button type="submit" class="lp-btn lp-btn--teal lp-btn--block" data-busy-label="送信しています…">相談内容を送る</button>
+          <p class="lp-form__error" role="alert" hidden></p>
+          <p class="lp-small lp-muted">ご入力の情報は、本件のご連絡にのみ使用します。<a href="https://www.antecanis.com/privacy/" target="_blank" rel="noopener">プライバシーポリシー</a>　メールで直接のご相談も承ります：<a href="mailto:support@antecanis.com">support@antecanis.com</a></p>
+        </form>
+        <div class="lp-form-done" data-form-done="corporate" role="status" hidden>
+          <h3>ご相談を受け付けました</h3>
+          <p>ありがとうございます。内容を確認し、support@antecanis.com から主催者の栗山がご返信します。自動の受付メールはお送りしていません。</p>
+        </div>
+        <noscript><p class="lp-small">フォームの送信には JavaScript が必要です。<a href="mailto:support@antecanis.com">support@antecanis.com</a> へメールでご相談ください。</p></noscript>
+      </div>
+    </div>
+  </section>
+
+  <section class="lp-block">
+    <div class="wrap lp-view">
+      <div>
+        <div class="seyebrow">本プロジェクトが提供する視座</div>
+        <h2>「AIを使う」から、<br>「AI前提で事業戦略を作る」へ。</h2>
+        <p>「ツールとしてのAI活用」にとどまらず、AI前提で事業戦略を構想・実装し、組織の能力として残す。その視座を、手を動かす実践を通じて組織に根づかせます。</p>
+        <a href="{{ 'about/philosophy/' | url }}">設計思想を読む →</a>
+      </div>
+      <figure class="lp-fig">
+        <img src="{{ 'assets/img/session-result.png' | url }}" alt="AI戦略対抗戦の合議結果画面" loading="lazy">
+        <figcaption>AI戦略対抗戦。複数のAIが多視点で評価・合議し、戦略案を採点する。</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="lp-block">
+    <div class="wrap">
+      <h2>ご相談からご利用までの流れ</h2>
+      <ol class="lp-flow">
+        {%- for h, t in [
+          ("ご相談の送信", "このページのフォーム、またはメールでご連絡ください。"),
+          ("ご要望の確認", "人数・時期・目的を伺います。個別開催やカスタマイズは、日程と内容を調整します。"),
+          ("お見積りとご承認", "お見積書をお送りし、ご承認いただいたうえで進めます。"),
+          ("ご利用開始", "複数名でのご参加は、個人のクレジットカード払いに代えて請求書で対応し、それ以外は個人の方と同じ流れです。個別開催は、調整した日程で開催します。"),
+          ("ご請求・お支払い", "ご利用後に請求書（適格請求書）を発行します。期日までにお振込みください。"),
+        ] %}
+        <li><span class="lp-num">{{ "%02d" | format(loop.index) }}</span><h3>{{ h }}</h3><p>{{ t }}</p></li>
+        {%- endfor %}
+      </ol>
+    </div>
+  </section>
+
+  <section class="lp-stats">
+    <div class="wrap">
+      <div class="lp-stats__grid">
+        <div class="lp-stats__item"><span class="lp-stats__v">{{ st.paid_members }}</span><span class="lp-stats__k">有償メンバー</span></div>
+        <div class="lp-stats__item"><span class="lp-stats__v">{{ st.rounds_label }}</span><span class="lp-stats__k">{{ st.rounds_note }}</span></div>
+        <div class="lp-stats__item"><span class="lp-stats__v">{{ st.satisfaction }}</span><span class="lp-stats__k">「参加して良かった」※</span></div>
+        <div class="lp-stats__cta"><a href="{{ 'join/' | url }}">個人での有償メンバー参加はこちら →</a></div>
+      </div>
+      <p class="lp-stats__note">※ {{ st.satisfaction_note }}</p>
+    </div>
+  </section>
+
+</div>
+</main>
+{% endblock %}
