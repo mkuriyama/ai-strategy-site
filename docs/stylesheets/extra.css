@@ -71,7 +71,7 @@
   border-color: var(--md-accent-fg-color);
   color: #fff;
 }
-/* 金＝案内メールの無料登録。ティール(--primary)＝申込（Stripe）。
+/* 金＝無料のメール登録。ティール(--primary)＝申込（Stripe）。
    ホーム（.home-landing の btn-gold / btn-teal）と役割・配色を揃える。 */
 .md-typeset .md-button--gold,
 .md-typeset .md-button--gold:hover {

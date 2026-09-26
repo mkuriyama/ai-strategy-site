@@ -1,15 +1,15 @@
 ---
-description: 参加費とお申し込み。早期参加枠の料金、課金と解約のしくみ、無料メール登録と直接申し込みの2つの入口。
+description: 参加費とお申し込み。早期参加枠の料金、更新と解約のしくみ、無料のメール登録と有償メンバーへのお申し込みの2つの入口。
 ---
 
 # 参加費とお申し込み
 
-参加費・課金のしくみと、お申し込みまでをこのページにまとめています。**申込当月回の参加は無料**、
-翌月回の参加から下記の参加費です。早期参加枠の料金は、先に申し込まれた方ほど長くお得になる
+参加費・更新と解約のしくみと、お申し込みまでをこのページにまとめています。有償メンバーは**初月無料**で、
+申込翌月の更新日（15日）から下記の参加費です。早期参加枠の料金は、先に申し込まれた方ほど長くお得になる
 設計です。
 
-入口は2つあります。すでに参加を決めている方は **お申し込み**、まず情報だけ受け取りたい方は
-**無料の案内メール登録** へ。どちらも **[このページの下部](#2つの入口)** から進めます。
+入口は2つあります。有償メンバーになると決めている方は **お申し込み**、まず情報だけ受け取りたい方は
+**無料のメール登録** へ。どちらも **[このページの下部](#2つの入口)** から進めます。
 
 ## 参加費（個人参加）
 
@@ -23,20 +23,20 @@ description: 参加費とお申し込み。早期参加枠の料金、課金と�
     割引を当面維持しつつ、後から申し込む方の割引幅を段階的に縮小していく想定です。
     **お申し込み済みの方の月額は、その時点の金額のまま変わりません。**
 
-## 課金と解約のしくみ
+## 更新と解約のしくみ
 
-お申し込みから課金開始までの流れと、早期参加枠のしくみを図でまとめました。文章だけでは
+お申し込みから初回のお支払いまでの流れと、早期参加枠のしくみを図でまとめました。文章だけでは
 伝わりにくい2点を、下の図でご確認ください。
 
 <figure markdown="span">
-<svg viewBox="0 0 780 430" xmlns="http://www.w3.org/2000/svg" font-family="'Noto Sans JP', sans-serif" role="img" aria-label="お申し込みから課金までの流れ">
+<svg viewBox="0 0 780 430" xmlns="http://www.w3.org/2000/svg" font-family="'Noto Sans JP', sans-serif" role="img" aria-label="お申し込みから初回のお支払いまでの流れ">
 <rect x="0" y="0" width="780" height="430" fill="#FFFFFF"/>
-<text x="40" y="50" font-family="'Noto Serif JP', serif" font-size="27" font-weight="700" fill="#004455">お申し込みから課金までの流れ</text>
+<text x="40" y="50" font-family="'Noto Serif JP', serif" font-size="27" font-weight="700" fill="#004455">お申し込みから初回のお支払いまでの流れ</text>
 <text x="41" y="79" font-size="14" fill="#5E7378">例：9月中にお申し込みの場合</text>
 <rect x="39" y="104" width="168" height="104" rx="12" fill="#EAF1F2" stroke="#AEC6CA" stroke-width="1.5"/>
 <text x="123" y="128" text-anchor="middle" font-size="11" letter-spacing="1.5" font-weight="700" fill="#1C6E7C">STEP 1</text>
 <text x="123" y="154" text-anchor="middle" font-family="'Noto Serif JP', serif" font-size="20" font-weight="700" fill="#004455">お申し込み</text>
-<text x="123" y="182" text-anchor="middle" font-size="12.5" fill="#003A47">Stripeに登録（登録は無料）</text>
+<text x="123" y="182" text-anchor="middle" font-size="12.5" fill="#003A47">Stripeでお申し込み（初月無料）</text>
 <line x1="123" y1="208" x2="123" y2="252" stroke="#AEC6CA" stroke-width="1.5"/>
 <rect x="219" y="104" width="168" height="104" rx="12" fill="#F5ECD3" stroke="#E0C77E" stroke-width="1.5"/>
 <text x="303" y="128" text-anchor="middle" font-size="11" letter-spacing="1.5" font-weight="700" fill="#C0962F">STEP 2</text>
@@ -45,12 +45,12 @@ description: 参加費とお申し込み。早期参加枠の料金、課金と�
 <line x1="303" y1="208" x2="303" y2="252" stroke="#E0C77E" stroke-width="1.5"/>
 <rect x="397" y="104" width="168" height="104" rx="12" fill="#EAF1F2" stroke="#AEC6CA" stroke-width="1.5"/>
 <text x="481" y="128" text-anchor="middle" font-size="11" letter-spacing="1.5" font-weight="700" fill="#1C6E7C">STEP 3</text>
-<text x="481" y="154" text-anchor="middle" font-family="'Noto Serif JP', serif" font-size="20" font-weight="700" fill="#004455">初回の課金</text>
+<text x="481" y="154" text-anchor="middle" font-family="'Noto Serif JP', serif" font-size="20" font-weight="700" fill="#004455">初回のお支払い</text>
 <text x="481" y="182" text-anchor="middle" font-size="12.5" fill="#003A47">¥6,930（早期割引 6,300＋税）</text>
 <line x1="481" y1="208" x2="481" y2="252" stroke="#AEC6CA" stroke-width="1.5"/>
 <rect x="575" y="104" width="168" height="104" rx="12" fill="#EAF1F2" stroke="#AEC6CA" stroke-width="1.5"/>
 <text x="659" y="128" text-anchor="middle" font-size="11" letter-spacing="1.5" font-weight="700" fill="#1C6E7C">STEP 4</text>
-<text x="659" y="154" text-anchor="middle" font-family="'Noto Serif JP', serif" font-size="20" font-weight="700" fill="#004455">以降の課金</text>
+<text x="659" y="154" text-anchor="middle" font-family="'Noto Serif JP', serif" font-size="20" font-weight="700" fill="#004455">以降のお支払い</text>
 <text x="659" y="182" text-anchor="middle" font-size="12.5" fill="#003A47">毎月15日に自動更新</text>
 <line x1="659" y1="208" x2="659" y2="252" stroke="#AEC6CA" stroke-width="1.5"/>
 <text x="303" y="200" text-anchor="middle" font-size="11.5" fill="#5E7378">10/2（B日程）</text>
@@ -66,11 +66,11 @@ description: 参加費とお申し込み。早期参加枠の料金、課金と�
 <text x="659" y="276" text-anchor="middle" font-size="13" font-weight="700" fill="#004455">毎月15日</text>
 <rect x="40" y="300" width="708" height="86" rx="12" fill="#EAF1F2" stroke="#AEC6CA" stroke-width="1.5"/>
 <rect x="40" y="300" width="6" height="86" rx="3" fill="#C0962F"/>
-<text x="64" y="332" font-family="'Noto Serif JP', serif" font-size="17" font-weight="700" fill="#004455">解約はいつでも。課金日の前日までなら、その月は¥0。</text>
-<text x="64" y="358" font-size="13.5" fill="#003A47">各課金日（毎月15日）の前日までに Stripe カスタマーポータルから解約すれば、その月の費用は発生しません。</text>
+<text x="64" y="332" font-family="'Noto Serif JP', serif" font-size="17" font-weight="700" fill="#004455">解約はいつでも。更新日の前日までなら、その月は¥0。</text>
+<text x="64" y="358" font-size="13.5" fill="#003A47">各更新日（毎月15日）の前日までに Stripe カスタマーポータルから解約すれば、その月の費用は発生しません。</text>
 <text x="64" y="378" font-size="13.5" fill="#5E7378">例）10/14 までに解約 → 費用ゼロ。 ／ カード情報は弊社で保持しません。</text>
 </svg>
-<figcaption>図1：お申し込みから課金までの流れ（9月中にお申し込みの場合）</figcaption>
+<figcaption>図1：お申し込みから初回のお支払いまでの流れ（9月中にお申し込みの場合）</figcaption>
 </figure>
 
 <figure markdown="span">
@@ -114,8 +114,8 @@ description: 参加費とお申し込み。早期参加枠の料金、課金と�
 </figure>
 
 !!! note "3つのポイント"
-    - **申込月の回は無料。** お申し込みいただいた当月のセッションは費用がかかりません。
-    - **課金は翌15日から、毎月15日。** 初回課金は申込翌月の15日。以降は毎月15日が課金日です。
+    - **初月無料。** お申し込みいただいた月のセッションは費用がかかりません。
+    - **初回のお支払いは申込翌月の15日。** 以降は毎月15日が更新日です。
     - **前日までの解約で、その月は¥0。** 各15日の前日までにStripeカスタマーポータルから
       解約すれば費用は発生しません。解約はいつでもご自身で可能です。
 
@@ -128,37 +128,37 @@ description: 参加費とお申し込み。早期参加枠の料金、課金と�
 
 ## 2つの入口
 
-進み方は2つあります。**参加を決めた方はお申し込み（有料・申込月は無料）**、**まず情報だけ
+進み方は2つあります。**有償メンバーになると決めた方はお申し込み（月額制・初月無料）**、**まず情報だけ
 受け取りたい方は案内メール（無料）** です。どちらもこのページから進めます。
 
 <div class="cta-pair" markdown>
 
-{{ join_button("今すぐ申し込む（申込月無料）") }}
-{{ register_button("案内メールを受け取る（無料登録）") }}
+{{ join_button() }}
+{{ register_button() }}
 
 </div>
 
-### 今すぐ申し込む（Stripe・申込月は無料）
+### 有償メンバーに申し込む（Stripe・初月無料）
 
-お申し込みの前に、上記の3点（申込月は無料／課金は毎月15日／前日までの解約でその月は¥0）を
+お申し込みの前に、上記の3点（初月無料／更新日は毎月15日／前日までの解約でその月は¥0）を
 ご確認ください。お申し込み後に、オンライン会場（Zoom）情報・当日資料と、参加者コミュニティ
 （Circle）へのご招待をお送りします（会場リンク・資料は主に Circle 内でご案内します）。Circleでの
 続く場については **[進め方と持ち帰るもの](../sessions/index.md#セッションの外へ--毎月の挑戦挑戦セット挑戦ボード)**
 をご覧ください。
 
-{{ join_button("今すぐ申し込む（申込月無料）") }}
+{{ join_button() }}
 
 ### 案内メールを受け取る（無料・いつでも解除可）
 
 次回以降（月1回予定）の参加案内、追加開催（サブ回）のご案内、今後の開催に関する継続的な情報を、
-順次メールでお送りします。費用は発生しません。以下のいずれのご意向でも、まずはご登録ください。
+順次メールでお送りします。費用は発生しません。以下のいずれのご意向でも、まずはメール登録をどうぞ。
 
 - 次回セッションへの参加を希望
 - 日時が合わないが、録画視聴での参加を希望／別日程（サブ回）があれば参加希望
 - 継続参加（月次）を検討
 - 現時点では未定だが、本プロジェクトの継続的な案内を希望
 
-{{ register_button("案内メールを受け取る（無料登録）") }}
+{{ register_button() }}
 
 !!! info "メール配信について"
     ご案内配信メールは **support@antecanis.com** からお送りします。プロモーションメール等に
