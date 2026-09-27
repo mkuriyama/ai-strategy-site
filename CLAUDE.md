@@ -48,8 +48,16 @@ docs/
 │   └─ vol-04.md / vol-04b.md   第4回 A日程(8/18) / B日程(9/3)
 │                               ※`vol-0N.md`=A日程、`vol-0Nb.md`=B日程。表記は Vol.NA / Vol.NB
 ├─ join/
-│   ├─ index.md                 参加費とお申し込み（費用・課金図・申込・メール登録の統合ページ）
-│   └─ corporate.md             法人の方へ
+│   ├─ index.md                 参加費とお申し込み（費用・更新と解約の図・申込・メール登録の統合ページ）
+│   └─ corporate.md             法人の方へ（問い合わせフォーム）。front-matter のみ。実体は
+│                               overrides/corporate.html。送信先はゲートウェイ /api/corporate-inquiry
+├─ subscribe/                   **メール登録（2026年9月〜。広告のリンク先はここに統一）**
+│   ├─ index.md                 /subscribe/。front-matter のみ。実体は overrides/subscribe.html。
+│   │                           送信先はゲートウェイ /api/subscribe（シングルオプトイン）
+│   └─ thanks/index.md          /subscribe/thanks/ 登録完了ページ。nav に載せず noindex、
+│                               sitemap・llms.txt・サイト内検索からも外す
+├─ javascripts/forms.js         2つのフォームの送信・Turnstile・UTM の保持・固定CTA・GA4 計測。
+│                               全ページで読み込む（フォームの無いページでは UTM を覚えるだけ）
 │  ※ start-guide.md（スタートガイド）は2026年9月に**ライブラリー（B）の `/guide/` へ移設**。
 │    あちらは「参加している方の手元」という位置づけで、原稿は B の `content/guide/*.md`。
 │    本サイトは転送のみ（`redirect_maps` の `start-guide.md` → 外部URL）。**消さないこと**
@@ -58,7 +66,8 @@ docs/
 │                               知っていれば開ける」扱い ―― nav・検索・sitemap・llms.txt
 │                               から外し noindex。**ファイルは正本として残す**（B が読む
 │                               `site/data/glossary.json` の生成元。用語の追加手順も同じ）
-├─ apply/index.html             申込リンクの転送用（スタンドアロン・navに載せない）
+│  ※ apply/（旧来の申込リンク）は2026年9月に `redirect_maps` の `apply/index.md` →
+│    `extra.join_url` への転送に変えた（行き先は YAML アンカーで join_url と同じ値）。**消さないこと**
 ├─ welcome/index.html           決済完了後の着地ページ（Stripeのsuccess URL）
 ├─ paused/index.html            決済中断時の着地ページ（Stripeのcancel URL）
 ├─ includes/abbreviations.md    用語ツールチップ定義（全ページに自動付与）
@@ -85,6 +94,11 @@ overrides/
 ├─ main.html                    全ページ共通のお知らせバーCTA（announceブロック）＋
                                 構造化データ JSON-LD（extrahead ブロック。Organization／Event／BreadcrumbList）
 ├─ home.html                    ホーム（縦長ランディング）の専用テンプレート
+├─ subscribe.html               /subscribe/（メール登録の着地ページ）
+├─ subscribe-thanks.html        /subscribe/thanks/（登録完了）
+├─ corporate.html               /join/corporate/（法人の方へ・問い合わせ）
+├─ partials/lp.html             上の3つで共有する部品（日付の短縮・次回セッション・フォーム部品）。
+│                               スタイルは extra.css の `.home-landing.lp`（ホームと同じキャンバス）
 └─ partials/header.html         Material の header partial を上書き。ヘッダーのタイトル文字を
                                 site_name ではなく**ページ自身のタイトル**（トップは「ホーム」）に
                                 する。ロゴのワードマークと重複させないため
@@ -106,7 +120,7 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
 ```
 
 > 📄 **join の統合（2026年8月）**: 旧 `join/register.md`（登録方法）は `join/index.md` に統合。
-> 「参加費 → 課金と解約のしくみ → お申し込み → 法人 → 規約」の1ページで完結させ、広告・紹介の
+> 「参加費 → 更新と解約のしくみ → お申し込み → 法人 → 規約」の1ページで完結させ、広告・紹介の
 > 着地先を1つのURLに揃えた。旧URL `/join/register/` は `redirects` プラグインで `/join/` へ転送
 > （`mkdocs.yml` の `plugins.redirects.redirect_maps`）。**この転送設定は消さないこと**（メール等で
 > 配布済みのリンクが切れる）。参加者コミュニティ（Circle）の説明は `sessions/index.md` に集約。
@@ -155,6 +169,9 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
      要約・図・ダイジェスト）。図は A日程ダイジェストの図1を
      `assets/img/history/vol-0N.svg` に切り出す。
      `extra.latest_digest` を新しいダイジェストに向ける（ホームの「新着」）。
+     - B日程の前に先頭へ入れた回は `dates` に「開催予定」と書いてある（例：`10/2(金・開催予定)`）。
+       **B日程が終わったら外す**。新しい回を足したら `highlight` 等も新しい回に付け替える
+       （/subscribe/ の「直近の回から」は先頭の回を出す）。`extra.stats` の回数・満足度も見直す
      - ⚠ 回番号のキーは **`round:`**。`no:` は **YAML が真偽値として読む**ため使えない
        （2026年9月に実際に踏み、開催履歴が「第回」と表示されていた）。`hooks/export_data.py`
        が同種のキーを検出してビルドを止める。
@@ -188,8 +205,12 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
 | 参加費の金額 | **`mkdocs.yml` の `extra.pricing`**（ホームのティーザー・join の価格表へ自動反映）＋ **`join/index.md` の inline SVG 2点**（図1の金額・日付、図2の「いまここ」＝手動）＋ **`flyer.html` の参加費欄**（手動） |
 | 用語の定義 | `docs/glossary.md` と `docs/includes/abbreviations.md` の**両方**（定義文を一致させる）。**正本はこの2つだけ**。ライブラリー（B）の `/terms/` は `site/data/glossary.json` をビルド時に取りに来るので、B 側に書き足す必要はない（書き足すと片方だけ古くなる）。掲載場所は B だが、**編集する場所はここ** |
 | 5×5×5 の 15 領域 | **`docs/about/philosophy.md` の表だけ**（B の領域マップは `site/data/areas.json` を取りに来る）。⚠ 表の書式（`**[1A]** 名前 ── 説明` を `<br>` 区切り／層と切り口の2列）を変えると読み取りが減る。15個そろわなければ `hooks/export_data.py` がビルドを止める |
-| 登録フォームURL | **`mkdocs.yml` の `extra.register_url` の1か所のみ**（通常は固定: `https://mailchi.mp/antecanis/ai-strategy`） |
-| 申込（Stripe）URL | **`mkdocs.yml` の `extra.join_url` の1か所のみ**（固定リンク: `https://go.antecanis.com/ai-strategy-join`。リンク先の差し替えはStripe側で行う） |
+| メール登録の行き先 | **`mkdocs.yml` の `extra.register_url` の1か所のみ**（`subscribe/`＝サイト内の /subscribe/。サイト相対で書き、マクロ・テンプレートが相対パスに直す）。旧LP `mailchi.mp/antecanis/ai-strategy` は過去の投稿からリンクされているので Mailchimp 側に残してあり、本サイトからは `<noscript>` の代替（`extra.forms.noscript_url`）でのみ参照する |
+| フォームの送信先・Turnstile・ご案内メールの件名 | **`mkdocs.yml` の `extra.forms`**（`api_base`・`turnstile_sitekey`・`welcome_subject`）。件名は実際のご案内メール（Mailchimp のオートメーション）と一致させる。`api_base` と `turnstile_sitekey` は環境変数 `FORMS_API_BASE` / `TURNSTILE_SITEKEY` で上書きできる（検証用） |
+| 実績数値 | **`mkdocs.yml` の `extra.stats` の1か所だけ**（/subscribe/ のチップと実績帯、/join/corporate/ の実績帯）。`satisfaction` は新しい回のアンケートが加わるたびに再計算する（延べ回答のうち「参加・視聴して良かった」が「とても／ややそう思う」の割合。未回答も分母に含める）。年代など、ファクトチェックしていない属性は書かない |
+| 次回回のテーマ | `extra.sessions[].theme`（**任意**。決まっているときだけ日付の下に出る。空でよい） |
+| 直近の回の紹介 | `extra.history` の**先頭の回**の `highlight`（2〜4文）・`highlight_image`・`highlight_caption`・`month`（いずれも任意）→ /subscribe/ の「直近の回から」。`highlight` が無ければ `summary`、画像が無ければ画像なしで出る |
+| 申込（Stripe）URL | **`mkdocs.yml` の `extra.join_url` の1か所のみ**（固定リンク: `https://go.antecanis.com/ai-strategy-join`。リンク先の差し替えはゲートウェイ側で行う）。**値は `plugins.redirects` の `apply/index.md` に YAML アンカーで書いてあり**、`extra.join_url` はそれを参照する（/apply/ の転送先と同じ値にするため） |
 
 ---
 
@@ -310,8 +331,10 @@ B 側**（`ai-strategy-news-app` の `content/guide/*.md`）。本サイトに�
 - **マクロ（`main.py`）**:
   - `{{ session_cards() }}` … `extra.sessions` から「次回開催」カードを描画（`sessions/index.md` で使用）
   - `{{ history_cards() }}` … `extra.history` から開催履歴カードを描画（sessions/history で使用）
-  - `{{ register_button("ラベル") }}` … メール登録ボタン（**金**・`.md-button--gold`）
-  - `{{ join_button("ラベル") }}` … 申込（Stripe）ボタン（**ティール**・`.md-button--primary`）。
+  - `{{ register_button() }}` … メール登録ボタン（**金**・`.md-button--gold`）。既定ラベル
+    「案内メールを受け取る（無料のメール登録）」。サイト内（/subscribe/）なので同じタブで開く
+  - `{{ join_button() }}` … 申込（Stripe）ボタン（**ティール**・`.md-button--primary`）。既定ラベル
+    「有償メンバーに申し込む（初月無料）」。
     **join ページでのみ使う**
   - `{{ footer_cta("リンク1", …, join_cta=False) }}` … 全ページ末尾の共通動線。2つの入口を
     ボタン2つで並べる（ティール＝「参加費とお申し込みを見る →」／金＝メール登録）。join への
@@ -323,7 +346,11 @@ B 側**（`ai-strategy-news-app` の `content/guide/*.md`）。本サイトに�
 - **ホーム**は `overrides/home.html`（`base→main→home` の継承）。`docs/index.md` は front-matter
   （`template: home.html` と `hide: [navigation, toc]`、`description`）のみ。セクションのコピーは
   テンプレート内、スタイルは `extra.css` の `.home-landing` 配下。
-- **お知らせバーCTA**は `overrides/main.html` の `announce` ブロックで全ページに表示。
+- **お知らせバーCTA**は `overrides/main.html` の `announce` ブロックで表示（/subscribe/ 配下では
+  行き先が自分自身になるので出さない）。
+- **ランディング系ページ**（/subscribe/・/subscribe/thanks/・/join/corporate/）もホームと同じ方式
+  （front-matter の `template:` と `hide: [navigation, toc]`）。値は `extra:` から差し込み、
+  文言はテンプレート内。ダークモードでも明るい地で描く（ホームと同じ）
 - **構造化データ（JSON-LD）**も `overrides/main.html` の `extrahead` ブロックで生成。
   Organization は全ページ、Event は `extra.sessions` の `start` がある回をホーム・`sessions/`・join に、
   BreadcrumbList はホーム以外。手編集しない（`extra:` を直せば追随する）。
@@ -362,7 +389,7 @@ B 側**（`ai-strategy-news-app` の `content/guide/*.md`）。本サイトに�
 - 金額の正本は `extra.pricing`。**値に「円」を含めない**（テンプレート側で「円」を付けるため、
   含めると「6,930円円」になる。過去に実際に発生）。
 - **既存契約者は申込時の月額のまま据え置き**が原則。改定は「これから申し込む人」にのみ適用。
-- 改定時に手動更新が要るのは：`join/index.md` の**図1**（金額・次回コホートの日付・初回課金日・
+- 改定時に手動更新が要るのは：`join/index.md` の**図1**（金額・次回コホートの日付・初回のお支払い日・
   解約期限の例）、**図2**（「いまここ」の位置と金額）、`flyer.html` の参加費欄。
 - **⚠ 編集方針：割引が「いつ終わったか」は書かない。** 直後に訪れた人が「損した」と感じるため、
   具体的な旧価格・改定日・「受付終了」といった表現は載せない。「先に申し込んだ方は据え置き」
@@ -375,7 +402,22 @@ B 側**（`ai-strategy-news-app` の `content/guide/*.md`）。本サイトに�
 - **「コホート」はユーザー向けの文言に出さない**（裏側の運用概念）。
 - **具体的なAIモデル名・バージョンは書かない**（陳腐化が速い）。「軽量モデル」等の概念表記にする。
   用語集も「モデル（世代／グレード）」という概念エントリで扱っている。
-- 入口の2本立て（無料メール登録／Stripe申込）の言い回しは全ページで統一する。
+- 入口の2本立て（無料のメール登録／有償メンバーへのお申し込み）の言い回しは全ページで統一する。
+
+### 用語ルール（2026年9月〜）
+
+初見の人に「無料の部分」と「有償の部分」を取り違えさせないため、次に統一する。
+
+| 使う | 使わない | 備考 |
+|---|---|---|
+| **メール登録**（無料の案内メール） | 単独の「登録」「無料登録」 | 「登録」だけだと有償の申込と区別できない。「登録者」も、メール登録者か有償メンバーかを書き分ける |
+| **有償メンバー**（月額の会員） | 「月例セッション」を商品名として使うこと | 会員の価値はセッションに加え、アーカイブ・ライブラリー等に広がっている |
+| **セッション**（月1回のオンライン実践の場） | — | 有償メンバーが参加するものの一つとして書く |
+| **初月無料** | 「申込月の回は無料」 | 当面継続 |
+| **更新日（毎月15日）**・**お支払い** | 「課金日」「課金」 | 金銭の匂いを避け、中立的な語にする。見出しは「更新と解約のしくみ」 |
+| **有償メンバーに申し込む** | 単独の「参加を申し込む」「今すぐ申し込む」 | ボタン・リンクの文言 |
+
+※「従量課金」（AI の API の料金体系）など、会員の料金と無関係な一般用語は対象外。
 
 ## 既知の落とし穴
 
@@ -388,6 +430,8 @@ B 側**（`ai-strategy-news-app` の `content/guide/*.md`）。本サイトに�
 | サイト名「AI戦略ライブラリー」の途中にツールチップが出る | `abbreviations.md` に「ライブラリ」があると名前の中に一致する（「セル」＝「キャンセル」と同じ）。2026年9月にツールチップから外した（用語集には残している） |
 | ローカルで `mkdocs: command not found` | コンテナ再起動で依存が消えている。`pip install -q -r requirements.txt` で復旧（`python3 -m mkdocs` で実行） |
 | `git push origin main` が rejected | 別セッションの変更が先に入っている。**force push は禁止**。`git fetch` → 差分確認 → `git merge` で統合してから push（過去に実際に発生し、マージで解決） |
+| テンプレートの HTML コメントに書いた内容が公開される／`TemplateSyntaxError: tag name expected` | `overrides/*.html` の `<!-- -->` は**そのまま公開ページのソースに出る**。しかも Jinja はコメントの中の `{%` も解釈する。内部の事情（非公開リポジトリ・運用の詳細）を書くなら `{# #}` の Jinja コメントにする |
+| ランディング系ページで `hidden` を付けた要素が消えない | `display` を指定した部品は `hidden` 属性より CSS が勝つ。`extra.css` の `.lp [hidden]{display:none!important}` で対処済み（消さないこと） |
 | ビルド時の「MkDocs may break…」警告 | `redirects` プラグインが出す将来予告。ビルドは正常（無視してよい） |
 
 ---
@@ -429,10 +473,11 @@ python3 -m mkdocs build --strict       # リンク切れ等を含め検証（公
 - **フッタの規約リンク**（プライバシー/キャンセル/利用規約/特商法/お問い合わせ）は
   `mkdocs.yml` の `copyright:` にHTMLで記載。URLは `https://www.antecanis.com/...`。
 - **決済（Stripe）リンクは `docs/join/index.md` の「お申し込み」節にのみ掲載**（URLは
-  `extra.join_url` が単一ソース）。他ページから直リンクは張らず、ホーム等は join ページへ
-  誘導する（課金条件を一度目に入れてもらうため）。入口は「情報を受け取りたい人＝無料メール登録」
+  `extra.join_url` が単一ソース）。例外は /subscribe/ の「有償メンバー」カード1か所（価格・初月無料・
+  更新日の条件が同じカードに並んでいるため）。他ページから直リンクは張らず、ホーム等は join ページへ
+  誘導する（お支払いの条件を一度目に入れてもらうため）。入口は「情報を受け取りたい人＝無料メール登録」
   「参加を決めた人＝Stripe申込」の2本立てで、文言もこの2択で統一する。
-- **ボタンの色は役割で固定する**：**金＝案内メールの無料登録**、**ティール（塗り）＝申込
+- **ボタンの色は役割で固定する**：**金＝無料のメール登録**、**ティール（塗り）＝申込
   （Stripe）または申込ページへの遷移**、**アウトライン＝回遊**。ホーム（`.btn-gold` /
   `.btn-teal` / `.btn-outline`）と本文ページ（`.md-button--gold` / `.md-button--primary` /
   `.md-button`）で同じ意味になるよう対応させている。2つの入口を並べるときは

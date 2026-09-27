@@ -5,23 +5,23 @@ description: AI戦略実践プロジェクトを紹介するためのURL・例�
 # このプロジェクトを紹介する
 
 本プロジェクトにご関心がありそうな方へのご紹介、歓迎します。**最も簡単で確実なのは、
-本サイトまたは登録ページ（LP）のURLをそのままお伝えいただくこと**です（LINE・Messenger・
+本サイトまたはメール登録ページのURLをそのままお伝えいただくこと**です（LINE・Messenger・
 メールなどのDM、グループチャットや掲示板への投稿など）。
 
 ## 紹介に使えるURL
 
 - サイト（ポータル）: <https://ai-strategy.antecanis.com/>
-- 登録ページ（LP）: <https://mailchi.mp/antecanis/ai-strategy>
+- メール登録ページ: <https://ai-strategy.antecanis.com/subscribe/>
 
-全体像をまず見てほしいときは**サイト**、すぐ登録に進んでほしいときは**LP**が向いています。
+全体像をまず見てほしいときは**サイト**、すぐメール登録に進んでほしいときは**メール登録ページ**が向いています。
 
 ## ご紹介の例文（コピーしてお使いください）
 
 **短いDM向け**
 
 > AIを「便利ツール」で終わらせず、事業戦略に組み込む実践の場「AI戦略実践プロジェクト」。
-> 月1回のオンライン回で、手を動かしてAIで動く仕組みを作ります。登録後の初回は無料。
-> 詳細・登録 → https://ai-strategy.antecanis.com/
+> 月1回のオンライン回で、手を動かしてAIで動く仕組みを作ります。有償メンバーは初月無料。
+> 詳細・メール登録 → https://ai-strategy.antecanis.com/
 
 **少し詳しめ（メール・投稿向け）**
 
@@ -30,7 +30,8 @@ description: AI戦略実践プロジェクトを紹介するためのURL・例�
 > 養う月次オンラインセッションです。プログラミング未経験でも参加でき、各回は独立テーマで
 > どの回からでも参加可能。録画・資料の提供もあります。
 > ・内容や設計思想: https://ai-strategy.antecanis.com/
-> ・登録（登録後の初回は無料・いつでも解約可）: https://mailchi.mp/antecanis/ai-strategy
+> ・メール登録: https://ai-strategy.antecanis.com/subscribe/
+> ・有償メンバー（初月無料）: https://ai-strategy.antecanis.com/join/
 
 ご自身の言葉で一言添えていただけると、より伝わりやすくなります。
 

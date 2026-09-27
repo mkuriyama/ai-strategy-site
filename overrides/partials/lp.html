@@ -1,0 +1,61 @@
+{#-
+  ランディング系ページ（/subscribe/・/subscribe/thanks/・/join/corporate/）で共有する部品。
+  値はすべて config.extra（単一ソース）から取る。本文に日付・価格・実績数値を書かない。
+  使い方: {% import "partials/lp.html" as lp with context %}
+-#}
+
+{#- 外部URLなら新しいタブ、サイト内なら相対パスに直す -#}
+{% macro href(u) -%}
+  {%- if u.startswith('http') -%}href="{{ u }}" target="_blank" rel="noopener"
+  {%- else -%}href="{{ u | url }}"{%- endif -%}
+{%- endmacro %}
+
+{#- 「10/2」のような短い日付（start の ISO 日時から作る。無ければ date の括弧の前） -#}
+{% macro short_date(s) -%}
+  {%- if s.start -%}{{ s.start[5:7] | int }}/{{ s.start[8:10] | int }}
+  {%- else -%}{{ s.date.split('(')[0] }}{%- endif -%}
+{%- endmacro %}
+
+{#- ブランドの印（線と2つの点）。ホームの eyebrow と同じ形 -#}
+{% macro cmark(color="#1C6E7C") -%}
+<svg class="cmark" viewBox="-1 -1 71 46" aria-hidden="true"><line x1="10" y1="34.04" x2="64.53" y2="4.0" stroke="{{ color }}" stroke-width="3" stroke-linecap="round"/><circle cx="10" cy="34.04" r="10" fill="{{ color }}"/><circle cx="64.53" cy="4.0" r="4.4" fill="{{ color }}"/></svg>
+{%- endmacro %}
+
+{% macro check() -%}
+<svg class="lp-check" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M6 10.3l2.6 2.6L14 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+{%- endmacro %}
+
+{#- 次回・次々回（extra.sessions の先頭2件）。theme は設定されているときだけ出す -#}
+{% macro sessions(labels=("次回セッション", "次々回セッション")) -%}
+<div class="lp-sessions">
+  {%- for s in config.extra.sessions[:2] %}
+  <div class="lp-sessions__item">
+    <span class="lp-sessions__k">{{ labels[loop.index0] }}</span>
+    <span class="lp-sessions__date">{{ s.date }}</span>
+    {%- if s.theme %}<span class="lp-sessions__theme">{{ s.theme }}</span>{% endif %}
+  </div>
+  {%- endfor %}
+</div>
+{%- endmacro %}
+
+{#- フォームの共通部品 -#}
+{% macro req() %}<span class="lp-req">必須</span>{% endmacro %}
+{% macro opt(t="任意") %}<span class="lp-opt">{{ t }}</span>{% endmacro %}
+
+{% macro source_select(id) -%}
+<select id="{{ id }}" name="source" required>
+  <option value="">選択してください</option>
+  {%- for o in ["Facebook", "LinkedIn", "X", "知人・同僚から", "講演・授業で", "検索して", "広告を見て", "ニュース・用語集のページ", "その他"] %}
+  <option>{{ o }}</option>
+  {%- endfor %}
+</select>
+{%- endmacro %}
+
+{#- UTM（hidden。forms.js が URL か、同じタブで最初に着地したときの値を詰める）とハニーポット -#}
+{% macro hidden_fields() -%}
+{%- for k in ["utm_source", "utm_medium", "utm_campaign", "utm_content"] %}
+<input type="hidden" name="{{ k }}" value="">
+{%- endfor %}
+<div class="lp-hp" aria-hidden="true"><label>ウェブサイト（入力しないでください）<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+<div class="lp-turnstile"></div>
+{%- endmacro %}

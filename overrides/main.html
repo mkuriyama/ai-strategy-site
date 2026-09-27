@@ -2,15 +2,21 @@
 
 <!--
   全ページ共通のお知らせバー（ヘッダー上・全ページ常時表示の CTA）。
-  次回開催・登録URL は mkdocs.yml の extra: を単一ソースとして参照する。
+  次回開催・メール登録の行き先は mkdocs.yml の extra: を単一ソースとして参照する。
+  /subscribe/ 配下では出さない（行き先が自分自身になるため）。
+  ブロックの中身が空白だけでも Material はバーを出すので、タグの空白除去（ハイフン付きの記法）で必ず削る。
 -->
-{% block announce %}
-  <a class="cta-announce" href="{{ config.extra.register_url }}" target="_blank" rel="noopener">
+{% block announce -%}
+  {%- set src = page.file.src_uri if page and page.file else '' -%}
+  {%- set reg = config.extra.register_url -%}
+  {%- if not src.startswith('subscribe/') -%}
+  <a class="cta-announce" {% if reg.startswith('http') %}href="{{ reg }}" target="_blank" rel="noopener"{% else %}href="{{ reg | url }}"{% endif %}>
     次回開催 <b>{{ config.extra.next_session_short }}</b>
     <span class="cta-announce__sep">·</span>
     案内メールを受け取る →
   </a>
-{% endblock %}
+  {%- endif -%}
+{%- endblock %}
 
 <!--
   構造化データ（JSON-LD）。検索・AI検索が「誰の・何の・いつの」を読めるようにする。
@@ -28,8 +34,10 @@
       noindex が読まれず、既に索引された分が消えない。 -#}
   {#- 用語集も同じ扱い（2026年9月〜）。掲載場所はライブラリー（B）の /terms/ に
       移したが、旧URLを踏んだ人が**動く用語集に着地する**ほうがよいのでページは残す。 -#}
+  {#- メール登録の完了ページ（/subscribe/thanks/）は、送信した人だけが見るページ。索引しない -#}
   {%- if page and page.file and (page.file.src_uri.startswith('digests/')
-                                 or page.file.src_uri == 'glossary.md') %}
+                                 or page.file.src_uri == 'glossary.md'
+                                 or page.file.src_uri.startswith('subscribe/thanks/')) %}
   <meta name="robots" content="noindex, follow">
   {%- endif %}
   {%- set site_url = config.site_url | default('') -%}
