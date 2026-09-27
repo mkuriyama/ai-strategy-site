@@ -776,8 +776,86 @@
 
       <div class="lp-card lp-formcard" id="form">
         <h2>法人でのご利用のご相談</h2>
-        <p class="lp-formcard__lead">内容を確認し、support@antecanis.com から主催者の栗山がご返信します。</p><p class="lp-small">ご相談は support@antecanis.com へのメールで承ります。会社名・お名前・ご検討の内容（人数・時期など）をお書き添えください。</p>
-        <a class="lp-btn lp-btn--teal lp-btn--block" href="mailto:support@antecanis.com?subject=%E6%B3%95%E4%BA%BA%E3%81%A7%E3%81%AE%E3%81%94%E5%88%A9%E7%94%A8%E3%81%AE%E3%81%94%E7%9B%B8%E8%AB%87">メールで相談する</a>
+        <p class="lp-formcard__lead" data-form-intro="corporate">内容を確認し、support@antecanis.com から主催者の栗山がご返信します。</p>
+        <form id="corporate-form" class="lp-form" data-aisia-form="corporate" data-endpoint="https://go.antecanis.com/api/corporate-inquiry" data-sitekey="0x4AAAAAAFFE4MRIh0cbQOTJ">
+          <div class="lp-row2">
+            <div class="lp-field">
+              <label for="corp-company">会社名<span class="lp-req">必須</span></label>
+              <input id="corp-company" name="company" type="text" autocomplete="organization" placeholder="株式会社〇〇" required="" maxlength="200">
+            </div>
+            <div class="lp-field">
+              <label for="corp-title">部署・役職<span class="lp-opt">任意</span></label>
+              <input id="corp-title" name="title" type="text" autocomplete="organization-title" placeholder="経営企画部 課長" maxlength="200">
+            </div>
+          </div>
+          <div class="lp-row2">
+            <div class="lp-field">
+              <label for="corp-name">お名前<span class="lp-req">必須</span></label>
+              <input id="corp-name" name="name" type="text" autocomplete="name" placeholder="山田 花子" required="" maxlength="100">
+            </div>
+            <div class="lp-field">
+              <label for="corp-email">メールアドレス<span class="lp-req">必須</span></label>
+              <input id="corp-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="name@company.co.jp" required="" maxlength="254">
+            </div>
+          </div>
+          <fieldset class="lp-fieldset">
+            <legend class="lp-legend">ご検討の内容<span class="lp-opt">いくつでも</span></legend>
+            <div class="lp-checkgrid">
+              <label><input type="checkbox" name="interests" value="複数名での参加">複数名での参加</label>
+              <label><input type="checkbox" name="interests" value="お見積書・請求書払い">お見積書・請求書払い</label>
+              <label><input type="checkbox" name="interests" value="個別開催・テーマカスタマイズ">個別開催・テーマカスタマイズ</label>
+              <label><input type="checkbox" name="interests" value="AI戦略アドバイザリー">AI戦略アドバイザリー</label>
+              <label><input type="checkbox" name="interests" value="まだ決めていない・情報収集">まだ決めていない・情報収集</label>
+            </div>
+          </fieldset>
+          <div class="lp-row2">
+            <div class="lp-field">
+              <label for="corp-headcount">ご検討の人数（目安）<span class="lp-opt">任意</span></label>
+              <select id="corp-headcount" name="headcount">
+                <option value="">選択してください</option>
+                <option>1〜4名</option>
+                <option>5〜9名</option>
+                <option>10〜29名</option>
+                <option>30名以上</option>
+                <option>未定</option>
+              </select>
+            </div>
+            <div class="lp-field">
+              <label for="corp-source">このプロジェクトを知ったきっかけ<span class="lp-req">必須</span></label>
+              <select id="corp-source" name="source" required="">
+  <option value="">選択してください</option>
+  <option>Facebook</option>
+  <option>LinkedIn</option>
+  <option>X</option>
+  <option>知人・同僚から</option>
+  <option>講演・授業で</option>
+  <option>検索して</option>
+  <option>広告を見て</option>
+  <option>ニュース・用語集のページ</option>
+  <option>その他</option>
+</select>
+            </div>
+          </div>
+          <div class="lp-field">
+            <label for="corp-message">ご相談内容<span class="lp-opt">任意</span></label>
+            <textarea id="corp-message" name="message" rows="4" maxlength="4000" placeholder="例：部門の10名程度で参加を検討しています。請求書払いの手続きを知りたいです。"></textarea>
+          </div>
+          
+<input type="hidden" name="utm_source" value="">
+<input type="hidden" name="utm_medium" value="">
+<input type="hidden" name="utm_campaign" value="">
+<input type="hidden" name="utm_content" value="">
+<div class="lp-hp" aria-hidden="true"><label>ウェブサイト（入力しないでください）<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+<div class="lp-turnstile"></div>
+          <button type="submit" class="lp-btn lp-btn--teal lp-btn--block" data-busy-label="送信しています…">相談内容を送る</button>
+          <p class="lp-form__error" role="alert" hidden=""></p>
+          <p class="lp-small lp-muted">ご入力の情報は、本件のご連絡にのみ使用します。<a href="https://www.antecanis.com/privacy/" target="_blank" rel="noopener">プライバシーポリシー</a>　メールで直接のご相談も承ります：<a href="mailto:support@antecanis.com">support@antecanis.com</a></p>
+        </form>
+        <div class="lp-form-done" data-form-done="corporate" role="status" hidden="">
+          <h3>ご相談を受け付けました</h3>
+          <p>ありがとうございます。ご入力のアドレスに受付のメールをお送りしました。内容を確認のうえ、support@antecanis.com から主催者の栗山がご連絡します。</p>
+        </div>
+        <noscript><p class="lp-small">フォームの送信には JavaScript が必要です。<a href="mailto:support@antecanis.com">support@antecanis.com</a> へメールでご相談ください。</p></noscript>
       </div>
     </div>
   </section>
