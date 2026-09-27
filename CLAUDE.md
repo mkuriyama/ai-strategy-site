@@ -350,7 +350,7 @@ B 側**（`ai-strategy-news-app` の `content/guide/*.md`）。本サイトに�
   行き先が自分自身になるので出さない）。
 - **ランディング系ページ**（/subscribe/・/subscribe/thanks/・/join/corporate/）もホームと同じ方式
   （front-matter の `template:` と `hide: [navigation, toc]`）。値は `extra:` から差し込み、
-  文言はテンプレート内。ダークモードでも明るい地で描く（ホームと同じ）
+  文言はテンプレート内
 - **構造化データ（JSON-LD）**も `overrides/main.html` の `extrahead` ブロックで生成。
   Organization は全ページ、Event は `extra.sessions` の `start` がある回をホーム・`sessions/`・join に、
   BreadcrumbList はホーム以外。手編集しない（`extra:` を直せば追随する）。
@@ -470,6 +470,10 @@ python3 -m mkdocs build --strict       # リンク切れ等を含め検証（公
   変更は `docs/stylesheets/extra.css` と `mkdocs.yml`（palette: custom）。
   金（gold）は **ボタン＋意味的アクセント1点（ライブパネルの本編タグ）** に限定（キャッチコピーの
   強調には使わない＝色の濃淡＋細い下線で表現。home-draft 準拠）。
+- **ダークモードは置かない**（2026年9月に廃止）。`mkdocs.yml` の `palette` は1つ（マッピング）で、
+  切り替えボタンも出ない。以前はボタンがあったが、ホームとランディング系ページは常に明るい地で
+  描くため、効くのは本文ページだけという中途半端な状態だった。**`palette` をリストに戻さないこと**
+  （リストにするとボタンと、以前の選択を localStorage から戻すスクリプトが復活する）
 - **フッタの規約リンク**（プライバシー/キャンセル/利用規約/特商法/お問い合わせ）は
   `mkdocs.yml` の `copyright:` にHTMLで記載。URLは `https://www.antecanis.com/...`。
 - **決済（Stripe）リンクは `docs/join/index.md` の「お申し込み」節にのみ掲載**（URLは

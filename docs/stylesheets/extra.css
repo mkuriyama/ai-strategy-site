@@ -30,11 +30,6 @@
   --md-typeset-a-color:  #0a5567;
 }
 
-/* Dark scheme keeps a lighter teal so headings stay readable */
-[data-md-color-scheme="slate"] {
-  --md-typeset-a-color: #7fb5c2;
-}
-
 /* ---- Serif teal headings ---- */
 .md-typeset h1,
 .md-typeset h2,
@@ -43,11 +38,6 @@
   color: var(--md-primary-fg-color);
   font-weight: 600;
   letter-spacing: .01em;
-}
-[data-md-color-scheme="slate"] .md-typeset h1,
-[data-md-color-scheme="slate"] .md-typeset h2,
-[data-md-color-scheme="slate"] .md-typeset h3 {
-  color: #9ccad6;
 }
 .md-typeset h2 {
   border-bottom: 1px solid rgba(0,68,85,.14);
@@ -121,9 +111,6 @@
   display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 1.1rem;
   align-items: start; padding: 1rem 1.1rem;
   border: 1px solid var(--line); border-radius: 12px; background: var(--paper);
-}
-[data-md-color-scheme="slate"] .md-typeset .history-card {
-  background: var(--md-code-bg-color); border-color: rgba(255,255,255,.12);
 }
 .md-typeset .history-card__fig img { width: 100%; height: auto; display: block; border-radius: 8px;
   background: #fff; }
@@ -392,7 +379,7 @@ a.chip:hover { border-color: var(--teal2); background: var(--pale); }
    ボタンの色は役割で固定：金＝メール登録、ティール＝申込、アウトライン＝回遊。
    ============================================================ */
 .home-landing.lp { --gold-ink: #7a5c17; --warm: #fbf8f0; --warm-line: #e3cf9a; --field: #aebfc3;
-  color-scheme: light; /* ダークモードでもフォーム部品（チェックボックス等）を明るい地の描画に揃える */ }
+  color-scheme: light; /* OS がダークでも、フォーム部品（チェックボックス等）を明るい地の描画に揃える */ }
 .home-landing.lp figure { margin: 0; }
 .home-landing.lp h2 { font-size: 27px; margin-bottom: 10px; }
 .home-landing.lp h3 { font-size: 18px; }
