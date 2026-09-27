@@ -3,8 +3,8 @@
 
 {#-
   /join/corporate/（法人の方へ・問い合わせ）。URL は従来どおり。
-  - 送信は docs/javascripts/forms.js → ゲートウェイ /api/corporate-inquiry。問い合わせ者への自動受付メールは送らない
-  - 送信後はページ内で完了表示に切り替える（data-form-done）
+  - 送信は docs/javascripts/forms.js → ゲートウェイ /api/corporate-inquiry → 専用 GAS。GAS が問い合わせ者へ受付メールを送る
+  - 送信後はページ内で完了表示に切り替える（data-form-done）。フォームの案内文（data-form-intro）は隠す
   - mailto の導線はフォームと併記して残す（JavaScript が無効でも連絡できる）
 -#}
 {% block container %}
@@ -39,7 +39,7 @@
 
       <div class="lp-card lp-formcard" id="form">
         <h2>法人でのご利用のご相談</h2>
-        <p class="lp-formcard__lead">内容を確認し、support@antecanis.com から主催者の栗山がご返信します。</p>
+        <p class="lp-formcard__lead" data-form-intro="corporate">内容を確認し、support@antecanis.com から主催者の栗山がご返信します。</p>
         {%- if fm.turnstile_sitekey %}
         <form id="corporate-form" class="lp-form" data-aisia-form="corporate"
               data-endpoint="{{ fm.api_base }}/api/corporate-inquiry"
@@ -98,7 +98,7 @@
         </form>
         <div class="lp-form-done" data-form-done="corporate" role="status" hidden>
           <h3>ご相談を受け付けました</h3>
-          <p>ありがとうございます。内容を確認し、support@antecanis.com から主催者の栗山がご返信します。自動の受付メールはお送りしていません。</p>
+          <p>ありがとうございます。ご入力のアドレスに受付のメールをお送りしました。内容を確認のうえ、support@antecanis.com から主催者の栗山がご連絡します。</p>
         </div>
         <noscript><p class="lp-small">フォームの送信には JavaScript が必要です。<a href="mailto:support@antecanis.com">support@antecanis.com</a> へメールでご相談ください。</p></noscript>
         {%- else %}

@@ -183,6 +183,9 @@
           var done = document.querySelector("[data-form-done='" + kind + "']");
           if (done) {
             form.hidden = true;
+            Array.prototype.forEach.call(document.querySelectorAll("[data-form-intro='" + kind + "']"), function (el) {
+              el.hidden = true;
+            });
             done.hidden = false;
             done.setAttribute("tabindex", "-1");
             done.focus();
