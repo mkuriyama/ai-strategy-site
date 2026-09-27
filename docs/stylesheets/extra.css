@@ -586,12 +586,17 @@ a.chip:hover { border-color: var(--teal2); background: var(--pale); }
 .lp .lp-sticky { display: none; }
 
 /* 完了ページ（/subscribe/thanks/） */
-.lp .lp-done { padding: 56px 0 0; }
-.lp .lp-done__card { max-width: 720px; margin: 0 auto; padding: 36px 36px 30px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 14px; }
-.lp .lp-done__icon { width: 56px; height: 56px; border-radius: 50%; background: var(--pale); color: var(--teal); display: flex; align-items: center; justify-content: center; }
-.lp .lp-done__icon svg { width: 28px; height: 28px; }
-.home-landing.lp .lp-done__card h1 { font-size: 28px; color: #0f2f37; }
-.lp .lp-done__card p { font-size: 15.5px; line-height: 1.9; color: #2b3a3f; }
+.lp .lp-done { padding: 32px 0 0; }
+.lp .lp-done__card { max-width: 720px; margin: 0 auto; padding: 28px 36px 24px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.lp .lp-done__icon { width: 44px; height: 44px; border-radius: 50%; background: var(--pale); color: var(--teal); display: flex; align-items: center; justify-content: center; }
+.lp .lp-done__icon svg { width: 22px; height: 22px; }
+.home-landing.lp .lp-done__card h1 { font-size: 25px; color: #0f2f37; }
+.lp .lp-done__card p { font-size: 15.5px; line-height: 1.85; color: #2b3a3f; }
+.lp .lp-done__card .lp-done__sub { font-size: 13.5px; line-height: 1.8; color: var(--muted); }
+.lp .lp-done__card .lp-done__help { width: 100%; margin-top: 8px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 13.5px; line-height: 1.8; color: var(--muted); text-align: left; }
+.lp .lp-done__help strong { color: #0f2f37; }
+.lp .lp-done__help a { font-weight: 700; }
+.lp .lp-block.lp-block--next { padding-top: 40px; }
 .lp .lp-mailbtns { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 6px; }
 .lp .lp-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; max-width: 960px; margin: 28px auto 0; }
 .lp .lp-next { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin-top: 18px; }
@@ -666,12 +671,14 @@ a.chip:hover { border-color: var(--teal2); background: var(--pale); }
 }
 @media (max-width: 560px) {
   .lp .lp-row2, .lp .lp-checkgrid, .lp .lp-sessions { grid-template-columns: minmax(0, 1fr); }
-  .lp .lp-mailbtns .lp-btn { flex: 1 1 100%; }
+  .lp .lp-mailbtns { width: 100%; flex-wrap: nowrap; }
+  .lp .lp-mailbtns .lp-btn { flex: 1 1 0; padding-left: 8px; padding-right: 8px; }
+  .home-landing.lp .lp-done__card h1 { font-size: 21px; }
+  .lp .lp-done__card p { text-align: left; }
 }
 @media (prefers-reduced-motion: reduce) {
   .lp .lp-sticky { transition: none; }
 }
-.lp .lp-done__help { max-width: 720px; margin: 20px auto 0; }
 .lp .lp-hero__grid--corp { grid-template-columns: minmax(0, 1fr) 520px; grid-template-areas: "copy form" "host form"; }
 @media (max-width: 900px) {
   .lp .lp-hero__grid--corp { grid-template-columns: minmax(0, 1fr); grid-template-areas: "copy" "host" "form"; }
