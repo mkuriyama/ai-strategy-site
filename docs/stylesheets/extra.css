@@ -676,3 +676,5 @@ a.chip:hover { border-color: var(--teal2); background: var(--pale); }
 @media (max-width: 900px) {
   .lp .lp-hero__grid--corp { grid-template-columns: minmax(0, 1fr); grid-template-areas: "copy" "host" "form"; }
 }
+/* 送信の準備がそろうまでの代替表示（フォームの代わりに旧LP・メールへのボタン） */
+.lp .lp-formcard > .lp-btn { margin: 14px 0 12px; }

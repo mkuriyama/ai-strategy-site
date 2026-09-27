@@ -40,6 +40,7 @@
       <div class="lp-card lp-formcard" id="form">
         <h2>法人でのご利用のご相談</h2>
         <p class="lp-formcard__lead">内容を確認し、support@antecanis.com から主催者の栗山がご返信します。</p>
+        {%- if fm.turnstile_sitekey %}
         <form id="corporate-form" class="lp-form" data-aisia-form="corporate"
               data-endpoint="{{ fm.api_base }}/api/corporate-inquiry"
               data-sitekey="{{ fm.turnstile_sitekey }}">
@@ -100,6 +101,11 @@
           <p>ありがとうございます。内容を確認し、support@antecanis.com から主催者の栗山がご返信します。自動の受付メールはお送りしていません。</p>
         </div>
         <noscript><p class="lp-small">フォームの送信には JavaScript が必要です。<a href="mailto:support@antecanis.com">support@antecanis.com</a> へメールでご相談ください。</p></noscript>
+        {%- else %}
+        {#- 送信の準備がそろうまでは、メールで受け付ける（extra.forms.turnstile_sitekey を入れると自動でフォームに戻る） -#}
+        <p class="lp-small">ご相談は support@antecanis.com へのメールで承ります。会社名・お名前・ご検討の内容（人数・時期など）をお書き添えください。</p>
+        <a class="lp-btn lp-btn--teal lp-btn--block" href="mailto:support@antecanis.com?subject=%E6%B3%95%E4%BA%BA%E3%81%A7%E3%81%AE%E3%81%94%E5%88%A9%E7%94%A8%E3%81%AE%E3%81%94%E7%9B%B8%E8%AB%87">メールで相談する</a>
+        {%- endif %}
       </div>
     </div>
   </section>
