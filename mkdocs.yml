@@ -9,23 +9,14 @@ theme:
   custom_dir: overrides
   logo: assets/logo-mincho-white.svg
   favicon: assets/favicon.png
+  # ダークモードは置かない（2026年9月に廃止）。ホームとランディング系ページは常に明るい地で
+  # 描くので、切り替えが効くのは本文ページだけという中途半端な状態になっていた。
+  # palette を1つ（マッピング）にすると、Material は切り替えボタンも、以前に選んだ
+  # 配色を localStorage から戻すスクリプトも出さない（ダークを選んでいた人も明るい地に戻る）
   palette:
-    # ライトモード
-    - media: "(prefers-color-scheme: light)"
-      scheme: default
-      primary: custom
-      accent: custom
-      toggle:
-        icon: material/weather-night
-        name: ダークモードに切り替え
-    # ダークモード
-    - media: "(prefers-color-scheme: dark)"
-      scheme: slate
-      primary: custom
-      accent: custom
-      toggle:
-        icon: material/weather-sunny
-        name: ライトモードに切り替え
+    scheme: default
+    primary: custom
+    accent: custom
   font:
     text: Noto Sans JP
     code: Roboto Mono
