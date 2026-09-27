@@ -44,6 +44,7 @@
 
       <div class="lp-card lp-formcard" id="form">
         <h2>無料で案内を受け取る</h2>
+        {%- if fm.turnstile_sitekey %}
         <form id="subscribe-form" class="lp-form" data-aisia-form="subscribe"
               data-endpoint="{{ fm.api_base }}/api/subscribe"
               data-success="{{ 'subscribe/thanks/' | url }}"
@@ -72,6 +73,16 @@
           <p class="lp-small lp-muted">ご入力の情報は本プロジェクトのご案内にのみ使用します。<a href="https://www.antecanis.com/privacy/" target="_blank" rel="noopener">プライバシーポリシー</a></p>
         </form>
         <noscript><p class="lp-small">フォームの送信には JavaScript が必要です。<a href="{{ fm.noscript_url }}">こちらのページからメール登録できます</a>。</p></noscript>
+        {%- else %}
+        {#- 送信の準備（ゲートウェイと Turnstile のサイトキー）がそろうまでは、旧LP で受け付ける。
+            extra.forms.turnstile_sitekey を入れると自動でフォームに戻る -#}
+        <p class="lp-small">下のボタンから、メール登録のページ（Mailchimp）が開きます。お名前とメールアドレスを入力すると登録が完了します。</p>
+        <a class="lp-btn lp-btn--gold lp-btn--block" href="{{ fm.noscript_url }}">無料で案内を受け取る</a>
+        <ul class="lp-checks">
+          <li>{{ lp.check() }}メール登録は無料です</li>
+          <li>{{ lp.check() }}いつでもワンクリックで配信停止できます</li>
+        </ul>
+        {%- endif %}
         <div class="lp-formcard__foot">有償メンバーをご希望の方は　<a href="{{ 'join/' | url }}">お申し込み（初月無料）→</a></div>
       </div>
     </div>
