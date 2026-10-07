@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+  # PR では検証（strict ビルド・携帯の幅の検査）だけを回し、公開はしない
+  pull_request:
+    branches:
+      - main
   # 手動実行も可能にする
   workflow_dispatch:
 
@@ -45,7 +49,18 @@ jobs:
       - name: Validate build (strict)
         run: mkdocs build --strict --site-dir /tmp/site-strict
 
+      # 携帯の幅（320〜412px）で開き、横へのはみ出しと、図の文字が小さすぎないかを測る。
+      # PCの幅では何も起きないので、実際に描画して確かめる（scripts/check_mobile.py の冒頭）
+      - name: Install Playwright
+        run: |
+          pip install playwright
+          playwright install --with-deps chromium
+
+      - name: Check mobile layout
+        run: python scripts/check_mobile.py /tmp/site-strict
+
       - name: Build and deploy to gh-pages
+        if: github.event_name != 'pull_request'
         env:
           # OGP/ソーシャルカードの自動生成を有効化（Google Fontsへのアクセスが必要）
           CARDS: "true"

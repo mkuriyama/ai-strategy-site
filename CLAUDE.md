@@ -87,7 +87,8 @@ docs/
     │   ├─ community-circle.png    参加者コミュニティ(Circle)。※日付写込みあり＝GitHub Pages専用
     │   ├─ history/vol-0N.svg       開催履歴の図。各回ダイジェスト（A日程）の図1を切り出したもの
     │   └─ pricing-flow.svg / pricing-tiers.svg  料金図の**元SVG。現在どこからも参照されていない**
-    │                              （join の図は .md に inline 埋め込み済。修正は join/index.md 側）
+    │                              （join の図は2026年10月から HTML。`main.py` の payment_flow() /
+    │                              pricing_ladder() が `extra:` から描く）
     └─ antecanis_*.png / profile_*.jpg   元画像（配信からは exclude_docs で除外）
 
 overrides/
@@ -116,6 +117,8 @@ hooks/export_data.py            5つの役割。①`site/data/rounds.json`（回
                                 `.build/digests.json`（`site/` の外＝**公開されない置き場**）へ
                                 書き出す ― 会員限定の場所へ運ぶ材料。
                                 あわせて `extra:` に真偽値として読まれたキーが無いか検査する
+scripts/check_mobile.py         ビルドしたサイトを携帯の幅（320〜412px）で開き、横へのはみ出しと
+                                図の文字の大きさ（10px 以上）を測る。CI で strict ビルドの後に走る
 requirements.txt                material[imaging] / macros / glightbox / redirects
 ```
 
@@ -202,7 +205,7 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
 |---|---|
 | 次回開催の日程 | **`mkdocs.yml` の `extra.sessions` / `extra.next_session_short`**（ホーム・セッションページ・お知らせバー・JSON-LD・llms.txt へ自動反映。`date` と `start` の両方）＋ **`docs/sessions/index.md` の月次表**（※開催済の付与）＋ **`docs/assets/flyer.html`**（手動） |
 | 終わった回の記録 | **`mkdocs.yml` の `extra.history` の1か所だけ**（開催履歴ページ・`rounds.json`・B の回ページの見出し・B の領域マップへ自動反映）。2026年9月に月次テーマpage を廃止して一本化した |
-| 参加費の金額 | **`mkdocs.yml` の `extra.pricing`**（ホームのティーザー・join の価格表へ自動反映）＋ **`join/index.md` の inline SVG 2点**（図1の金額・日付、図2の「いまここ」＝手動）＋ **`flyer.html` の参加費欄**（手動） |
+| 参加費の金額 | **`mkdocs.yml` の `extra.pricing`**（ホームのティーザー・join の価格表・**join の図1・図2**へ自動反映。図2の段は `pricing.ladder`）＋ **`flyer.html` の参加費欄**（手動） |
 | 用語の定義 | `docs/glossary.md` と `docs/includes/abbreviations.md` の**両方**（定義文を一致させる）。**正本はこの2つだけ**。ライブラリー（B）の `/terms/` は `site/data/glossary.json` をビルド時に取りに来るので、B 側に書き足す必要はない（書き足すと片方だけ古くなる）。掲載場所は B だが、**編集する場所はここ** |
 | 5×5×5 の 15 領域 | **`docs/about/philosophy.md` の表だけ**（B の領域マップは `site/data/areas.json` を取りに来る）。⚠ 表の書式（`**[1A]** 名前 ── 説明` を `<br>` 区切り／層と切り口の2列）を変えると読み取りが減る。15個そろわなければ `hooks/export_data.py` がビルドを止める |
 | メール登録の行き先 | **`mkdocs.yml` の `extra.register_url` の1か所のみ**（`subscribe/`＝サイト内の /subscribe/。サイト相対で書き、マクロ・テンプレートが相対パスに直す）。旧LP `mailchi.mp/antecanis/ai-strategy` は過去の投稿からリンクされているので Mailchimp 側に残してあり、本サイトからは `<noscript>` の代替（`extra.forms.noscript_url`）でのみ参照する |
@@ -333,6 +336,8 @@ B 側**（`ai-strategy-news-app` の `content/guide/*.md`）。本サイトに�
   - `{{ history_cards() }}` … `extra.history` から開催履歴カードを描画（sessions/history で使用）
   - `{{ register_button() }}` … メール登録ボタン（**金**・`.md-button--gold`）。既定ラベル
     「案内メールを受け取る（無料のメール登録）」。サイト内（/subscribe/）なので同じタブで開く
+  - `{{ payment_flow() }}` / `{{ pricing_ladder() }}` … join の図1（お申し込みから初回のお支払い
+    までの流れ）／図2（月額の段）。HTML で描き、PC では横、スマホでは縦に組み替わる（`.jf`）
   - `{{ join_button() }}` … 申込（Stripe）ボタン（**ティール**・`.md-button--primary`）。既定ラベル
     「有償メンバーに申し込む（初月無料）」。
     **join ページでのみ使う**
@@ -389,8 +394,11 @@ B 側**（`ai-strategy-news-app` の `content/guide/*.md`）。本サイトに�
 - 金額の正本は `extra.pricing`。**値に「円」を含めない**（テンプレート側で「円」を付けるため、
   含めると「6,930円円」になる。過去に実際に発生）。
 - **既存契約者は申込時の月額のまま据え置き**が原則。改定は「これから申し込む人」にのみ適用。
-- 改定時に手動更新が要るのは：`join/index.md` の**図1**（金額・次回コホートの日付・初回のお支払い日・
-  解約期限の例）、**図2**（「いまここ」の位置と金額）、`flyer.html` の参加費欄。
+- 改定時に手動更新が要るのは `flyer.html` の参加費欄だけ。join の**図1**（金額・次回の回と日付・
+  初回のお支払い日・解約期限の例）は `extra.sessions` の先頭の回と `extra.pricing` から、**図2**は
+  `extra.pricing.ladder`（税抜・高い順）から描く。「いまここ」は `early_monthly` と同じ金額の段に
+  自動で付き、それより下が「据え置き」、上が「今後の新規（例）」になる（2026年10月〜。以前は
+  inline SVG を手で直していた）。
 - **⚠ 編集方針：割引が「いつ終わったか」は書かない。** 直後に訪れた人が「損した」と感じるため、
   具体的な旧価格・改定日・「受付終了」といった表現は載せない。「先に申し込んだ方は据え置き」
   「後から申し込む方ほど割引幅は小さくなる」という一般的な説明に留める。
@@ -442,11 +450,13 @@ B 側**（`ai-strategy-news-app` の `content/guide/*.md`）。本サイトに�
 pip install -q -r requirements.txt     # 依存導入（コンテナ再起動後は毎回必要になることがある）
 python3 -m mkdocs serve                # ローカルプレビュー（http://127.0.0.1:8000）
 python3 -m mkdocs build --strict       # リンク切れ等を含め検証（公開前に必ず通す）
+python3 scripts/check_mobile.py        # 携帯の幅で崩れていないか（要 `pip install playwright`）
 ```
 
 - 作業用ブランチで編集 → コミット → プッシュ → **`main` にマージ**すると、GitHub Actions
-  （`.github/workflows/ci.yml`）が **`mkdocs build --strict` で検証してから** `mkdocs gh-deploy` で
-  自動デプロイします（リンク切れがあるとデプロイ前に止まる）。
+  （`.github/workflows/ci.yml`）が **`mkdocs build --strict` と携帯の幅の検査で検証してから**
+  `mkdocs gh-deploy` で自動デプロイします（リンク切れ・携帯での崩れがあるとデプロイ前に止まる）。
+  `main` 向けの PR でも同じ検証だけが走る（公開はしない）。
 - デプロイは「新しい版を作ってから切り替える」ので**ダウンタイムは生じない**。本番が変わるのは
   `main` へのマージ時だけ。
 - **デプロイ確認**：Actions のジョブは apt インストールに数分かかることがある（過去に5分超の例）。
@@ -487,6 +497,11 @@ python3 -m mkdocs build --strict       # リンク切れ等を含め検証（公
   `.md-button`）で同じ意味になるよう対応させている。2つの入口を並べるときは
   `<div class="cta-pair" markdown>` で囲む。**同じ見た目のボタンに別の行き先を割り当てない。**
 - **「コホート」はユーザー向けの文言に出さない**（回ごとの参加者管理は裏側の運用概念）。
+- **モバイル（2026年10月〜）**：広告から来る人の多くはスマホ。**新しいページ・図は、まず幅390pxで
+  見る**。図の文字は画面上で **10px 以上**（`scripts/check_mobile.py` が測り、下回ると CI が止まる）。
+  横長の inline SVG は縮んで読めなくなるので、**説明の図は HTML＋CSS で組み、狭い画面では縦に
+  並べる**（例：join の `.jf`）。SVG にするなら、スマホでも文字が10px以上になる縦長の構図にする。
+  ダイジェストの図は基準を満たしていないが、会員限定の場所へ移す予定なので所見のみ（落とさない）
 - **大きい元画像**は `mkdocs.yml` の `exclude_docs` で配信から除外（リポジトリにはソースとして保持）。
 - `hooks/abbr_cjk.py` は日本語ツールチップの要。**触らない**。
 - チラシ(`flyer.html`)とダイジェストの元デザインHTMLはテーマCSSと独立。チラシは

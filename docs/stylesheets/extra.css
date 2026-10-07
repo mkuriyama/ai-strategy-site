@@ -127,6 +127,95 @@
   .md-typeset .history-card { grid-template-columns: 1fr; }
 }
 
+/* ---- join の図1・図2（main.py の payment_flow() / pricing_ladder() が描画） ----
+   以前は横長の inline SVG で、スマホでは文字が6px相当まで縮んでいた。HTML にして、
+   PC では横4段の時系列、狭い画面では縦の時系列に組み替える。文字は12px以上。 */
+.md-typeset .jf {
+  background: #fff; border: 1px solid var(--line); border-radius: 12px;
+  padding: 1.1rem 1.2rem .9rem; margin: 1.2em 0 1.6em; text-align: left;
+}
+.md-typeset .jf__title { margin: 0; font-family: var(--serif); font-weight: 700;
+  font-size: 1.05rem; line-height: 1.45; color: var(--teal); }
+.md-typeset .jf__sub { margin: .2rem 0 1rem; font-size: .72rem; line-height: 1.6; color: var(--muted); }
+.md-typeset .jf figcaption { max-width: none; margin: .8rem 0 0; text-align: left; font-style: normal; }
+
+/* 図1：時系列。PC＝カード4枚を横に並べ、下に日付つきの軸 */
+.md-typeset ol.jf-steps { list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .7rem; }
+.md-typeset ol.jf-steps > li.jf-step { margin: 0; padding: 0; position: relative;
+  display: flex; flex-direction: column; }
+.md-typeset .jf-step__card { order: 1; flex: 1; display: flex; flex-direction: column; align-items: center;
+  text-align: center; gap: .15rem; padding: .7rem .5rem; border-radius: 10px;
+  background: var(--pale); border: 1px solid var(--line); }
+.md-typeset .jf-step__no { font-size: .6rem; font-weight: 700; letter-spacing: .12em; color: var(--teal2); }
+.md-typeset .jf-step__name { font-family: var(--serif); font-weight: 700; font-size: .78rem;
+  line-height: 1.4; color: var(--teal); }
+.md-typeset .jf-step__desc { font-size: .66rem; line-height: 1.55; color: var(--ink); }
+.md-typeset .jf-step__free { display: block; font-family: var(--serif); font-weight: 700;
+  font-size: 1.05rem; color: var(--gold); }
+.md-typeset .jf-step__free small { font-size: .72rem; }
+.md-typeset .jf-step--free .jf-step__card { background: var(--gold-pale); border-color: var(--gold-soft); }
+.md-typeset .jf-step--free .jf-step__no { color: var(--gold); }
+/* 日付：軸の上の点＋ラベル。軸は li ごとの線をつないで1本に見せる */
+.md-typeset .jf-step__at { order: 2; position: relative; padding-top: 1.5rem; text-align: center;
+  font-size: .68rem; font-weight: 700; color: var(--teal); }
+.md-typeset .jf-step__at::before { content: ""; position: absolute; top: .45rem; left: 50%;
+  width: .6rem; height: .6rem; margin-left: -.3rem; border-radius: 50%;
+  background: var(--teal); box-shadow: 0 0 0 2px #fff; z-index: 1; }
+.md-typeset .jf-step--free .jf-step__at::before { background: var(--gold); }
+.md-typeset .jf-step::after { content: ""; position: absolute; left: -.35rem; right: -.35rem;
+  bottom: calc(.68rem * 1.6 + 1.5rem - .75rem); height: 2px; background: var(--teal2); }
+.md-typeset .jf-step:first-child::after { left: 0; }
+.md-typeset .jf-step:last-child::after { right: 0; }
+
+.md-typeset .jf-note { margin-top: 1rem; padding: .7rem .9rem; border-radius: 10px;
+  background: var(--pale); border: 1px solid var(--line); border-left: 5px solid var(--gold); }
+.md-typeset .jf-note p { margin: 0; font-size: .68rem; line-height: 1.7; color: var(--ink); }
+.md-typeset .jf-note .jf-note__lead { margin-bottom: .25rem; font-family: var(--serif); font-weight: 700;
+  font-size: .82rem; color: var(--teal); }
+.md-typeset .jf-note .jf-note__ex { color: var(--muted); }
+
+/* 図2：月額の段。上ほど後から申し込む方の想定。棒の長さ＝定価に対する比率 */
+.md-typeset ul.jf-ladder { list-style: none; margin: 0; padding: 0; display: grid; gap: .45rem; }
+.md-typeset ul.jf-ladder > li.jf-rung { margin: 0; display: grid; align-items: center;
+  grid-template-columns: 4.2rem minmax(0, 1fr) minmax(0, 1.3fr); gap: .3rem .7rem; }
+.md-typeset .jf-rung__price { font-size: .72rem; font-weight: 700; color: var(--muted);
+  text-align: right; font-variant-numeric: tabular-nums; }
+.md-typeset .jf-rung__bar { height: .7rem; border-radius: 4px; background: #F1F5F6; overflow: hidden; }
+.md-typeset .jf-rung__bar i { display: block; height: 100%; border-radius: 4px; background: var(--line); }
+.md-typeset .jf-rung__tag { font-size: .66rem; line-height: 1.5; color: var(--muted); }
+.md-typeset .jf-rung--future .jf-rung__bar i { background: repeating-linear-gradient(90deg,
+  var(--teal2) 0 7px, transparent 7px 12px); opacity: .55; }
+.md-typeset .jf-rung--now { margin: .2rem -.5rem !important; padding: .45rem .5rem; border-radius: 9px;
+  background: var(--gold-pale); border: 1px solid var(--gold-soft); }
+.md-typeset .jf-rung--now .jf-rung__price,
+.md-typeset .jf-rung--now .jf-rung__tag { color: var(--gold); font-weight: 700; }
+.md-typeset .jf-rung--now .jf-rung__bar i { background: var(--teal); }
+.md-typeset .jf-rung--past .jf-rung__bar i { background: var(--teal); opacity: .55; }
+.md-typeset .jf-rung--past .jf-rung__tag { color: var(--teal); font-weight: 700; }
+.md-typeset .jf-ladder__axis { margin: .7rem 0 0; font-size: .64rem; line-height: 1.6; color: var(--muted); }
+
+/* 狭い画面：図1は縦の時系列（左に軸と点、右にカード）、図2は札を棒の下へ */
+@media screen and (max-width: 44.9375em) {
+  .md-typeset .jf { padding: 1rem .9rem .8rem; }
+  .md-typeset ol.jf-steps { grid-template-columns: 1fr; gap: .9rem; }
+  .md-typeset ol.jf-steps > li.jf-step { padding-left: 1.5rem; }
+  .md-typeset .jf-step__at { order: 0; padding: 0 0 .3rem; text-align: left; font-size: .72rem; }
+  .md-typeset .jf-step__at::before { top: .3rem; left: -1.5rem; margin-left: .15rem; }
+  .md-typeset .jf-step::after,
+  .md-typeset .jf-step:first-child::after,
+  .md-typeset .jf-step:last-child::after { left: .44rem; right: auto; top: .6rem; bottom: -1.5rem;
+    width: 2px; height: auto; }
+  .md-typeset .jf-step:last-child::after { bottom: 0; }
+  .md-typeset .jf-step__card { align-items: flex-start; text-align: left; padding: .6rem .8rem; }
+  .md-typeset .jf-step__name { font-size: .88rem; }
+  .md-typeset .jf-step__desc { font-size: .7rem; }
+  .md-typeset .jf-step__free { display: inline; margin-right: .4rem; }
+  .md-typeset .jf-note p { font-size: .7rem; }
+  .md-typeset ul.jf-ladder > li.jf-rung { grid-template-columns: 4rem minmax(0, 1fr); }
+  .md-typeset .jf-rung__tag { grid-column: 2; font-size: .66rem; }
+}
+
 /* Header wordmark logo (project lockup): taller than the default icon so the
    horizontal lockup + sub-line stay legible. Slightly smaller on mobile. */
 .md-header__button.md-logo img,

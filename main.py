@@ -98,6 +98,117 @@ def define_env(env):
         out.append("</div>")
         return "\n".join(out)
 
+    def _figure_head(title, sub):
+        """join の図の見出し。<p> にして目次（toc）に載せない。"""
+        return (f'<p class="jf__title">{title}</p>'
+                f'<p class="jf__sub">{sub}</p>')
+
+    @env.macro
+    def payment_flow():
+        """join の図1「お申し込みから初回のお支払いまでの流れ」。
+
+        以前は inline SVG で、横長の図を縮めるためスマホでは文字が6px相当になっていた。
+        HTML にして、PC では横4段・スマホでは縦の時系列に組み替える（extra.css の `.jf`）。
+
+        中身は単一ソースから決まる。例に取る月＝`extra.sessions` の先頭の回（直近の回）の
+        開催月。その回が初月無料で、初回のお支払いは翌月15日、解約の期限はその前日。
+        金額は `extra.pricing`。**回・金額が変わっても、この図を手で直す必要はない。**
+        """
+        from datetime import datetime
+
+        sessions = extra.get("sessions", []) or []
+        pricing = extra.get("pricing", {}) or {}
+        s = sessions[0] if sessions else {}
+        start = datetime.fromisoformat(s["start"]) if s.get("start") else None
+        if start is None:
+            return ""
+        m = start.month
+        nm = m % 12 + 1
+        label = str(s.get("label", ""))
+        round_name, _, sched = label.partition(" ")
+        when = f"{start.month}/{start.day}" + (f"（{sched}）" if sched else "")
+        early = str(pricing.get("early_monthly", "")).replace("円", "")
+        incl = pricing.get("early_monthly_incl", "")
+
+        steps = [
+            ("", "STEP 1", "お申し込み", "Stripeでお申し込み（初月無料）", f"{m}月中"),
+            ("jf-step--free", "STEP 2", f"{round_name}に参加",
+             f'<span class="jf-step__free">¥0 <small>無料</small></span>{when}',
+             f"{start.month}/{start.day}"),
+            ("", "STEP 3", "初回のお支払い", f"¥{incl}（早期割引 {early}）", f"{nm}/15"),
+            ("", "STEP 4", "以降のお支払い", "毎月15日に自動更新", "毎月15日"),
+        ]
+        out = ['<figure class="jf jf--flow">',
+               _figure_head("お申し込みから初回のお支払いまでの流れ",
+                            f"例：{m}月中にお申し込みの場合"),
+               '<ol class="jf-steps">']
+        for cls, no, name, desc, at in steps:
+            out.append(
+                f'<li class="jf-step {cls}"><span class="jf-step__at">{at}</span>'
+                f'<span class="jf-step__card"><span class="jf-step__no">{no}</span>'
+                f'<span class="jf-step__name">{name}</span>'
+                f'<span class="jf-step__desc">{desc}</span></span></li>')
+        out.append("</ol>")
+        out.append(
+            '<div class="jf-note"><p class="jf-note__lead">解約はいつでも。'
+            '更新日の前日までなら、その月は¥0。</p>'
+            '<p>各更新日（毎月15日）の前日までに Stripe カスタマーポータルから解約すれば、'
+            'その月の費用は発生しません。</p>'
+            f'<p class="jf-note__ex">例）{nm}/14 までに解約 → 費用ゼロ。／'
+            'カード情報は弊社で保持しません。</p></div>')
+        out.append(f"<figcaption>図1：お申し込みから初回のお支払いまでの流れ"
+                   f"（{m}月中にお申し込みの場合）</figcaption>")
+        out.append("</figure>")
+        return "\n".join(out)
+
+    @env.macro
+    def pricing_ladder():
+        """join の図2「早く申し込むほど、ずっとお得」。月額の段を上から並べる。
+
+        段の金額は `extra.pricing.ladder`（税抜・高い順）。「いまここ」は
+        `early_monthly` と同じ金額の段、それより下＝お申し込み済み（据え置き）、
+        上＝今後の新規（例）、先頭＝定価。**料金改定は `extra.pricing` だけ直せばよい。**
+        """
+        import re
+
+        pricing = extra.get("pricing", {}) or {}
+        ladder = [str(v) for v in (pricing.get("ladder") or [])]
+        if not ladder:
+            return ""
+
+        def num(v):
+            m_ = re.search(r"[\d,]+", str(v))
+            return int(m_.group().replace(",", "")) if m_ else 0
+
+        now = num(pricing.get("early_monthly", ""))
+        top = max(num(v) for v in ladder) or 1
+        out = ['<figure class="jf jf--ladder">',
+               _figure_head("早く申し込むほど、ずっとお得",
+                            "お申し込み時の月額は当面そのまま。後から参加する方ほど、"
+                            "割引は小さくなります。"),
+               '<ul class="jf-ladder" aria-label="月額（税抜）">']
+        for i, v in enumerate(ladder):
+            n = num(v)
+            if i == 0:
+                cls, tag = "list", "定価"
+            elif n == now:
+                cls, tag = "now", "いまここ（現在の早期参加枠）"
+            elif n < now:
+                cls, tag = "past", "お申し込み済みの方は据え置き"
+            else:
+                cls, tag = "future", "今後の新規（例）"
+            out.append(
+                f'<li class="jf-rung jf-rung--{cls}"><span class="jf-rung__price">¥{v}</span>'
+                f'<span class="jf-rung__bar"><i style="width:{round(n / top * 100)}%"></i></span>'
+                f'<span class="jf-rung__tag">{tag}</span></li>')
+        out.append("</ul>")
+        out.append('<p class="jf-ladder__axis">月額（税抜）。上の段ほど、後から申し込む方の想定です'
+                   '（時期・幅は運営側で調整）。</p>')
+        out.append("<figcaption>図2：早期参加枠は「申込時の月額が据え置き」になります。"
+                   "後から申し込む方ほど、月額は段階的に上がっていく想定です。</figcaption>")
+        out.append("</figure>")
+        return "\n".join(out)
+
     @env.macro
     def footer_cta(*related, join_cta=True):
         """全ページ末尾の共通動線ブロック（関連ページ＋次回開催＋CTA）。
