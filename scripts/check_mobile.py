@@ -49,9 +49,28 @@ SKIP = ("assets/",)
 
 CHROME = os.environ.get("CHECK_MOBILE_CHROME", "")
 
-MEASURE = """(minPx) => {
+MEASURE = r"""async (minPx) => {
   const de = document.documentElement;
   const small = [];
+  // <img src="*.svg"> の図も測る（開催履歴の図など）。画像の中の文字は DOM に出ないので、
+  // SVG を取り寄せて最小の font-size と viewBox の幅を読み、表示幅との比で画面上の大きさを出す
+  for (const img of document.querySelectorAll('img[src$=".svg"]')) {
+    const w = img.getBoundingClientRect().width;
+    if (!w || img.closest('.md-header, .md-footer, .md-nav')) continue;
+    let txt;
+    try { txt = await (await fetch(img.currentSrc || img.src)).text(); } catch (e) { continue; }
+    const doc = new DOMParser().parseFromString(txt, 'image/svg+xml');
+    const svg = doc.documentElement;
+    const vb = (svg.getAttribute('viewBox') || '').split(/[\s,]+/).map(Number);
+    if (vb.length !== 4 || !vb[2]) continue;
+    const sizes = [...doc.querySelectorAll('text, tspan')].map(t =>
+      parseFloat(t.getAttribute('font-size') || (t.getAttribute('style') || '').match(/font-size:\s*([\d.]+)/)?.[1]))
+      .filter(n => n > 0);
+    if (!sizes.length) continue;
+    const px = Math.min(...sizes) * w / vb[2];
+    if (px < minPx) small.push({ px: Math.round(px * 10) / 10,
+      text: '画像 ' + (img.getAttribute('src') || '').split('/').pop() });
+  }
   for (const t of document.querySelectorAll('svg text, svg tspan')) {
     const r = t.getBoundingClientRect();
     if (!r.width || !r.height) continue;

@@ -80,10 +80,15 @@ def define_env(env):
             image = r.get("image")
             out.append('<article class="history-card">')
             if image:
+                # SVG の図（文字を読ませる図）は、携帯では原寸の横スクロールにする（extra.css）。
+                # 縮めると文字が5px前後になり読めないため。その旨の小さな案内を添える
+                svg = str(image).endswith(".svg")
                 out.append(
-                    f'<div class="history-card__fig"><img src="{_rel(image)}" '
-                    f'alt="第{no}回の図" loading="lazy"></div>'
+                    f'<div class="history-card__fig{" history-card__fig--svg" if svg else ""}">'
+                    f'<img src="{_rel(image)}" alt="第{no}回の図" loading="lazy"></div>'
                 )
+                if svg:
+                    out.append('<p class="history-card__hint">図は横にスクロールできます →</p>')
             out.append('<div class="history-card__body">')
             out.append(
                 f'<div class="history-card__meta"><span class="history-card__no">第{no}回</span>'
@@ -112,6 +117,8 @@ def define_env(env):
 
         中身は単一ソースから決まる。例に取る月＝`extra.sessions` の先頭の回（直近の回）の
         開催月。その回が初月無料で、初回のお支払いは翌月15日、解約の期限はその前日。
+        初月無料の回は、`extra.sessions` のうち先頭と同じ回のすべての日程（A日程・B日程の
+        どちらに参加してもよい）を「または」でつないで出す。
         金額は `extra.pricing`。**回・金額が変わっても、この図を手で直す必要はない。**
         """
         from datetime import datetime
@@ -126,15 +133,26 @@ def define_env(env):
         nm = m % 12 + 1
         label = str(s.get("label", ""))
         round_name, _, sched = label.partition(" ")
-        when = f"{start.month}/{start.day}" + (f"（{sched}）" if sched else "")
+        # 同じ回の日程（例：第6回の A日程 10/20 と B日程 11/6）。どちらに出ても無料
+        dates = []
+        for t in sessions:
+            r, _, sc = str(t.get("label", "")).partition(" ")
+            if r != round_name or not t.get("start"):
+                continue
+            d = datetime.fromisoformat(t["start"])
+            dates.append((f"{d.month}/{d.day}", sc))
+        # 日程ごとに折り返さない塊にする（「または」は前の日程に付ける）
+        parts = [f"{d}" + (f"（{sc}）" if sc else "") for d, sc in dates]
+        when = " ".join(f'<span class="jf-step__date">{p}{"または" if i < len(parts) - 1 else ""}'
+                        "</span>" for i, p in enumerate(parts))
+        at = "・".join(d for d, _ in dates)
         early = str(pricing.get("early_monthly", "")).replace("円", "")
         incl = pricing.get("early_monthly_incl", "")
 
         steps = [
             ("", "STEP 1", "お申し込み", "Stripeでお申し込み（初月無料）", f"{m}月中"),
             ("jf-step--free", "STEP 2", f"{round_name}に参加",
-             f'<span class="jf-step__free">¥0 <small>無料</small></span>{when}',
-             f"{start.month}/{start.day}"),
+             f'<span class="jf-step__free">¥0 <small>無料</small></span>{when}', at),
             ("", "STEP 3", "初回のお支払い", f"¥{incl}（早期割引 {early}）", f"{nm}/15"),
             ("", "STEP 4", "以降のお支払い", "毎月15日に自動更新", "毎月15日"),
         ]
@@ -168,6 +186,10 @@ def define_env(env):
         段の金額は `extra.pricing.ladder`（税抜・高い順）。「いまここ」は
         `early_monthly` と同じ金額の段、それより下＝お申し込み済み（据え置き）、
         上＝今後の新規（例）、先頭＝定価。**料金改定は `extra.pricing` だけ直せばよい。**
+
+        **金額を出すのは定価と「いまここ」の段だけ。** 据え置きの段（過去の早期価格）を
+        出すと後から来た人が「損した」と感じ、今後の段の金額はまだ仮なので約束に見える。
+        段の棒（長さ）だけで「上がっていく」ことを見せる。
         """
         import re
 
@@ -198,7 +220,8 @@ def define_env(env):
             else:
                 cls, tag = "future", "今後の新規（例）"
             out.append(
-                f'<li class="jf-rung jf-rung--{cls}"><span class="jf-rung__price">¥{v}</span>'
+                f'<li class="jf-rung jf-rung--{cls}"><span class="jf-rung__price">'
+                f'{"¥" + v if cls in ("list", "now") else ""}</span>'
                 f'<span class="jf-rung__bar"><i style="width:{round(n / top * 100)}%"></i></span>'
                 f'<span class="jf-rung__tag">{tag}</span></li>')
         out.append("</ul>")
