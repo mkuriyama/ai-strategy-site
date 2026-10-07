@@ -206,6 +206,13 @@
     </div>
   </section>
 
+  {# スマホ：画面下の固定ボタン（2つの入口）。ヒーローのボタン・最後の CTA・フッターが
+     見えている間は forms.js が隠す。ヒーローのあと最後の CTA まで約5,000px ボタンが無かったため #}
+  <div class="home-sticky" data-sticky-cta data-sticky-hide=".hero .actions, .finalcta, .md-footer" hidden>
+    <a class="btn btn-gold" href="{{ config.extra.register_url | url }}">案内メールを受け取る</a>
+    <a class="btn btn-teal" href="join/">有償メンバーに申し込む</a>
+  </div>
+
 </div>
 </main>
 {% endblock %}

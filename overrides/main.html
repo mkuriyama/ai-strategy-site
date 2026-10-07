@@ -11,7 +11,7 @@
   {%- set reg = config.extra.register_url -%}
   {%- if not src.startswith('subscribe/') -%}
   <a class="cta-announce" {% if reg.startswith('http') %}href="{{ reg }}" target="_blank" rel="noopener"{% else %}href="{{ reg | url }}"{% endif %}>
-    次回開催 <b>{{ config.extra.next_session_short }}</b>
+    次回<span class="cta-announce__long">開催</span> <b>{{ config.extra.next_session_short }}</b>
     <span class="cta-announce__sep">·</span>
     案内メールを受け取る →
   </a>

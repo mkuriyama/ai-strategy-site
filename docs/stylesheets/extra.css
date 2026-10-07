@@ -123,8 +123,16 @@
   margin-bottom: .45rem; }
 .md-typeset .history-card__summary { font-size: .88rem; line-height: 1.8; margin: 0 0 .5rem; }
 .md-typeset .history-card__links { font-size: .85rem; }
+.md-typeset .history-card__hint { display: none; }
 @media screen and (max-width: 44.9375em) {
   .md-typeset .history-card { grid-template-columns: 1fr; }
+  /* 図（ダイジェストの図1、幅680の SVG）は縮めると文字が5px前後になる。携帯では原寸で
+     横スクロールにし、文字を10px以上に保つ。カードの端まで広げてスクロールの幅を稼ぐ */
+  .md-typeset .history-card__fig--svg { overflow-x: auto; margin: 0 -1.1rem;
+    padding: 0 1.1rem; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
+  .md-typeset .history-card__fig--svg img { width: 680px; max-width: none; }
+  .md-typeset .history-card__hint { display: block; margin: -.6rem 0 0; font-size: .64rem;
+    color: var(--md-default-fg-color--light); text-align: right; }
 }
 
 /* ---- join の図1・図2（main.py の payment_flow() / pricing_ladder() が描画） ----
@@ -154,6 +162,7 @@
 .md-typeset .jf-step__free { display: block; font-family: var(--serif); font-weight: 700;
   font-size: 1.05rem; color: var(--gold); }
 .md-typeset .jf-step__free small { font-size: .72rem; }
+.md-typeset .jf-step__date { white-space: nowrap; }
 .md-typeset .jf-step--free .jf-step__card { background: var(--gold-pale); border-color: var(--gold-soft); }
 .md-typeset .jf-step--free .jf-step__no { color: var(--gold); }
 /* 日付：軸の上の点＋ラベル。軸は li ごとの線をつないで1本に見せる */
@@ -245,6 +254,17 @@
 .md-banner a.cta-announce:hover { text-decoration: underline; }
 .md-banner a.cta-announce b { color: #fff; font-weight: 700; }
 .cta-announce__sep { opacity: .5; margin: 0 .4em; }
+/* 携帯：2行に折れて「受け取／る →」で切れていた（390px で2行・約76px）。
+   「開催」を畳み、字を少し詰めて1行に収める。収まらない幅（〜320px）は末尾を省略する */
+@media screen and (max-width: 44.9375em) {
+  .md-banner a.cta-announce { font-size: .64rem; letter-spacing: 0; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis; }
+  .cta-announce__long { display: none; }
+  .cta-announce__sep { margin: 0 .3em; }
+}
+@media screen and (max-width: 359px) {
+  .md-banner a.cta-announce { font-size: .58rem; }
+}
 
 /* ============================================================
    ホーム（縦長ランディング）  overrides/home.html
@@ -446,6 +466,22 @@ a.chip:hover { border-color: var(--teal2); background: var(--pale); }
 @media (max-width: 760px) {
   .home-landing .figrow { grid-template-columns: 1fr; }
   .home-landing .prices { grid-template-columns: 1fr; }
+  /* 1列になると、ヒーローと同じ画面（事業デザイン対抗戦）がもう一度出る。携帯では2枚目だけ残す */
+  .home-landing #sessions .figrow .fig:first-child { display: none; }
+}
+/* 固定ボタン（携帯）。/subscribe/ の .lp-sticky と同じ見た目で、入口を2つ並べる */
+.home-landing .home-sticky { display: none; }
+@media (max-width: 900px) {
+  .home-landing .home-sticky {
+    display: flex; gap: 8px; position: fixed; left: 0; right: 0; bottom: 0; z-index: 3;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: rgba(252,253,253,.96);
+    border-top: 1px solid var(--line); box-shadow: 0 -8px 24px -18px rgba(0,48,57,.5);
+    transition: transform .2s ease;
+  }
+  .home-landing .home-sticky .btn { flex: 1 1 0; justify-content: center; text-align: center;
+    min-height: 44px; padding: 8px 10px; font-size: 13px; line-height: 1.35; }
+  .home-landing .home-sticky[hidden] { display: none; }
+  .home-landing .home-sticky.is-hidden { transform: translateY(120%); }
 }
 @media (max-width: 520px) {
   .home-landing .cards { grid-template-columns: 1fr; }

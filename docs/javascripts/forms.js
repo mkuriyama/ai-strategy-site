@@ -226,18 +226,25 @@
     }
   }
 
-  // ---- スマホの固定ボタン：フォームが見えている間は隠す ----
+  // ---- スマホの固定ボタン：同じ行き先のボタンが見えている間は隠す ----
+  // 隠す相手は data-sticky-hide（CSS セレクタ）。無ければ /subscribe/ のフォーム（#form）。
+  // ホームはヒーローのボタン・最後の CTA・フッター（規約リンクを覆わないため）
   var observer = null;
   function stickyCta() {
     if (observer) { observer.disconnect(); observer = null; }
     var bar = document.querySelector("[data-sticky-cta]");
-    var target = document.getElementById("form");
-    if (!bar || !target || !("IntersectionObserver" in window)) return;
+    if (!bar || !("IntersectionObserver" in window)) return;
+    var targets = document.querySelectorAll(bar.getAttribute("data-sticky-hide") || "#form");
+    if (!targets.length) return;
+    var seen = new Set();
     bar.hidden = false;
     observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) { bar.classList.toggle("is-hidden", en.isIntersecting); });
+      entries.forEach(function (en) {
+        if (en.isIntersecting) seen.add(en.target); else seen.delete(en.target);
+      });
+      bar.classList.toggle("is-hidden", seen.size > 0);
     }, { threshold: 0.15 });
-    observer.observe(target);
+    Array.prototype.forEach.call(targets, function (t) { observer.observe(t); });
   }
 
   // ---- 「無料で案内を受け取る」でフォームへ移り、最初の欄にフォーカス ----
