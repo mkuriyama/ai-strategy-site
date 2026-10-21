@@ -201,20 +201,20 @@ extra:
   # ⚠ 値は plugins.redirects の apply/index.md に書いてある（YAML アンカー）。/apply/ の転送先と一致させるため
   join_url: *join_url
   # ヘッダー／導線で使う短縮表記（直近に開催される回）
-  next_session_short: "10/20(火) 20:00〜"
+  next_session_short: "11/6(金) 20:00〜"
   # 次回回の配列（ラベル／種別 main|sub／日付／補足／start=ISO日時。start は構造化データ Event 用）
   # theme は任意。決まっているときだけ日付の下に出る（直前まで決めきれないことが多いので空でよい）
   sessions:
-    - label: "第6回 A日程"
-      kind: main
-      date: "10/20(火) 20:00〜"
-      start: "2026-10-20T20:00:00+09:00"
-      note: "オンライン(Zoom)／火曜開催のメイン日程。各回は独立で途中参加歓迎。"
     - label: "第6回 B日程"
       kind: sub
       date: "11/6(金) 20:00〜"
       start: "2026-11-06T20:00:00+09:00"
       note: "第6回（10/20）と同内容の追加開催。A日程に都合が合わない方向け。有償メンバーは初月無料。"
+    - label: "第7回 A日程"
+      kind: main
+      date: "11/17(火) 20:00〜"
+      start: "2026-11-17T20:00:00+09:00"
+      note: "オンライン(Zoom)／火曜開催のメイン日程。各回は独立で途中参加歓迎。"
   # ホーム「新着」の先頭リンク（新しい回が終わったらここを更新）
   latest_digest:
     url: "sessions/history/"
