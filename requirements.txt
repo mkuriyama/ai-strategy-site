@@ -1,4 +1,8 @@
 mkdocs-material[imaging]>=9.5
 mkdocs-macros-plugin>=1.0
 mkdocs-glightbox>=0.4
+# ⚠ glightbox の HTML 解析器。selectolax 1.0（2026-10-03）で挙動が変わり、
+# glightbox 0.5.2 と組み合わせると**本文ページの画像が黙って消える**（開催履歴・
+# セッションの図が実際に本番から消えた）。glightbox 側が対応するまで 1.0 未満に固定する。
+selectolax<1
 mkdocs-redirects>=1.2

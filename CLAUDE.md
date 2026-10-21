@@ -116,7 +116,8 @@ hooks/export_data.py            5つの役割。①`site/data/rounds.json`（回
                                 ④sitemap からダイジェストを外す。⑤ダイジェストの本文を
                                 `.build/digests.json`（`site/` の外＝**公開されない置き場**）へ
                                 書き出す ― 会員限定の場所へ運ぶ材料。
-                                あわせて `extra:` に真偽値として読まれたキーが無いか検査する
+                                あわせて `extra:` に真偽値として読まれたキーが無いか、
+                                開催履歴の図が出力から消えていないか（`_check_images`）を検査する
 scripts/check_mobile.py         ビルドしたサイトを携帯の幅（320〜412px）で開き、横へのはみ出しと
                                 図の文字の大きさ（10px 以上）を測る。CI で strict ビルドの後に走る
 requirements.txt                material[imaging] / macros / glightbox / redirects
@@ -442,6 +443,7 @@ B 側**（`ai-strategy-news-app` の `content/guide/*.md`）。本サイトに�
 |---|---|
 | 税込金額が「6,930**円円**」になる | `extra.pricing` の値に「円」を含めている。値は数字のみ（テンプレートが「円」を付ける） |
 | 開催履歴が「第**回**」と番号抜けで出る | `extra:` のキーに `no:` `yes:` `on:` `off:` を使うと YAML が真偽値として読み、`r.get("no")` が静かに `None` を返す。**エラーにならず表示だけ欠ける**。キーは `round:` のように別の語にする（`hooks/export_data.py` が検出してビルドを止める） |
+| **本文ページの画像だけが黙って消える**（開催履歴・セッションの図。ホームや /subscribe/ は無事） | glightbox がページHTMLを解析し直す際に使う **selectolax が 1.0 以上**だと、glightbox 0.5.2 が `<img>` を落とす。**警告もエラーも出ず、ビルドも CI も通る**（2026年10月に実際に本番から図が消えた）。`requirements.txt` で **`selectolax<1`** に固定済み ―― **この固定を外さないこと**。glightbox 側が selectolax 1.x に対応したら外せる。ホームとランディング系はテンプレートに直接 `<a class="glightbox">` を書いているので影響を受けず、**壊れても気づきにくい**。`hooks/export_data.py` の `_check_images()` が出力を検査してビルドを止める |
 | ダイジェストや料金図のSVGが極端に小さい | Material の `figure{width:fit-content}` が、`viewBox` だけで幅指定のないinline SVGを潰す。`extra.css` の `.md-typeset figure{width:100%}` で対処済み（消さないこと） |
 | 用語集の見出しを文字列grepしても一致しない | 見出し内の用語が `<abbr>` で囲まれ文字列が分断されるため。検証は用語単体か `<abbr title=...>` で行う。**サイト名「AI戦略ライブラリー」も同じ理由で grep に引っかからないことがある** |
 | サイト名「AI戦略ライブラリー」の途中にツールチップが出る | `abbreviations.md` に「ライブラリ」があると名前の中に一致する（「セル」＝「キャンセル」と同じ）。2026年9月にツールチップから外した（用語集には残している） |

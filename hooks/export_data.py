@@ -354,8 +354,40 @@ def _strip_digests_from_sitemap(config) -> None:
         gz.write_bytes(gzip.compress(kept.encode("utf-8")))
 
 
+def _check_images(config) -> None:
+    """本文ページの画像が消えていないか、出来上がった HTML で確かめる。
+
+    2026年10月、glightbox の解析器（selectolax）が 1.0 に上がった環境で、本文ページの
+    画像が**警告もエラーも出さずに消えた**。ビルドは通り、CI も通り、開催履歴と
+    セッションの図だけが本番から消えた状態で数時間公開された。
+    `extra.history` の各回の図が出力に残っていることを、ここで必ず確かめる。
+    """
+    rounds = (config.get("extra") or {}).get("history") or []
+    want = [os.path.basename(str(r["image"])) for r in rounds if r.get("image")]
+    if not want:
+        return
+    path = os.path.join(config["site_dir"], "sessions", "history", "index.html")
+    try:
+        with open(path, encoding="utf-8") as f:
+            html = f.read()
+    except FileNotFoundError:
+        return
+    imgs = re.findall(r"<img\b[^>]*>", html)
+    missing = [n for n in want if not any(n in tag for tag in imgs)]
+    if missing:
+        from mkdocs.exceptions import PluginError
+
+        raise PluginError(
+            "開催履歴の図が出力から消えています: " + "、".join(missing) +
+            "\n  history_cards() は <img> を出しているので、後段の処理が落としている。"
+            "\n  既知の原因: mkdocs-glightbox が使う selectolax が 1.0 以上。"
+            " requirements.txt の `selectolax<1` の固定が外れていないか確認すること。"
+        )
+
+
 def on_post_build(config):
     now = datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")
+    _check_images(config)
     site_url = (config.get("site_url") or "").rstrip("/") + "/"
 
     out_dir = os.path.join(config["site_dir"], "data")
