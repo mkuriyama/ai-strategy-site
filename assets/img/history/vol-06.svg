@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 680 260" xmlns="http://www.w3.org/2000/svg" role="img">
+  <g font-family="'Noto Sans JP', sans-serif">
+  <rect x="20" y="20" width="204" height="220" rx="11" fill="#004455"/>
+  <text x="122" y="50" font-family="'Noto Serif JP', serif" font-size="16" fill="#fff" font-weight="700" text-anchor="middle">A社</text>
+  <text x="38" y="80" font-size="11" fill="rgba(255,255,255,.85)">問いの深さを上げ続ける</text>
+  <text x="38" y="98" font-size="11" fill="rgba(255,255,255,.85)">仕組みと文化がある。深く</text>
+  <text x="38" y="116" font-size="11" fill="rgba(255,255,255,.85)">考えた人同士が議論し、</text>
+  <text x="38" y="134" font-size="11" fill="rgba(255,255,255,.85)">後進にも継承する</text>
+  <line x1="38" y1="160" x2="206" y2="160" stroke="rgba(255,255,255,.25)"/>
+  <text x="38" y="184" font-size="10.5" fill="rgba(255,255,255,.6)">判断の根拠</text>
+  <text x="38" y="206" font-size="11.5" fill="#ffe9c2" font-weight="700">「どう考え、構想が</text>
+  <text x="38" y="224" font-size="11.5" fill="#ffe9c2" font-weight="700">　動いたか」</text>
+  <rect x="238" y="20" width="204" height="220" rx="11" fill="#f7f4ee" stroke="rgba(0,68,85,.2)"/>
+  <text x="340" y="50" font-family="'Noto Serif JP', serif" font-size="16" fill="#004455" font-weight="700" text-anchor="middle">B社</text>
+  <text x="256" y="80" font-size="11" fill="#5d6b6e">AIと深く考える人が数人</text>
+  <text x="256" y="98" font-size="11" fill="#5d6b6e">いてスーパースター扱い。</text>
+  <text x="256" y="116" font-size="11" fill="#5d6b6e">だが洞察はその人の中に</text>
+  <text x="256" y="134" font-size="11" fill="#5d6b6e">閉じ、組織に広がらない</text>
+  <line x1="256" y1="160" x2="424" y2="160" stroke="rgba(0,68,85,.15)"/>
+  <text x="256" y="184" font-size="10.5" fill="#8a979a">判断の根拠</text>
+  <text x="256" y="206" font-size="11.5" fill="#004455" font-weight="700">「あの人が言った」</text>
+  <text x="256" y="224" font-size="10.5" fill="#5d6b6e">根拠が人に張り付く</text>
+  <rect x="456" y="20" width="204" height="220" rx="11" fill="#fff" stroke="rgba(0,68,85,.2)"/>
+  <text x="558" y="50" font-family="'Noto Serif JP', serif" font-size="16" fill="#5d6b6e" font-weight="700" text-anchor="middle">C社</text>
+  <text x="474" y="80" font-size="11" fill="#5d6b6e">AIの答えをそのまま採用</text>
+  <text x="474" y="98" font-size="11" fill="#5d6b6e">した整った資料が会議を</text>
+  <text x="474" y="116" font-size="11" fill="#5d6b6e">埋める。AIは「自社らし</text>
+  <text x="474" y="134" font-size="11" fill="#5d6b6e">く」調整するために使う</text>
+  <line x1="474" y1="160" x2="642" y2="160" stroke="rgba(0,68,85,.15)"/>
+  <text x="474" y="184" font-size="10.5" fill="#8a979a">判断の根拠</text>
+  <text x="474" y="206" font-size="11.5" fill="#5d6b6e" font-weight="700">「AIがそう言った」</text>
+  <text x="474" y="224" font-size="10.5" fill="#8a979a">根拠が人から消える</text>
+  </g>
+</svg>
