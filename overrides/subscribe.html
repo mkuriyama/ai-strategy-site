@@ -51,7 +51,8 @@
               data-endpoint="{{ fm.api_base }}/api/subscribe"
               data-success="{{ 'subscribe/thanks/' | url }}"
               data-sitekey="{{ fm.turnstile_sitekey }}"
-              data-source-blank="{{ fm.source_blank or '' }}">
+              data-source-blank="{{ fm.source_blank or '' }}"
+              {%- if fm.source_fallback %} data-source-fallback="{{ fm.source_fallback }}"{% endif %}>
           <div class="lp-field">
             <label for="sub-email">メールアドレス{{ lp.req() }}</label>
             <input id="sub-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="name@example.com" required maxlength="254">

@@ -24,7 +24,8 @@
 
 - `upcoming_html(extra, n)` … 「これからの開催」。回・テーマ・問い・A/B の日時・同じ内容・開催済み
 - `schedule_list_html(extra)` … 全回の一覧（/sessions/ の「開催予定」）
-- `payment_months_html(extra)` … お申し込み月ごとの、初回のお支払い日と、それまでに参加できる回
+- `payment_table_html(extra)` … お申し込みの時期ごとの、初回のお支払い日と、無料で参加できる回
+  （申込用 GAS の COHORT_SCHEDULE と同じ決まり。`payment_windows()` の説明を参照）
 - `participation_html(extra, title)` … 参加の前に（`extra.participation`）
 
 テンプレートでは `on_env` が登録する同名の関数（`schedule_upcoming(2)` など）、Markdown では
@@ -192,7 +193,7 @@ def on_env(env, config, files):
     env.globals.update(
         schedule_upcoming=lambda n=2, variant="": upcoming_html(extra, n, variant),
         schedule_list=lambda: schedule_list_html(extra),
-        payment_months=lambda: payment_months_html(extra),
+        payment_table=lambda: payment_table_html(extra),
         participation=lambda title="有償メンバーとして参加する前に": participation_html(extra, title),
     )
     return env
@@ -262,47 +263,67 @@ def _month_start(y: int, m: int) -> dt.datetime:
     return dt.datetime(y, m, 1, tzinfo=JST)
 
 
-def payment_months_html(extra, months: int = 3) -> str:
-    """お申し込み月ごとの、初回のお支払い日（翌月15日）と、それまでに参加できる回。
+def _day_start(d: dt.datetime) -> dt.datetime:
+    return dt.datetime(d.year, d.month, d.day, tzinfo=JST)
 
-    いまの月から、**最後の回の A日程がある月まで**（最大 months か月）。終わった月の行は
-    schedule.js が隠す（行に `data-month-end`）。
 
-    最後の回の A日程の月で止めるのは、その翌月の行（例：第8回B 1/6 しか載っていない1月）を
-    出すと、まだ載せていない次の回（1月後半）が「参加できる回」から抜けた表になるため。
-    A日程は毎月15日の20時以降に置いている（初回のお支払いは15日の0時）ので、ここで止めれば、
-    載っている月の行に「まだ載せていない回」が入り込むことはない。
+def payment_windows(extra) -> list[dict]:
+    """お申し込みの時期ごとの、初回のお支払い日と、無料で参加できる回。
+
+    **申込用 GAS（Stripe Checkout を作る `doGet`）の COHORT_SCHEDULE と同じ決まり。**
+
+    - 申込の受付は回ごとに切り替わる：前の回の B日程の**翌日 0時（日本時間）**から、
+      その回の B日程の日の終わりまで（GAS の `advertiseFrom`）
+    - その期間のお申し込みは、**その回（A日程・B日程）に無料で参加**できる
+    - 初回のお支払い（Stripe の `trial_end`）は、その回の **A日程の翌月15日 0時（日本時間）**
+      （例：第7回 11/17・11/30 → 11/7〜11/30 のお申し込み → 12/15）
+
+    「申込月の翌月15日」ではない。たとえば 11/1〜11/6 のお申し込みは第6回B（11/6）が無料で、
+    初回のお支払いは 11/15。GAS の COHORT_SCHEDULE を変えたら、ここも合わせる。
     """
-    when = now()
     rs = rounds(extra)
-    days = [d for r in rs for d in r["days"]]
-    if not days:
+    out = []
+    for i, r in enumerate(rs):
+        a = r["days"][0]["at"]
+        last = r["days"][-1]["at"]
+        start = _day_start(rs[i - 1]["days"][-1]["at"]) + dt.timedelta(days=1) if i else None
+        end = _day_start(last) + dt.timedelta(days=1)          # この時刻から次の回の受付
+        pay = _month_start(a.year, a.month + 1).replace(day=15)
+        out.append({"round": r, "start": start, "end": end, "pay": pay})
+    return out
+
+
+def payment_table_html(extra, rows: int = 3) -> str:
+    """お申し込みの時期ごとの表（いまの受付から rows 行）。終わった行は schedule.js が隠す
+    （行に `data-window-end`）。済んだ日程は CSS で隠す（`.pay-month .sch-day.is-held`）。"""
+    when = now()
+    ws = [w for w in payment_windows(extra) if when < w["end"]][: rows + 1]
+    if not ws:
         return ""
-    last = max(r["days"][0]["at"] for r in rs)
     out = ['<div class="pay-months">',
            '<div class="pay-months__head" aria-hidden="true"><span>お申し込み</span>'
-           '<span>初回のお支払い</span><span>それまでに参加できる回（無料）</span></div>']
-    y, m = when.year, when.month
-    for k in range(months):
-        start = _month_start(y, m + k)
-        end = _month_start(y, m + k + 1)                      # 申込月の終わり
-        pay = end.replace(day=15)                             # 初回のお支払い（翌月15日）
-        if start > last:
-            break
-        # 済んだ日程はビルドの時点で外す（ブラウザでも .is-held を隠す）
-        free = [d for d in days if start <= d["at"] < pay and not held(d["at"], when)]
-        out.append(f'<div class="pay-month" data-month-end="{_iso(end)}">')
-        out.append(f'<p class="pay-month__when"><b>{start.month}月中</b>'
-                   '<span class="pay-month__sfx">にお申し込み</span></p>')
+           '<span>初回のお支払い</span><span>無料で参加できる回</span></div>']
+    for i, w in enumerate(ws):
+        r = w["round"]
+        last_day = w["end"] - dt.timedelta(days=1)
+        span = (f"{md(w['start'], when)}〜{md(last_day, when)}" if w["start"]
+                else f"{md(last_day, when)}まで")
+        free = [d for d in r["days"] if not held(d["at"], when)]
+        items = "".join(_day_li(d["at"], d["label"], when, with_time=False) for d in r["days"])
+        out.append(f'<div class="pay-month" data-window-end="{_iso(w["end"])}"{" hidden" if i >= rows else ""}>')
+        out.append(f'<p class="pay-month__when"><b>{_e(span)}</b>'
+                   '<span class="pay-month__sfx">のお申し込み</span></p>')
         out.append(f'<p class="pay-month__pay"><span class="pay-month__k">初回のお支払い</span>'
-                   f'<b>{_e(md(pay, when))}</b>'
-                   f'<span class="pay-month__dl">無料のまま解約するなら {_e(md(pay - dt.timedelta(days=1), when))} まで</span></p>')
-        items = "".join(_day_li(d["at"], d["label"], when, with_time=False) for d in free)
+                   f'<b>{_e(md(w["pay"], when))}</b>'
+                   f'<span class="pay-month__dl">無料のまま解約するなら '
+                   f'{_e(md(w["pay"] - dt.timedelta(days=1), when))} まで</span></p>')
         out.append(f'<div><ul class="sch-days pay-month__free">{items}</ul>'
                    f'<p class="pay-month__none" data-pay-none{" hidden" if free else ""}>'
-                   "これから開催される回はありません</p></div>")
+                   "この期間に参加できる回は終わりました（明日のお申し込みからは、次の回に無料で参加できます）"
+                   "</p></div>")
         out.append("</div>")
-    out.append('<p class="pay-months__note">参加できるのは、お申し込み日より後に開催される回です。'
+    out.append('<p class="pay-months__none" data-pay-empty hidden>次の回の日程は、決まりしだいお知らせします。</p>')
+    out.append('<p class="pay-months__note">お申し込みの時期は、前の回の B日程の翌日で切り替わります。'
                "日付は日本時間で数えます。</p>")
     out.append("</div>")
     return "\n".join(out)

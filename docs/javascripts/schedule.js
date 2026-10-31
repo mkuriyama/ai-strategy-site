@@ -9,7 +9,8 @@
  * - [data-at]           … 1つの日程。済んだら .is-held、[data-when-held] を出し、[data-when-planned] を隠す
  * - [data-round-end]    … 1つの回（最後の日程の開始）。済んだら .is-held
  * - [data-sch-up]       … これからの開催。済んだ回を隠し、先頭から data-max 回だけ出す（繰り上げ）
- * - [data-month-end]    … 申込月ごとの表の行。その月が終わったら隠す。残りの日程が無ければ [data-pay-none] を出す
+ * - [data-window-end]   … 申込の時期ごとの表の行。受付が終わったら隠し、次の行を繰り上げる。
+ *                         残りの日程が無ければ [data-pay-none] を出す
  * - [data-next-session] … 直近の日程の表記（"md" なら 11/6(金)、無指定なら 11/6(金) 20:00〜）
  * - [data-next-label]   … 直近の日程の回（第6回 B日程）
  * - [data-next-wrap]    … 直近の日程が無くなったら隠す
@@ -58,12 +59,17 @@
       each("[data-sch-empty]", function (x) { x.hidden = shown > 0; }, box);
     });
 
-    each("[data-month-end]", function (row) {
-      var end = time(row.getAttribute("data-month-end"));
-      row.hidden = end !== null && now >= end;
+    // 申込の時期ごとの表：受付が終わった行を隠し、先頭から3行だけ出す（4行目は繰り上げ用）
+    var rows = 0;
+    each("[data-window-end]", function (row) {
+      var end = time(row.getAttribute("data-window-end"));
+      var show = !(end !== null && now >= end) && rows < 3;
+      row.hidden = !show;
+      if (show) rows++;
       var left = row.querySelectorAll("[data-at]:not(.is-held)").length;
       each("[data-pay-none]", function (x) { x.hidden = left > 0; }, row);
     });
+    each("[data-pay-empty]", function (x) { x.hidden = rows > 0; });
 
     var next = null;
     days().some(function (d) {

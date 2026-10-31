@@ -849,11 +849,11 @@ a.chip:hover { border-color: var(--teal2); background: var(--pale); }
 
 /* お申し込み月ごとの初回のお支払い日（/join/） */
 .pay-months { margin: 12px 0 20px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #fff; }
-.pay-months__head, .pay-month { display: grid; grid-template-columns: 8.5em 12em minmax(0, 1fr); gap: 6px 14px; }
+.pay-months__head, .pay-month { display: grid; grid-template-columns: 13em 11em minmax(0, 1fr); gap: 6px 14px; }
 .pay-months__head { padding: 8px 14px; background: var(--pale); font-size: 12px; font-weight: 700; color: var(--teal2); }
 .pay-month { align-items: start; padding: 12px 14px; border-top: 1px solid var(--line); }
 .pay-month__when { font-size: 14px; }
-.pay-month__when b { font-family: var(--serif); font-size: 16px; color: var(--teal); }
+.pay-month__when b { font-family: var(--serif); font-size: 15px; color: var(--teal); }
 .pay-month__pay { display: flex; flex-direction: column; }
 .pay-month__k { display: none; font-size: 12px; color: var(--muted); }
 .pay-month__pay b { font-size: 16px; color: var(--teal); }
@@ -864,6 +864,8 @@ a.chip:hover { border-color: var(--teal2); background: var(--pale); }
 .pay-month__sfx { display: none; }                      /* 「にお申し込み」。PC は見出し行が言っている */
 .pay-month .sch-day__d { font-size: 14px; }
 .pay-month__none { font-size: 13px; color: var(--muted); }
+.md-typeset .pay-months__none, .pay-months__none { padding: 10px 14px; border-top: 1px solid var(--line);
+  font-size: 13px; color: var(--muted); }
 .md-typeset .pay-months__note, .pay-months__note { padding: 8px 14px; border-top: 1px solid var(--line);
   font-size: 12px; color: var(--muted); background: var(--paper); }
 @media (max-width: 720px) {
