@@ -486,15 +486,17 @@ B 側**（`ai-strategy-news-app` の `content/guide/*.md`）。本サイトに�
   | 法人問い合わせの送信成功 | generate_lead（form: corporate） | Contact | コンバージョン（`google_ads_inquiry_label`） |
   | 登録完了ページの「公開記録」 | click_context | — | — |
 
-- **「数える登録」**＝ゲートウェイが `ok` を返し、かつこのブラウザで同じアドレスをまだ数えていない。
-  アドレスはハッシュにしてブラウザ内（localStorage）にだけ置く。ゲートウェイが応答に `lead`
-  （新規に作ったときだけ true）を返すようになれば、それに従う（いまのゲートウェイは返さない）。
+- **「数える登録」**＝ゲートウェイが `ok` を返し、かつ応答の `lead` が true（新規に作ったとき。v10〜）。
+  `lead` が無い応答（v9 まで）では、このブラウザで同じアドレスをまだ数えていないとき
+  （アドレスはハッシュにしてブラウザ内〔localStorage〕にだけ置く）。
   完了ページに着いたときに1回だけ送り、再読み込み・直アクセスでは送らない
 - **UTM**：URL に `utm_*` があり、保存中の値が無い（または30日を過ぎた）ときだけ localStorage に保存する
   （**初回訪問の値を30日保つ**＝上書きしない）。/subscribe/ と法人フォームの隠し項目で送り、ゲートウェイが
   Mailchimp の UTM 項目に書く
-- **「知ったきっかけ」は任意**（/subscribe/）。ゲートウェイが空欄を入力エラーにするので、空欄のときは
-  `extra.forms.source_blank`（いまは「その他」）を送る。ゲートウェイが空欄を受け付けたら `""` にする
+- **「知ったきっかけ」は任意**（/subscribe/）。空欄は空のまま送る（`extra.forms.source_blank: ""`）。
+  ゲートウェイ v10 から受け付け、Mailchimp の `SOURCE001` は空のまま・タグは `src:none`。
+  ゲートウェイが空欄を拒んだとき（v9 まで）だけ `extra.forms.source_fallback`（「その他」）で1回送り直すので、
+  ゲートウェイの切り替えとサイトの公開はどちらが先でもよい。v10 が本番になったら `source_fallback` は消してよい
 - Meta の自動のイベント検出（`autoConfig`）は切ってある。メールアドレス等を Meta・Google へ送らない
   （詳細一致〔Advanced Matching〕・拡張コンバージョンは使わない）。外部送信の内容はプライバシーポリシーに書く
 - 試すとき：`META_PIXEL_ID=… GOOGLE_ADS_ID=AW-… TRACKING_HOSTS=127.0.0.1 python3 -m mkdocs serve`。
