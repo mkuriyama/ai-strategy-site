@@ -6,7 +6,7 @@
 `</head>` の前に差し込む。広告のタグは、ページの側と同じく ID が空なら読み込まれない。
 
 送るのはページビューだけ。申込の完了（/welcome/）を Meta の StartTrial や Google 広告の
-コンバージョンとして送るかは未決（aisia-ops の計画書 Q11）。
+コンバージョンとして送るかは、まだ決めていない。
 """
 
 from __future__ import annotations

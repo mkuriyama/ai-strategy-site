@@ -215,7 +215,7 @@ extra:
     noscript_url: https://mailchi.mp/antecanis/ai-strategy
     # 「知ったきっかけ」は任意（2026年11月〜）。**空欄のときに送る値。** ゲートウェイが空欄を
     # 入力エラーにするので、当面は「その他」として送る。ゲートウェイが空欄を受け付けるように
-    # なったら "" にする（aisia-ops の計画書 §4-2）
+    # なったら "" にする
     source_blank: "その他"
   # 実績数値（/subscribe/・/join/corporate/ の実績帯とチップが参照）。
   # satisfaction は新しい回のアンケートが加わるたびに再計算する（未回答も分母に含める）
