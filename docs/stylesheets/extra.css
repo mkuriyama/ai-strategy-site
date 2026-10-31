@@ -162,7 +162,6 @@
 .md-typeset .jf-step__free { display: block; font-family: var(--serif); font-weight: 700;
   font-size: 1.05rem; color: var(--gold); }
 .md-typeset .jf-step__free small { font-size: .72rem; }
-.md-typeset .jf-step__date { white-space: nowrap; }
 .md-typeset .jf-step--free .jf-step__card { background: var(--gold-pale); border-color: var(--gold-soft); }
 .md-typeset .jf-step--free .jf-step__no { color: var(--gold); }
 /* 日付：軸の上の点＋ラベル。軸は li ごとの線をつないで1本に見せる */
@@ -182,7 +181,9 @@
 .md-typeset .jf-note p { margin: 0; font-size: .68rem; line-height: 1.7; color: var(--ink); }
 .md-typeset .jf-note .jf-note__lead { margin-bottom: .25rem; font-family: var(--serif); font-weight: 700;
   font-size: .82rem; color: var(--teal); }
-.md-typeset .jf-note .jf-note__ex { color: var(--muted); }
+.md-typeset .jf-note .jf-note__ex { color: var(--muted); margin-top: .25rem; }
+.md-typeset .jf-note .jf-note__case { padding-left: 1em; text-indent: -1em; }
+.md-typeset .jf-note .jf-note__case::before { content: "・"; }
 
 /* 図2：月額の段。上ほど後から申し込む方の想定。棒の長さ＝定価に対する比率 */
 .md-typeset ul.jf-ladder { list-style: none; margin: 0; padding: 0; display: grid; gap: .45rem; }
@@ -347,17 +348,10 @@
 .home-landing .live .phead .cmark { height: 14px; width: auto; }
 .home-landing .live .phead .lbl { font-family: var(--serif); font-weight: 600; font-size: 15px; }
 .home-landing .live .phead .meta { margin-left: auto; font-size: 11.5px; color: rgba(255,255,255,.72); }
-.home-landing .live .pbody { display: grid; grid-template-columns: 1fr 1fr .9fr; gap: 0; }
+.home-landing .live .pbody { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, .9fr); gap: 0; }
 .home-landing .live .col { padding: 18px 22px; border-right: 1px dashed var(--line); }
 .home-landing .live .col:last-child { border-right: none; background: var(--pale); }
-.home-landing .sess .tag {
-  display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .04em;
-  padding: 2px 9px; border-radius: 20px; margin-bottom: 7px;
-}
-.home-landing .sess.main .tag { background: var(--gold-pale); color: var(--gold); border: 1px solid var(--gold-soft); }
-.home-landing .sess.sub .tag { background: var(--pale); color: var(--teal2); border: 1px solid var(--line); }
-.home-landing .sess .date { font-family: var(--serif); font-weight: 700; color: var(--teal); font-size: 19px; }
-.home-landing .sess .desc { font-size: 12.5px; color: var(--muted); margin-top: 3px; }
+.home-landing .live .sched { padding: 14px 16px; }
 .home-landing .news .nt { font-size: 11.5px; font-weight: 700; color: var(--muted); letter-spacing: .06em; margin-bottom: 8px; }
 .home-landing .news ul { margin: 0; padding: 0; list-style: none; }
 .home-landing .news li { font-size: 13px; padding: 4px 0; }
@@ -614,11 +608,14 @@ a.chip:hover { border-color: var(--teal2); background: var(--pale); }
 .lp .lp-tag { align-self: flex-start; font-size: 12px; font-weight: 700; color: #1f4a55; background: #e6eef0; border-radius: 999px; padding: 2px 12px; }
 .lp .lp-tag--gold { color: var(--gold-ink); background: #f3e7c6; }
 .lp .lp-badge { font-size: 12px; font-weight: 700; color: #23303a; background: var(--gold); border-radius: 999px; padding: 2px 10px; }
-.lp .lp-sessions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; border-top: 1px dashed var(--warm-line); padding-top: 14px; }
-.lp .lp-sessions__item { display: flex; flex-direction: column; gap: 2px; }
-.lp .lp-sessions__k { font-size: 12px; font-weight: 700; color: var(--gold-ink); }
-.lp .lp-sessions__date { font-family: var(--serif); font-size: 18px; font-weight: 700; color: #0f2f37; }
-.lp .lp-sessions__theme { font-size: 13px; color: #3a4a4f; }
+.lp .lp-plan__k { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: .06em; color: var(--gold-ink); }
+.lp .lp-plan .lp-small { font-size: 13.5px; line-height: 1.7; color: #3a4a4f; }
+/* 有償メンバーのカードのすぐ下：これからの開催（左）と、参加の前に（右）。/join/ と同じ部品 */
+.lp .lp-plandetail { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 20px; margin-top: 20px; align-items: start; }
+.lp .lp-plandetail > .lp-card { padding: 18px 22px; }
+.lp .lp-plandetail .sch-up { margin: 8px 0 0; }
+.lp .lp-plandetail .prep { margin: 0; padding: 0; border: none; background: transparent; }
+@media (max-width: 900px) { .lp .lp-plandetail { grid-template-columns: minmax(0, 1fr); } }
 .lp .lp-corpband {
   display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-top: 20px;
   border: 1px solid var(--line); border-radius: 12px; padding: 18px 26px; background: #f5f7f7;
@@ -797,3 +794,96 @@ a.chip:hover { border-color: var(--teal2); background: var(--pale); }
 }
 /* 送信の準備がそろうまでの代替表示（フォームの代わりに旧LP・メールへのボタン） */
 .lp .lp-formcard > .lp-btn { margin: 14px 0 12px; }
+
+/* ────────────────────────────────────────────────────────────
+   回の予定（hooks/schedule.py の部品）。本文ページ（.md-typeset）とランディング系（.home-landing）の
+   両方に置くので、文字の大きさは px で持つ。開催済みの印は schedule.js がいまの時刻で付け直す。
+   ──────────────────────────────────────────────────────────── */
+.sch-up, .sch-all, .pay-months, .prep { font-size: 15px; line-height: 1.6; color: var(--ink); }
+.sch-up [hidden], .sch-all [hidden], .pay-months [hidden], [data-next-wrap][hidden] { display: none !important; }
+.md-typeset .sch-up p, .md-typeset .sch-all p, .md-typeset .pay-months p, .md-typeset .prep p,
+.sch-up p, .sch-all p, .pay-months p, .prep p { margin: 0; }
+.md-typeset ul.sch-days, ul.sch-days { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.md-typeset ul.sch-days > li, ul.sch-days > li { margin: 0; }
+
+/* これからの開催（回ごとのカード） */
+.sch-up { display: grid; gap: 12px; margin: 14px 0 18px; }
+.sch-round { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; min-width: 0; }
+.sch-round__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+.sch-round__no { flex: none; font-size: 12px; font-weight: 700; letter-spacing: .06em; color: #fff;
+  background: var(--teal2); border-radius: 20px; padding: 1px 10px; }
+.sch-round__theme { font-family: var(--serif); font-weight: 700; color: var(--teal); font-size: 16.5px; line-height: 1.45; }
+.sch-round__theme--tbd { font-family: var(--sans); font-weight: 500; color: var(--muted); font-size: 14px; }
+.md-typeset .sch-round__q, .sch-round__q { margin-top: 4px; font-size: 13.5px; line-height: 1.6; color: #33474c; }
+.md-typeset .sch-round__same, .sch-round__same { margin-top: 8px; font-size: 12.5px; color: var(--muted); }
+.sch-up__empty { font-size: 14px; color: var(--muted); }
+.sch-day { display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 2px 7px; padding: 6px 11px;
+  border-radius: 9px; background: var(--pale); border: 1px solid var(--line); }
+.sch-day__k { font-size: 12px; font-weight: 700; color: var(--teal2); }
+.sch-day__d { font-weight: 700; color: var(--teal); font-size: 15px; }
+.sch-day__held { font-size: 11.5px; font-weight: 700; color: var(--muted); background: #fff;
+  border: 1px solid var(--line); border-radius: 20px; padding: 0 8px; }
+.sch-day.is-held { background: #fff; border-style: dashed; }
+.sch-day.is-held .sch-day__k { color: var(--muted); }
+.sch-day.is-held .sch-day__d { color: var(--muted); font-weight: 500; text-decoration: line-through;
+  text-decoration-color: rgba(94,115,120,.55); }
+.sch-up--card { margin: 2px 0 4px; gap: 10px; }
+.sch-up--card .sch-round { background: #fff; border-color: var(--warm-line, var(--line)); padding: 12px 14px; }
+.sch-up--panel { margin: 0; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.sch-up--panel .sch-round { padding: 12px 14px; }
+@media (max-width: 860px) { .sch-up--panel { grid-template-columns: 1fr; } }
+
+/* 全回の一覧（/sessions/ の開催予定） */
+.sch-all { margin: 12px 0 18px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #fff; }
+.sch-all__row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 16px; align-items: center;
+  padding: 10px 14px; border-top: 1px solid var(--line); }
+.sch-all__row:first-child { border-top: none; }
+.md-typeset .sch-all__row ul.sch-days, .sch-all__row ul.sch-days { margin: 0; justify-content: flex-end; }
+.sch-all__row.is-held { background: var(--paper); }
+.sch-all__row.is-held .sch-round__no { background: #8aa0a5; }
+.sch-all__row.is-held .sch-round__theme { color: var(--muted); font-size: 15px; }
+@media (max-width: 720px) {
+  .sch-all__row { grid-template-columns: minmax(0, 1fr); }
+  .md-typeset .sch-all__row ul.sch-days, .sch-all__row ul.sch-days { justify-content: flex-start; }
+}
+
+/* お申し込み月ごとの初回のお支払い日（/join/） */
+.pay-months { margin: 12px 0 20px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #fff; }
+.pay-months__head, .pay-month { display: grid; grid-template-columns: 8.5em 12em minmax(0, 1fr); gap: 6px 14px; }
+.pay-months__head { padding: 8px 14px; background: var(--pale); font-size: 12px; font-weight: 700; color: var(--teal2); }
+.pay-month { align-items: start; padding: 12px 14px; border-top: 1px solid var(--line); }
+.pay-month__when { font-size: 14px; }
+.pay-month__when b { font-family: var(--serif); font-size: 16px; color: var(--teal); }
+.pay-month__pay { display: flex; flex-direction: column; }
+.pay-month__k { display: none; font-size: 12px; color: var(--muted); }
+.pay-month__pay b { font-size: 16px; color: var(--teal); }
+.pay-month__dl { font-size: 12px; line-height: 1.5; color: var(--muted); }
+.md-typeset .pay-month ul.sch-days, .pay-month ul.sch-days { margin: 0; }
+.pay-month .sch-day { padding: 4px 9px; }
+.pay-month .sch-day.is-held { display: none; }          /* 済んだ日程は、これから申し込む人には関係ない */
+.pay-month__sfx { display: none; }                      /* 「にお申し込み」。PC は見出し行が言っている */
+.pay-month .sch-day__d { font-size: 14px; }
+.pay-month__none { font-size: 13px; color: var(--muted); }
+.md-typeset .pay-months__note, .pay-months__note { padding: 8px 14px; border-top: 1px solid var(--line);
+  font-size: 12px; color: var(--muted); background: var(--paper); }
+@media (max-width: 720px) {
+  .pay-months__head { display: none; }
+  .pay-month { grid-template-columns: minmax(0, 1fr); }
+  .pay-month__k, .pay-month__sfx { display: inline; }
+  .pay-month__pay { flex-direction: row; flex-wrap: wrap; gap: 2px 10px; align-items: baseline; }
+}
+
+/* 参加の前に（/join/ と /subscribe/） */
+.prep { margin: 14px 0 18px; padding: 14px 18px; border: 1px solid var(--line); border-left: 5px solid var(--teal2);
+  border-radius: 12px; background: var(--paper); }
+.md-typeset .prep__title, .prep__title { margin-bottom: 6px; font-family: var(--serif); font-weight: 700;
+  color: var(--teal); font-size: 16px; }
+.md-typeset ul.prep__list, ul.prep__list { margin: 0; padding-left: 1.2em; }
+.md-typeset ul.prep__list > li, ul.prep__list > li { margin: 5px 0; font-size: 14px; line-height: 1.7; }
+.prep__list strong { color: var(--ink); margin-right: .25em; }
+
+/* 登録完了ページ：公開記録への案内 */
+.lp .lp-read { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; padding: 22px 26px;
+  border-left: 4px solid var(--teal2); }
+.home-landing.lp .lp-read h2 { font-size: 20px; margin: 0; color: #0f2f37; }
+.lp .lp-read p { margin: 0; font-size: 15px; line-height: 1.85; color: #2b3a3f; }

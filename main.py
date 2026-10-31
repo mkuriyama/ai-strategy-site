@@ -1,29 +1,52 @@
 """mkdocs-macros module.
 
-変動情報（次回開催・参加費・登録URL）の単一ソースは mkdocs.yml の `extra:` に置き、
+変動情報（回の予定・参加費・登録URL）の単一ソースは mkdocs.yml の `extra:` に置き、
 ここではそれを各ページへ流し込むためのマクロだけを定義する。
 本文に日付・価格をハードコードしないこと（§3 単一ソース原則）。
+
+日程の部品（これからの開催・全回の一覧・申込月ごとの表・参加の前に）は hooks/schedule.py に
+あり、テーマのテンプレートと同じものをここから呼ぶ（表示を1か所で作るため）。
 """
+
+import importlib.util
+import pathlib
+import sys
+
+
+def _schedule():
+    """hooks/schedule.py（MkDocs が hook として読み込んだもの）。無ければパスから読む。"""
+    mod = sys.modules.get("hooks/schedule.py")
+    if mod is None:
+        path = pathlib.Path(__file__).with_name("hooks") / "schedule.py"
+        spec = importlib.util.spec_from_file_location("aisia_schedule", path)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+    return mod
 
 
 def define_env(env):
     extra = env.conf.get("extra", {}) or {}
+    sched = _schedule()
 
     @env.macro
-    def session_cards():
-        """次回開催を grid cards で描画（schedule / 必要箇所が参照）。"""
-        sessions = extra.get("sessions", [])
-        out = ['<div class="grid cards" markdown>', ""]
-        for s in sessions:
-            out.append(f'-   **{s["label"]}**')
-            out.append("")
-            out.append("    ---")
-            out.append("")
-            theme = f'（{s["theme"]}）' if s.get("theme") else ""
-            out.append(f'    **{s["date"]}**{theme} ／ {s["note"]}')
-            out.append("")
-        out.append("</div>")
-        return "\n".join(out)
+    def upcoming_rounds(n=2):
+        """これからの開催（回・テーマ・問い・A/B の日時・同じ内容・開催済み）。"""
+        return sched.upcoming_html(extra, n)
+
+    @env.macro
+    def schedule_list():
+        """全回の一覧（/sessions/ の開催予定）。"""
+        return sched.schedule_list_html(extra)
+
+    @env.macro
+    def payment_months():
+        """お申し込み月ごとの初回のお支払い日と、それまでに参加できる回（join）。"""
+        return sched.payment_months_html(extra)
+
+    @env.macro
+    def participation_notes(title="有償メンバーとして参加する前に"):
+        """参加の前に（`extra.participation`）。/subscribe/ のカードと同じ内容。"""
+        return sched.participation_html(extra, title)
 
     def _link(url, classes):
         """Markdown のリンク。外部URLだけ新しいタブで開く（サイト内は相対パスに直す）。"""
@@ -75,7 +98,8 @@ def define_env(env):
             no = r.get("round", "")
             title = _html.escape(str(r.get("title", "")))
             area = _html.escape(str(r.get("area", "")))
-            dates = _html.escape(str(r.get("dates", "")))
+            # 日付は hooks/schedule.py が extra.schedule から作る（「開催予定」はブラウザ側でも外れる）
+            dates = r.get("dates_html") or _html.escape(str(r.get("dates", "")))
             summary = _html.escape(str(r.get("summary", "")))
             image = r.get("image")
             out.append('<article class="history-card">')
@@ -110,55 +134,32 @@ def define_env(env):
 
     @env.macro
     def payment_flow():
-        """join の図1「お申し込みから初回のお支払いまでの流れ」。
+        """join の図1「お申し込みから初回のお支払いまでの流れ」と、解約の2つの場合。
 
-        以前は inline SVG で、横長の図を縮めるためスマホでは文字が6px相当になっていた。
-        HTML にして、PC では横4段・スマホでは縦の時系列に組み替える（extra.css の `.jf`）。
+        **例の月を持たない**（2026年11月〜）。以前は `extra.sessions` の先頭の回の月を例に
+        取っていたため、その月の途中から申し込む人や、前の月に申し込む人に当てはまらない
+        日付が出ていた。具体的な日付は、すぐ下の `payment_months()`（申込月ごとの表）が出す。
 
-        中身は単一ソースから決まる。例に取る月＝`extra.sessions` の先頭の回（直近の回）の
-        開催月。その回が初月無料で、初回のお支払いは翌月15日、解約の期限はその前日。
-        初月無料の回は、`extra.sessions` のうち先頭と同じ回のすべての日程（A日程・B日程の
-        どちらに参加してもよい）を「または」でつないで出す。
-        金額は `extra.pricing`。**回・金額が変わっても、この図を手で直す必要はない。**
+        PC では横4段・スマホでは縦の時系列（extra.css の `.jf`）。金額は `extra.pricing`、
+        解約の文は `extra.billing`（ホーム・/subscribe/・FAQ・llms.txt と同じ文）。
         """
-        from datetime import datetime
+        import html as _html
 
-        sessions = extra.get("sessions", []) or []
         pricing = extra.get("pricing", {}) or {}
-        s = sessions[0] if sessions else {}
-        start = datetime.fromisoformat(s["start"]) if s.get("start") else None
-        if start is None:
-            return ""
-        m = start.month
-        nm = m % 12 + 1
-        label = str(s.get("label", ""))
-        round_name, _, sched = label.partition(" ")
-        # 同じ回の日程（例：第6回の A日程 10/20 と B日程 11/6）。どちらに出ても無料
-        dates = []
-        for t in sessions:
-            r, _, sc = str(t.get("label", "")).partition(" ")
-            if r != round_name or not t.get("start"):
-                continue
-            d = datetime.fromisoformat(t["start"])
-            dates.append((f"{d.month}/{d.day}", sc))
-        # 日程ごとに折り返さない塊にする（「または」は前の日程に付ける）
-        parts = [f"{d}" + (f"（{sc}）" if sc else "") for d, sc in dates]
-        when = " ".join(f'<span class="jf-step__date">{p}{"または" if i < len(parts) - 1 else ""}'
-                        "</span>" for i, p in enumerate(parts))
-        at = "・".join(d for d, _ in dates)
+        billing = extra.get("billing", {}) or {}
         early = str(pricing.get("early_monthly", "")).replace("円", "")
         incl = pricing.get("early_monthly_incl", "")
-
         steps = [
-            ("", "STEP 1", "お申し込み", "Stripeでお申し込み（初月無料）", f"{m}月中"),
-            ("jf-step--free", "STEP 2", f"{round_name}に参加",
-             f'<span class="jf-step__free">¥0 <small>無料</small></span>{when}', at),
-            ("", "STEP 3", "初回のお支払い", f"¥{incl}（早期割引 {early}）", f"{nm}/15"),
-            ("", "STEP 4", "以降のお支払い", "毎月15日に自動更新", "毎月15日"),
+            ("", "STEP 1", "お申し込み", "Stripeでカード情報を登録。お申し込み時のお支払いはありません", "お申し込み日"),
+            ("jf-step--free", "STEP 2", "無料期間",
+             '<span class="jf-step__free">¥0 <small>無料</small></span>'
+             "この間に開催される回に参加できます", "翌月14日まで"),
+            ("", "STEP 3", "初回のお支払い", f"¥{incl}（早期割引 {early}）", "翌月15日"),
+            ("", "STEP 4", "以降のお支払い", "毎月15日に自動で更新", "毎月15日"),
         ]
         out = ['<figure class="jf jf--flow">',
                _figure_head("お申し込みから初回のお支払いまでの流れ",
-                            f"例：{m}月中にお申し込みの場合"),
+                            "初回のお支払いは、お申し込みの日にかかわらず「お申し込み月の翌月15日」です。"),
                '<ol class="jf-steps">']
         for cls, no, name, desc, at in steps:
             out.append(
@@ -167,15 +168,13 @@ def define_env(env):
                 f'<span class="jf-step__name">{name}</span>'
                 f'<span class="jf-step__desc">{desc}</span></span></li>')
         out.append("</ol>")
+        e = lambda k: _html.escape(str(billing.get(k, "")))
         out.append(
-            '<div class="jf-note"><p class="jf-note__lead">解約はいつでも。'
-            '更新日の前日までなら、その月は¥0。</p>'
-            '<p>各更新日（毎月15日）の前日までに Stripe カスタマーポータルから解約すれば、'
-            'その月の費用は発生しません。</p>'
-            f'<p class="jf-note__ex">例）{nm}/14 までに解約 → 費用ゼロ。／'
-            'カード情報は弊社で保持しません。</p></div>')
-        out.append(f"<figcaption>図1：お申し込みから初回のお支払いまでの流れ"
-                   f"（{m}月中にお申し込みの場合）</figcaption>")
+            '<div class="jf-note"><p class="jf-note__lead">解約はいつでも、ご自身で。締め切りは2通りです。</p>'
+            f'<p class="jf-note__case">{e("cancel_trial")}</p>'
+            f'<p class="jf-note__case">{e("cancel_paid")}</p>'
+            f'<p class="jf-note__ex">{e("cancel_note")}カード情報は弊社で保持しません。</p></div>')
+        out.append("<figcaption>図1：お申し込みから初回のお支払いまでの流れ</figcaption>")
         out.append("</figure>")
         return "\n".join(out)
 
@@ -250,6 +249,8 @@ def define_env(env):
             lines.append("**関連ページ:** " + " ・ ".join(related))
             lines.append("")
         if nxt:
+            # 日付は schedule.js が、開催日を過ぎたら次の日程に付け直す（data-next-session）
+            nxt = f'<span data-next-session>{nxt}</span>'
             lines.append(f"次回開催は **{nxt}**。参加を決めた方も、まず情報だけ受け取りたい方も、"
                          "下のいずれかからどうぞ。" if join_cta else f"次回開催は **{nxt}**。")
             lines.append("")

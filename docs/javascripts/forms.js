@@ -2,20 +2,36 @@
  * フォーム（/subscribe/ のメール登録・/join/corporate/ の法人問い合わせ）と、UTM の保持・計測。
  *
  * - 全ページで読み込まれる（mkdocs.yml の extra_javascript）。フォームの無いページでは
- *   URL の utm_* を覚えるだけ。広告でホーム等に着地してから /subscribe/ へ移っても、
- *   同じタブのあいだは最初の UTM を送れるようにする（sessionStorage）。
+ *   UTM を覚えて、ページビュー（ページ移動のたび）と申込（Stripe）ボタンのクリックを送るだけ。
  * - Material の navigation.instant ではページ遷移で <script> が読み直されないので、
  *   初期化は document$（ページが描かれるたびに流れる）に載せる。
  * - 送信先はゲートウェイ（go.antecanis.com）。フォームの data-endpoint。
  * - Turnstile（Cloudflare）は明示描画。トークンは1回きりなので、失敗したら作り直す。
- * - 計測は GA4 の generate_lead を送信成功の1回だけ（メール登録は完了ページの表示時）。
+ *
+ * ## UTM（2026年11月〜）
+ * URL に utm_* があり、保存中の値が無い（または30日を過ぎた）ときだけ、localStorage に30日保存する
+ * （**初回訪問の値を保つ**＝ファーストタッチ。上書きしない）。広告で来た人が日をおいて /subscribe/ に
+ * 戻ってきても、最初の UTM を送れる。送り先はフォームの隠し項目 → ゲートウェイ → Mailchimp。
+ *
+ * ## 計測（GA4・Meta・Google 広告）
+ * - メール登録：ゲートウェイが ok を返し、**このブラウザで同じアドレスをまだ数えていない**ときだけ、
+ *   完了ページで1回：GA4 generate_lead・Meta Lead・Google 広告のコンバージョン（ラベルがあれば）。
+ *   送り直し（2回目以降）は GA4 subscribe_repeat だけ。再読み込み・直アクセスでは何も送らない。
+ *   ゲートウェイが応答に lead（真偽値。新規に作ったときだけ true）を返すようになったら、それに従う。
+ * - 申込（Stripe）ボタンのクリック（href が extra.join_url で始まるリンク）：GA4 click_join・
+ *   Meta InitiateCheckout・Google 広告のコンバージョン（ラベルがあれば）。
+ * - 法人問い合わせの送信成功：GA4 generate_lead（form: corporate）・Meta Contact・Google 広告（ラベルがあれば）。
+ * - Meta・Google 広告は、overrides/partials/tracking.html が ID と本番ホストを確かめて読み込んだときだけ
+ *   送る（window.__aisiaTags.on）。GA4 は従来どおり Material の組み込み（dataLayer）。
  */
 (function () {
   "use strict";
 
   var UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content"];
-  var UTM_STORE = "aisia_utm";
-  var LEAD_STORE = "aisia_lead";
+  var UTM_STORE = "aisia_utm_v2";
+  var UTM_TTL = 30 * 24 * 60 * 60 * 1000;   // 30日
+  var LEAD_STORE = "aisia_lead";             // 送信直後 → 完了ページへの受け渡し（sessionStorage）
+  var LEADS_SEEN = "aisia_leads";            // このブラウザで数えたアドレス（ハッシュ。localStorage）
 
   var MESSAGES = {
     invalid_input: "入力内容をご確認ください。",
@@ -28,17 +44,31 @@
   var CORPORATE_SUFFIX = "お急ぎの場合は support@antecanis.com へメールでご連絡ください。";
 
   // ---- storage（プライベートブラウズ等で使えなくても落ちないように）----
-  function load(key) {
-    try { return JSON.parse(sessionStorage.getItem(key) || "null"); } catch (e) { return null; }
+  function store(kind) {
+    try { var s = window[kind]; s.setItem("__aisia", "1"); s.removeItem("__aisia"); return s; }
+    catch (e) { return null; }
   }
-  function save(key, value) {
-    try { sessionStorage.setItem(key, JSON.stringify(value)); } catch (e) { /* 無視 */ }
+  function load(key, kind) {
+    var s = store(kind || "sessionStorage");
+    try { return s ? JSON.parse(s.getItem(key) || "null") : null; } catch (e) { return null; }
   }
-  function drop(key) {
-    try { sessionStorage.removeItem(key); } catch (e) { /* 無視 */ }
+  function save(key, value, kind) {
+    var s = store(kind || "sessionStorage");
+    try { if (s) s.setItem(key, JSON.stringify(value)); } catch (e) { /* 無視 */ }
   }
+  function drop(key, kind) {
+    var s = store(kind || "sessionStorage");
+    try { if (s) s.removeItem(key); } catch (e) { /* 無視 */ }
+  }
+  // 30日の保持は localStorage。使えなければ sessionStorage（そのタブの間だけ）に落とす
+  function longKind() { return store("localStorage") ? "localStorage" : "sessionStorage"; }
 
-  // ---- UTM：URL にあればそれを、無ければ同じタブで最初に着地したときの値 ----
+  // ---- UTM：初回訪問の値を30日（上書きしない）----
+  function storedUtm() {
+    var cur = load(UTM_STORE, longKind());
+    if (!cur || !cur.ts || !cur.v || Date.now() - cur.ts >= UTM_TTL) return null;
+    return cur;
+  }
   function rememberUtm() {
     var params = new URLSearchParams(location.search);
     var found = {};
@@ -47,17 +77,54 @@
       var v = (params.get(k) || "").slice(0, 100);
       if (v) { found[k] = v; any = true; }
     });
-    if (any) save(UTM_STORE, found);
+    if (!any || storedUtm()) return;
+    save(UTM_STORE, { v: found, ts: Date.now() }, longKind());
   }
   function currentUtm() {
-    return load(UTM_STORE) || {};
+    var cur = storedUtm();
+    return cur ? cur.v : {};
   }
 
-  // ---- GA4（Material は gtag をグローバルに出さないので dataLayer に直接積む）----
-  // gtag.js は arguments オブジェクトを期待するので、同じ形にして積む
-  function gtagEvent(name, params) {
+  // ---- 計測 ----
+  // GA4：Material は gtag をグローバルに出さないので dataLayer に直接積む（gtag.js は arguments の形を期待する）
+  function gtagPush() {
     window.dataLayer = window.dataLayer || [];
-    (function () { window.dataLayer.push(arguments); })("event", name, params);
+    window.dataLayer.push(arguments);
+  }
+  function gtagEvent(name, params) { gtagPush("event", name, params || {}); }
+  function tags() { return window.__aisiaTags || {}; }
+  function metaTrack(name, params) {
+    var t = tags();
+    if (!t.on || !t.meta || typeof window.fbq !== "function") return;
+    if (params) window.fbq("track", name, params); else window.fbq("track", name);
+  }
+  function adsConversion(label) {
+    var t = tags();
+    if (!t.on || !t.ads || !label) return;
+    gtagPush("event", "conversion", { send_to: t.ads + "/" + label });
+  }
+
+  // メールアドレスをブラウザ内に置かないための短いハッシュ（cyrb53。照合に使うだけで、どこにも送らない）
+  function hash(str) {
+    var h1 = 0xdeadbeef, h2 = 0x41c6ce57;
+    for (var i = 0, ch; i < str.length; i++) {
+      ch = str.charCodeAt(i);
+      h1 = Math.imul(h1 ^ ch, 2654435761);
+      h2 = Math.imul(h2 ^ ch, 1597334677);
+    }
+    h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+    h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+    return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36);
+  }
+  // 数える登録か（ゲートウェイの lead があればそれに従う。無ければ、このブラウザで初めてのアドレスか）
+  function countLead(email, res) {
+    var key = hash("aisia:" + String(email || "").trim().toLowerCase());
+    var kind = longKind();
+    var seen = load(LEADS_SEEN, kind);
+    if (!Array.isArray(seen)) seen = [];
+    var first = seen.indexOf(key) < 0;
+    if (first) save(LEADS_SEEN, seen.concat([key]).slice(-20), kind);
+    return res && typeof res.lead === "boolean" ? res.lead : first;
   }
 
   // ---- Turnstile ----
@@ -146,6 +213,9 @@
           data[el.name] = el.value.trim();
         }
       });
+      // 「知ったきっかけ」が任意のフォーム：空欄のときに送る値（mkdocs.yml の extra.forms.source_blank）
+      var blank = form.getAttribute("data-source-blank");
+      if (blank !== null && "source" in data && !data.source) data.source = blank;
       var utm = currentUtm();
       UTM_KEYS.forEach(function (k) { data[k] = data[k] || utm[k] || ""; });
       data.turnstile_token = token();
@@ -174,12 +244,17 @@
       }).then(function (res) {
         if (res && res.ok) {
           if (kind === "subscribe") {
-            // 計測は完了ページで1回だけ（再読み込み・直アクセスでは数えない）
-            save(LEAD_STORE, "subscribe");
+            // 計測は完了ページで1回だけ（再読み込み・直アクセスでは数えない）。
+            // 数える登録か、送り直しかをここで決めて渡す
+            save(LEAD_STORE, countLead(data.email, res) ? "subscribe" : "subscribe:repeat");
             location.href = form.getAttribute("data-success");
             return;
           }
           gtagEvent("generate_lead", { form: kind });
+          if (kind === "corporate") {
+            metaTrack("Contact");
+            adsConversion(tags().adsInquiry);
+          }
           var done = document.querySelector("[data-form-done='" + kind + "']");
           if (done) {
             form.hidden = true;
@@ -209,10 +284,52 @@
     var marker = document.querySelector("[data-lead-page]");
     if (!marker) return;
     var form = marker.getAttribute("data-lead-page");
-    if (load(LEAD_STORE) === form) {
+    var v = load(LEAD_STORE);
+    if (v === form) {
       drop(LEAD_STORE);
       gtagEvent("generate_lead", { form: form });
+      metaTrack("Lead");
+      adsConversion(tags().adsLead);
+    } else if (v === form + ":repeat") {
+      drop(LEAD_STORE);
+      gtagEvent("subscribe_repeat", { form: form });
     }
+  }
+
+  // ---- ページビュー：Material の instant navigation でのページ移動のたびに（Meta・Google 広告）----
+  // 最初の表示は partials/tracking.html が送っているので、2回目以降だけ。GA4 は Material が送る
+  var lastPath = null;
+  function pageView() {
+    var p = location.pathname + location.search;
+    if (lastPath === null || p === lastPath) { lastPath = p; return; }
+    lastPath = p;
+    var t = tags();
+    if (!t.on) return;
+    if (t.meta && typeof window.fbq === "function") window.fbq("track", "PageView");
+    if (t.ads) gtagPush("config", t.ads);
+  }
+
+  // ---- クリックの計測（申込ボタン・data-ga のリンク）。document に1回だけ付ける ----
+  var clicksBound = false;
+  function bindClicks() {
+    if (clicksBound) return;
+    clicksBound = true;
+    document.addEventListener("click", function (e) {
+      var a = e.target && e.target.closest ? e.target.closest("a[href]") : null;
+      if (!a) return;
+      var join = tags().joinUrl;
+      if (join && a.href.indexOf(join) === 0) {
+        gtagEvent("click_join", {
+          page_path: location.pathname,
+          link_text: (a.textContent || "").replace(/\s+/g, " ").trim().slice(0, 60)
+        });
+        metaTrack("InitiateCheckout");
+        adsConversion(tags().adsJoin);
+        return;
+      }
+      var name = a.getAttribute("data-ga");
+      if (name) gtagEvent(name, { page_path: location.pathname, link_url: a.href });
+    }, true);
   }
 
   // ---- ライブラリーから来た人向けの小見出し ----
@@ -265,6 +382,8 @@
 
   function init() {
     rememberUtm();
+    pageView();
+    bindClicks();
     Array.prototype.forEach.call(document.querySelectorAll("form[data-aisia-form]"), setupForm);
     trackThanks();
     libraryEyebrow();

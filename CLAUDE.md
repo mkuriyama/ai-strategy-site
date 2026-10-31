@@ -13,9 +13,10 @@
 
 > ⚙ **アーキテクチャ更新（2026年6月）**: ホームは縦長ランディングに刷新。専用テンプレート
 > `overrides/home.html` で描画し、`docs/index.md` は front-matter（`template: home.html`）のみ。
-> **次回開催・参加費・登録URLは `mkdocs.yml` の `extra:` が単一ソース**（本文にハードコードしない）。
-> マクロは `main.py`（`session_cards` / `register_button` / `footer_cta`）。後述の
-> 「単一ソース運用」「ホームの仕組み」を参照。
+> **回の予定・参加費・登録URLは `mkdocs.yml` の `extra:` が単一ソース**（本文にハードコードしない）。
+> 日程は 2026年11月から **`extra.schedule`（全回の A/B 日程）だけ**が正本で、次回の表記などは
+> `hooks/schedule.py` が作る。マクロは `main.py`（`upcoming_rounds` / `register_button` / `footer_cta` ほか）。
+> 後述の「単一ソース運用」「ホームの仕組み」「回の予定（日程）の仕組み」「計測」を参照。
 
 ```
 docs/
@@ -29,8 +30,8 @@ docs/
 │   └─ share.md                 このプロジェクトを紹介する（チラシへの導線）
 ├─ sessions/
 │   ├─ index.md                 セッションの進め方と開催予定。構成例・持ち帰るもの・
-│   │                           **次回開催・今後の月次予定**・毎月の挑戦・使うアプリ・今後の展開。
-│   │                           2026年9月に schedule.md を吸収した
+│   │                           **これからの開催・開催予定（全回）**（どちらも extra.schedule から自動）・
+│   │                           毎月の挑戦・使うアプリ・今後の展開。2026年9月に schedule.md を吸収した
 │   └─ history.md               開催履歴（`extra.history` を history_cards() で描画。本文は書かない）
 │   ※ themes.md（月次テーマ）と schedule.md（開催予定）は2026年9月に廃止。
 │     themes は history と同じ内容を手書きで持っていただけ（→ history へ転送）。
@@ -56,8 +57,10 @@ docs/
 │   │                           送信先はゲートウェイ /api/subscribe（シングルオプトイン）
 │   └─ thanks/index.md          /subscribe/thanks/ 登録完了ページ。nav に載せず noindex、
 │                               sitemap・llms.txt・サイト内検索からも外す
-├─ javascripts/forms.js         2つのフォームの送信・Turnstile・UTM の保持・固定CTA・GA4 計測。
-│                               全ページで読み込む（フォームの無いページでは UTM を覚えるだけ）
+├─ javascripts/forms.js         2つのフォームの送信・Turnstile・UTM の保持（初回訪問の値を30日）・
+│                               固定CTA・計測（GA4・Meta・Google 広告。後述「計測」）。全ページで読み込む
+├─ javascripts/schedule.js      開催日を過ぎた日程を、次のビルドを待たずにブラウザで「開催済み」にし、
+│                               「次回」を繰り上げる（hooks/schedule.py と同じ決まり。後述）
 │  ※ start-guide.md（スタートガイド）は2026年9月に**ライブラリー（B）の `/guide/` へ移設**。
 │    あちらは「参加している方の手元」という位置づけで、原稿は B の `content/guide/*.md`。
 │    本サイトは転送のみ（`redirect_maps` の `start-guide.md` → 外部URL）。**消さないこと**
@@ -93,12 +96,14 @@ docs/
 
 overrides/
 ├─ main.html                    全ページ共通のお知らせバーCTA（announceブロック）＋
-                                構造化データ JSON-LD（extrahead ブロック。Organization／Event／BreadcrumbList）
+                                構造化データ JSON-LD（extrahead ブロック。Organization／Event／BreadcrumbList）＋
+                                日程の JSON（schedule.js 用）＋ 計測タグ（analytics ブロック → partials/tracking.html）
 ├─ home.html                    ホーム（縦長ランディング）の専用テンプレート
 ├─ subscribe.html               /subscribe/（メール登録の着地ページ）
 ├─ subscribe-thanks.html        /subscribe/thanks/（登録完了）
 ├─ corporate.html               /join/corporate/（法人の方へ・問い合わせ）
-├─ partials/lp.html             上の3つで共有する部品（日付の短縮・次回セッション・フォーム部品）。
+├─ partials/tracking.html       広告の計測タグ（Meta ピクセル・Google 広告）。**ID が空なら読み込まない**
+├─ partials/lp.html             上の3つで共有する部品（日付の短縮・フォーム部品）。
 │                               スタイルは extra.css の `.home-landing.lp`（ホームと同じキャンバス）
 └─ partials/header.html         Material の header partial を上書き。ヘッダーのタイトル文字を
                                 site_name ではなく**ページ自身のタイトル**（トップは「ホーム」）に
@@ -106,6 +111,9 @@ overrides/
 main.py                         mkdocs-macros のマクロ定義（単一ソースを各ページへ流し込む）
 mkdocs.yml                      設定・ナビ(nav)・配色・copyright・**extra:（単一ソースデータ）**
 hooks/abbr_cjk.py               日本語の用語ツールチップを成立させる（変更不要）
+hooks/schedule.py               回の予定（extra.schedule）から、次回の表記・これからの開催・全回の一覧・
+                                申込月ごとの初回のお支払い日・開催履歴の日付・Event を作る（最初に動く hook）
+hooks/tracking.py               Material を通らない静的ページ（/welcome/・/paused/）に GA4 と広告タグを差し込む
 hooks/seo_files.py              AIO 用 `llms.txt` をビルド時に生成（extra: と各ページの description から）
 hooks/export_data.py            5つの役割。①`site/data/rounds.json`（回の表題・領域・開催日・
                                 要約）を公開 ― B が回ページの見出しに使う。②`site/data/
@@ -151,41 +159,45 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
 
 ## 毎回の更新チェックリスト（新しい回の開催ごと）
 
-> ✅ **次回開催・参加費は `mkdocs.yml` の `extra:` を1か所更新すれば、ホーム/schedule/join に
-> 自動反映**されます（以前のような index.md と schedule.md の二重編集は不要になりました）。
+> ✅ **日程は `extra.schedule` に全回を書いておけば、開催が終わっても書き換えは要りません**
+> （2026年11月〜）。開始から3時間で「開催済み」になり、「次回」も次の日程に繰り上がる ――
+> ビルドの時点でも、ブラウザ（schedule.js）でも。回ごとの作業は「新しい回の日程を足す」
+> 「終わった回を開催履歴に足す」の2つだけ。
 
 0. **⚠ 日付の曜日を必ず検証する**（過去に「7/10(木)」と誤記した実例あり）
    ```bash
    for d in 2026-09-15 2026-10-02; do printf "%s = " "$d"; date -d "$d" "+%a"; done
    ```
    ユーザー提供の資料でも曜日が誤っていることがある。**曜日はコマンドの結果を正とする**。
-1. **次回開催・参加費（単一ソース）** `mkdocs.yml` の `extra:`
-   - `extra.next_session_short`（ヘッダー/お知らせバー/導線の短縮表記）＝**直近に開催される1件**
-   - `extra.sessions`（次回回の配列：`label` / `kind`(main|sub) / `date` / `note`）＝**通常2件**。
-     終わった回を落とし、「次に来る2つ」を並べる（例：第4回B日程が終わったら
-     「第5回 A日程(9/15)」＋「第5回 B日程(10/2)」）。`kind: main`=A日程（金タグ）、`sub`=B日程
+1. **回の予定（単一ソース）** `mkdocs.yml` の `extra.schedule`
+   - **新しい回の日程が決まったら末尾に足す**：`round`・`a`（A日程の開始）・`b`（B日程の開始）。
+     開始は日本時間の ISO（例 `2026-12-15T20:00:00+09:00`）。**曜日は書かない**（日付から計算する）
+   - テーマが決まったら `theme`（短い名前）と `question`（問い1文）を足す。決まるまでは省く
+     （「テーマは決まりしだいお知らせします」と出る）。開催済みの回で省いたときは `extra.history` の
+     `title`（「 ── 」より前）を使う
+   - これだけで、お知らせバーの「次回」・ホームのライブパネル・/subscribe/・/join/・/sessions/ の
+     「これからの開催」・/sessions/ の「開催予定（全回）」・/join/ の「お申し込み月ごとの初回の
+     お支払い日」・JSON-LD（Event）・`llms.txt`・開催履歴の日付（「開催予定」の付け外し）が揃う
+   - ⚠ `extra.sessions`・`extra.next_session_short` は**もう手で書かない**（hook が作る。書いても上書きされる）
+   - ⚠ /join/ の申込月ごとの表は「最後の回の A日程がある月」までしか行を出さない。次の回の日程が
+     決まったら早めに足す（足さないと、表が先の月まで伸びない）
    - `extra.pricing`（早期枠・定価の金額）… 後述「料金改定の運用」を参照
-   - 各回の `start`（ISO 日時。例 `2026-09-15T20:00:00+09:00`）… 構造化データ Event の開催日時。
-     `date` と食い違わないように同時に更新する
-   - これだけで、ホームのライブパネル・お知らせバー・schedule の「次回開催」カード・join の
-     価格表・JSON-LD・`llms.txt` が更新される。
-   - **終わった回は `extra.history` の先頭に追加**（`round:`＝回番号・テーマ・領域・開催日・
-     要約・図）。`digests:` は第1〜4回にしかない（第5回以降は掲載を取りやめたため）。
+   - **終わった回は `extra.history` の先頭に追加**（`round:`＝回番号・テーマ・領域・要約・図。
+     開催日は書かない ―― `extra.schedule` から作る）。`digests:` は第1〜4回にしかない（第5回以降は掲載を取りやめたため）。
      図は回の内容を表す1点を `assets/img/history/vol-0N.svg`（または .gif）に置く。
      `extra.latest_digest` は開催履歴ページを指したまま、`label` の回数だけ新しくする
      （ホームの「新着」。例：`第6回までの開催履歴を公開中`）。
      ⚠ **テーマ・領域・要約・highlight は実際の開催内容が必要**。手元に無いときは
      推測で埋めず、依頼者に内容を確認する（日程の更新だけ先に進めてよい）。
-     - B日程の前に先頭へ入れた回は `dates` に「開催予定」と書いてある（例：`10/2(金・開催予定)`）。
-       **B日程が終わったら外す**。新しい回を足したら `highlight` 等も新しい回に付け替える
+     - B日程の前に先頭へ入れた回の「開催予定」は**自動で付き、B日程が終われば自動で外れる**。
+       新しい回を足したら `highlight` 等も新しい回に付け替える
        （/subscribe/ の「直近の回から」は先頭の回を出す）。`extra.stats` の回数・満足度も見直す
      - ⚠ 回番号のキーは **`round:`**。`no:` は **YAML が真偽値として読む**ため使えない
        （2026年9月に実際に踏み、開催履歴が「第回」と表示されていた）。`hooks/export_data.py`
        が同種のキーを検出してビルドを止める。
-2. **開催スケジュールの月次表** `docs/sessions/index.md` の「今後の月次予定」
-   - 表は **A日程（メイン）/ B日程（追加開催・同内容）の2列構成**。終了した日程に「※開催済」を付ける
-   - 同ページの「次回開催」カードは `{{ session_cards() }}` マクロ（手編集不要）。
-   - ※ホームの「次回開催」は overrides/home.html が `extra.sessions` を直接描画（手編集不要）。
+2. ~~開催スケジュールの月次表~~ … **手編集は不要になった**（2026年11月）。/sessions/ の
+   「これからの開催」は `{{ upcoming_rounds() }}`、「開催予定（全回）」は `{{ schedule_list() }}`
+   が `extra.schedule` から描く。「※開催済」も自動
 3. ~~月次テーマ~~ … **廃止**（2026年9月）。各回の記録は `extra.history` → 開催履歴に一本化。
    同じ内容を2か所に手書きしていたのをやめた
 4. ~~ダイジェスト~~ … **第5回以降は本サイトに載せない**（2026年10月に取りやめ）。
@@ -208,7 +220,7 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
 
 | 情報 | 載っているファイル |
 |---|---|
-| 次回開催の日程 | **`mkdocs.yml` の `extra.sessions` / `extra.next_session_short`**（ホーム・セッションページ・お知らせバー・JSON-LD・llms.txt へ自動反映。`date` と `start` の両方）＋ **`docs/sessions/index.md` の月次表**（※開催済の付与）＋ **`docs/assets/flyer.html`**（手動） |
+| 回の日程（A/B） | **`mkdocs.yml` の `extra.schedule` の1か所だけ**（お知らせバー・ホーム・/subscribe/・/subscribe/thanks/・/join/・/sessions/・開催履歴の日付・JSON-LD・llms.txt・`rounds.json` へ自動反映。開催済みも自動）＋ **`docs/assets/flyer.html`**（手動）。メンバースペース（aisia-ledger-admin の `content.ts`）は別に持っている |
 | 終わった回の記録 | **`mkdocs.yml` の `extra.history` の1か所だけ**（開催履歴ページ・`rounds.json`・B の回ページの見出し・B の領域マップへ自動反映）。2026年9月に月次テーマpage を廃止して一本化した |
 | 参加費の金額 | **`mkdocs.yml` の `extra.pricing`**（ホームのティーザー・join の価格表・**join の図1・図2**へ自動反映。図2の段は `pricing.ladder`）＋ **`flyer.html` の参加費欄**（手動） |
 | 用語の定義 | `docs/glossary.md` と `docs/includes/abbreviations.md` の**両方**（定義文を一致させる）。**正本はこの2つだけ**。ライブラリー（B）の `/terms/` は `site/data/glossary.json` をビルド時に取りに来るので、B 側に書き足す必要はない（書き足すと片方だけ古くなる）。掲載場所は B だが、**編集する場所はここ** |
@@ -216,7 +228,10 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
 | メール登録の行き先 | **`mkdocs.yml` の `extra.register_url` の1か所のみ**（`subscribe/`＝サイト内の /subscribe/。サイト相対で書き、マクロ・テンプレートが相対パスに直す）。旧LP `mailchi.mp/antecanis/ai-strategy` は過去の投稿からリンクされているので Mailchimp 側に残してあり、本サイトからは `<noscript>` の代替（`extra.forms.noscript_url`）でのみ参照する |
 | フォームの送信先・Turnstile・ご案内メールの件名 | **`mkdocs.yml` の `extra.forms`**（`api_base`・`turnstile_sitekey`・`welcome_subject`）。件名は実際のご案内メール（Mailchimp のオートメーション）と一致させる。`api_base` と `turnstile_sitekey` は環境変数 `FORMS_API_BASE` / `TURNSTILE_SITEKEY` で上書きできる（検証用） |
 | 実績数値 | **`mkdocs.yml` の `extra.stats` の1か所だけ**（/subscribe/ のチップと実績帯、/join/corporate/ の実績帯）。`satisfaction` は新しい回のアンケートが加わるたびに再計算する（延べ回答のうち「参加・視聴して良かった」が「とても／ややそう思う」の割合。未回答も分母に含める）。年代など、ファクトチェックしていない属性は書かない |
-| 次回回のテーマ | `extra.sessions[].theme`（**任意**。決まっているときだけ日付の下に出る。空でよい） |
+| これからの回のテーマ | `extra.schedule[].theme`・`question`（**任意**。決まるまで省いてよい） |
+| 初回のお支払いと解約の文 | **`mkdocs.yml` の `extra.billing`**（join の図1・お申し込みの前の注記・ホームの「いつでも自分で解約」・/subscribe/ のカードと FAQ・llms.txt へ自動反映）＋ **`docs/welcome/index.html`**（静的HTML。手で揃える）。「無料期間中の解約」と「お支払い開始後の解約」を**分けて書く**（後述「料金改定の運用」） |
+| 参加の前に（途中参加・A/B・録画・事前課題・準備・費用） | **`mkdocs.yml` の `extra.participation`**（/subscribe/ の有償メンバーのカードの下と、/join/ のお申し込みの前に同じ内容で出る） |
+| 広告の計測タグの ID | **`mkdocs.yml` の `extra.tracking`**（空なら読み込まない。後述「計測」）。ライブラリー（B）は B の `frontend/shared/site.js` に別に持つ |
 | 直近の回の紹介 | `extra.history` の**先頭の回**の `highlight`（2〜4文）・`highlight_image`・`highlight_caption`・`month`（いずれも任意）→ /subscribe/ の「直近の回から」。`highlight` が無ければ `summary`、画像が無ければ画像なしで出る |
 | 申込（Stripe）URL | **`mkdocs.yml` の `extra.join_url` の1か所のみ**（固定リンク: `https://go.antecanis.com/ai-strategy-join`。リンク先の差し替えはゲートウェイ側で行う）。**値は `plugins.redirects` の `apply/index.md` に YAML アンカーで書いてあり**、`extra.join_url` はそれを参照する（/apply/ の転送先と同じ値にするため） |
 
@@ -335,15 +350,22 @@ B 側**（`ai-strategy-news-app` の `content/guide/*.md`）。本サイトに�
 
 ## 単一ソース運用とホームの仕組み（重要）
 
-- **変動情報の正本は `mkdocs.yml` の `extra:`**。`sessions` / `next_session_short` / `pricing` /
-  `register_url` をここで定義し、**本文（.md）にハードコードしない**。
+- **変動情報の正本は `mkdocs.yml` の `extra:`**。`schedule` / `pricing` / `billing` / `participation` /
+  `register_url` をここで定義し、**本文（.md）にハードコードしない**。`sessions` / `next_session_short` は
+  `hooks/schedule.py` が `schedule` から作る（手で書かない）。
 - **マクロ（`main.py`）**:
-  - `{{ session_cards() }}` … `extra.sessions` から「次回開催」カードを描画（`sessions/index.md` で使用）
+  - `{{ upcoming_rounds(n) }}` … これからの開催（回・テーマ・問い・A/B の日時・同じ内容・開催済み）。
+    /sessions/・/join/ で使用。テーマのテンプレートでは同じものを `{{ schedule_upcoming(n, "card"|"panel") }}` で呼ぶ
+  - `{{ schedule_list() }}` … 全回の一覧（/sessions/ の「開催予定（全回）」）
+  - `{{ payment_months() }}` … お申し込み月ごとの初回のお支払い日と、それまでに参加できる回（/join/）
+  - `{{ participation_notes() }}` … 参加の前に（`extra.participation`。/subscribe/ では `{{ participation() }}`）
+  - ↑4つの部品の実体は `hooks/schedule.py`（テンプレートとマクロで同じものを使うため）
   - `{{ history_cards() }}` … `extra.history` から開催履歴カードを描画（sessions/history で使用）
   - `{{ register_button() }}` … メール登録ボタン（**金**・`.md-button--gold`）。既定ラベル
     「案内メールを受け取る（無料のメール登録）」。サイト内（/subscribe/）なので同じタブで開く
   - `{{ payment_flow() }}` / `{{ pricing_ladder() }}` … join の図1（お申し込みから初回のお支払い
-    までの流れ）／図2（月額の段）。HTML で描き、PC では横、スマホでは縦に組み替わる（`.jf`）
+    までの流れ。**例の月を持たない**一般形＋解約の2つの場合）／図2（月額の段）。HTML で描き、
+    PC では横、スマホでは縦に組み替わる（`.jf`）
   - `{{ join_button() }}` … 申込（Stripe）ボタン（**ティール**・`.md-button--primary`）。既定ラベル
     「有償メンバーに申し込む（初月無料）」。
     **join ページでのみ使う**
@@ -363,7 +385,7 @@ B 側**（`ai-strategy-news-app` の `content/guide/*.md`）。本サイトに�
   （front-matter の `template:` と `hide: [navigation, toc]`）。値は `extra:` から差し込み、
   文言はテンプレート内
 - **構造化データ（JSON-LD）**も `overrides/main.html` の `extrahead` ブロックで生成。
-  Organization は全ページ、Event は `extra.sessions` の `start` がある回をホーム・`sessions/`・join に、
+  Organization は全ページ、Event はこれから開催される日程（`extra.schedule` から hook が作る）をホーム・`sessions/`・join に、
   BreadcrumbList はホーム以外。手編集しない（`extra:` を直せば追随する）。
 - **`llms.txt`** は `hooks/seo_files.py` がビルド時に `site/llms.txt` へ生成。`extra:` と各ページの
   `description` が材料なので、新しいページには必ず `description` を付ける。
@@ -377,12 +399,24 @@ B 側**（`ai-strategy-news-app` の `content/guide/*.md`）。本サイトに�
 
 ## A/B日程の運用（2026年7月〜）
 
-- 各回に **A日程（火曜・メイン）** と **B日程（追加開催・同内容）** の2日程がある。B日程はA日程の
-  内容をベースに改良を加えることが多い（その差分はダイジェストに書く）。
-- `extra.sessions` には「次に来る2つ」を並べる。回をまたぐこともある
-  （例：第4回B(9/3)が終わったら「第5回A(9/15)」＋「第5回B(10/2)」）。
-- `extra.next_session_short` は**直近の1件**。A/Bどちらであっても、単純に日付が近い方。
-- 月次表（schedule.md）は A日程／B日程 の2列。過去分に `※開催済` を付ける。
+- 各回に **A日程** と **B日程** の2日程があり、**同じ内容**（2026年11月〜、表記も「同じ内容」に
+  統一。「メイン／追加開催」の言い方はやめた）。読み手には「どちらか一方に参加すればよい」と伝える。
+- 表示は回ごと（「第7回 AI駆動開発と企業戦略 ── A日程 11/17・B日程 11/30（同じ内容）」）。
+  「次回・次々回」の2枠は、11/6 が第6回B（10/20と同じ内容）で 11/17 が第7回A、ということが
+  読み取れなかったのでやめた。
+- お知らせバーの「次回」は**直近の1件**。A/Bどちらであっても、単純に日付が近い方（自動）。
+
+## 回の予定（日程）の仕組み（2026年11月〜）
+
+- 正本は `extra.schedule`（全回）。`hooks/schedule.py` がビルド時に「いま」と比べて、次回の表記・
+  これからの開催・開催済み・開催履歴の日付・Event を作る。**開始から3時間で「開催済み」**
+- サイトは main へのマージでしか作り直されないので、開催日を過ぎても次のビルドまで古い表示が残る。
+  それを `docs/javascripts/schedule.js` が**ブラウザで同じ決まりで付け直す**（済んだ日程に「開催済み」、
+  済んだ回を「これからの開催」から外して次の回を繰り上げ、お知らせバーの「次回」も次の日程に）。
+  ページに埋めた日程の JSON（`overrides/main.html` の `#aisia-schedule`）を読む
+- 「いま」を差し替えてビルドできる：`SCHEDULE_NOW=2026-11-07T00:00:00+09:00 python3 -m mkdocs build`
+- ⚠ 部品の中の `hidden` は CSS の `display` に負けないよう `!important` で効かせてある
+  （`.sch-up [hidden]` ほか。`.lp [hidden]` と同じ理由）
 
 ## 挑戦セット・挑戦ボード（2026年8月〜、恒久提供）
 
@@ -400,18 +434,59 @@ B 側**（`ai-strategy-news-app` の `content/guide/*.md`）。本サイトに�
 - 金額の正本は `extra.pricing`。**値に「円」を含めない**（テンプレート側で「円」を付けるため、
   含めると「6,930円円」になる。過去に実際に発生）。
 - **既存契約者は申込時の月額のまま据え置き**が原則。改定は「これから申し込む人」にのみ適用。
-- 改定時に手動更新が要るのは `flyer.html` の参加費欄だけ。join の**図1**（金額・次回の回と日付・
-  初回のお支払い日・解約期限の例）は `extra.sessions` の先頭の回と `extra.pricing` から、**図2**は
-  `extra.pricing.ladder`（税抜・高い順）から描く。「いまここ」は `early_monthly` と同じ金額の段に
-  自動で付き、それより下が「据え置き」、上が「今後の新規（例）」になる（2026年10月〜。以前は
-  inline SVG を手で直していた）。図1の「初月無料の回」は、先頭の回と同じ回の日程をすべて
-  「または」でつないで出す（例：10/20（A日程）または 11/6（B日程））。
+- 改定時に手動更新が要るのは `flyer.html` の参加費欄だけ。join の**図1**（金額・流れ・解約の2つの
+  場合）は `extra.pricing` と `extra.billing` から、**図2**は `extra.pricing.ladder`（税抜・高い順）から
+  描く。「いまここ」は `early_monthly` と同じ金額の段に自動で付き、それより下が「据え置き」、上が
+  「今後の新規（例）」になる（2026年10月〜。以前は inline SVG を手で直していた）。
+- 図1は**例の月を持たない**（2026年11月〜）。以前は `extra.sessions` の先頭の回の月を例に取って
+  いたため、その月の途中から申し込む人や前の月に申し込む人に当てはまらない日付が出ていた。
+  具体的な日付は、図のすぐ下の「お申し込み月ごとの初回のお支払い日」（`payment_months()`）が
+  `extra.schedule` から出す（10月中 → 11/15、11月中 → 12/15 …。終わった月は消える）。
+- **解約は2つの場合に分けて書く**（2026年11月〜）。「無料期間中に、初回のお支払い日の前日までに
+  解約 → お支払いは発生しない」と「お支払い開始後に、次の更新日の前日までに解約 → 次の更新分は
+  請求されない」。「前日までの解約で、その月は¥0」の一本にすると、初回のお支払いと継続の更新を
+  取り違えさせる。文は `extra.billing` の1か所（/welcome/ だけ手で揃える）。
+  ⚠ 文は Stripe の実設定（無料期間の終わり＝翌月15日0時〔日本時間〕・期間の終わりに解約）が前提。
+  Stripe 側を変えたら文も直す
 - **図2に金額を出すのは定価と「いまここ」の段だけ**（2026年10月〜）。据え置きの段（過去の
   早期価格）の金額は「損した」と感じさせ、今後の段の金額は仮なので約束に見えるため。
   段の棒の長さだけで「上がっていく」ことを見せる。`ladder` の値は棒の長さにだけ使われる
 - **⚠ 編集方針：割引が「いつ終わったか」は書かない。** 直後に訪れた人が「損した」と感じるため、
   具体的な旧価格・改定日・「受付終了」といった表現は載せない。「先に申し込んだ方は据え置き」
   「後から申し込む方ほど割引幅は小さくなる」という一般的な説明に留める。
+
+## 計測（2026年11月〜。広告配信に向けて）
+
+- **GA4**（`extra.analytics`）は Material の標準の組み込み。**Meta ピクセル・Google 広告**は
+  `extra.tracking` の ID で `overrides/partials/tracking.html` が全ページに入れる。
+  **ID が空のタグは一切読み込まない**。`extra.tracking.hosts`（本番ホスト）以外では動かない
+- Material を通らない `/welcome/`（Stripe の決済後）・`/paused/` には `hooks/tracking.py` が同じタグを差し込む
+- 送るイベント（`docs/javascripts/forms.js`）
+
+  | いつ | GA4 | Meta | Google 広告 |
+  |---|---|---|---|
+  | 全ページ・ページ移動のたび | page_view（Material） | PageView | config（リマーケティング） |
+  | メール登録の成功（完了ページで1回） | generate_lead | Lead | コンバージョン（`google_ads_lead_label`） |
+  | 同じブラウザで同じアドレスの送り直し | subscribe_repeat | — | — |
+  | 申込（Stripe）ボタンのクリック（href が `extra.join_url`） | click_join | InitiateCheckout | コンバージョン（`google_ads_join_label`） |
+  | 法人問い合わせの送信成功 | generate_lead（form: corporate） | Contact | コンバージョン（`google_ads_inquiry_label`） |
+  | 登録完了ページの「公開記録」 | click_context | — | — |
+
+- **「数える登録」**＝ゲートウェイが `ok` を返し、かつこのブラウザで同じアドレスをまだ数えていない。
+  アドレスはハッシュにしてブラウザ内（localStorage）にだけ置く。ゲートウェイが応答に `lead`
+  （新規に作ったときだけ true）を返すようになれば、それに従う（いまのゲートウェイは返さない）。
+  完了ページに着いたときに1回だけ送り、再読み込み・直アクセスでは送らない
+- **UTM**：URL に `utm_*` があり、保存中の値が無い（または30日を過ぎた）ときだけ localStorage に保存する
+  （**初回訪問の値を30日保つ**＝上書きしない）。/subscribe/ と法人フォームの隠し項目で送り、ゲートウェイが
+  Mailchimp の UTM 項目に書く
+- **「知ったきっかけ」は任意**（/subscribe/）。ゲートウェイが空欄を入力エラーにするので、空欄のときは
+  `extra.forms.source_blank`（いまは「その他」）を送る。ゲートウェイが空欄を受け付けたら `""` にする
+- Meta の自動のイベント検出（`autoConfig`）は切ってある。メールアドレス等を Meta・Google へ送らない
+  （詳細一致〔Advanced Matching〕・拡張コンバージョンは使わない）。外部送信の内容はプライバシーポリシーに書く
+- 試すとき：`META_PIXEL_ID=… GOOGLE_ADS_ID=AW-… TRACKING_HOSTS=127.0.0.1 python3 -m mkdocs serve`。
+  ⚠ ローカルでは Material のページ移動（instant navigation）が効かない（sitemap の URL が本番の
+  `site_url` のため）。ページ移動での送信を確かめるときは `site_url` をローカルにした一時の設定
+  （`INHERIT: mkdocs.yml` ＋ `site_url: http://127.0.0.1:8000/`）でビルドする
 
 ## 文言の方針（サイト全体）
 

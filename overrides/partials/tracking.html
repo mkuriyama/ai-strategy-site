@@ -1,0 +1,57 @@
+{#-
+  広告の計測タグ（Meta ピクセル・Google 広告）。値は mkdocs.yml の extra.tracking。
+  overrides/main.html の analytics ブロック（GA4 のすぐあと）から全ページに入る。
+  hooks/tracking.py が、同じ出力を Material を通らない /welcome/・/paused/ にも差し込む。
+
+  - **ID が空のタグは読み込まない。**（window.__aisiaTags の設定だけは常に出す ―― forms.js が
+    申込ボタンの判定〔joinUrl〕と、タグが動いているか〔on〕を読むため。これ自体は何も送らない）
+  - extra.tracking.hosts（本番ホスト）以外では動かない。ローカルの確認で数字を汚さないため
+  - ここで送るのはページビューまで。イベント（Lead・InitiateCheckout・コンバージョン）と、
+    instant navigation でのページ移動のページビューは docs/javascripts/forms.js が送る
+  - Meta の自動のイベント検出（autoConfig）は切る：ボタンの文字やページの情報を勝手に送らせず、
+    数えるイベントをこちらが送ったものだけにする
+-#}
+{%- set tr = config.extra.tracking or {} -%}
+{%- set meta = (tr.meta_pixel_id or "") | string | trim -%}
+{%- set ads = (tr.google_ads_id or "") | string | trim -%}
+{%- set hosts = tr.hosts if (tr.hosts is iterable and tr.hosts is not string) else ((tr.hosts or "") | string).split(",") -%}
+{%- set ga = (config.extra.analytics or {}).property or "" -%}
+<script id="__aisia_tags">
+(function () {
+  var cfg = window.__aisiaTags = {{ {
+    "meta": meta,
+    "ads": ads,
+    "adsLead": (tr.google_ads_lead_label or "") | string | trim,
+    "adsJoin": (tr.google_ads_join_label or "") | string | trim,
+    "adsInquiry": (tr.google_ads_inquiry_label or "") | string | trim,
+    "hosts": hosts | map("trim") | select | list,
+    "joinUrl": config.extra.join_url or "",
+    "ga": ga
+  } | tojson }};
+  cfg.on = !!(cfg.meta || cfg.ads) && cfg.hosts.indexOf(location.hostname) >= 0;
+  if (!cfg.on) return;
+  if (cfg.ads) {
+    window.dataLayer = window.dataLayer || [];
+    var gtag = function () { window.dataLayer.push(arguments); };
+    if (!cfg.ga) {
+      // GA4 が無いときだけ、gtag.js を Google 広告の ID で読む（GA4 があれば Material が読んでいる）
+      gtag("js", new Date());
+      var g = document.createElement("script");
+      g.async = true;
+      g.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(cfg.ads);
+      document.head.appendChild(g);
+    }
+    gtag("config", cfg.ads);
+  }
+  if (cfg.meta) {
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    window.fbq("set", "autoConfig", false, cfg.meta);
+    window.fbq("init", cfg.meta);
+    window.fbq("track", "PageView");
+  }
+})();
+</script>

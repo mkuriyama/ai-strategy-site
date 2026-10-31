@@ -10,13 +10,22 @@
   {%- set src = page.file.src_uri if page and page.file else '' -%}
   {%- set reg = config.extra.register_url -%}
   {%- if not src.startswith('subscribe/') -%}
+  {#- 「次回」の日付は extra.schedule から（hooks/schedule.py）。開催日を過ぎたら schedule.js が
+      次の日程に付け直す。日程が1つも無いときは「案内メールを受け取る」だけ -#}
   <a class="cta-announce" {% if reg.startswith('http') %}href="{{ reg }}" target="_blank" rel="noopener"{% else %}href="{{ reg | url }}"{% endif %}>
-    次回<span class="cta-announce__long">開催</span> <b>{{ config.extra.next_session_short }}</b>
-    <span class="cta-announce__sep">·</span>
+    <span data-next-wrap{% if not config.extra.next_session_short %} hidden{% endif %}>次回<span class="cta-announce__long">開催</span> <b data-next-session>{{ config.extra.next_session_short }}</b>
+    <span class="cta-announce__sep">·</span></span>
     案内メールを受け取る →
   </a>
   {%- endif -%}
 {%- endblock %}
+
+{#- 広告の計測タグ（Meta ピクセル・Google 広告）。GA4（Material の標準）のすぐあとに置く。
+    ID が空なら何も出さない（partials/tracking.html） -#}
+{% block analytics %}
+  {{ super() }}
+  {% include "partials/tracking.html" %}
+{% endblock %}
 
 <!--
   構造化データ（JSON-LD）。検索・AI検索が「誰の・何の・いつの」を読めるようにする。
@@ -41,6 +50,8 @@
   <meta name="robots" content="noindex, follow">
   {%- endif %}
   {%- set site_url = config.site_url | default('') -%}
+  {#- 回の日程（全回・近い順）。schedule.js が「開催済み」と「次回」をいまの時刻で付け直すのに使う -#}
+  <script type="application/json" id="aisia-schedule">{{ (config.extra.schedule_client or []) | tojson }}</script>
   <script type="application/ld+json">
   {{ {
     "@context": "https://schema.org",
