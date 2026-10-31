@@ -50,13 +50,17 @@ def on_post_build(config):
     lines.append("主催: 栗山実／株式会社アンテカニス（https://www.antecanis.com/）")
     lines.append("形式: オンライン（Zoom）・月次開催。各回は独立したテーマで、途中参加可。")
 
+    # これから開催される日程（hooks/schedule.py が extra.schedule から作る。近い順）
     sessions = extra.get("sessions") or []
     if sessions:
         lines.append("")
-        lines.append("## 次回開催")
+        lines.append("## これからの開催")
+        lines.append("")
+        lines.append("各回は A日程・B日程の2日程で、同じ内容。いずれも20:00開始・オンライン（Zoom）。")
         lines.append("")
         for s in sessions:
-            lines.append(f"- {s.get('label', '')}: {s.get('date', '')} ── {s.get('note', '')}")
+            theme = f"「{s['theme']}」" if s.get("theme") else ""
+            lines.append(f"- {s.get('label', '')}{theme}: {s.get('date', '')}")
 
     pricing = extra.get("pricing") or {}
     if pricing:
@@ -68,7 +72,11 @@ def on_post_build(config):
             f"（税込 {pricing.get('early_monthly_incl', '')}円）"
         )
         lines.append(f"- 定価: 月額 {pricing.get('list_monthly', '')}（税込 {pricing.get('list_monthly_incl', '')}円）")
-        lines.append("- 有償メンバーは初月無料。更新日（毎月15日）の前日までに解約すればその月は0円。")
+        billing = extra.get("billing") or {}
+        lines.append("- 有償メンバーは初月無料。" + billing.get("first", ""))
+        for k in ("cancel_trial", "cancel_paid", "cancel_note"):
+            if billing.get(k):
+                lines.append(f"- {billing[k]}")
 
     lines.append("")
     lines.append("## 入口")

@@ -42,17 +42,13 @@
     <div class="panel">
       <div class="phead">
         <svg class="cmark" viewBox="-1 -1 71 46" aria-hidden="true"><line x1="10" y1="34.04" x2="64.53" y2="4.0" stroke="#fff" stroke-width="3" stroke-linecap="round"/><circle cx="10" cy="34.04" r="10" fill="#fff"/><circle cx="64.53" cy="4.0" r="4.4" fill="#fff"/></svg>
-        <span class="lbl">次回開催・最新情報</span>
+        <span class="lbl">これからの開催・最新情報</span>
         <span class="meta">このページは常に最新です（ブックマーク推奨）</span>
       </div>
       <div class="pbody">
-        {% for s in config.extra.sessions %}
-        <div class="col sess {{ s.kind }}">
-          <span class="tag">{{ s.label }}</span>
-          <div class="date">{{ s.date }}</div>
-          <div class="desc">{{ s.note }}</div>
-        </div>
-        {% endfor %}
+        {#- 回ごと（回・テーマ・A/B の日時・同じ内容・開催済み）。extra.schedule から hooks/schedule.py が作り、
+            開催日を過ぎたら schedule.js が繰り上げる。「次回・次々回」の2枠は 2026年11月にやめた -#}
+        <div class="col sched">{{ schedule_upcoming(2, "panel") }}</div>
         <div class="col news">
           <div class="nt">新着</div>
           <ul>
@@ -147,11 +143,11 @@
     <div class="wrap">
       <div class="read">
         <div class="seyebrow">参加のしかたと、リスクのなさ</div>
-        <h2>合わなければ、いつでも、費用ゼロで離れられる。</h2>
+        <h2>合わなければ、いつでも自分で解約できる。</h2>
       </div>
       <div class="prices">
-        <div class="price"><h3>初月無料</h3><p>お申し込みいただいた月のセッションは費用がかかりません。</p></div>
-        <div class="price"><h3>いつでも自分で解約</h3><p>更新日（毎月15日）の前日までに解約すれば、その月は¥0。</p></div>
+        <div class="price"><h3>初月無料</h3><p>初回のお支払いは、お申し込み月の翌月15日。それまでに開催される回は、費用がかかりません。</p></div>
+        <div class="price"><h3>いつでも自分で解約</h3><p>{{ config.extra.billing.cancel_short }}</p></div>
         <div class="price"><h3>早期参加枠は据え置き</h3><p>先に申し込んだ方の月額は当面そのまま。後からの割引は段階的に縮小予定。</p></div>
       </div>
       <div class="pricefoot">
@@ -186,7 +182,11 @@
     <div class="wrap">
       <div class="finalcta">
         <div>
-          <h2>次回は {{ config.extra.next_session_short }}。まずは案内を受け取る。</h2>
+          {%- if config.extra.next_session_short %}
+          <h2>次回は <span data-next-session>{{ config.extra.next_session_short }}</span>。まずは案内を受け取る。</h2>
+          {%- else %}
+          <h2>まずは、案内を受け取る。</h2>
+          {%- endif %}
           <div class="sub">すぐの参加が難しい方も歓迎。開催案内と結果をメールでお送りします。</div>
         </div>
         <div class="finalcta__actions">
@@ -201,7 +201,8 @@
         {# スタートガイドと用語集はライブラリー（B）へ移設（2026年9月）。カードは
            戻さない ―― ここは申込へ運ぶための入口で、外へ出す札を並べる場所ではない。
            B への導線は about/index.md の節とフッタに置いてある #}
-        <div class="card"><div class="k">内容を見たい</div><h3>開催履歴・ダイジェスト</h3><p>これまでの各回のテーマと、過去回の公開ダイジェスト。</p><a href="sessions/history/">→ 開催履歴</a></div>
+        {#- ダイジェストは 2026年9月から導線を外している（「載せないが、URLを知っていれば開ける」）ので、札に出さない -#}
+        <div class="card"><div class="k">内容を見たい</div><h3>開催履歴</h3><p>これまでの各回のテーマと、取り組んだことの要約。</p><a href="sessions/history/">→ 開催履歴</a></div>
       </div>
     </div>
   </section>
