@@ -22,6 +22,39 @@
     .note{font-size:13px;color:var(--muted);margin:26px 0 0;text-align:center;}
     .note a{color:var(--accent);}
   </style>
+<!-- aisia-tags -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2H53XSH9YC"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-2H53XSH9YC');</script>
+<script id="__aisia_tags">
+(function () {
+  var cfg = window.__aisiaTags = {"ads": "", "adsInquiry": "", "adsJoin": "", "adsLead": "", "ga": "G-2H53XSH9YC", "hosts": ["ai-strategy.antecanis.com"], "joinUrl": "https://go.antecanis.com/ai-strategy-join", "meta": ""};
+  cfg.on = !!(cfg.meta || cfg.ads) && cfg.hosts.indexOf(location.hostname) >= 0;
+  if (!cfg.on) return;
+  if (cfg.ads) {
+    window.dataLayer = window.dataLayer || [];
+    var gtag = function () { window.dataLayer.push(arguments); };
+    if (!cfg.ga) {
+      // GA4 が無いときだけ、gtag.js を Google 広告の ID で読む（GA4 があれば Material が読んでいる）
+      gtag("js", new Date());
+      var g = document.createElement("script");
+      g.async = true;
+      g.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(cfg.ads);
+      document.head.appendChild(g);
+    }
+    gtag("config", cfg.ads);
+  }
+  if (cfg.meta) {
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    window.fbq("set", "autoConfig", false, cfg.meta);
+    window.fbq("init", cfg.meta);
+    window.fbq("track", "PageView");
+  }
+})();
+</script>
 </head>
 <body>
   <div class="card">
