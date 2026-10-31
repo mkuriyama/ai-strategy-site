@@ -31,7 +31,7 @@ docs/
 ├─ sessions/
 │   ├─ index.md                 セッションの進め方と開催予定。構成例・持ち帰るもの・
 │   │                           **これからの開催・開催予定（全回）**（どちらも extra.schedule から自動）・
-│   │                           毎月の挑戦・使うアプリ・今後の展開。2026年9月に schedule.md を吸収した
+│   │                           参加者コミュニティ（Circle）・使うアプリ・今後の展開。2026年9月に schedule.md を吸収した
 │   └─ history.md               開催履歴（`extra.history` を history_cards() で描画。本文は書かない）
 │   ※ themes.md（月次テーマ）と schedule.md（開催予定）は2026年9月に廃止。
 │     themes は history と同じ内容を手書きで持っていただけ（→ history へ転送）。
@@ -176,11 +176,12 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
      （「テーマは決まりしだいお知らせします」と出る）。開催済みの回で省いたときは `extra.history` の
      `title`（「 ── 」より前）を使う
    - これだけで、お知らせバーの「次回」・ホームのライブパネル・/subscribe/・/join/・/sessions/ の
-     「これからの開催」・/sessions/ の「開催予定（全回）」・/join/ の「お申し込み月ごとの初回の
+     「これからの開催」・/sessions/ の「開催予定（全回）」・/join/ の「お申し込みの時期ごとの初回の
      お支払い日」・JSON-LD（Event）・`llms.txt`・開催履歴の日付（「開催予定」の付け外し）が揃う
    - ⚠ `extra.sessions`・`extra.next_session_short` は**もう手で書かない**（hook が作る。書いても上書きされる）
-   - ⚠ /join/ の申込月ごとの表は「最後の回の A日程がある月」までしか行を出さない。次の回の日程が
-     決まったら早めに足す（足さないと、表が先の月まで伸びない）
+   - ⚠ **申込用 GAS の COHORT_SCHEDULE にも同じ回の行を足す**（`advertiseFrom`＝前の回の B日程の翌日、
+     `cohort`＝その回の A日程の翌月）。/join/ の「お申し込みの時期ごとの初回のお支払い日」は、
+     この決まりで `extra.schedule` から作っているので、GAS とずれると表が実際の請求日と食い違う
    - `extra.pricing`（早期枠・定価の金額）… 後述「料金改定の運用」を参照
    - **終わった回は `extra.history` の先頭に追加**（`round:`＝回番号・テーマ・領域・要約・図。
      開催日は書かない ―― `extra.schedule` から作る）。`digests:` は第1〜4回にしかない（第5回以降は掲載を取りやめたため）。
@@ -357,7 +358,8 @@ B 側**（`ai-strategy-news-app` の `content/guide/*.md`）。本サイトに�
   - `{{ upcoming_rounds(n) }}` … これからの開催（回・テーマ・問い・A/B の日時・同じ内容・開催済み）。
     /sessions/・/join/ で使用。テーマのテンプレートでは同じものを `{{ schedule_upcoming(n, "card"|"panel") }}` で呼ぶ
   - `{{ schedule_list() }}` … 全回の一覧（/sessions/ の「開催予定（全回）」）
-  - `{{ payment_months() }}` … お申し込み月ごとの初回のお支払い日と、それまでに参加できる回（/join/）
+  - `{{ payment_table() }}` … お申し込みの時期ごとの初回のお支払い日と、無料で参加できる回（/join/）。
+    申込用 GAS の COHORT_SCHEDULE と同じ決まり（後述「料金改定の運用」）
   - `{{ participation_notes() }}` … 参加の前に（`extra.participation`。/subscribe/ では `{{ participation() }}`）
   - ↑4つの部品の実体は `hooks/schedule.py`（テンプレートとマクロで同じものを使うため）
   - `{{ history_cards() }}` … `extra.history` から開催履歴カードを描画（sessions/history で使用）
@@ -390,7 +392,7 @@ B 側**（`ai-strategy-news-app` の `content/guide/*.md`）。本サイトに�
 - **`llms.txt`** は `hooks/seo_files.py` がビルド時に `site/llms.txt` へ生成。`extra:` と各ページの
   `description` が材料なので、新しいページには必ず `description` を付ける。
 - ホームからの深いリンクは、CJK 見出しの自動スラッグに依存させず、本文側に `<a id="…"></a>` を
-  置いてそこへ張る（例：`sessions/index.md` の `monthly-challenge`）。
+  置いてそこへ張る（例：`sessions/index.md` の `community`・`schedule`・`next-session`）。
 - **OGP/ソーシャルカード**（`social` プラグイン）はフォント取得にネットワークが要るため、
   **ローカルでは無効（既定）／CI でのみ有効**（`.github/workflows/ci.yml` が `CARDS=true` と
   画像ライブラリ導入を行う）。ローカルで試すには `CARDS=true mkdocs build`（要ネット接続）。
@@ -418,16 +420,18 @@ B 側**（`ai-strategy-news-app` の `content/guide/*.md`）。本サイトに�
 - ⚠ 部品の中の `hidden` は CSS の `display` に負けないよう `!important` で効かせてある
   （`.sch-up [hidden]` ほか。`.lp [hidden]` と同じ理由）
 
-## 挑戦セット・挑戦ボード（2026年8月〜、恒久提供）
+## 挑戦セット・挑戦ボード・発表枠（2026年8月〜。**2026年11月にサイトの説明から外した**）
 
-セッション後も取り組みが続く仕組みで、**プロジェクトの常設要素**として掲載している（特定回の
-話ではない）。正本は `docs/sessions/index.md` の「セッションの外へ ── 毎月の挑戦」節。
+セッション後も取り組みが続く仕組みとして始めたが、反応がほとんどなく下火になっている。
+**撤回はしていないが、説明には入れない**（栗山、2026-10-31）。サイトでは /sessions/ の
+「セッションの外へ ── 毎月の挑戦」節・構成例の「挑戦セットの案内」・ホームの「続く場」の一文・
+関連リンクの「挑戦ボード」を外し、/sessions/ は「参加者コミュニティ（Circle）」節（アンカー
+`#community`。旧 `#monthly-challenge` も同じ場所に残してある）にした。
 
 - **挑戦セット**：戦略レーン（コード不要）／実践レーン（手順書つき）の2レーン × 3段階〈守・破・離〉
 - **挑戦ボード**：Circle上に記録を持ち寄り、次回冒頭で紹介する
 - **参加者の発表枠**（第4回〜・先着）
-- ホームの「続く場（Circle）」節と、ライブラリー（B）のガイド
-  （`content/guide/getting-started.md`）からも言及している。回ごとの更新は不要。
+- ライブラリー（B）のガイド（`content/guide/getting-started.md`）には、まだ言及が残っている
 
 ## 料金改定の運用
 
@@ -438,16 +442,26 @@ B 側**（`ai-strategy-news-app` の `content/guide/*.md`）。本サイトに�
   場合）は `extra.pricing` と `extra.billing` から、**図2**は `extra.pricing.ladder`（税抜・高い順）から
   描く。「いまここ」は `early_monthly` と同じ金額の段に自動で付き、それより下が「据え置き」、上が
   「今後の新規（例）」になる（2026年10月〜。以前は inline SVG を手で直していた）。
-- 図1は**例の月を持たない**（2026年11月〜）。以前は `extra.sessions` の先頭の回の月を例に取って
+- **初回のお支払いの決まり**（申込用 GAS〔Stripe Checkout を作る doGet〕の COHORT_SCHEDULE と同じ）：
+  前の回の B日程の**翌日**から、その回の B日程の日までのお申し込みは、**その回（A・B）に無料で参加**でき、
+  初回のお支払い（Stripe の trial_end）は**その回の A日程の翌月15日 0時（日本時間）**。
+  ⚠ **「申込月の翌月15日」ではない**（11/1〜11/6 のお申し込みは 11/15。2026年11月に、サイトがこう
+  書いていたのを直した）。サイトでは「お申し込みのあと最初に開催される回は無料、初回のお支払いは
+  その回のあとの15日」と書き、具体的な日付は図1の下の表（`payment_table()`）が `extra.schedule` から
+  出す（10/3〜11/6 → 11/15、11/7〜11/30 → 12/15、12/1〜1/6 → 1/15。受付が終わった行は消える）。
+  Stripe のダッシュボードで、trial_end が 15日 0:00（JST）＝前日 15:00（UTC）であることを確認済み
+- 図1は**例の日付を持たない**（2026年11月〜）。以前は `extra.sessions` の先頭の回の月を例に取って
   いたため、その月の途中から申し込む人や前の月に申し込む人に当てはまらない日付が出ていた。
-  具体的な日付は、図のすぐ下の「お申し込み月ごとの初回のお支払い日」（`payment_months()`）が
-  `extra.schedule` から出す（10月中 → 11/15、11月中 → 12/15 …。終わった月は消える）。
+- **月額の切り替えも GAS の COHORT_SCHEDULE の `offer` で決まる**（コホートの `advertiseFrom` の日から）。
+  サイトの `extra.pricing` は**自動では切り替わらない**ので、`offer` が変わる日にあわせて手で直す
+  （`early_monthly`・`early_monthly_incl`・`early_target`）。切り替えの予定日は公開リポジトリに書かない
+  （「割引がいつ終わるか」を書かない方針のため。予定は非公開の運用資料の側で持つ）
 - **解約は2つの場合に分けて書く**（2026年11月〜）。「無料期間中に、初回のお支払い日の前日までに
   解約 → お支払いは発生しない」と「お支払い開始後に、次の更新日の前日までに解約 → 次の更新分は
   請求されない」。「前日までの解約で、その月は¥0」の一本にすると、初回のお支払いと継続の更新を
-  取り違えさせる。文は `extra.billing` の1か所（/welcome/ だけ手で揃える）。
-  ⚠ 文は Stripe の実設定（無料期間の終わり＝翌月15日0時〔日本時間〕・期間の終わりに解約）が前提。
-  Stripe 側を変えたら文も直す
+  取り違えさせる。文は `extra.billing` の1か所（/welcome/ だけ手で揃える）。解約はカスタマーポータルの
+  「期間の終わりに解約（解約予約）」で、その期間の終わりまでは使える。ポータルの入口は
+  `extra.billing.portal_url`（会員向けの配信メールでも案内している URL）
 - **図2に金額を出すのは定価と「いまここ」の段だけ**（2026年10月〜）。据え置きの段（過去の
   早期価格）の金額は「損した」と感じさせ、今後の段の金額は仮なので約束に見えるため。
   段の棒の長さだけで「上がっていく」ことを見せる。`ladder` の値は棒の長さにだけ使われる
