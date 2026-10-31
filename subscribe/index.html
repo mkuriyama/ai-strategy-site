@@ -756,7 +756,7 @@
 
       <div class="lp-card lp-formcard" id="form">
         <h2>無料で案内を受け取る</h2>
-        <form id="subscribe-form" class="lp-form" data-aisia-form="subscribe" data-endpoint="https://go.antecanis.com/api/subscribe" data-success="thanks/" data-sitekey="0x4AAAAAAFFE4MRIh0cbQOTJ" data-source-blank="その他">
+        <form id="subscribe-form" class="lp-form" data-aisia-form="subscribe" data-endpoint="https://go.antecanis.com/api/subscribe" data-success="thanks/" data-sitekey="0x4AAAAAAFFE4MRIh0cbQOTJ" data-source-blank="" data-source-fallback="その他">
           <div class="lp-field">
             <label for="sub-email">メールアドレス<span class="lp-req">必須</span></label>
             <input id="sub-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="name@example.com" required maxlength="254">
@@ -824,7 +824,7 @@
             <span class="lp-muted lp-small">（早期参加枠）</span>
           </div>
           <p>月1回のオンライン実践セッションへの参加に加え、録画と資料のアーカイブ、メンバー限定コミュニティをご利用いただけます。セッションは平日20:00〜、Zoomで約2〜2.5時間。</p>
-          <p class="lp-small">初回のお支払いは、お申し込み月の翌月15日です（それまでは無料）。以降は毎月15日に自動で更新されます。初回のお支払い日（翌月15日）の前日までの解約なら¥0。お支払い開始後も、更新日の前日までに解約すれば次の更新分はかかりません。</p>
+          <p class="lp-small">お申し込みのあと最初に開催される回（A日程・B日程）には、無料で参加できます。初回のお支払いは、その回のあとの15日です。以降は毎月15日に自動で更新されます。初回のお支払い日の前日までの解約なら¥0。お支払い開始後も、更新日の前日までに解約すれば次の更新分はかかりません。</p>
           
           <a class="lp-plan__link" href="https://go.antecanis.com/ai-strategy-join" target="_blank" rel="noopener">有償メンバーに申し込む（初月無料）→</a>
         </div>
@@ -909,7 +909,7 @@
       <div class="lp-latest">
         <div class="lp-latest__text">
           <span class="lp-latest__k">直近の回から</span>
-          <h3>第6回「AI対話と企業の命運 ── 答えのない問いを解く力は、個人と組織の差をどう開くか」（2026年10月）</h3>
+          <h3>第6回「AI対話と企業の命運 ── 答えのない問いをAI対話で解く力は、個人と企業の命運をどう分けるか」（2026年10月）</h3>
           <figure class="lp-latest__fig lp-latest__fig--sp">
             <img src="../assets/img/history/vol-06-highlight.png" alt="対話アリーナの記録（1回目・社長の三つの問い）。線は一人1本で匿名、横線はAIだけで考えさせた参考ライン" loading="lazy"><figcaption>対話アリーナの記録（1回目・社長の三つの問い）。線は一人1本で匿名、横線はAIだけで考えさせた参考ライン</figcaption>
           </figure>
@@ -987,9 +987,9 @@
         <dt>Q. メール登録すると、有償メンバーへの勧誘がありますか？</dt>
         <dd>メール登録だけで費用はかかりません。個別の勧誘もありません。有償メンバーを希望される場合のみ、ご自身で申込ページからお申し込みください。</dd>
         <dt>Q. 有償メンバーとしてセッションに参加するには？</dt>
-        <dd><a href="../join/">申込ページ</a>からクレジットカードでお申し込みいただけます。初月は無料です。初回のお支払いは、お申し込み月の翌月15日です（それまでは無料）。以降は毎月15日に自動で更新されます。</dd>
+        <dd><a href="../join/">申込ページ</a>からクレジットカードでお申し込みいただけます。初月は無料です。お申し込みのあと最初に開催される回（A日程・B日程）には、無料で参加できます。初回のお支払いは、その回のあとの15日です。以降は毎月15日に自動で更新されます。</dd>
         <dt>Q. 合わなかったら、どう解約しますか？</dt>
-        <dd>無料期間中の解約：初回のお支払い日（翌月15日）の前日までに解約すれば、お支払いは発生しません。お支払いが始まったあとの解約：次の更新日（毎月15日）の前日までに解約すれば、次の更新分は請求されません。どちらも、その期間の終わりまではご利用いただけます。日付は日本時間で数えます。解約は Stripe カスタマーポータルから、ご自身でいつでも手続きできます。</dd>
+        <dd>無料期間中の解約：初回のお支払い日の前日までに解約すれば、お支払いは発生しません。お支払いが始まったあとの解約：次の更新日（毎月15日）の前日までに解約すれば、次の更新分は請求されません。どちらも、その期間の終わりまではご利用いただけます（日割りの返金はありません）。日付は日本時間で数えます。解約は Stripe カスタマーポータルから、お申し込みに使ったメールアドレスで、ご自身でいつでも手続きできます。</dd>
         <dt>Q. 途中の回から参加できますか？</dt>
         <dd>できます。各回は独立したテーマで、前の回の知識は前提にしません。A日程とB日程は同じ内容なので、都合のよい日程を選べます。当日参加できない回は、録画と資料で取り組めます。</dd>
         <dt>Q. 法人として利用できますか？</dt>
