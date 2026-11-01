@@ -51,8 +51,7 @@
               data-endpoint="{{ fm.api_base }}/api/subscribe"
               data-success="{{ 'subscribe/thanks/' | url }}"
               data-sitekey="{{ fm.turnstile_sitekey }}"
-              data-source-blank="{{ fm.source_blank or '' }}"
-              {%- if fm.source_fallback %} data-source-fallback="{{ fm.source_fallback }}"{% endif %}>
+              data-source-blank="{{ fm.source_blank or '' }}">
           <div class="lp-field">
             <label for="sub-email">メールアドレス{{ lp.req() }}</label>
             <input id="sub-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="name@example.com" required maxlength="254">
@@ -72,7 +71,8 @@
             <li>{{ lp.check() }}メール登録は無料です</li>
             <li>{{ lp.check() }}いつでもワンクリックで配信停止できます</li>
             {%- if ex.sessions %}
-            <li>{{ lp.check() }}次回（<span data-next-session="md">{{ lp.short_date(ex.sessions[0]) }}</span>）の開催後から、月2回ほど届きます</li>
+            {#- li は flex なので、文と日付を1つの span にまとめる（分けると日付が別の列になって崩れる） #}
+            <li>{{ lp.check() }}<span>次回（<span data-next-session="md">{{ lp.short_date(ex.sessions[0]) }}</span>）の開催後から、月2回ほど届きます</span></li>
             {%- else %}
             <li>{{ lp.check() }}開催にあわせて、月2回ほど届きます</li>
             {%- endif %}
