@@ -184,11 +184,11 @@ extra:
   # ────────────────────────────────────────────────────────────
   tracking:
     # Meta ピクセルの ID（数字だけ）
-    meta_pixel_id: !ENV [META_PIXEL_ID, ""]
+    meta_pixel_id: !ENV [META_PIXEL_ID, "1933755187988577"]
     # Google 広告のタグ ID（AW-で始まる）
-    google_ads_id: !ENV [GOOGLE_ADS_ID, ""]
+    google_ads_id: !ENV [GOOGLE_ADS_ID, "AW-18550105733"]
     # コンバージョンのラベル（Google 広告で作ったコンバージョンの「AW-…/」の後ろ）。空なら送らない
-    google_ads_lead_label: !ENV [GOOGLE_ADS_LEAD_LABEL, ""]   # メール登録
+    google_ads_lead_label: !ENV [GOOGLE_ADS_LEAD_LABEL, "EgymCPnUkLAdEIXNsI1F"]   # メール登録
     google_ads_join_label: !ENV [GOOGLE_ADS_JOIN_LABEL, ""]   # 申込（Stripe）ボタンのクリック
     google_ads_inquiry_label: !ENV [GOOGLE_ADS_INQUIRY_LABEL, ""]   # 法人問い合わせの送信
     # タグを動かすホスト（カンマ区切り）
@@ -216,8 +216,6 @@ extra:
     # 「知ったきっかけ」は任意（2026年11月〜）。**空欄のときに送る値**（空のまま送る。ゲートウェイ v10 から
     # 受け付け、Mailchimp の SOURCE001 は空のまま・タグは src:none）
     source_blank: ""
-    # ゲートウェイが空欄を拒んだとき（v9 まで）だけ、この値で1回送り直す。v10 が本番になったら消してよい
-    source_fallback: "その他"
   # 実績数値（/subscribe/・/join/corporate/ の実績帯とチップが参照）。
   # satisfaction は新しい回のアンケートが加わるたびに再計算する（未回答も分母に含める）
   stats:

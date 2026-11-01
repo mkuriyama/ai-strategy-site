@@ -494,9 +494,8 @@ B 側**（`ai-strategy-news-app` の `content/guide/*.md`）。本サイトに�
   （**初回訪問の値を30日保つ**＝上書きしない）。/subscribe/ と法人フォームの隠し項目で送り、ゲートウェイが
   Mailchimp の UTM 項目に書く
 - **「知ったきっかけ」は任意**（/subscribe/）。空欄は空のまま送る（`extra.forms.source_blank: ""`）。
-  ゲートウェイ v10 から受け付け、Mailchimp の `SOURCE001` は空のまま・タグは `src:none`。
-  ゲートウェイが空欄を拒んだとき（v9 まで）だけ `extra.forms.source_fallback`（「その他」）で1回送り直すので、
-  ゲートウェイの切り替えとサイトの公開はどちらが先でもよい。v10 が本番になったら `source_fallback` は消してよい
+  ゲートウェイ v10（2026-11-01 に本番）が受け付け、Mailchimp の `SOURCE001` は空のまま・タグは `src:none`。
+  （v9 のあいだ使っていた「その他」での送り直しは、v10 の本番を確かめて外した）
 - Meta の自動のイベント検出（`autoConfig`）は切ってある。メールアドレス等を Meta・Google へ送らない
   （詳細一致〔Advanced Matching〕・拡張コンバージョンは使わない）。外部送信の内容はプライバシーポリシーに書く
 - 試すとき：`META_PIXEL_ID=… GOOGLE_ADS_ID=AW-… TRACKING_HOSTS=127.0.0.1 python3 -m mkdocs serve`。
