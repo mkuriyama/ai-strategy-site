@@ -246,16 +246,6 @@
 
       busy(true);
       send().then(function (res) {
-        // 「知ったきっかけ」の空欄を受け付けないゲートウェイ（v9 まで）なら、代わりの値で1回だけ送り直す。
-        // ゲートウェイの入力検証は Turnstile の照合より前なので、同じトークンで送り直せる
-        var fallback = form.getAttribute("data-source-fallback");
-        if (fallback && data.source === "" && res && !res.ok && res.error === "invalid_input" &&
-            Array.isArray(res.fields) && res.fields.length === 1 && res.fields[0] === "source") {
-          data.source = fallback;
-          return send();
-        }
-        return res;
-      }).then(function (res) {
         if (res && res.ok) {
           if (kind === "subscribe") {
             // 計測は完了ページで1回だけ（再読み込み・直アクセスでは数えない）。
