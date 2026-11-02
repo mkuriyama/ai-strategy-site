@@ -190,7 +190,7 @@ extra:
     # コンバージョンのラベル（Google 広告で作ったコンバージョンの「AW-…/」の後ろ）。空なら送らない
     google_ads_lead_label: !ENV [GOOGLE_ADS_LEAD_LABEL, "EgymCPnUkLAdEIXNsI1F"]   # メール登録
     google_ads_join_label: !ENV [GOOGLE_ADS_JOIN_LABEL, "XkiDCOiwr7AdEIXNsI1F"]   # 申込（Stripe）ボタンのクリック
-    google_ads_inquiry_label: !ENV [GOOGLE_ADS_INQUIRY_LABEL, ""]   # 法人問い合わせの送信
+    google_ads_inquiry_label: !ENV [GOOGLE_ADS_INQUIRY_LABEL, "hVsDCMG3qbAdEIXNsI1F"]   # 法人問い合わせの送信
     # タグを動かすホスト（カンマ区切り）
     hosts: !ENV [TRACKING_HOSTS, "ai-strategy.antecanis.com"]
 
