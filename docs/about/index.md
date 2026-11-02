@@ -73,13 +73,21 @@ ChatGPT・Gemini・Claudeの普及により、誰もがシステムを実装で�
 
 参加後の体験を深めるための場として、**AI戦略ライブラリー**を公開しています。その日の
 ビジネス・AIニュースを、過去のセッションで実際に語られた論点につないで読み解き、
-AI関連イベントの一覧・用語集・参加ガイド（当日の流れと手元の準備）も同じ場所に
-置いています。
+読み解いたものを棚に積んでいます。
+
+- [課題の棚](https://ai-strategy-library.antecanis.com/issues/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" } — AIで取り組める課題の案を、業務の場と業界ごとに
+- [道具の棚](https://ai-strategy-library.antecanis.com/tools/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" } — AIの道具ごとの、使う条件の変化
+- [戦略の棚](https://ai-strategy-library.antecanis.com/companies/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" } — 会社ごとのAIの取り組み
+- [ニュース解釈](https://ai-strategy-library.antecanis.com/stories/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" } — 続いている出来事の流れ
+
+あわせて、[AI関連イベント](https://ai-strategy-library.antecanis.com/events/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" }の一覧・[用語集](https://ai-strategy-library.antecanis.com/terms/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" }・
+[セッションの記録](https://ai-strategy-library.antecanis.com/context/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" }・[参加ガイド](https://ai-strategy-library.antecanis.com/guide/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" }（当日の流れと手元の準備）も
+同じ場所に置いています。
 
 セッションで扱った視点が、日々のニュースの読み方としてどう効いてくるか——参加と並行して
 使っていただくためのものですが、申し込み前でもご覧いただけます。
 
-- [AI戦略ライブラリーを見る](https://ai-strategy-library.antecanis.com/d/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" }
+- [AI戦略ライブラリーを見る（今日の読み解き）](https://ai-strategy-library.antecanis.com/d/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" }
   （[関連リンク](links.md)に、メンバーサイトや主催会社もまとめています）
 
 ## さらに詳しく
