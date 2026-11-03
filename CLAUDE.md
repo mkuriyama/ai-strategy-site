@@ -115,7 +115,7 @@ hooks/schedule.py               回の予定（extra.schedule）から、次回�
                                 申込月ごとの初回のお支払い日・開催履歴の日付・Event を作る（最初に動く hook）
 hooks/tracking.py               Material を通らない静的ページ（/welcome/・/paused/）に GA4 と広告タグを差し込む
 hooks/seo_files.py              AIO 用 `llms.txt` をビルド時に生成（extra: と各ページの description から）
-hooks/export_data.py            5つの役割。①`site/data/rounds.json`（回の表題・領域・開催日・
+hooks/export_data.py            6つの役割。①`site/data/rounds.json`（回の表題・領域・開催日・
                                 要約）を公開 ― B が回ページの見出しに使う。②`site/data/
                                 glossary.json`（用語集）を公開 ― B の `/terms/` が読む。
                                 **正本は本サイトの `docs/glossary.md` のまま**。
@@ -124,6 +124,10 @@ hooks/export_data.py            5つの役割。①`site/data/rounds.json`（回
                                 ④sitemap からダイジェストを外す。⑤ダイジェストの本文を
                                 `.build/digests.json`（`site/` の外＝**公開されない置き場**）へ
                                 書き出す ― 会員限定の場所へ運ぶ材料。
+                                ⑥`site/data/schedule.json`（全回・全日程の開始時刻）を公開 ―
+                                主催会社のサイト（www.antecanis.com）が毎朝読み、トップの
+                                「直近」「次回」に使う。**「次回」はここでは決めない**（読む側が
+                                自分の時刻で選ぶ）。項目を変えるときは `schema` の版を上げる。
                                 あわせて `extra:` に真偽値として読まれたキーが無いか、
                                 開催履歴の図が出力から消えていないか（`_check_images`）を検査する
 scripts/check_mobile.py         ビルドしたサイトを携帯の幅（320〜412px）で開き、横へのはみ出しと
@@ -221,7 +225,7 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
 
 | 情報 | 載っているファイル |
 |---|---|
-| 回の日程（A/B） | **`mkdocs.yml` の `extra.schedule` の1か所だけ**（お知らせバー・ホーム・/subscribe/・/subscribe/thanks/・/join/・/sessions/・開催履歴の日付・JSON-LD・llms.txt・`rounds.json` へ自動反映。開催済みも自動）＋ **`docs/assets/flyer.html`**（手動）。メンバースペース（aisia-ledger-admin の `content.ts`）は別に持っている |
+| 回の日程（A/B） | **`mkdocs.yml` の `extra.schedule` の1か所だけ**（お知らせバー・ホーム・/subscribe/・/subscribe/thanks/・/join/・/sessions/・開催履歴の日付・JSON-LD・llms.txt・`rounds.json`・`schedule.json`（主催会社サイトのトップの「次回」）へ自動反映。開催済みも自動）＋ **`docs/assets/flyer.html`**（手動）。メンバースペース（aisia-ledger-admin の `content.ts`）は別に持っている |
 | 終わった回の記録 | **`mkdocs.yml` の `extra.history` の1か所だけ**（開催履歴ページ・`rounds.json`・B の回ページの見出し・B の領域マップへ自動反映）。2026年9月に月次テーマpage を廃止して一本化した |
 | 参加費の金額 | **`mkdocs.yml` の `extra.pricing`**（ホームのティーザー・join の価格表・**join の図1・図2**へ自動反映。図2の段は `pricing.ladder`）＋ **`flyer.html` の参加費欄**（手動） |
 | 用語の定義 | `docs/glossary.md` と `docs/includes/abbreviations.md` の**両方**（定義文を一致させる）。**正本はこの2つだけ**。ライブラリー（B）の `/terms/` は `site/data/glossary.json` をビルド時に取りに来るので、B 側に書き足す必要はない（書き足すと片方だけ古くなる）。掲載場所は B だが、**編集する場所はここ** |
