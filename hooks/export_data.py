@@ -34,6 +34,13 @@
 `docs/about/philosophy.md` の表**。B が「どの領域を扱ってきたか」の地図を描くのに使う。
 15 個そろわなければビルドを止める（表の書式を変えたときに、片側だけ静かに減るのを防ぐ）。
 
+**`site/data/schedule.json`（公開）** … 全回・全日程の開始時刻の一覧（`extra.schedule`
+から。読み取りは `hooks/schedule.py` の `rounds()` をそのまま使う）。主催会社のサイト
+（www.antecanis.com）が毎朝のビルドで読み、トップの「直近」「次回」に使う。**「次回」は
+ここでは決めない** ―― 本サイトは main へのマージでしか作り直されないので、決めて書くと
+古くなる。開始時刻だけを渡し、読む側が自分の時刻で選ぶ（開催済みの判定は
+`held_after_minutes`＝`HELD_AFTER` と同じ3時間）。項目を変えるときは `schema` の版を上げる。
+
 **`.build/digests.json`（公開しない）** … ダイジェストの描画済み本文（図の inline SVG・
 用語ツールチップ込み）。`site/` の外に置くので GitHub Pages は配らない。会員限定の
 場所へ運ぶときの材料。
@@ -42,10 +49,12 @@
 from __future__ import annotations
 
 import datetime
+import importlib.util
 import json
 import os
 import pathlib
 import re
+import sys
 from urllib.parse import urljoin
 
 # src_uri（例 "digests/vol-04.md"） -> (絶対URL, 加工済みHTML, title, description)
@@ -210,6 +219,61 @@ def _rounds(config) -> list[dict]:
             "image": urljoin(site_url, entry["image"]) if entry.get("image") else "",
         })
     return out
+
+
+def _schedule_module():
+    """hooks/schedule.py（MkDocs が hook として読み込んだもの）。無ければパスから読む（main.py と同じ）。"""
+    mod = sys.modules.get("hooks/schedule.py")
+    if mod is None:
+        path = pathlib.Path(__file__).with_name("schedule.py")
+        spec = importlib.util.spec_from_file_location("aisia_schedule", path)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+    return mod
+
+
+# schedule.json の `links`。読む側（www.antecanis.com）はURLを持たず、ここから受け取る。
+# ページを移したらここも直す（無いページを指していればビルドが止まる）。
+_SCHEDULE_LINKS = {
+    "home": "",
+    "sessions": "sessions/",
+    "history": "sessions/history/",
+    "corporate": "join/corporate/",
+    "join": "join/",
+}
+
+
+def _schedule_feed(config, site_url: str, now: str) -> dict:
+    sched = _schedule_module()
+    slots = []
+    for r in sched.rounds(config.get("extra", {}) or {}):
+        for d in r["days"]:
+            slot = {"round": r["round"], "slot": d["day"].upper(),
+                    "start": d["at"].isoformat(timespec="seconds"),
+                    # いまは全回オンライン（Zoom）。対面の回ができたら extra.schedule に項目を足す
+                    "format": "online"}
+            if r["theme"]:
+                slot["theme"] = r["theme"]
+            slots.append(slot)
+    slots.sort(key=lambda s: s["start"])
+
+    from mkdocs.exceptions import PluginError
+    if not slots:
+        raise PluginError("schedule.json: extra.schedule に日程がありません")
+    missing = [p for p in _SCHEDULE_LINKS.values()
+               if not os.path.exists(os.path.join(config["site_dir"], p, "index.html"))]
+    if missing:
+        raise PluginError("schedule.json の links が無いページを指しています: " +
+                          "、".join("/" + p for p in missing))
+
+    return {
+        "schema": "antecanis-feed/schedule@1",
+        "generated": now,
+        "site": site_url,
+        "held_after_minutes": int(sched.HELD_AFTER.total_seconds() // 60),
+        "links": {k: site_url + p for k, p in _SCHEDULE_LINKS.items()},
+        "slots": slots,
+    }
 
 
 def _digests(config) -> list[dict]:
@@ -395,6 +459,12 @@ def on_post_build(config):
     with open(os.path.join(out_dir, "rounds.json"), "w", encoding="utf-8") as f:
         json.dump({"generated": now, "site": site_url, "rounds": _rounds(config)},
                   f, ensure_ascii=False, separators=(",", ":"))
+
+    feed = _schedule_feed(config, site_url, now)
+    with open(os.path.join(out_dir, "schedule.json"), "w", encoding="utf-8") as f:
+        json.dump(feed, f, ensure_ascii=False, separators=(",", ":"))
+    print(f"[export] data/schedule.json に {len(feed['slots'])}日程"
+          f"（{feed['slots'][0]['start'][:10]}〜{feed['slots'][-1]['start'][:10]}）")
 
     sections = _glossary(config)
     with open(os.path.join(out_dir, "glossary.json"), "w", encoding="utf-8") as f:
