@@ -21,17 +21,31 @@
  * - 申込（Stripe）ボタンのクリック（href が extra.join_url で始まるリンク）：GA4 click_join・
  *   Meta InitiateCheckout・Google 広告のコンバージョン（ラベルがあれば）。
  * - 法人問い合わせの送信成功：GA4 generate_lead（form: corporate）・Meta Contact・Google 広告（ラベルがあれば）。
- * - Meta・Google 広告は、overrides/partials/tracking.html が ID と本番ホストを確かめて読み込んだときだけ
- *   送る（window.__aisiaTags.on）。GA4 は従来どおり Material の組み込み（dataLayer）。
+ * - Meta・Google 広告・LinkedIn は、overrides/partials/tracking.html が ID と本番ホストを確かめて読み込んだ
+ *   ときだけ送る（window.__aisiaTags.on。?notrack=1 で開いたブラウザでは送らない）。GA4 は従来どおり
+ *   Material の組み込み（dataLayer。?notrack のときは partials/tracking.html が止める）。
+ *
+ * ## 広告用LP（/start/。2026年11月〜）
+ * - 申込ボタンの位置（data-cta：hero／plan／final／sticky）を click_join の position で送る
+ * - data-ga のリンク（ライブラリーへの click_library など）は、data-ga-pos を position で送る
+ * - 各ブロック（data-lp-section）が画面に入ったら、1回の表示につき1回 GA4 lp_section_view
+ * - 報告メールの登録は data-lead-name="start"（完了ページ /start/thanks/ で generate_lead form: start）。
+ *   応答の profile_token を sessionStorage に置き、完了ページでお名前・きっかけを追記できるようにする
+ * - 申込（Stripe）ボタンのリンクに、初回訪問の UTM と広告のクリック ID を付ける（ゲートウェイ →
+ *   申込用 GAS → Stripe の metadata。どの広告から申し込んだかを Stripe の側で数えるため）
  */
 (function () {
   "use strict";
 
   var UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content"];
+  // 広告のクリック ID（Google・Meta・LinkedIn）。UTM と一緒に初回訪問の値を保ち、申込のリンクに付ける
+  var CLICK_KEYS = ["gclid", "gbraid", "wbraid", "fbclid", "li_fat_id"];
   var UTM_STORE = "aisia_utm_v2";
   var UTM_TTL = 30 * 24 * 60 * 60 * 1000;   // 30日
   var LEAD_STORE = "aisia_lead";             // 送信直後 → 完了ページへの受け渡し（sessionStorage）
   var LEADS_SEEN = "aisia_leads";            // このブラウザで数えたアドレス（ハッシュ。localStorage）
+  var PROFILE_STORE = "aisia_profile";       // 登録の応答の札（sessionStorage）。完了ページでお名前などを追記する
+  var PROFILE_TTL = 25 * 60 * 1000;          // ゲートウェイの札は30分。余裕をみて25分で欄を閉じる
 
   var MESSAGES = {
     invalid_input: "入力内容をご確認ください。",
@@ -39,6 +53,9 @@
     rate_limited: "短い時間に送信が続いたため、受け付けを一時止めています。しばらくしてからお試しください。",
     cannot_subscribe: "このアドレスでは登録できませんでした。support@antecanis.com にご連絡ください。",
     not_ready: "送信の準備をしています。数秒おいて、もう一度お試しください。",
+    empty_profile: "お名前か、知ったきっかけを入力してください。",
+    invalid_token: "時間が経ったため、この画面からは送信できませんでした。お手数ですが、このままお待ちください（ご登録は完了しています）。",
+    not_found: "時間が経ったため、この画面からは送信できませんでした。お手数ですが、このままお待ちください（ご登録は完了しています）。",
     temporary: "ただいま送信できませんでした。時間をおいて、もう一度お試しください。"
   };
   var CORPORATE_SUFFIX = "お急ぎの場合は support@antecanis.com へメールでご連絡ください。";
@@ -73,8 +90,8 @@
     var params = new URLSearchParams(location.search);
     var found = {};
     var any = false;
-    UTM_KEYS.forEach(function (k) {
-      var v = (params.get(k) || "").slice(0, 100);
+    UTM_KEYS.concat(CLICK_KEYS).forEach(function (k) {
+      var v = (params.get(k) || "").slice(0, UTM_KEYS.indexOf(k) >= 0 ? 100 : 200);
       if (v) { found[k] = v; any = true; }
     });
     if (!any || storedUtm()) return;
@@ -83,6 +100,25 @@
   function currentUtm() {
     var cur = storedUtm();
     return cur ? cur.v : {};
+  }
+
+  // ---- 申込（Stripe）ボタンのリンクに、流入元の印（初回訪問の UTM・広告のクリック ID）を付ける ----
+  // ゲートウェイの /ai-strategy-join は受け取ったクエリをそのまま申込用 GAS に渡し、GAS が Stripe の
+  // metadata に入れる（URL にすでに同じ名前があれば、そちらを優先する）
+  function decorateJoinLinks() {
+    var join = tags().joinUrl;
+    var v = currentUtm();
+    var keys = Object.keys(v);
+    if (!join || !keys.length || typeof URL !== "function") return;
+    Array.prototype.forEach.call(document.querySelectorAll("a[href]"), function (a) {
+      if (a.dataset.utmDone || a.href.indexOf(join) !== 0) return;
+      try {
+        var u = new URL(a.href);
+        keys.forEach(function (k) { if (!u.searchParams.has(k)) u.searchParams.set(k, v[k]); });
+        a.href = u.toString();
+        a.dataset.utmDone = "1";
+      } catch (e) { /* 付けずに進む */ }
+    });
   }
 
   // ---- 計測 ----
@@ -102,6 +138,12 @@
     var t = tags();
     if (!t.on || !t.ads || !label) return;
     gtagPush("event", "conversion", { send_to: t.ads + "/" + label });
+  }
+  // LinkedIn（Insight Tag）のコンバージョン。ID が空なら送らない
+  function liConversion(id) {
+    var t = tags();
+    if (!t.on || !t.li || !id || typeof window.lintrk !== "function") return;
+    window.lintrk("track", { conversion_id: Number(id) });
   }
 
   // メールアドレスをブラウザ内に置かないための短いハッシュ（cyrb53。照合に使うだけで、どこにも送らない）
@@ -213,6 +255,12 @@
           data[el.name] = el.value.trim();
         }
       });
+      // 登録直後の追記（/start/thanks/）：登録の応答で受け取った札を付ける。UTM・Turnstile は使わない
+      if (kind === "profile") {
+        var p = load(PROFILE_STORE);
+        data.token = (p && p.t) || "";
+        return data;
+      }
       // 「知ったきっかけ」が任意のフォーム：空欄のときに送る値（mkdocs.yml の extra.forms.source_blank）
       var blank = form.getAttribute("data-source-blank");
       if (blank !== null && "source" in data && !data.source) data.source = blank;
@@ -232,6 +280,7 @@
       if (!form.reportValidity()) return;
       var data = payload();
       if (sitekey && !data.turnstile_token) { showError("not_ready"); return; }
+      if (kind === "profile" && !data.name && !data.source) { showError("empty_profile", ["name"]); return; }
 
       function send() {
         return fetch(endpoint, {
@@ -249,12 +298,21 @@
         if (res && res.ok) {
           if (kind === "subscribe") {
             // 計測は完了ページで1回だけ（再読み込み・直アクセスでは数えない）。
-            // 数える登録か、送り直しかをここで決めて渡す
-            save(LEAD_STORE, countLead(data.email, res) ? "subscribe" : "subscribe:repeat");
+            // 数える登録か、送り直しかをここで決めて渡す。名前は data-lead-name（無ければ subscribe）
+            var lead = form.getAttribute("data-lead-name") || kind;
+            save(LEAD_STORE, countLead(data.email, res) ? lead : lead + ":repeat");
+            // 新規の登録のときだけ、ゲートウェイが追記用の札（profile_token）を返す
+            if (res.profile_token) save(PROFILE_STORE, { t: res.profile_token, ts: Date.now() });
+            else drop(PROFILE_STORE);
             location.href = form.getAttribute("data-success");
             return;
           }
-          gtagEvent("generate_lead", { form: kind });
+          if (kind === "profile") {
+            drop(PROFILE_STORE);
+            gtagEvent("profile_submit", { form: "start" });
+          } else {
+            gtagEvent("generate_lead", { form: kind });
+          }
           if (kind === "corporate") {
             metaTrack("Contact");
             adsConversion(tags().adsInquiry);
@@ -294,10 +352,19 @@
       gtagEvent("generate_lead", { form: form });
       metaTrack("Lead");
       adsConversion(tags().adsLead);
+      liConversion(tags().liLead);
     } else if (v === form + ":repeat") {
       drop(LEAD_STORE);
       gtagEvent("subscribe_repeat", { form: form });
     }
+  }
+
+  // ---- 登録直後の追記の欄：札があるとき（新規の登録の直後）だけ出す ----
+  function profileSection() {
+    var sec = document.querySelector("[data-profile-section]");
+    if (!sec) return;
+    var p = load(PROFILE_STORE);
+    sec.hidden = !(p && p.t && p.ts && Date.now() - p.ts < PROFILE_TTL);
   }
 
   // ---- ページビュー：Material の instant navigation でのページ移動のたびに（Meta・Google 広告）----
@@ -325,14 +392,17 @@
       if (join && a.href.indexOf(join) === 0) {
         gtagEvent("click_join", {
           page_path: location.pathname,
-          link_text: (a.textContent || "").replace(/\s+/g, " ").trim().slice(0, 60)
+          link_text: (a.textContent || "").replace(/\s+/g, " ").trim().slice(0, 60),
+          position: a.getAttribute("data-cta") || ""
         });
         metaTrack("InitiateCheckout");
         adsConversion(tags().adsJoin);
+        liConversion(tags().liJoin);
         return;
       }
       var name = a.getAttribute("data-ga");
-      if (name) gtagEvent(name, { page_path: location.pathname, link_url: a.href });
+      if (name) gtagEvent(name, { page_path: location.pathname, link_url: a.href.split("?")[0],
+                                  position: a.getAttribute("data-ga-pos") || "" });
     }, true);
   }
 
@@ -384,15 +454,39 @@
     });
   }
 
+  // ---- 広告用LP：各ブロック（data-lp-section）が画面に入ったら、1回の表示につき1回 ----
+  // 画面の上から65%までに入ったら「読まれた」とみなす（縦に長いブロックでも数えられるよう、割合は見ない）
+  var sectionObserver = null;
+  function sectionViews() {
+    if (sectionObserver) { sectionObserver.disconnect(); sectionObserver = null; }
+    var els = document.querySelectorAll("[data-lp-section]");
+    if (!els.length || !("IntersectionObserver" in window)) return;
+    var sent = {};
+    var obs = sectionObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        var name = en.target.getAttribute("data-lp-section");
+        obs.unobserve(en.target);
+        if (sent[name]) return;
+        sent[name] = true;
+        gtagEvent("lp_section_view", { section: name, page_path: location.pathname });
+      });
+    }, { rootMargin: "0px 0px -35% 0px", threshold: 0 });
+    Array.prototype.forEach.call(els, function (el) { obs.observe(el); });
+  }
+
   function init() {
     rememberUtm();
+    decorateJoinLinks();
     pageView();
     bindClicks();
     Array.prototype.forEach.call(document.querySelectorAll("form[data-aisia-form]"), setupForm);
     trackThanks();
+    profileSection();
     libraryEyebrow();
     stickyCta();
     scrollLinks();
+    sectionViews();
   }
 
   if (window.document$ && typeof window.document$.subscribe === "function") {

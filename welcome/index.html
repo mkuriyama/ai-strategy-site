@@ -37,12 +37,24 @@
     .note a{color:var(--accent);}
   </style>
 <!-- aisia-tags -->
+<script>(function(){try{var u=new URL(location.href),s=u.searchParams.get('session_id');if(!s)return;u.searchParams.delete('session_id');history.replaceState(null,'',u.pathname+u.search+u.hash);if(/^cs_(live|test)_[A-Za-z0-9]+$/.test(s))window.__aisiaCheckout=s;}catch(e){}})();</script>
+<script>(function(){try{var q=new URLSearchParams(location.search).get('notrack');if(q==='1')localStorage.setItem('aisia_notrack','1');if(q==='0')localStorage.removeItem('aisia_notrack');if(localStorage.getItem('aisia_notrack')==='1')window['ga-disable-G-2H53XSH9YC']=true;}catch(e){}})();</script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-2H53XSH9YC"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-2H53XSH9YC');</script>
 <script id="__aisia_tags">
 (function () {
-  var cfg = window.__aisiaTags = {"ads": "AW-18550105733", "adsInquiry": "hVsDCMG3qbAdEIXNsI1F", "adsJoin": "XkiDCOiwr7AdEIXNsI1F", "adsLead": "EgymCPnUkLAdEIXNsI1F", "ga": "G-2H53XSH9YC", "hosts": ["ai-strategy.antecanis.com"], "joinUrl": "https://go.antecanis.com/ai-strategy-join", "meta": "1933755187988577"};
-  cfg.on = !!(cfg.meta || cfg.ads) && cfg.hosts.indexOf(location.hostname) >= 0;
+  var cfg = window.__aisiaTags = {"ads": "AW-18550105733", "adsInquiry": "hVsDCMG3qbAdEIXNsI1F", "adsJoin": "XkiDCOiwr7AdEIXNsI1F", "adsLead": "EgymCPnUkLAdEIXNsI1F", "adsSignup": "", "ga": "G-2H53XSH9YC", "hosts": ["ai-strategy.antecanis.com"], "joinUrl": "https://go.antecanis.com/ai-strategy-join", "li": "", "liJoin": "", "liLead": "", "liSignup": "", "meta": "1933755187988577"};
+  // 自分の閲覧を数えない（?notrack=1 で印を立て、?notrack=0 で外す）
+  var off = false;
+  try {
+    var q = new URLSearchParams(location.search).get("notrack");
+    if (q === "1") localStorage.setItem("aisia_notrack", "1");
+    if (q === "0") localStorage.removeItem("aisia_notrack");
+    off = localStorage.getItem("aisia_notrack") === "1";
+  } catch (e) { /* localStorage が使えないときは数える */ }
+  cfg.notrack = off;
+  if (off && cfg.ga) window["ga-disable-" + cfg.ga] = true;
+  cfg.on = !off && !!(cfg.meta || cfg.ads || cfg.li) && cfg.hosts.indexOf(location.hostname) >= 0;
   if (!cfg.on) return;
   if (cfg.ads) {
     window.dataLayer = window.dataLayer || [];
@@ -67,8 +79,23 @@
     window.fbq("init", cfg.meta);
     window.fbq("track", "PageView");
   }
+  if (cfg.li) {
+    // LinkedIn の Insight Tag（ページビューは読み込んだときに LinkedIn が送る）
+    window._linkedin_partner_id = cfg.li;
+    window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];
+    window._linkedin_data_partner_ids.push(cfg.li);
+    if (!window.lintrk) {
+      window.lintrk = function (a, b) { window.lintrk.q.push([a, b]); };
+      window.lintrk.q = [];
+    }
+    var l = document.createElement("script");
+    l.async = true;
+    l.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
+    document.head.appendChild(l);
+  }
 })();
 </script>
+<script>(function(){var s=window.__aisiaCheckout,t=window.__aisiaTags||{};if(!s||t.notrack)return;var k='aisia_signups',seen=[];try{seen=JSON.parse(localStorage.getItem(k)||'[]')||[];}catch(e){}if(seen.indexOf(s)>=0)return;try{localStorage.setItem(k,JSON.stringify(seen.concat([s]).slice(-10)));}catch(e){}window.dataLayer=window.dataLayer||[];var g=function(){window.dataLayer.push(arguments);};g('event','sign_up',{method:'stripe'});if(!t.on)return;if(t.meta&&typeof window.fbq==='function')window.fbq('track','StartTrial',{},{eventID:s});if(t.ads&&t.adsSignup)g('event','conversion',{send_to:t.ads+'/'+t.adsSignup,transaction_id:s});if(t.li&&t.liSignup&&typeof window.lintrk==='function')window.lintrk('track',{conversion_id:Number(t.liSignup)});})();</script>
 </head>
 <body>
   <div class="card">
