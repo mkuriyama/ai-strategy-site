@@ -33,11 +33,13 @@
 {% macro req() %}<span class="lp-req">必須</span>{% endmacro %}
 {% macro opt(t="任意") %}<span class="lp-opt">{{ t }}</span>{% endmacro %}
 
-{#- 「知ったきっかけ」。required=false で任意（/subscribe/。2026年11月〜） -#}
-{% macro source_select(id, required=true) -%}
+{#- 「知ったきっかけ」。required=false で任意（/subscribe/。2026年11月〜）。
+    ⚠ 選択肢の文字列はゲートウェイ（forms.py の SOURCES）と完全に一致させる（違うと入力エラーになる）。
+    2026年11月に、ゲートウェイ v11 に合わせて Instagram を足し、「講演・登壇で」「ライブラリーのページ」に改めた -#}
+{% macro source_select(id, required=true, placeholder="") -%}
 <select id="{{ id }}" name="source"{% if required %} required{% endif %}>
-  <option value="">{% if required %}選択してください{% else %}選択してください（任意）{% endif %}</option>
-  {%- for o in ["Facebook", "LinkedIn", "X", "知人・同僚から", "講演・授業で", "検索して", "広告を見て", "ニュース・用語集のページ", "その他"] %}
+  <option value="">{% if placeholder %}{{ placeholder }}{% elif required %}選択してください{% else %}選択してください（任意）{% endif %}</option>
+  {%- for o in ["Facebook", "Instagram", "LinkedIn", "X", "検索して", "広告を見て", "知人・同僚から", "講演・登壇で", "ライブラリーのページ", "その他"] %}
   <option>{{ o }}</option>
   {%- endfor %}
 </select>

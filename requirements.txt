@@ -6,3 +6,5 @@ mkdocs-glightbox>=0.4
 # セッションの図が実際に本番から消えた）。glightbox 側が対応するまで 1.0 未満に固定する。
 selectolax<1
 mkdocs-redirects>=1.2
+# 見出しの日本語を句の切れ目で改行する（hooks/phrases.py。広告用LP の見出し）
+budoux>=0.6,<1

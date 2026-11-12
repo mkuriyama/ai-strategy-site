@@ -57,6 +57,10 @@ docs/
 │   │                           送信先はゲートウェイ /api/subscribe（シングルオプトイン）
 │   └─ thanks/index.md          /subscribe/thanks/ 登録完了ページ。nav に載せず noindex、
 │                               sitemap・llms.txt・サイト内検索からも外す
+├─ start/                       **広告用LP（2026年11月〜）**。後述「広告用LP（/start/）」
+│   ├─ index.md                 /start/。front-matter のみ。実体は overrides/start.html。
+│   │                           nav に載せず noindex、sitemap・llms.txt・サイト内検索からも外す
+│   └─ thanks/index.md          /start/thanks/ 報告メールの登録直後（お名前・きっかけを任意で追記）
 ├─ javascripts/forms.js         2つのフォームの送信・Turnstile・UTM の保持（初回訪問の値を30日）・
 │                               固定CTA・計測（GA4・Meta・Google 広告。後述「計測」）。全ページで読み込む
 ├─ javascripts/schedule.js      開催日を過ぎた日程を、次のビルドを待たずにブラウザで「開催済み」にし、
@@ -102,7 +106,10 @@ overrides/
 ├─ subscribe.html               /subscribe/（メール登録の着地ページ）
 ├─ subscribe-thanks.html        /subscribe/thanks/（登録完了）
 ├─ corporate.html               /join/corporate/（法人の方へ・問い合わせ）
-├─ partials/tracking.html       広告の計測タグ（Meta ピクセル・Google 広告）。**ID が空なら読み込まない**
+├─ start.html                   /start/（広告用LP）。ヘッダー・タブ・お知らせバーを出さない専用の組み
+├─ start-thanks.html            /start/thanks/（報告メールの登録直後）
+├─ partials/tracking.html       広告の計測タグ（Meta ピクセル・Google 広告・LinkedIn）。**ID が空なら読み込まない**。
+│                               ?notrack=1 で開いたブラウザでは何も送らない（GA4 も止める）
 ├─ partials/lp.html             上の3つで共有する部品（日付の短縮・フォーム部品）。
 │                               スタイルは extra.css の `.home-landing.lp`（ホームと同じキャンバス）
 └─ partials/header.html         Material の header partial を上書き。ヘッダーのタイトル文字を
@@ -113,7 +120,10 @@ mkdocs.yml                      設定・ナビ(nav)・配色・copyright・**ex
 hooks/abbr_cjk.py               日本語の用語ツールチップを成立させる（変更不要）
 hooks/schedule.py               回の予定（extra.schedule）から、次回の表記・これからの開催・全回の一覧・
                                 申込月ごとの初回のお支払い日・開催履歴の日付・Event を作る（最初に動く hook）
-hooks/tracking.py               Material を通らない静的ページ（/welcome/・/paused/）に GA4 と広告タグを差し込む
+hooks/tracking.py               Material を通らない静的ページ（/welcome/・/paused/）に GA4 と広告タグを差し込む。
+                                /welcome/ では、Stripe の session_id が付いていれば申込完了を1回だけ送る
+hooks/phrases.py                テンプレートのフィルター `phrase`。BudouX で日本語の見出しの句の切れ目に
+                                `<wbr>` を入れる（iPhone の Safari では CSS の auto-phrase が効かないため）
 hooks/seo_files.py              AIO 用 `llms.txt` をビルド時に生成（extra: と各ページの description から）
 hooks/export_data.py            6つの役割。①`site/data/rounds.json`（回の表題・領域・開催日・
                                 要約）を公開 ― B が回ページの見出しに使う。②`site/data/
@@ -131,8 +141,9 @@ hooks/export_data.py            6つの役割。①`site/data/rounds.json`（回
                                 あわせて `extra:` に真偽値として読まれたキーが無いか、
                                 開催履歴の図が出力から消えていないか（`_check_images`）を検査する
 scripts/check_mobile.py         ビルドしたサイトを携帯の幅（320〜412px）で開き、横へのはみ出しと
-                                図の文字の大きさ（10px 以上）を測る。CI で strict ビルドの後に走る
-requirements.txt                material[imaging] / macros / glightbox / redirects
+                                図の文字の大きさ（10px 以上）を測る。広告用LP（start/）は本文の文字も
+                                12px 以上かを測る。CI で strict ビルドの後に走る
+requirements.txt                material[imaging] / macros / glightbox / redirects / budoux
 ```
 
 > 📄 **join の統合（2026年8月）**: 旧 `join/register.md`（登録方法）は `join/index.md` に統合。
@@ -214,6 +225,11 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
      月次リスト（過去日を除去）」「テーマ欄（実施済表記）」「参加費欄の金額・対象」
    - 新版HTMLを提供された場合は**丸ごと差し替え**（print CSSを保ったスタンドアロンHTMLのまま）
 6. **用語集 ＋ ツールチップ**（新しい用語が出た回） … 下記「用語の追加手順」
+6a. **広告用LP（/start/）の回ごとの文** `mkdocs.yml` の `extra.lp`
+   - `practice_example`（得られるもの・毎月の実践の回：直近の回と次の回を1文ずつ）を書き換える
+   - `extra.history` の先頭に新しい回を足したら、`recent_round` と `recent_text`（実際の回から）も
+     その回に合わせる。合っていないあいだは、`extra.history` の先頭の `highlight`（無ければ `summary`）が出る
+   - 次回の日程・料金・実績は `extra.schedule`・`extra.pricing`・`extra.stats` から自動
 7. **日付スタンプ**の確認
    - `docs/glossary.md` 末尾「◯年◯月時点」
    - ガイドの `updated:`（ライブラリー（B）の `content/guide/*.md` の前書き）
@@ -238,6 +254,7 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
 | 参加の前に（途中参加・A/B・録画・事前課題・準備・費用） | **`mkdocs.yml` の `extra.participation`**（/subscribe/ の有償メンバーのカードの下と、/join/ のお申し込みの前に同じ内容で出る） |
 | 広告の計測タグの ID | **`mkdocs.yml` の `extra.tracking`**（空なら読み込まない。後述「計測」）。ライブラリー（B）は B の `frontend/shared/site.js` に別に持つ |
 | 直近の回の紹介 | `extra.history` の**先頭の回**の `highlight`（2〜4文）・`highlight_image`・`highlight_caption`・`month`（いずれも任意）→ /subscribe/ の「直近の回から」。`highlight` が無ければ `summary`、画像が無ければ画像なしで出る |
+| 広告用LP の回ごとの文と画像 | **`mkdocs.yml` の `extra.lp`**（`practice_example`・`recent_round`・`recent_text`・`issues_count`・`news_member_note`・`images`）。構成と文面は `overrides/start.html` の中 |
 | 申込（Stripe）URL | **`mkdocs.yml` の `extra.join_url` の1か所のみ**（固定リンク: `https://go.antecanis.com/ai-strategy-join`。リンク先の差し替えはゲートウェイ側で行う）。**値は `plugins.redirects` の `apply/index.md` に YAML アンカーで書いてあり**、`extra.join_url` はそれを参照する（/apply/ の転送先と同じ値にするため） |
 
 ---
@@ -435,7 +452,7 @@ B 側**（`ai-strategy-news-app` の `content/guide/*.md`）。本サイトに�
 - **挑戦セット**：戦略レーン（コード不要）／実践レーン（手順書つき）の2レーン × 3段階〈守・破・離〉
 - **挑戦ボード**：Circle上に記録を持ち寄り、次回冒頭で紹介する
 - **参加者の発表枠**（第4回〜・先着）
-- ライブラリー（B）のガイド（`content/guide/getting-started.md`）には、まだ言及が残っている
+- ライブラリー（B）のガイド（`content/guide/getting-started.md`）からも、2026年11月に外した
 
 ## 料金改定の運用
 
@@ -489,6 +506,16 @@ B 側**（`ai-strategy-news-app` の `content/guide/*.md`）。本サイトに�
   | 申込（Stripe）ボタンのクリック（href が `extra.join_url`） | click_join | InitiateCheckout | コンバージョン（`google_ads_join_label`） |
   | 法人問い合わせの送信成功 | generate_lead（form: corporate） | Contact | コンバージョン（`google_ads_inquiry_label`） |
   | 登録完了ページの「公開記録」 | click_context | — | — |
+  | 広告用LP：申込ボタン（位置は `position`：hero／plan／final／sticky） | click_join | InitiateCheckout | コンバージョン（`google_ads_join_label`） |
+  | 広告用LP：ライブラリーへのリンク（`position`） | click_library | — | — |
+  | 広告用LP：各ブロックが画面に入った（`section`。1回の表示につき1回） | lp_section_view | — | — |
+  | 広告用LP：報告メールの登録（完了ページ /start/thanks/ で1回） | generate_lead（form: start） | Lead | コンバージョン（`google_ads_lead_label`） |
+  | 広告用LP：登録直後のお名前・きっかけの追記 | profile_submit | — | — |
+  | 申込完了（Stripe のあとの /welcome/。session_id ごとに1回） | sign_up | StartTrial（eventID＝session_id） | コンバージョン（`google_ads_signup_label`。transaction_id＝session_id） |
+
+  LinkedIn（`linkedin_partner_id` を入れたときだけ）は、報告メール・メール登録（`linkedin_lead_conversion`）・
+  申込ボタン（`linkedin_join_conversion`）・申込完了（`linkedin_signup_conversion`）を送る。
+  GA4 で `section`・`position` を集計するには、GA4 の管理画面でイベントのカスタム定義（イベントスコープ）を作る
 
 - **「数える登録」**＝ゲートウェイが `ok` を返し、かつ応答の `lead` が true（新規に作ったとき。v10〜）。
   `lead` が無い応答（v9 まで）では、このブラウザで同じアドレスをまだ数えていないとき
@@ -502,10 +529,43 @@ B 側**（`ai-strategy-news-app` の `content/guide/*.md`）。本サイトに�
   （v9 のあいだ使っていた「その他」での送り直しは、v10 の本番を確かめて外した）
 - Meta の自動のイベント検出（`autoConfig`）は切ってある。メールアドレス等を Meta・Google へ送らない
   （詳細一致〔Advanced Matching〕・拡張コンバージョンは使わない）。外部送信の内容はプライバシーポリシーに書く
+- **自分の閲覧を数えない**：`?notrack=1` を付けて一度開くと、そのブラウザでは以後 GA4・Meta・Google 広告・
+  LinkedIn に何も送らない（localStorage の `aisia_notrack`。`?notrack=0` で戻す）。ライブラリー（B）は
+  別のドメインなので、B でも一度 `?notrack=1` で開く。携帯・PC・アプリ内ブラウザごとに1回ずつ要る
+- **流入元を Stripe まで**：初回訪問の UTM と広告のクリック ID（`gclid`・`gbraid`・`wbraid`・`fbclid`・
+  `li_fat_id`）を30日保ち、申込（Stripe）ボタンのリンクに付ける（`forms.js` の `decorateJoinLinks`）。
+  ゲートウェイの `/ai-strategy-join` はクエリをそのまま申込用 GAS に渡し、GAS が Checkout セッションと
+  サブスクリプションの metadata に入れる（GAS の変更は非公開の運用資料の側）
+- **申込完了**：申込用 GAS の `SUCCESS_URL` に `?session_id={CHECKOUT_SESSION_ID}` を付けると、/welcome/ が
+  申込完了を送る（上の表）。session_id は GA4・Meta がページの URL を読む前に URL から消す。無ければ何も送らない
 - 試すとき：`META_PIXEL_ID=… GOOGLE_ADS_ID=AW-… TRACKING_HOSTS=127.0.0.1 python3 -m mkdocs serve`。
   ⚠ ローカルでは Material のページ移動（instant navigation）が効かない（sitemap の URL が本番の
   `site_url` のため）。ページ移動での送信を確かめるときは `site_url` をローカルにした一時の設定
   （`INHERIT: mkdocs.yml` ＋ `site_url: http://127.0.0.1:8000/`）でビルドする
+
+## 広告用LP（/start/。2026年11月〜）
+
+広告（Meta・Google 検索・LinkedIn）から初めて来た人を、**有償メンバーの申込**につなげるページ。
+副の導線は AI戦略ライブラリー（登録不要）と、報告メール（ページの後半。「無料」「メール」は前面に出さない）。
+/subscribe/（メール登録のページ）は残してあり、広告の行き先を差し替えるまでは今の広告がそちらを指す。
+
+- **構成と文面は栗山さんの仕様が正**（仕様と検討は非公開の運用資料の側）。文面を変えるときは栗山さんに確認する。
+  回ごとに変わる文と画像だけを `extra.lp` に出してある（上の「毎回の更新チェックリスト」6a）
+- **組み**：`overrides/start.html`（スタイルは `extra.css` の「広告用LP」、名前は `.st` 配下）。
+  Material のヘッダー・タブは `body:has(.st)` で隠し、お知らせバーは `overrides/main.html` で出さない。
+  ページの先頭に細い帯（名称・ページ内の移動・「参加する」）を置く。**ナビ（外のページへのリンク）は置かない**
+- **最初の画面**：見出し・補足・画像・主催者・申込ボタンが、携帯（390×664 前後）に収まるように詰めてある。
+  ⚠ 文や画像を足すときは、`scripts/check_mobile.py` と同じ幅で、申込ボタンの下端が画面内にあるかを測る
+- **料金は税込を必ず出す**（総額表示）。`extra.pricing` の `early_monthly_incl` と `early_monthly`
+- **見出しの改行**：テンプレートで `{{ "…" | phrase }}`（`hooks/phrases.py`）。CSS は keep-all
+- **画像**は `extra.lp.images`（空ならその枠を出さない）。⚠ **参加者の名前・アイコンが写っていないか**を
+  確かめてから置く。携帯用の切り出し（`hero_sp`）があれば携帯ではそちらを出す
+- **報告メールの欄はメールアドレスだけ**（ゲートウェイ v11 からお名前は任意）。登録の応答の
+  `profile_token`（30分）を使って、/start/thanks/ でお名前と知ったきっかけを同じ人に追記する
+  （`/api/subscribe/profile`）。札が無いとき（登録済みの方・直接開いた場合）は、その欄を出さない
+- **言葉**：LP では「メンバーとして参加する（初月無料）」「報告メール」を使う（下の用語ルールの例外。
+  無料・メールを前面に出さないため）
+- 検索・sitemap・llms.txt から外し、noindex（広告の着地専用。ホームと内容が重なるため）
 
 ## 文言の方針（サイト全体）
 
@@ -596,6 +656,9 @@ python3 scripts/check_mobile.py        # 携帯の幅で崩れていないか（
   更新日の条件が同じカードに並んでいるため）。他ページから直リンクは張らず、ホーム等は join ページへ
   誘導する（お支払いの条件を一度目に入れてもらうため）。入口は「情報を受け取りたい人＝無料メール登録」
   「参加を決めた人＝Stripe申込」の2本立てで、文言もこの2択で統一する。
+  **広告用LP（/start/）も例外**：申込ボタン（最初の画面・料金の枠・最後の帯・携帯の固定ボタン）は
+  Stripe へ直接進む。そのかわり、最初の画面のボタンのすぐ下に月額（税込）と「最初の回は無料・合わなければ
+  費用はかからない」を必ず出す（価格を見ずに Stripe に進ませない）
 - **ボタンの色は役割で固定する**：**金＝無料のメール登録**、**ティール（塗り）＝申込
   （Stripe）または申込ページへの遷移**、**アウトライン＝回遊**。ホーム（`.btn-gold` /
   `.btn-teal` / `.btn-outline`）と本文ページ（`.md-button--gold` / `.md-button--primary` /

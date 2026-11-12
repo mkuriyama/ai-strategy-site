@@ -4,12 +4,13 @@
   全ページ共通のお知らせバー（ヘッダー上・全ページ常時表示の CTA）。
   次回開催・メール登録の行き先は mkdocs.yml の extra: を単一ソースとして参照する。
   /subscribe/ 配下では出さない（行き先が自分自身になるため）。
+  広告用LP（/start/ 配下）でも出さない（最初の画面に収めるため。行き先がメール登録で、LP の方針とも合わない）。
   ブロックの中身が空白だけでも Material はバーを出すので、タグの空白除去（ハイフン付きの記法）で必ず削る。
 -->
 {% block announce -%}
   {%- set src = page.file.src_uri if page and page.file else '' -%}
   {%- set reg = config.extra.register_url -%}
-  {%- if not src.startswith('subscribe/') -%}
+  {%- if not (src.startswith('subscribe/') or src.startswith('start/')) -%}
   {#- 「次回」の日付は extra.schedule から（hooks/schedule.py）。開催日を過ぎたら schedule.js が
       次の日程に付け直す。日程が1つも無いときは「案内メールを受け取る」だけ -#}
   <a class="cta-announce" {% if reg.startswith('http') %}href="{{ reg }}" target="_blank" rel="noopener"{% else %}href="{{ reg | url }}"{% endif %}>
@@ -44,9 +45,11 @@
   {#- 用語集も同じ扱い（2026年9月〜）。掲載場所はライブラリー（B）の /terms/ に
       移したが、旧URLを踏んだ人が**動く用語集に着地する**ほうがよいのでページは残す。 -#}
   {#- メール登録の完了ページ（/subscribe/thanks/）は、送信した人だけが見るページ。索引しない -#}
+  {#- 広告用LP（/start/ と /start/thanks/）も索引しない。広告の着地専用で、ホームと内容が重なるため -#}
   {%- if page and page.file and (page.file.src_uri.startswith('digests/')
                                  or page.file.src_uri == 'glossary.md'
-                                 or page.file.src_uri.startswith('subscribe/thanks/')) %}
+                                 or page.file.src_uri.startswith('subscribe/thanks/')
+                                 or page.file.src_uri.startswith('start/')) %}
   <meta name="robots" content="noindex, follow">
   {%- endif %}
   {%- set site_url = config.site_url | default('') -%}
