@@ -1,0 +1,56 @@
+{% extends "main.html" %}
+{% import "partials/lp.html" as lp with context %}
+
+{#-
+  /start/thanks/（広告用LP の報告メールの登録直後）。登録は送信した時点で完了し、ご案内メールが届く。
+  - ナビに載せず noindex（overrides/main.html）。sitemap・llms.txt・サイト内検索からも外す
+  - 計測（GA4 generate_lead・Meta Lead・Google 広告）は forms.js が、送信直後に着いたときだけ1回送る（data-lead-page）
+  - お名前と知ったきっかけは、ここで任意に聞き、同じ人の登録情報に追記する（ゲートウェイの
+    /api/subscribe/profile。登録の応答で受け取った期限つきの札が要る）。札が無いとき（すでに登録済みの方・
+    直接開いた場合）は、この欄を出さない（forms.js）
+  - 登録済みかどうかで文言を分けない（画面から、そのアドレスが登録済みかを読み取れないようにする）
+-#}
+{% block container %}
+{%- set ex = config.extra -%}
+{%- set fm = ex.forms -%}
+{%- set latest = ex.history[0] -%}
+<main class="md-main" data-md-component="main">
+<div class="home-landing lp st st--thanks" data-lead-page="start">
+
+  <section class="st-block st-done">
+    <div class="st-wrap st-narrow">
+      <div class="st-done__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/><path d="M7.5 12.3l3 3 6-6.3" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <h1>ご登録ありがとうございます</h1>
+      <p class="st-text">support@antecanis.com から、ご案内のメールをお送りしました。届かない場合は、迷惑メールのフォルダもご確認ください。</p>
+
+      <div class="st-profile" data-profile-section hidden>
+        <h2>よろしければ教えてください（任意）</h2>
+        <form id="profile-form" class="lp-form" data-aisia-form="profile"
+              data-endpoint="{{ fm.api_base }}/api/subscribe/profile">
+          <div class="lp-field">
+            <label for="profile-name">お名前</label>
+            <input id="profile-name" name="name" type="text" autocomplete="name" placeholder="例：山田 太郎" maxlength="100">
+          </div>
+          <div class="lp-field">
+            <label for="profile-source">このプロジェクトを知ったきっかけ</label>
+            {{ lp.source_select("profile-source", required=false, placeholder="選んでください") }}
+          </div>
+          <button type="submit" class="lp-btn lp-btn--teal lp-btn--block" data-busy-label="送信しています…">送信する</button>
+          <p class="lp-form__error" role="alert" hidden></p>
+        </form>
+        <div class="st-profile__done" data-form-done="profile" hidden>
+          <p>ありがとうございました。</p>
+        </div>
+      </div>
+
+      <div class="st-nextread">
+        <h2>次に読むもの</h2>
+        <p><a href="{{ 'sessions/history/' | url }}">第{{ latest.round }}回の発見を読む（開催履歴）→</a></p>
+        <p><a href="{{ ex.news_site_url }}" target="_blank" rel="noopener" data-ga="click_library" data-ga-pos="thanks">今朝のAI戦略ライブラリーを見る →</a></p>
+      </div>
+    </div>
+  </section>
+
+</div>
+</main>
+{% endblock %}

@@ -410,6 +410,8 @@ def _strip_digests_from_sitemap(config) -> None:
     kept = re.sub(r"\s*<url>\s*<loc>[^<]*/glossary/</loc>.*?</url>", "", kept, flags=re.S)
     # メール登録の完了ページ（/subscribe/thanks/）も。送信した人だけが見る（noindex）
     kept = re.sub(r"\s*<url>\s*<loc>[^<]*/subscribe/thanks/</loc>.*?</url>", "", kept, flags=re.S)
+    # 広告用LP（/start/ と /start/thanks/）も。広告の着地専用で、ホームと内容が重なる（noindex）
+    kept = re.sub(r"\s*<url>\s*<loc>[^<]*/start/(?:thanks/)?</loc>.*?</url>", "", kept, flags=re.S)
     if kept == xml:
         return
     path.write_text(kept, encoding="utf-8")

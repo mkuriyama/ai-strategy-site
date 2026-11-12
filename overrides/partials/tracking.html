@@ -1,11 +1,15 @@
 {#-
-  広告の計測タグ（Meta ピクセル・Google 広告）。値は mkdocs.yml の extra.tracking。
+  広告の計測タグ（Meta ピクセル・Google 広告・LinkedIn）。値は mkdocs.yml の extra.tracking。
   overrides/main.html の analytics ブロック（GA4 のすぐあと）から全ページに入る。
   hooks/tracking.py が、同じ出力を Material を通らない /welcome/・/paused/ にも差し込む。
 
   - **ID が空のタグは読み込まない。**（window.__aisiaTags の設定だけは常に出す ―― forms.js が
     申込ボタンの判定〔joinUrl〕と、タグが動いているか〔on〕を読むため。これ自体は何も送らない）
   - extra.tracking.hosts（本番ホスト）以外では動かない。ローカルの確認で数字を汚さないため
+  - **自分の閲覧を数えない**：URL に ?notrack=1 を付けて一度開くと、そのブラウザでは以後、GA4・Meta・
+    Google 広告・LinkedIn に何も送らない（localStorage の aisia_notrack。?notrack=0 で戻す）。
+    GA4 は Google の決まり（window['ga-disable-<測定ID>']）で止める ―― gtag.js が読み込まれて
+    記録を送るより前（このスクリプトは GA4 の設定の直後に同期で動く）に立てるので、最初のページビューも送らない
   - ここで送るのはページビューまで。イベント（Lead・InitiateCheckout・コンバージョン）と、
     instant navigation でのページ移動のページビューは docs/javascripts/forms.js が送る
   - Meta の自動のイベント検出（autoConfig）は切る：ボタンの文字やページの情報を勝手に送らせず、
@@ -14,6 +18,7 @@
 {%- set tr = config.extra.tracking or {} -%}
 {%- set meta = (tr.meta_pixel_id or "") | string | trim -%}
 {%- set ads = (tr.google_ads_id or "") | string | trim -%}
+{%- set li = (tr.linkedin_partner_id or "") | string | trim -%}
 {%- set hosts = tr.hosts if (tr.hosts is iterable and tr.hosts is not string) else ((tr.hosts or "") | string).split(",") -%}
 {%- set ga = (config.extra.analytics or {}).property or "" -%}
 <script id="__aisia_tags">
@@ -24,11 +29,26 @@
     "adsLead": (tr.google_ads_lead_label or "") | string | trim,
     "adsJoin": (tr.google_ads_join_label or "") | string | trim,
     "adsInquiry": (tr.google_ads_inquiry_label or "") | string | trim,
+    "adsSignup": (tr.google_ads_signup_label or "") | string | trim,
+    "li": li,
+    "liLead": (tr.linkedin_lead_conversion or "") | string | trim,
+    "liJoin": (tr.linkedin_join_conversion or "") | string | trim,
+    "liSignup": (tr.linkedin_signup_conversion or "") | string | trim,
     "hosts": hosts | map("trim") | select | list,
     "joinUrl": config.extra.join_url or "",
     "ga": ga
   } | tojson }};
-  cfg.on = !!(cfg.meta || cfg.ads) && cfg.hosts.indexOf(location.hostname) >= 0;
+  // 自分の閲覧を数えない（?notrack=1 で印を立て、?notrack=0 で外す）
+  var off = false;
+  try {
+    var q = new URLSearchParams(location.search).get("notrack");
+    if (q === "1") localStorage.setItem("aisia_notrack", "1");
+    if (q === "0") localStorage.removeItem("aisia_notrack");
+    off = localStorage.getItem("aisia_notrack") === "1";
+  } catch (e) { /* localStorage が使えないときは数える */ }
+  cfg.notrack = off;
+  if (off && cfg.ga) window["ga-disable-" + cfg.ga] = true;
+  cfg.on = !off && !!(cfg.meta || cfg.ads || cfg.li) && cfg.hosts.indexOf(location.hostname) >= 0;
   if (!cfg.on) return;
   if (cfg.ads) {
     window.dataLayer = window.dataLayer || [];
@@ -52,6 +72,20 @@
     window.fbq("set", "autoConfig", false, cfg.meta);
     window.fbq("init", cfg.meta);
     window.fbq("track", "PageView");
+  }
+  if (cfg.li) {
+    // LinkedIn の Insight Tag（ページビューは読み込んだときに LinkedIn が送る）
+    window._linkedin_partner_id = cfg.li;
+    window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];
+    window._linkedin_data_partner_ids.push(cfg.li);
+    if (!window.lintrk) {
+      window.lintrk = function (a, b) { window.lintrk.q.push([a, b]); };
+      window.lintrk.q = [];
+    }
+    var l = document.createElement("script");
+    l.async = true;
+    l.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
+    document.head.appendChild(l);
   }
 })();
 </script>

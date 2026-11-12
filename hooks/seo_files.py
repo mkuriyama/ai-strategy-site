@@ -29,7 +29,8 @@ def on_page_context(context, page, config, nav):
     # 関連サイトから辿れる。
     src = page.file.src_uri or ""
     # メール登録の完了ページも載せない（送信した人だけが見る。noindex）
-    if src.startswith("digests/") or src == "glossary.md" or src.startswith("subscribe/thanks/"):
+    if (src.startswith("digests/") or src == "glossary.md" or src.startswith("subscribe/thanks/")
+            or src.startswith("start/")):
         return context
     site_url = (config.get("site_url") or "").rstrip("/") + "/"
     url = site_url + page.url

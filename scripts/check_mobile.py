@@ -15,6 +15,8 @@
 - 横スクロールが出ていないか（`scrollWidth` が `clientWidth` を超えていないか）
 - inline SVG の文字が、画面上で `MIN_TEXT_PX` 以上あるか
   （SVG の font-size × 実際に縮められた倍率で測る）
+- 広告用LP（`start/`）では、本文の文字もすべて `MIN_LP_TEXT_PX`（12px）以上か
+  （広告から携帯で来る人が最初に読むページ。注記でも12px以上という決まり）
 
 ダイジェスト（`digests/`）は「載せないが、URLを知っていれば開ける」ページで、
 図は今後 B の会員限定の場所へ移すため、**所見を出すだけで落とさない**。
@@ -42,6 +44,9 @@ import threading
 WIDTHS = (320, 360, 390, 412)
 # 本文の最小（Material の携帯の本文は16px、注記類で12〜13px）より下は読めない扱い
 MIN_TEXT_PX = 10
+# 広告用LP：本文の文字もすべてこの大きさ以上（注記を含む）
+MIN_LP_TEXT_PX = 12
+LP_PAGES = ("start/",)
 # 落とさず所見だけ出す場所
 WARN_ONLY = ("digests/",)
 # 開かない場所（素材）。転送用のページは中身で見分けて飛ばす
@@ -80,6 +85,21 @@ MEASURE = r"""async (minPx) => {
     if (px < minPx) small.push({ px: Math.round(px * 10) / 10, text: t.textContent.trim().slice(0, 20) });
   }
   return { over: de.scrollWidth - de.clientWidth, small };
+}"""
+
+# 広告用LP の本文の文字（LP の中身＝.st の中だけを見る。表示されていないものは数えない）
+LP_TEXT = r"""(minPx) => {
+  const small = [];
+  for (const el of document.querySelectorAll('.st *')) {
+    if (![...el.childNodes].some(n => n.nodeType === 3 && n.textContent.trim())) continue;
+    const r = el.getBoundingClientRect();
+    if (!r.width || !r.height) continue;
+    const cs = getComputedStyle(el);
+    if (cs.visibility === 'hidden') continue;
+    const px = parseFloat(cs.fontSize);
+    if (px < minPx) small.push({ px, text: el.textContent.trim().slice(0, 20) });
+  }
+  return small;
 }"""
 
 
@@ -145,6 +165,12 @@ async def run(root: pathlib.Path) -> int:
                         ex = "・".join(f"「{s['text']}」{s['px']}px" for s in m["small"][:3])
                         found.append(f"{path} の図の文字 {len(m['small'])}個が {width}px で"
                                      f" {MIN_TEXT_PX}px 未満（{ex}）")
+                    if path.lstrip("/").startswith(LP_PAGES):
+                        lp = await pg.evaluate(LP_TEXT, MIN_LP_TEXT_PX)
+                        if lp:
+                            ex = "・".join(f"「{s['text']}」{s['px']}px" for s in lp[:3])
+                            found.append(f"{path} の文字 {len(lp)}個が {width}px で"
+                                         f" {MIN_LP_TEXT_PX}px 未満（{ex}）")
                     (warn if path.lstrip("/").startswith(WARN_ONLY) else bad).extend(found)
                 await ctx.close()
             await br.close()
@@ -162,7 +188,7 @@ async def run(root: pathlib.Path) -> int:
             print("   " + b)
         return 1
     print(f"[mobile] ✓ {len(paths)}ページ × {len(WIDTHS)}幅、"
-          f"横へのはみ出しなし・図の文字は {MIN_TEXT_PX}px 以上")
+          f"横へのはみ出しなし・図の文字は {MIN_TEXT_PX}px 以上・LP の文字は {MIN_LP_TEXT_PX}px 以上")
     return 0
 
 

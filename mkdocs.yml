@@ -57,6 +57,8 @@ hooks:
   - hooks/export_data.py
   # 広告の計測タグを、Material を通らない静的ページ（/welcome/・/paused/）にも差し込む
   - hooks/tracking.py
+  # 見出しの日本語を句の切れ目で改行する（テンプレートのフィルター phrase。BudouX）
+  - hooks/phrases.py
 
 # 日本語検索対応（CJK 分割に対応）
 plugins:
@@ -191,6 +193,13 @@ extra:
     google_ads_lead_label: !ENV [GOOGLE_ADS_LEAD_LABEL, "EgymCPnUkLAdEIXNsI1F"]   # メール登録
     google_ads_join_label: !ENV [GOOGLE_ADS_JOIN_LABEL, "XkiDCOiwr7AdEIXNsI1F"]   # 申込（Stripe）ボタンのクリック
     google_ads_inquiry_label: !ENV [GOOGLE_ADS_INQUIRY_LABEL, "hVsDCMG3qbAdEIXNsI1F"]   # 法人問い合わせの送信
+    google_ads_signup_label: !ENV [GOOGLE_ADS_SIGNUP_LABEL, ""]   # 申込完了（Stripe のあとの /welcome/）
+    # LinkedIn の Insight Tag（パートナー ID・数字）と、コンバージョンの ID（数字）。空なら読み込まない・送らない。
+    # 入れるときは、プライバシーポリシーの外部送信の表に LinkedIn を足すこと
+    linkedin_partner_id: !ENV [LINKEDIN_PARTNER_ID, ""]
+    linkedin_lead_conversion: !ENV [LINKEDIN_LEAD_CONVERSION, ""]       # 報告メール・メール登録（新規）
+    linkedin_join_conversion: !ENV [LINKEDIN_JOIN_CONVERSION, ""]       # 申込（Stripe）ボタンのクリック
+    linkedin_signup_conversion: !ENV [LINKEDIN_SIGNUP_CONVERSION, ""]   # 申込完了（/welcome/）
     # タグを動かすホスト（カンマ区切り）
     hosts: !ENV [TRACKING_HOSTS, "ai-strategy.antecanis.com"]
 
@@ -216,6 +225,30 @@ extra:
     # 「知ったきっかけ」は任意（2026年11月〜）。**空欄のときに送る値**（空のまま送る。ゲートウェイ v10 から
     # 受け付け、Mailchimp の SOURCE001 は空のまま・タグは src:none）
     source_blank: ""
+  # ────────────────────────────────────────────────────────────
+  # 広告用LP（/start/。overrides/start.html）の、回ごと・時期ごとに変わる文と画像。
+  # 構成と文面はテンプレートの中（栗山さんの仕様。変えるときは栗山さんに確認する）。
+  # ⚠ 新しい回のたびに見直す（CLAUDE.md の毎回の更新チェックリスト）：
+  #   practice_example … 「得られるもの」の毎月の実践の回。直近の回と次の回を1文ずつ
+  #   recent_text      … 「実際の回から」の短い紹介。recent_round が extra.history の先頭の回と
+  #                      違うときは使わず、history の highlight（無ければ summary）を出す
+  # ────────────────────────────────────────────────────────────
+  lp:
+    practice_example: "第6回は、全員が同じ問いでAIと対話し、深まりを1往復ごとに点数化して比べました。第7回は、各自がAIでウェブサイトを作って公開し、開発のコストが消えた後の戦略を議論します。"
+    recent_round: 6
+    recent_text: "全員が同じ強さのAIを相手に、同じ問いで対話し、その深まりを1往復ごとに点数化して比べました。分かれ目は入力の長さではなく、問いの立て方でした。"
+    # 課題の棚の件数（増えていくので「〜超」で書く）
+    issues_count: "2,000件超"
+    # 「毎朝のAIニュース解釈」（メンバー）と、ライブラリー（登録不要）の違いの一言。空なら出さない
+    news_member_note: "コミュニティでは、届いた読み解きをもとに、メンバー同士で考えを交わせます。"
+    # 画像（docs/ からの相対パス）。空なら、その枠を出さない（届くまで）。
+    # ⚠ 参加者の名前・アイコンが写っていないことを確かめてから置く
+    images:
+      hero: ""        # AI戦略スタジオの画面（最初の画面）
+      hero_sp: ""     # 同じ画面の携帯用の切り出し（任意。無ければ hero）
+      practice: ""    # AI集合知ボードの画面（毎月の実践の回）
+      space: ""       # 課題の棚の画面（メンバースペース）
+      recent: ""      # 対話アリーナの画面（実際の回から。空なら extra.history の先頭の highlight_image）
   # 実績数値（/subscribe/・/join/corporate/ の実績帯とチップが参照）。
   # satisfaction は新しい回のアンケートが加わるたびに再計算する（未回答も分母に含める）
   stats:
