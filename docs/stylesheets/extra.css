@@ -991,11 +991,10 @@ body:has(.st) .md-main { background: #fff; }
   display: flex; flex-direction: column; align-items: center; text-align: center; gap: 2px; }
 .st .st-hero__stats b { font-family: var(--serif); font-size: 18px; line-height: 1.3; color: var(--teal); }
 .st .st-hero__stats span { font-size: 12px; line-height: 1.45; color: var(--muted); }
-.st .st-hero__links { display: flex; flex-direction: column; gap: 8px; margin-top: 18px; }
+.st .st-hero__cta { margin-top: 20px; }
+.st .st-hero__note { font-size: 13px; line-height: 1.75; color: var(--muted); margin-top: 10px; }
+.st .st-hero__links { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
 .st .st-hero__links a { font-size: 14px; line-height: 1.6; color: var(--teal2); }
-.st .st-hero__more { align-self: flex-start; font-weight: 700; color: var(--teal) !important;
-  border: 1.5px solid var(--teal); border-radius: 8px; padding: 9px 18px; }
-.st .st-hero__more:hover { background: var(--pale); }
 
 /* ② 心当たり・1990年代との相似形（紹介スライドの図を HTML で） */
 .st .st-checks { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
@@ -1104,19 +1103,62 @@ body:has(.st) .md-main { background: #fff; }
 .sch-up--band .sch-day.is-held { display: none; }
 .sch-up--band .sch-up__empty { color: rgba(255,255,255,.85); }
 
-/* ⑦ 参加者の声 */
-.st .st-voices__head { display: flex; flex-direction: column; gap: 4px; margin-bottom: 22px; }
-.home-landing.st .st-voices__head h2 { margin: 0; }
+/* ③ 参加すると、何が変わるか（参加者の声と満足度をここに） */
+.st .st-change__head { display: flex; flex-direction: column; gap: 4px; margin-bottom: 24px; }
+.home-landing.st .st-change__head h2 { margin: 0; }
 .st .st-score { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 10px; }
-.st .st-score strong { font-family: var(--serif); font-size: 52px; line-height: 1.1; color: var(--teal); }
+.st .st-score strong { font-family: var(--serif); font-size: 48px; line-height: 1.1; color: var(--teal); }
 .st .st-score span { font-size: 16px; color: #2b3a3f; }
-.st .st-voices { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
-.st .st-voice { position: relative; margin: 0; background: #fff; border-radius: 14px; padding: 26px 22px 22px;
-  box-shadow: 0 12px 30px -26px rgba(0,48,57,.6); border: 1px solid #d7e4e6; }
-.st .st-voice::before { content: "“"; position: absolute; top: 4px; left: 18px; font-family: var(--serif);
-  font-size: 46px; line-height: 1; color: rgba(28,110,124,.28); }
-.st .st-voice figcaption { font-family: var(--serif); font-size: 17px; font-weight: 700; color: var(--teal); margin-bottom: 8px; }
-.st .st-voice blockquote { margin: 0; padding: 0; border: 0; font-size: 15px; line-height: 1.9; color: #2b3a3f; }
+.st .st-change { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+.st .st-change__item { background: #fff; border: 1px solid #d7e4e6; border-radius: 16px; padding: 22px 20px 20px;
+  display: flex; flex-direction: column; gap: 14px; box-shadow: 0 12px 30px -26px rgba(0,48,57,.6); }
+.home-landing.st .st-change__item h3 { font-family: var(--serif); font-size: 19px; line-height: 1.55; color: var(--teal); margin: 0; }
+.st .st-change__ba { display: flex; flex-direction: column; gap: 6px; }
+.st .st-change__ba p { display: flex; gap: 10px; align-items: baseline; font-size: 15px; line-height: 1.7; color: var(--muted); }
+.st .st-change__ba .st-change__after { color: #1f2d31; font-weight: 700; }
+.st .st-change__k { flex: none; font-size: 12px; font-weight: 700; line-height: 1.6; border-radius: 4px; padding: 0 7px;
+  background: #e8eef0; color: var(--muted); }
+.st .st-change__after .st-change__k { background: var(--teal); color: #fff; }
+.st .st-change__voice { margin: auto 0 0; padding: 14px 0 0; border: 0; border-top: 1px dashed #cfdde0;
+  font-size: 14.5px; line-height: 1.85; color: #2b3a3f; }
+.st .st-change__voice span { display: block; font-size: 12px; font-weight: 700; color: var(--teal2); margin-bottom: 2px; }
+
+/* ⑤ 1回の流れ */
+.st .st-flow__meta { display: inline-block; font-size: 14px; font-weight: 700; color: var(--teal); background: #fff;
+  border: 1px solid #d7e4e6; border-radius: 999px; padding: 4px 14px; margin: -8px 0 20px; }
+.st .st-flow { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; counter-reset: none; }
+.st .st-flow li { position: relative; background: #fff; border-radius: 14px; padding: 18px 18px 18px 64px; border: 1px solid #d7e4e6; }
+.st .st-flow__n { position: absolute; left: 18px; top: 18px; width: 32px; height: 32px; border-radius: 50%;
+  background: var(--teal); color: #fff; font-family: var(--serif); font-weight: 700; font-size: 16px;
+  display: flex; align-items: center; justify-content: center; }
+.home-landing.st .st-flow h3 { font-family: var(--serif); font-size: 18px; color: var(--teal); margin: 2px 0 6px; }
+.st .st-flow p { font-size: 15px; line-height: 1.85; color: #2b3a3f; }
+.st .st-flow__after { margin-top: 16px; background: #fff; border-radius: 14px; padding: 18px 20px; border-left: 4px solid var(--teal2); }
+.home-landing.st .st-flow__after h3 { font-family: var(--serif); font-size: 18px; color: var(--teal); margin: 0 0 6px; }
+.st .st-flow__after p { font-size: 15px; line-height: 1.85; color: #2b3a3f; }
+.st .st-flow__facts { list-style: none; margin: 18px 0 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px 24px; }
+.st .st-flow__facts li { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; line-height: 1.7; color: #2b3a3f; }
+.st .st-flow__facts .lp-check { width: 20px; height: 20px; margin-top: 3px; color: var(--teal); flex: none; }
+
+/* ⑥ 得られるもの：冒頭の一文 */
+.st .st-lead { font-size: 16.5px; line-height: 1.95; color: #2b3a3f; max-width: 760px; margin: -6px 0 34px; }
+
+/* ⑦ 主催者：経歴 */
+.st .st-career { list-style: none; margin: 16px 0 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.st .st-career li { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 10px; font-size: 14px; line-height: 1.75; color: #2b3a3f; }
+.st .st-career b { font-size: 12.5px; font-weight: 700; color: var(--teal); background: #fff; border: 1px solid #d7e4e6;
+  border-radius: 6px; text-align: center; padding: 1px 4px; align-self: start; }
+
+/* ⑧ これまでの回の並び */
+.st .st-history { margin-top: 44px; padding-top: 28px; border-top: 1px solid #e1eaec; }
+.st .st-history__k { font-family: var(--serif); font-size: 19px; font-weight: 700; color: var(--teal); margin-bottom: 14px; }
+.st .st-history__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+.st .st-history__list li { display: grid; grid-template-columns: auto auto minmax(0, 1fr); gap: 4px 10px; align-items: baseline;
+  background: var(--pale); border-radius: 10px; padding: 12px 14px; }
+.st .st-history__no { font-size: 12.5px; font-weight: 700; color: #fff; background: var(--teal); border-radius: 999px; padding: 1px 10px; }
+.st .st-history__m { font-size: 13px; font-weight: 700; color: var(--teal2); }
+.st .st-history__t { font-size: 14.5px; line-height: 1.6; color: #1f2d31; }
+.st .st-history__more { margin-top: 14px; font-size: 14px; }
 
 /* ⑧ メンバーとして参加する */
 .st .st-join { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; }
@@ -1131,14 +1173,14 @@ body:has(.st) .md-main { background: #fff; }
   line-height: 1.6; border-radius: 999px; padding: 2px 14px; }
 .st .st-checks--plan { gap: 8px; }
 .st .st-checks--plan li { font-size: 15.5px; line-height: 1.7; background: none; }
-.st .st-plan__cond { font-size: 13.5px; line-height: 1.85; color: var(--muted); background: var(--pale); border-radius: 10px; padding: 12px 14px; }
-.st .st-corp { background: var(--pale); border-radius: 16px; padding: 22px 20px 24px; align-self: start; }
+.st .st-plan__cond { font-size: 13.5px; line-height: 1.85; color: var(--muted); background: #f2f7f7; border-radius: 10px; padding: 12px 14px; }
+.st .st-corp { background: #fff; border: 1px solid #d7e4e6; border-radius: 16px; padding: 22px 20px 24px; align-self: start; }
 .st .st-corp p { font-size: 14.5px; line-height: 1.85; color: #2b3a3f; margin-bottom: 10px; }
 .st .st-corp a { font-weight: 700; }
 
 /* ⑨ 報告メール */
 .st .st-watch { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; }
-.st .st-watch__form { background: #fff; border-radius: 16px; padding: 20px 18px 18px; border: 1px solid #d7e4e6; }
+.st .st-watch__form { background: var(--pale); border-radius: 16px; padding: 20px 18px 18px; }
 .st .st-form .lp-btn { min-height: 54px; font-size: 16px; }
 
 /* ⑩ よくあるご質問 */
@@ -1198,8 +1240,12 @@ body:has(.st) .md-main { background: #fff; }
   .st .st-row { grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); gap: 48px; }
   .st .st-row:nth-child(even) .st-row__media { order: 2; }
   .st .st-row--open { padding: 36px 36px; }
-  .st .st-voices { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
-  .st .st-voices__head { flex-direction: row; align-items: baseline; justify-content: space-between; flex-wrap: wrap; }
+  .st .st-change { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+  .st .st-change__head { flex-direction: row; align-items: baseline; justify-content: space-between; flex-wrap: wrap; }
+  .st .st-flow { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .st .st-flow__facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .st .st-history__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .st .st-hero__cta .st-btn { display: inline-flex; }
   .st .st-host { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 52px; align-items: start; }
   .st .st-host__who { flex-direction: column; align-items: flex-start; gap: 14px; }
   .st .st-host__who img { width: 240px; height: 240px; border-radius: 18px; }
@@ -1231,6 +1277,12 @@ body:has(.st) .md-main { background: #fff; }
   .st .st-era__k { font-size: 13.5px; }
   .st .st-era__c { font-size: 15px; padding: 14px 16px; }
   .st .st-features { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .st .st-flow { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .st .st-flow li { padding: 64px 20px 20px; }
+  .st .st-flow__n { top: 20px; left: 20px; }
+  .st .st-history__list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .st .st-history__list li { grid-template-columns: auto minmax(0, 1fr); }
+  .st .st-history__t { grid-column: 1 / -1; }
   .st .st-features li { display: block; padding: 24px 22px; }
   .st .st-features__n { display: block; font-size: 32px; margin-bottom: 12px; }
   .st .st-hero__stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
