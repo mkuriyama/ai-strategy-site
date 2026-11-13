@@ -1136,6 +1136,8 @@ body:has(.st) .md-main { background: #fff; }
 .st .st-flow__after { margin-top: 16px; background: #fff; border-radius: 14px; padding: 18px 20px; border-left: 4px solid var(--teal2); }
 .home-landing.st .st-flow__after h3 { font-family: var(--serif); font-size: 18px; color: var(--teal); margin: 0 0 6px; }
 .st .st-flow__after p { font-size: 15px; line-height: 1.85; color: #2b3a3f; }
+.st .st-flow__afters { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; margin-top: 16px; }
+.st .st-flow__afters .st-flow__after { margin-top: 0; }
 .st .st-flow__facts { list-style: none; margin: 18px 0 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px 24px; }
 .st .st-flow__facts li { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; line-height: 1.7; color: #2b3a3f; }
 .st .st-flow__facts .lp-check { width: 20px; height: 20px; margin-top: 3px; color: var(--teal); flex: none; }
@@ -1174,6 +1176,24 @@ body:has(.st) .md-main { background: #fff; }
 .st .st-checks--plan { gap: 8px; }
 .st .st-checks--plan li { font-size: 15.5px; line-height: 1.7; background: none; }
 .st .st-plan__cond { font-size: 14.5px; line-height: 1.85; color: var(--ink); background: #f2f7f7; border-radius: 10px; padding: 12px 14px; }
+.st .st-plan__keep { font-size: 13.5px; line-height: 1.75; color: #2b3a3f; }
+/* 今日お申し込みの場合（hooks/schedule.py の pay_now。最初の画面と料金の枠。schedule.js がその日に合わせて出し直す） */
+.pay-now [hidden], .pay-now[hidden] { display: none !important; }
+.pay-now__d.is-held, .pay-now__d.is-held + .pay-now__sep { display: none; }
+.pay-now__d { white-space: nowrap; }
+.pay-now__sep { margin: 0 .2em; }
+.st .pay-now b { color: var(--teal); white-space: nowrap; }
+.st .st-hero__cta .pay-now { margin-top: 12px; }
+.st .st-hero__cta .pay-now__row { font-size: 15px; line-height: 1.75; font-weight: 600; color: var(--ink); }
+/* お申し込みの流れ（料金の枠の横。携帯では下） */
+.st .st-join__side { display: flex; flex-direction: column; gap: 18px; }
+.st .st-steps { background: #fff; border: 1px solid #d7e4e6; border-radius: 16px; padding: 22px 20px 24px; }
+.st .st-steps ol { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.st .st-steps li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 10px; align-items: start; }
+.st .st-steps__n { width: 26px; height: 26px; border-radius: 50%; background: var(--teal); color: #fff; font-family: var(--serif);
+  font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+.st .st-steps b { display: block; font-size: 15px; line-height: 1.6; color: var(--teal); margin-bottom: 2px; }
+.st .st-steps p { font-size: 14px; line-height: 1.8; color: #2b3a3f; margin: 0; }
 .st .st-corp { background: #fff; border: 1px solid #d7e4e6; border-radius: 16px; padding: 22px 20px 24px; align-self: start; }
 .st .st-corp p { font-size: 14.5px; line-height: 1.85; color: #2b3a3f; margin-bottom: 10px; }
 .st .st-corp a { font-weight: 700; }
@@ -1278,6 +1298,7 @@ body:has(.st) .md-main { background: #fff; }
   .st .st-era__c { font-size: 15px; padding: 14px 16px; }
   .st .st-features { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .st .st-flow { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .st .st-flow__afters { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
   .st .st-flow li { padding: 64px 20px 20px; }
   .st .st-flow__n { top: 20px; left: 20px; }
   .st .st-history__list { grid-template-columns: repeat(3, minmax(0, 1fr)); }

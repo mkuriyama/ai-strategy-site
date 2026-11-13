@@ -11,6 +11,8 @@
  * - [data-sch-up]       … これからの開催。済んだ回を隠し、先頭から data-max 回だけ出す（繰り上げ）
  * - [data-window-end]   … 申込の時期ごとの表の行。受付が終わったら隠し、次の行を繰り上げる。
  *                         残りの日程が無ければ [data-pay-none] を出す
+ * - [data-pay-now]      … 「今日お申し込みの場合」（広告用LP）。[data-now-start]〜[data-now-end] に
+ *                         いまが入る行だけを出す。無料の日程が残っていなければ [data-now-free] を隠す
  * - [data-next-session] … 直近の日程の表記（"md" なら 11/6(金)、無指定なら 11/6(金) 20:00〜）
  * - [data-next-label]   … 直近の日程の回（第6回 B日程）
  * - [data-next-wrap]    … 直近の日程が無くなったら隠す
@@ -70,6 +72,23 @@
       each("[data-pay-none]", function (x) { x.hidden = left > 0; }, row);
     });
     each("[data-pay-empty]", function (x) { x.hidden = rows > 0; });
+
+    // 「今日お申し込みの場合」（広告用LP）：いまの受付の行だけを出す。切り替えは前の回の B日程の翌日。
+    // 無料で参加できる日程が残っていなければ、その部分を隠す。どの行にも当たらなければ日付のない一文
+    each("[data-pay-now]", function (box) {
+      var current = null;
+      each("[data-now-end]", function (row) {
+        var s = time(row.getAttribute("data-now-start"));
+        var e = time(row.getAttribute("data-now-end"));
+        var on = !current && (s === null || now >= s) && !(e !== null && now >= e);
+        row.hidden = !on;
+        if (!on) return;
+        current = row;
+        var left = row.querySelectorAll("[data-at]:not(.is-held)").length;
+        each("[data-now-free]", function (x) { x.hidden = left === 0; }, row);
+      }, box);
+      each("[data-now-fallback]", function (x) { x.hidden = !!current; }, box);
+    });
 
     var next = null;
     days().some(function (d) {

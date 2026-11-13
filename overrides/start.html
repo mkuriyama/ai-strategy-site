@@ -12,6 +12,12 @@
     ほかの導線は、帯の「参加する」（いつも見える）・料金の枠・最後の帯・携帯の固定ボタン（最初の画面を過ぎてから出す）
   - 言葉：「プログラミング経験は前提にしない」とは書かない（技術の話が多い場だと思わせる）。「ITが苦手でも」の調子で。
     録画は「追いつく」ためではない（各回は独立したテーマ）。欠席した回を知る・見返す・探すためのもの
+  - 各回はその月の A・B の2日程だけで、同じ回をあとで開かない。参加者同士の気づきの交換や空気感は当日ならでは
+    （栗山さん、2026-11-14）。本編はおおむね 22:30 まで。そのあとの質問と交流は自由参加で、録画に残さない
+  - 「今日お申し込みの場合」の一文は pay_now()（hooks/schedule.py。申込用 GAS と同じ決まり）。
+    切り替えは前の回の B日程の翌日で、schedule.js がブラウザでも出し直す。手で直さない
+  - 早期参加枠：「お申し込みのあとも据え置き」「割引の幅は段階的に小さくなる」までは書く。いつ変わるかは書かない
+  - お申し込みの流れ：カード番号は Stripe が管理し、運営は受け取らない。更新は毎月15日
   - ヘッダー（Material）・タブ・お知らせバーは出さない（extra.css の body:has(.st) と main.html）
   - 料金・初回のお支払い・開催予定・実績は config.extra から（本文に書かない）。回ごとに変わる文と画像は extra.lp
   - 見出しは BudouX で句の切れ目に改行位置を入れる（filter phrase。hooks/phrases.py）
@@ -66,7 +72,8 @@
         </ul>
         <div class="st-hero__cta">
           <a class="st-btn st-btn--teal" id="hero-cta" href="{{ ex.join_url }}" data-cta="hero">{{ join_label }}</a>
-          <p class="st-hero__note">いつからでも参加できます。お申し込みのあと最初の回は無料で、合わなければ費用はかかりません。以降は月額{{ pr.early_monthly_incl }}円（税込）。</p>
+          {{ pay_now() }}
+          <p class="st-hero__note">いつからでも参加できます。合わなければ、初回のお支払い日の前日までの解約で費用はかかりません。以降は月額{{ pr.early_monthly_incl }}円（税込）。いまの月額（{{ pr.early_label }}）は、お申し込みのあとも据え置きです。</p>
         </div>
         <p class="st-hero__links">
           <a href="{{ library_url }}" target="_blank" rel="noopener" data-ga="click_library" data-ga-pos="hero">毎朝更新のAI戦略ライブラリーを見る（登録不要）→</a>
@@ -196,20 +203,26 @@
   <section class="st-block st-block--pale" id="flow" data-lp-section="flow">
     <div class="st-wrap">
       <h2>{{ "月に一度の回は、" | phrase }}{{ "こう進みます" | phrase }}</h2>
-      <p class="st-flow__meta">20:00開始・オンライン（Zoom）・約2〜2.5時間</p>
+      <p class="st-flow__meta">20:00〜22:30ごろ・オンライン（Zoom）</p>
       <ol class="st-flow">
         {%- for h, t in [
           ("問いから始める", "その回のテーマが、なぜ戦略的に重要か。自分の事業・業界の文脈で言葉にし、AIにも同じ問いを考えさせて比べます。"),
           ("AIで動かす、作る", "AIとの対話から始めて、AIに仕組みやコンテンツを作らせ、動くところまで進めます。作るのは主にAI。ITが苦手でも、その場で一緒に進めます。"),
           ("戦略に戻る", "作ったものをもとに、自社にどう効くか、産業や組織の構造がどう変わるかを考えます。"),
-          ("まとめと交流", "持ち帰るファイル一式を確かめ、次の回を予告します。終わったあとは、質問と交流の時間（最大60分ほど）。"),
+          ("まとめ", "持ち帰るファイル一式を確かめ、次の回を予告します。本編は、おおむね22:30までです。"),
         ] %}
         <li><span class="st-flow__n">{{ loop.index }}</span><h3>{{ h }}</h3><p>{{ t }}</p></li>
         {%- endfor %}
       </ol>
-      <div class="st-flow__after">
-        <h3>終わったあとも</h3>
-        <p>録画と資料に加えて、各回を場面ごとに見返せるビューアがあります。出られなかった回の中身も分かり、出た回の見返したい場面や、数か月前のあの話も、すぐに見つかります。</p>
+      <div class="st-flow__afters">
+        <div class="st-flow__after">
+          <h3>本編のあと（自由参加）</h3>
+          <p>質問と交流の時間です（最大60分ほど）。途中で抜けても大丈夫です。録画に残さない時間で、質問に答えたり議論したりするなかで、いまのAIの潮流の本質に話が及ぶこともあります。参加できる方は、ぜひ。</p>
+        </div>
+        <div class="st-flow__after">
+          <h3>終わったあとも</h3>
+          <p>録画と資料に加えて、各回を場面ごとに見返せるビューアがあります。出られなかった回の中身も分かり、出た回の見返したい場面や、数か月前のあの話も、すぐに見つかります。それでも、参加者同士の気づきの交換や、その場の空気感は、当日ならではです。</p>
+        </div>
       </div>
       <ul class="st-flow__facts">
         {%- for t in [
@@ -351,7 +364,7 @@
           <div class="st-next">
             <p class="st-next__k">次回</p>
             {{ schedule_upcoming(1, "start") }}
-            <p class="st-next__note">オンライン（Zoom）。AとBは同じ内容。途中の回から参加できます。</p>
+            <p class="st-next__note">オンライン（Zoom）・20:00〜22:30ごろ。AとBは同じ内容で、この回を開くのは、この2日程だけです。途中の回から参加できます。</p>
           </div>
         </div>
       </div>
@@ -379,6 +392,7 @@
             <span class="st-badge">初月無料</span>
             <p class="st-plan__price"><span class="st-plan__k">月額</span><strong>{{ pr.early_monthly_incl }}円</strong><span class="st-plan__tax">（税込）</span></p>
             <p class="st-plan__sub">{{ pr.early_monthly }}・{{ pr.early_label }}</p>
+            <p class="st-plan__keep">いまの月額（{{ pr.early_label }}）は、お申し込みのあとも据え置きです。割引の幅は、段階的に小さくなっていきます。</p>
           </div>
           <ul class="st-checks st-checks--plan">
             {%- for t in [
@@ -390,13 +404,28 @@
             <li>{{ lp.check() }}<span>{{ t }}</span></li>
             {%- endfor %}
           </ul>
-          <p class="st-plan__cond">お申し込み後、最初の回は無料で参加できます。初回のお支払いはその回のあとの15日。合わなければ、初回のお支払い日の前日までの解約で費用はかかりません。</p>
+          <div class="st-plan__cond">{{ pay_now(true) }}</div>
           <a class="st-btn st-btn--teal st-plan__cta" href="{{ ex.join_url }}" data-cta="plan">{{ join_label }}</a>
         </div>
-        <div class="st-corp">
-          <h3>会社として参加する</h3>
-          <p>適格領収書は、お申し込み後にStripeで表示できます。一定人数以上でのご参加なら、請求書の発行と後日のお振込にも対応します。</p>
-          <a href="{{ 'join/corporate/' | url }}">法人の方へ →</a>
+        <div class="st-join__side">
+          {# お申し込みの流れ（カード番号は Stripe が管理し、運営は受け取らない。招待と当日の案内は /welcome/ と同じ） #}
+          <div class="st-steps">
+            <h3>お申し込みの流れ</h3>
+            <ol>
+              {%- for h, t in [
+                ("お申し込み", "Stripe の画面で、メールアドレスとクレジットカードなどを入力します。カード番号は Stripe が管理し、運営は受け取りません。この時点では、お支払いはありません。"),
+                ("最初の回に無料で参加", "コミュニティ（Circle）への招待を、メールでお送りします。当日の Zoom のリンクや資料は、Circle でご案内します。"),
+                ("初回のお支払いと更新", "初回のお支払いは、その回のあとの15日です。以降は毎月15日に更新します。解約は Stripe のカスタマーポータルから、ご自身でいつでもできます。"),
+              ] %}
+              <li><span class="st-steps__n">{{ loop.index }}</span><div><b>{{ h }}</b><p>{{ t }}</p></div></li>
+              {%- endfor %}
+            </ol>
+          </div>
+          <div class="st-corp">
+            <h3>会社として参加する</h3>
+            <p>適格領収書は、お申し込み後にStripeで表示できます。一定人数以上でのご参加なら、請求書の発行と後日のお振込にも対応します。</p>
+            <a href="{{ 'join/corporate/' | url }}">法人の方へ →</a>
+          </div>
         </div>
       </div>
     </div>
@@ -450,7 +479,7 @@
         <dt>途中の回からでも参加できますか？</dt>
         <dd>できます。各回は独立したテーマで、前の回の知識は前提にしません。</dd>
         <dt>当日参加できない回は？</dt>
-        <dd>録画と資料で、ご自身のタイミングで取り組めます。</dd>
+        <dd>録画と資料で、ご自身のタイミングで取り組めます。ただ、各回はその月のA・Bの2日程だけで、同じ回をあとで開くことはありません。参加者同士の気づきの交換や、その場の空気感は当日ならではなので、できるだけ当日のご参加をおすすめします。</dd>
         <dt>当日、カメラや発言は必要ですか？</dt>
         <dd>どちらも必須ではありません。カメラは、差し支えなければオンにしていただくと話しやすくなります（参加者の顔は録画に残しません）。対抗戦のあとなどに、上位の方に感想や作戦をうかがうことがありますが、声を出せる方にお願いしています。</dd>
         <dt>自社の情報を話す必要はありますか？</dt>
