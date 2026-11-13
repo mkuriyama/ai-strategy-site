@@ -243,12 +243,16 @@ extra:
     news_member_note: "コミュニティでは、届いた読み解きをもとに、メンバー同士で考えを交わせます。"
     # 画像（docs/ からの相対パス）。空なら、その枠を出さない（届くまで）。
     # ⚠ 参加者の名前・アイコンが写っていないことを確かめてから置く
-    images:
-      hero: ""        # AI戦略スタジオの画面（最初の画面）
-      hero_sp: ""     # 同じ画面の携帯用の切り出し（任意。無ければ hero）
-      practice: ""    # AI集合知ボードの画面（毎月の実践の回）
-      space: ""       # 課題の棚の画面（メンバースペース）
-      recent: ""      # 対話アリーナの画面（実際の回から。空なら extra.history の先頭の highlight_image）
+    images:   # 空にした枠は出さない。⚠ 参加者の名前・アイコンが写っていないかを確かめてから置く
+      hero: "assets/img/start/build.jpg"            # 最初の画面（実践アプリの画面）
+      practice: "assets/img/start/result.jpg"      # 毎月の実践の回
+      space: "assets/img/start/kadai.jpg"           # メンバースペース（課題の棚）
+      space2: "assets/img/start/find.jpg"           # メンバースペース（探す・聞く。重ねて出す）
+      news: "assets/img/start/library-news.jpg"     # 毎朝のAIニュース解釈
+      library: "assets/img/start/library-digest.jpg" # AI戦略ライブラリー
+      peers: "assets/img/start/circle.jpg"          # 仲間（参加者コミュニティ）
+      recent: ""      # 実際の回から（空なら extra.history の先頭の highlight_image）
+      recent2: "assets/img/start/arena.jpg"         # 実際の回から（重ねて出す）
   # 実績数値（/subscribe/・/join/corporate/ の実績帯とチップが参照）。
   # satisfaction は新しい回のアンケートが加わるたびに再計算する（未回答も分母に含める）
   stats:
