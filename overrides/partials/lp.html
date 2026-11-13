@@ -75,5 +75,5 @@
 
 {#- 画面の写真の枠（ホームの .shot と同じ質感）。src が空なら何も出さない -#}
 {% macro shot(src, alt, cls="", lazy=true) -%}
-{%- if src %}<div class="st-shot {{ cls }}"><img src="{{ src | url }}" alt="{{ alt }}"{% if lazy %} loading="lazy"{% else %} fetchpriority="high"{% endif %}></div>{% endif -%}
+{%- if src %}<div class="st-shot {{ cls }}"><img src="{{ src | url }}" {{ img_attrs(src) }} alt="{{ alt }}"{% if lazy %} loading="lazy"{% else %} fetchpriority="high"{% endif %}></div>{% endif -%}
 {%- endmacro %}

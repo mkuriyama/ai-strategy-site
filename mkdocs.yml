@@ -59,6 +59,8 @@ hooks:
   - hooks/tracking.py
   # 見出しの日本語を句の切れ目で改行する（テンプレートのフィルター phrase。BudouX）
   - hooks/phrases.py
+  # 広告用LP の画像に幅と高さを書く（テンプレートの img_attrs。読み込みで文がずれないように）
+  - hooks/img_size.py
 
 # 日本語検索対応（CJK 分割に対応）
 plugins:

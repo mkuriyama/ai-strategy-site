@@ -124,6 +124,8 @@ hooks/tracking.py               Material を通らない静的ページ（/welco
                                 /welcome/ では、Stripe の session_id が付いていれば申込完了を1回だけ送る
 hooks/phrases.py                テンプレートのフィルター `phrase`。BudouX で日本語の見出しの句の切れ目に
                                 `<wbr>` を入れる（iPhone の Safari では CSS の auto-phrase が効かないため）
+hooks/img_size.py               テンプレートの関数 `img_attrs(src)`。広告用LP の画像に元の幅と高さを書き、
+                                遅れて読み込まれた画像でページが伸びて、読んでいる文がずれないようにする
 hooks/seo_files.py              AIO 用 `llms.txt` をビルド時に生成（extra: と各ページの description から）
 hooks/export_data.py            6つの役割。①`site/data/rounds.json`（回の表題・領域・開催日・
                                 要約）を公開 ― B が回ページの見出しに使う。②`site/data/
@@ -574,7 +576,9 @@ B 側**（`ai-strategy-news-app` の `content/guide/*.md`）。本サイトに�
 - **画像**は `extra.lp.images`（空ならその枠を出さない）。⚠ **参加者の名前・アイコンが写っていないか**を
   確かめてから置く。**会員限定の情報**（ボードに入るコード・メールアドレス・テスト用の表示）も写さない
   （メンバースペースの画面は、動画の中の URL をぼかしてある）。画像は `assets/img/start/`、2枚目（`…2`）は
-  右下に重ねて出す。画像の下の短い説明は `extra.lp.captions`。具体的なモデル名が大きく写る画面は使わない
+  右下に重ねて出す。画像の下の短い説明は `extra.lp.captions`。具体的なモデル名が大きく写る画面は使わない。
+  **ニュースの見出しが写る画面は、事件・事故・政治の見出しが無いか**も確かめる（2026-11-13、コミュニティの
+  投稿の画像に事件の見出しが写っていたので、その行を切り取った）。幅と高さは `hooks/img_size.py` が書く
 - **報告メールの欄はメールアドレスだけ**（ゲートウェイ v11 からお名前は任意）。登録の応答の
   `profile_token`（30分）を使って、/start/thanks/ でお名前と知ったきっかけを同じ人に追記する
   （`/api/subscribe/profile`）。札が無いとき（登録済みの方・直接開いた場合）は、その欄を出さない

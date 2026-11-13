@@ -992,7 +992,7 @@ body:has(.st) .md-main { background: #fff; }
 .st .st-hero__stats b { font-family: var(--serif); font-size: 18px; line-height: 1.3; color: var(--teal); }
 .st .st-hero__stats span { font-size: 12px; line-height: 1.45; color: var(--muted); }
 .st .st-hero__cta { margin-top: 20px; }
-.st .st-hero__note { font-size: 13px; line-height: 1.75; color: var(--muted); margin-top: 10px; }
+.st .st-hero__note { font-size: 14px; line-height: 1.75; color: #3d5258; margin-top: 10px; }
 .st .st-hero__links { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
 .st .st-hero__links a { font-size: 14px; line-height: 1.6; color: var(--teal2); }
 
@@ -1173,7 +1173,7 @@ body:has(.st) .md-main { background: #fff; }
   line-height: 1.6; border-radius: 999px; padding: 2px 14px; }
 .st .st-checks--plan { gap: 8px; }
 .st .st-checks--plan li { font-size: 15.5px; line-height: 1.7; background: none; }
-.st .st-plan__cond { font-size: 13.5px; line-height: 1.85; color: var(--muted); background: #f2f7f7; border-radius: 10px; padding: 12px 14px; }
+.st .st-plan__cond { font-size: 14.5px; line-height: 1.85; color: var(--ink); background: #f2f7f7; border-radius: 10px; padding: 12px 14px; }
 .st .st-corp { background: #fff; border: 1px solid #d7e4e6; border-radius: 16px; padding: 22px 20px 24px; align-self: start; }
 .st .st-corp p { font-size: 14.5px; line-height: 1.85; color: #2b3a3f; margin-bottom: 10px; }
 .st .st-corp a { font-weight: 700; }
