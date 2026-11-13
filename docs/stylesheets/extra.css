@@ -1032,7 +1032,7 @@ body:has(.st) .md-main { background: #fff; }
 .st .st-map figcaption { font-family: var(--serif); font-size: 17px; font-weight: 700; color: var(--teal); margin-bottom: 14px; }
 /* 4つの象限。軸は線で、端に名前 */
 .st .st-map__plane { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  grid-template-rows: auto auto; gap: 26px 22px; padding: 30px 0 30px; }
+  grid-template-rows: 1fr 1fr; gap: 30px 22px; padding: 30px 0 30px; } /* 上下の段を同じ高さにして、横の軸を段のあいだに通す */
 .st .st-map__plane::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 2px; background: var(--teal); opacity: .55; }
 .st .st-map__plane::after { content: ""; position: absolute; top: 22px; bottom: 22px; left: 50%; width: 2px; background: var(--teal); opacity: .55; }
 .st .st-map__ax { position: absolute; font-size: 12.5px; font-weight: 700; color: var(--teal); background: #fff; padding: 0 6px; z-index: 1; line-height: 1.4; }
