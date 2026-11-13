@@ -923,9 +923,13 @@ body:has(.st) .md-main { background: #fff; }
   box-shadow: 0 18px 46px -26px rgba(0,48,57,.55); }
 .st .st-shot img { display: block; width: 100%; height: auto; }
 /* 2枚を重ねる：後ろの1枚に、小さめの1枚を右下に重ねる */
-.st .st-row__media--stack { position: relative; padding: 0 0 18% 0; }
-.st .st-row__media--stack > .st-shot:first-child { width: 86%; }
-.st .st-row__media--stack > .st-shot--float { position: absolute; right: 0; bottom: 0; width: 58%; }
+.st .st-stack { position: relative; padding: 0 0 16% 0; }
+.st .st-stack > .st-shot:first-child { width: 84%; }
+.st .st-stack > .st-shot--float { position: absolute; right: 0; bottom: 0; width: 46%; }
+.st .st-stack--tall > .st-shot--float { width: 30%; bottom: -4%; }
+.st .st-row__media { margin: 0; }
+.st .st-row__media figcaption, .st .st-recent__media figcaption { font-size: 12.5px; line-height: 1.6; color: var(--muted); margin-top: 12px; }
+.st .st-row__media--narrow .st-shot { max-width: 480px; }
 
 /* buttons（申込はティール／最後の帯では白） */
 .st .st-btn {
@@ -970,10 +974,10 @@ body:has(.st) .md-main { background: #fff; }
   margin: 0; letter-spacing: .01em; font-weight: 700; }
 .st .st-mark { background: linear-gradient(transparent 72%, rgba(28,110,124,.16) 72%); }
 .st .st-hero__lead { font-size: 16px; line-height: 1.95; color: #2b3a3f; margin-top: 16px; }
-.st .st-hero__visual { margin: 0; position: relative; }
-.st .st-hero__visual > .st-shot--main { width: 92%; }
-.st .st-hero__visual > .st-shot--float { position: absolute; right: 0; top: 46%; width: 42%;
-  box-shadow: 0 16px 36px -18px rgba(0,48,57,.6); }
+.st .st-hero__visual { margin: 0; }
+.st .st-stack--hero { padding-bottom: 20%; }
+.st .st-stack--hero > .st-shot:first-child { width: 90%; }
+.st .st-stack--hero > .st-shot--float { width: 40%; box-shadow: 0 16px 36px -18px rgba(0,48,57,.6); }
 .st .st-hero__visual figcaption { font-size: 12px; line-height: 1.55; color: var(--muted); margin-top: 12px; }
 .st .st-hero__host { display: flex; gap: 14px; align-items: center; }
 .st .st-hero__host img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; flex: none;
@@ -1219,7 +1223,7 @@ body:has(.st) .md-main { background: #fff; }
   .home-landing.st .st-hero h1 { font-size: 42px; line-height: 1.45; }
   .st .st-hero__lead { font-size: 17px; margin-top: 22px; }
   .st .st-hero__visual { margin-top: 8px; align-self: center; }
-  .st .st-hero__visual > .st-shot--main { transform: rotate(.4deg); }
+  .st .st-stack--hero > .st-shot:first-child { transform: rotate(.4deg); }
   .st .st-hero__stats { max-width: 520px; }
   .st .st-hero__links { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 12px 22px; }
   .st .st-two--pain { grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); gap: 64px; align-items: start; }
@@ -1231,7 +1235,6 @@ body:has(.st) .md-main { background: #fff; }
   .st .st-features__n { display: block; font-size: 32px; margin-bottom: 12px; }
   .st .st-hero__stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .st .st-hero__stats li[data-next-wrap] { grid-column: auto; flex-direction: column; gap: 2px; }
-  .st .st-hero__visual > .st-shot--float { top: 52%; }
 }
 @media (prefers-reduced-motion: reduce) {
   .st .st-sticky { transition: none; }

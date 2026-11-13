@@ -243,16 +243,27 @@ extra:
     news_member_note: "コミュニティでは、届いた読み解きをもとに、メンバー同士で考えを交わせます。"
     # 画像（docs/ からの相対パス）。空なら、その枠を出さない（届くまで）。
     # ⚠ 参加者の名前・アイコンが写っていないことを確かめてから置く
-    images:   # 空にした枠は出さない。⚠ 参加者の名前・アイコンが写っていないかを確かめてから置く
-      hero: "assets/img/start/build.jpg"            # 最初の画面（実践アプリの画面）
-      practice: "assets/img/start/result.jpg"      # 毎月の実践の回
-      space: "assets/img/start/kadai.jpg"           # メンバースペース（課題の棚）
-      space2: "assets/img/start/find.jpg"           # メンバースペース（探す・聞く。重ねて出す）
-      news: "assets/img/start/library-news.jpg"     # 毎朝のAIニュース解釈
-      library: "assets/img/start/library-digest.jpg" # AI戦略ライブラリー
-      peers: "assets/img/start/circle.jpg"          # 仲間（参加者コミュニティ）
-      recent: ""      # 実際の回から（空なら extra.history の先頭の highlight_image）
-      recent2: "assets/img/start/arena.jpg"         # 実際の回から（重ねて出す）
+    images:   # 空にした枠は出さない。⚠ 参加者の名前・アイコン・会員限定の情報（ボードのコード等）が写っていないかを確かめてから置く
+      hero: "assets/img/start/studio.jpg"            # 最初の画面（AI戦略スタジオ）
+      hero2: "assets/img/start/app-demo.jpg"         # 最初の画面に重ねる（AIで作った業務アプリの例）
+      practice: "assets/img/start/reports.jpg"       # 毎月の実践の回（第5回で生成したレポート）
+      practice2: "assets/img/start/board-s06b.jpg"   # 同上に重ねる（第6回の対話アリーナ）
+      space: "assets/img/start/space-viewer.jpg"     # メンバースペース（場面ごとのビューア。動画の中のURLはぼかし済み）
+      space2: "assets/img/start/kadai.jpg"           # 同上に重ねる（課題の棚）
+      news: "assets/img/start/news-circle.jpg"       # 毎朝のAIニュース解釈（コミュニティの投稿）
+      library: "assets/img/start/library-digest.jpg" # AI戦略ライブラリー（今日のダイジェスト）
+      library2: "assets/img/start/library-companies.jpg" # 同上に重ねる（戦略の棚）
+      peers: "assets/img/start/gallery.jpg"          # 仲間（第5回のシナリオ・ギャラリー）
+      recent: "assets/img/start/arena-s06a.jpg"      # 実際の回から（空なら extra.history の先頭の highlight_image）
+      recent2: "assets/img/start/graph3d.jpg"        # 同上に重ねる（全員の対話の軌跡）
+    captions:  # 画像の下の短い説明（空なら出さない）
+      hero: "左：AI戦略スタジオで、チームで事業の案をつくる。右下：AIで作った業務アプリの例"
+      practice: "第5回：AIと書いた未来シナリオのレポート（右下は第6回の対話アリーナ）"
+      space: "メンバースペース：各回を場面ごとに見返す（右下は課題の棚）"
+      news: "毎朝のAIニュース解釈：メンバーのコミュニティに届く投稿"
+      library: "AI戦略ライブラリー：今日のダイジェスト（右下は戦略の棚）"
+      peers: "第5回のシナリオ・ギャラリー：参加者がAIと作った223本のシナリオを、全員で見比べる"
+      recent: "第6回の対話アリーナ：同じ問いでAIと対話し、深まりを1往復ごとに点数で見る（右下は全員の対話の軌跡）"
   # 実績数値（/subscribe/・/join/corporate/ の実績帯とチップが参照）。
   # satisfaction は新しい回のアンケートが加わるたびに再計算する（未回答も分母に含める）
   stats:

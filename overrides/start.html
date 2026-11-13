@@ -22,6 +22,7 @@
 {%- set fm = ex.forms -%}
 {%- set L = ex.lp or {} -%}
 {%- set img = L.images or {} -%}
+{%- set cap = L.captions or {} -%}
 {%- set latest = ex.history[0] -%}
 {%- set library_url = ex.news_site_url | replace('/d/', '/') -%}
 {#- 折り返すときは「（初月無料）」の前で（ボタンは keep-all） -#}
@@ -41,11 +42,11 @@
       </div>
       {%- if img.hero %}
       <figure class="st-hero__visual">
-        {{ lp.shot(img.hero, "実践アプリ「事業デザイン対抗戦」の画面", "st-shot--main", lazy=false) }}
-        {%- if latest.highlight_image %}
-        {{ lp.shot(latest.highlight_image, "第" ~ latest.round ~ "回の記録の画面", "st-shot--float") }}
-        {%- endif %}
-        <figcaption>実践アプリ「事業デザイン対抗戦」：市場の声を聞き、AIと事業の案を作り込む</figcaption>
+        <div class="st-stack st-stack--hero">
+          {{ lp.shot(img.hero, "AI戦略スタジオの画面", "st-shot--main", lazy=false) }}
+          {{ lp.shot(img.hero2, "AIで作った業務アプリの画面", "st-shot--float") }}
+        </div>
+        {%- if cap.hero %}<figcaption>{{ cap.hero }}</figcaption>{% endif %}
       </figure>
       {%- endif %}
       <div class="st-hero__foot">
@@ -159,7 +160,13 @@
       <h2>{{ "このプロジェクトで得られるもの" | phrase }}</h2>
       <div class="st-rows">
         <article class="st-row">
-          <div class="st-row__media">{{ lp.shot(img.practice, "AI戦略対抗戦の合議結果の画面") }}</div>
+          <figure class="st-row__media">
+            <div class="st-stack">
+              {{ lp.shot(img.practice, "AIと書いた未来シナリオのレポート") }}
+              {{ lp.shot(img.practice2, "対話アリーナの画面", "st-shot--float") }}
+            </div>
+            {%- if cap.practice %}<figcaption>{{ cap.practice }}</figcaption>{% endif %}
+          </figure>
           <div class="st-row__body">
             <span class="st-tag">メンバー</span>
             <h3>{{ "毎月の実践の回：" | phrase }}{{ "自社の問いを、AIで形にする" | phrase }}</h3>
@@ -167,10 +174,13 @@
           </div>
         </article>
         <article class="st-row">
-          <div class="st-row__media st-row__media--stack">
-            {{ lp.shot(img.space, "課題の棚の画面（業界×業務の表）") }}
-            {{ lp.shot(img.space2, "記録を言葉で探して聞く画面", "st-shot--float") }}
-          </div>
+          <figure class="st-row__media">
+            <div class="st-stack">
+              {{ lp.shot(img.space, "各回を場面ごとに見返す画面") }}
+              {{ lp.shot(img.space2, "課題の棚の画面（業界×業務の表）", "st-shot--float") }}
+            </div>
+            {%- if cap.space %}<figcaption>{{ cap.space }}</figcaption>{% endif %}
+          </figure>
           <div class="st-row__body">
             <span class="st-tag">メンバー</span>
             <h3>{{ "メンバースペース：" | phrase }}{{ "いつでも見返せる、戦略の引き出し" | phrase }}</h3>
@@ -178,7 +188,10 @@
           </div>
         </article>
         <article class="st-row">
-          <div class="st-row__media">{{ lp.shot(img.news, "これまでの回の文脈でAIニュースを読み解いた画面") }}</div>
+          <figure class="st-row__media st-row__media--narrow">
+            {{ lp.shot(img.news, "コミュニティに届く、毎朝のAIニュース解釈の投稿") }}
+            {%- if cap.news %}<figcaption>{{ cap.news }}</figcaption>{% endif %}
+          </figure>
           <div class="st-row__body">
             <span class="st-tag">メンバー</span>
             <h3>{{ "毎朝のAIニュース解釈：" | phrase }}{{ "変化の意味が分かる" | phrase }}</h3>
@@ -186,7 +199,13 @@
           </div>
         </article>
         <article class="st-row st-row--open" id="library">
-          <div class="st-row__media">{{ lp.shot(img.library, "AI戦略ライブラリーの今日のダイジェスト") }}</div>
+          <figure class="st-row__media">
+            <div class="st-stack st-stack--tall">
+              {{ lp.shot(img.library, "AI戦略ライブラリーの今日のダイジェスト") }}
+              {{ lp.shot(img.library2, "戦略の棚の画面（会社ごとの記事の数）", "st-shot--float") }}
+            </div>
+            {%- if cap.library %}<figcaption>{{ cap.library }}</figcaption>{% endif %}
+          </figure>
           <div class="st-row__body">
             <span class="st-tag st-tag--open">どなたでも・登録不要</span>
             <h3>{{ "AI戦略ライブラリー：" | phrase }}{{ "AIの変化を、事業の文脈で" | phrase }}</h3>
@@ -198,7 +217,10 @@
           </div>
         </article>
         <article class="st-row">
-          <div class="st-row__media">{{ lp.shot(img.peers, "参加者のコミュニティ（Circle）の画面") }}</div>
+          <figure class="st-row__media">
+            {{ lp.shot(img.peers, "第5回のシナリオ・ギャラリーの画面") }}
+            {%- if cap.peers %}<figcaption>{{ cap.peers }}</figcaption>{% endif %}
+          </figure>
           <div class="st-row__body">
             <span class="st-tag">メンバー</span>
             <h3>{{ "仲間：" | phrase }}{{ "同じ問いを持つ実践者" | phrase }}</h3>
@@ -238,11 +260,12 @@
       <div class="st-recent{% if not recent_img %} st-recent--noimg{% endif %}">
         {%- if recent_img %}
         <figure class="st-recent__media">
-          <div class="st-row__media--stack">
-            {{ lp.shot(recent_img, "第" ~ latest.round ~ "回の記録の画面") }}
-            {{ lp.shot(img.recent2, "第" ~ latest.round ~ "回の対話の画面", "st-shot--float") }}
+          <div class="st-stack">
+            {{ lp.shot(recent_img, "第" ~ latest.round ~ "回の対話アリーナの画面") }}
+            {{ lp.shot(img.recent2, "第" ~ latest.round ~ "回の全員の対話の軌跡", "st-shot--float") }}
           </div>
-          {%- if not img.recent and latest.highlight_caption %}<figcaption>{{ latest.highlight_caption }}</figcaption>{% endif %}
+          {%- set rc = cap.recent if img.recent else latest.highlight_caption -%}
+          {%- if rc %}<figcaption>{{ rc }}</figcaption>{% endif %}
         </figure>
         {%- endif %}
         <div class="st-recent__body">
