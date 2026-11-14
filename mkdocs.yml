@@ -262,6 +262,11 @@ extra:
       peers: "assets/img/start/gallery.jpg"          # 仲間（第5回のシナリオ・ギャラリー）
       recent: "assets/img/start/arena-s06a.jpg"      # 実際の回から（空なら extra.history の先頭の highlight_image）
       recent2: "assets/img/start/graph3d.jpg"        # 同上に重ねる（全員の対話の軌跡）
+    # 「得られるもの」の画像は 16:9 の枠に切り取って揃える。どこを見せるか（object-position。空なら上の中央）
+    focus:
+      practice: "0% 50%"   # レポートの一覧の左（表紙）
+      library: "0% 50%"    # 今日のダイジェストの左
+      peers: "0% 50%"      # ギャラリーの左の画面
     captions:  # 画像の下の短い説明（空なら出さない）
       hero: "左：AI戦略スタジオで、チームで事業の案をつくる。右下：AIで作った業務アプリの例"
       practice: "第5回：AIと書いた未来シナリオのレポート（右下は第6回の対話アリーナ）"

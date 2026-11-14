@@ -32,6 +32,7 @@
 {%- set L = ex.lp or {} -%}
 {%- set img = L.images or {} -%}
 {%- set cap = L.captions or {} -%}
+{%- set fx = L.focus or {} -%}
 {%- set latest = ex.history[0] -%}
 {%- set library_url = ex.news_site_url | replace('/d/', '/') -%}
 {#- 折り返すときは「（初月無料）」の前で（ボタンは keep-all） -#}
@@ -58,7 +59,8 @@
         {%- if cap.hero %}<figcaption>{{ cap.hero }}</figcaption>{% endif %}
       </figure>
       {%- endif %}
-      <div class="st-hero__foot">
+      {#- 主催者と実績：携帯では画面の写真の下、PC では見出しと写真の下に横一列の帯 #}
+      <div class="st-hero__trust">
         <div class="st-hero__host">
           <img src="{{ 'assets/profile.jpg' | url }}" alt="栗山 実" width="60" height="60">
           <p><strong>主催 栗山 実</strong>マッキンゼー出身。AIソリューションの VISITS Technologies を共同創業。多摩大学経営大学院 特任教授、グロービス経営大学院 教員。</p>
@@ -70,6 +72,9 @@
           <li data-next-wrap><b data-next-session>{{ ex.next_session_short }}</b><span>次回（オンライン）</span></li>
           {%- endif %}
         </ul>
+      </div>
+      {#- 申込ボタン：携帯では主催者と実績の下、PC では見出しの下（写真の横） #}
+      <div class="st-hero__act">
         <div class="st-hero__cta">
           <a class="st-btn st-btn--teal" id="hero-cta" href="{{ ex.join_url }}" data-cta="hero">{{ join_label }}</a>
           {{ pay_now() }}
@@ -249,7 +254,7 @@
         <article class="st-row">
           <figure class="st-row__media">
             <div class="st-stack">
-              {{ lp.shot(img.practice, "AIと書いた未来シナリオのレポート") }}
+              {{ lp.shot(img.practice, "AIと書いた未来シナリオのレポート", "st-shot--frame", focus=fx.practice) }}
               {{ lp.shot(img.practice2, "対話アリーナの画面", "st-shot--float") }}
             </div>
             {%- if cap.practice %}<figcaption>{{ cap.practice }}</figcaption>{% endif %}
@@ -263,7 +268,7 @@
         <article class="st-row">
           <figure class="st-row__media">
             <div class="st-stack">
-              {{ lp.shot(img.space, "各回を場面ごとに見返す画面") }}
+              {{ lp.shot(img.space, "各回を場面ごとに見返す画面", "st-shot--frame", focus=fx.space) }}
               {{ lp.shot(img.space2, "課題の棚の画面（業界×業務の表）", "st-shot--float") }}
             </div>
             {%- if cap.space %}<figcaption>{{ cap.space }}</figcaption>{% endif %}
@@ -275,8 +280,8 @@
           </div>
         </article>
         <article class="st-row">
-          <figure class="st-row__media st-row__media--narrow">
-            {{ lp.shot(img.news, "コミュニティに届く、毎朝のAIニュース解釈の投稿") }}
+          <figure class="st-row__media">
+            {{ lp.shot(img.news, "コミュニティに届く、毎朝のAIニュース解釈の投稿", "st-shot--frame", focus=fx.news) }}
             {%- if cap.news %}<figcaption>{{ cap.news }}</figcaption>{% endif %}
           </figure>
           <div class="st-row__body">
@@ -288,7 +293,7 @@
         <article class="st-row st-row--open" id="library">
           <figure class="st-row__media">
             <div class="st-stack st-stack--tall">
-              {{ lp.shot(img.library, "AI戦略ライブラリーの今日のダイジェスト") }}
+              {{ lp.shot(img.library, "AI戦略ライブラリーの今日のダイジェスト", "st-shot--frame", focus=fx.library) }}
               {{ lp.shot(img.library2, "戦略の棚の画面（会社ごとの記事の数）", "st-shot--float") }}
             </div>
             {%- if cap.library %}<figcaption>{{ cap.library }}</figcaption>{% endif %}
@@ -305,7 +310,7 @@
         </article>
         <article class="st-row">
           <figure class="st-row__media">
-            {{ lp.shot(img.peers, "第5回のシナリオ・ギャラリーの画面") }}
+            {{ lp.shot(img.peers, "第5回のシナリオ・ギャラリーの画面", "st-shot--frame", focus=fx.peers) }}
             {%- if cap.peers %}<figcaption>{{ cap.peers }}</figcaption>{% endif %}
           </figure>
           <div class="st-row__body">
@@ -469,33 +474,34 @@
 
   {# ⑪ よくあるご質問（カメラと発言・自社の情報の答えは栗山さんの説明から） #}
   <section class="st-block st-block--pale" id="faq" data-lp-section="faq">
-    <div class="st-wrap st-faqwrap">
-      <div class="st-faqwrap__side">
+    <div class="st-wrap">
+      <div class="st-faq__head">
         <h2>よくあるご質問</h2>
         <p class="st-faq__more">
           <a href="{{ 'join/' | url }}">お支払いと解約の詳しいしくみ（お申し込みの時期ごとの初回のお支払い日）→</a>
           <a href="{{ (ex.billing or {}).portal_url }}" target="_blank" rel="noopener">お申し込み後の解約・お支払いの確認（Stripe カスタマーポータル）→</a>
         </p>
       </div>
+      {#- PC では2段に流す（左の空きをなくす）。dl の中の div は1問ずつのまとまり #}
       <dl class="st-faq">
-        <dt>AIツールの使い方を学ぶ場ですか？</dt>
-        <dd>いいえ。個別ツールの勉強会は、ほかにも数多くあります。ここでは、AI前提の事業構想と、その実践に焦点を当てます。</dd>
-        <dt>ITが苦手でも参加できますか？</dt>
-        <dd>できます。作るのは主にAIで、その場で一緒に進めます。用意していただくのは、Zoomが使えるパソコン、個人のGoogleアカウント（Gmail）、無料版でよいのでいずれかのAIのアカウント（ChatGPT・Claude・Gemini・Copilot など）です。会社のパソコンは、セキュリティの設定でつながらないサイトが多いことがあるので、私用のパソコンをおすすめします。</dd>
-        <dt>追加の費用はかかりますか？</dt>
-        <dd>かかりません。月額のほかに費用をかけなくても、どの体験もできるように用意しています（AIは無料版のアカウントで足ります）。少し費用をかけると、有料のサービスで画像を作るなど、できることが増える場面もあり、その方法もご案内します。</dd>
-        <dt>途中の回からでも参加できますか？</dt>
-        <dd>できます。各回は独立したテーマで、前の回の知識は前提にしません。</dd>
-        <dt>当日参加できない回は？</dt>
-        <dd>録画と資料で、ご自身のタイミングで取り組めます。ただ、各回はその月のA・Bの2日程だけで、同じ回をあとで開くことはありません。参加者同士の気づきの交換や、その場の空気感は当日ならではなので、できるだけ当日のご参加をおすすめします。</dd>
-        <dt>当日、カメラや発言は必要ですか？</dt>
-        <dd>どちらも必須ではありません。カメラは、差し支えなければオンにしていただくと話しやすくなります（参加者の顔は録画に残しません）。ゲーム形式でAIを使う体験では、結果を順位で見ることもあります（ニックネームで参加できます）。特に優れていた方に感想やコツをうかがうことがありますが、声を出せる方にお願いしています。</dd>
-        <dt>自社の情報を話す必要はありますか？</dt>
-        <dd>いいえ。Zoomのチャットで「自社ではどんなAIを使っていますか」などとうかがうことはありますが、答えるかどうかは自由です。自分の業界で考えてみる場面でも、自社にしづらい方は、なじみのある別の業界で考えていただけます。</dd>
-        <dt>合わなかったら？</dt>
-        <dd>初回のお支払い日の前日までの解約なら費用はかかりません。その後も、次の更新日の前日までに解約すれば、次の分はかかりません。</dd>
-        <dt>会社の経費で参加できますか？</dt>
-        <dd>できます。お申し込み後、Stripeで適格領収書を表示できます。法人で3名以上のご参加なら、請求書の発行と後日のお振込にも対応します。</dd>
+        <div class="st-faq__item"><dt>AIツールの使い方を学ぶ場ですか？</dt>
+          <dd>いいえ。個別ツールの勉強会は、ほかにも数多くあります。ここでは、AI前提の事業構想と、その実践に焦点を当てます。</dd></div>
+        <div class="st-faq__item"><dt>ITが苦手でも参加できますか？</dt>
+          <dd>できます。作るのは主にAIで、その場で一緒に進めます。用意していただくのは、Zoomが使えるパソコン、個人のGoogleアカウント（Gmail）、無料版でよいのでいずれかのAIのアカウント（ChatGPT・Claude・Gemini・Copilot など）です。会社のパソコンは、セキュリティの設定でつながらないサイトが多いことがあるので、私用のパソコンをおすすめします。</dd></div>
+        <div class="st-faq__item"><dt>追加の費用はかかりますか？</dt>
+          <dd>かかりません。月額のほかに費用をかけなくても、どの体験もできるように用意しています（AIは無料版のアカウントで足ります）。少し費用をかけると、有料のサービスで画像を作るなど、できることが増える場面もあり、その方法もご案内します。</dd></div>
+        <div class="st-faq__item"><dt>途中の回からでも参加できますか？</dt>
+          <dd>できます。各回は独立したテーマで、前の回の知識は前提にしません。</dd></div>
+        <div class="st-faq__item"><dt>当日参加できない回は？</dt>
+          <dd>録画と資料で、ご自身のタイミングで取り組めます。ただ、各回はその月のA・Bの2日程だけで、同じ回をあとで開くことはありません。参加者同士の気づきの交換や、その場の空気感は当日ならではなので、できるだけ当日のご参加をおすすめします。</dd></div>
+        <div class="st-faq__item"><dt>当日、カメラや発言は必要ですか？</dt>
+          <dd>どちらも必須ではありません。カメラは、差し支えなければオンにしていただくと話しやすくなります（参加者の顔は録画に残しません）。ゲーム形式でAIを使う体験では、結果を順位で見ることもあります（ニックネームで参加できます）。特に優れていた方に感想やコツをうかがうことがありますが、声を出せる方にお願いしています。</dd></div>
+        <div class="st-faq__item"><dt>自社の情報を話す必要はありますか？</dt>
+          <dd>いいえ。Zoomのチャットで「自社ではどんなAIを使っていますか」などとうかがうことはありますが、答えるかどうかは自由です。自分の業界で考えてみる場面でも、自社にしづらい方は、なじみのある別の業界で考えていただけます。</dd></div>
+        <div class="st-faq__item"><dt>合わなかったら？</dt>
+          <dd>初回のお支払い日の前日までの解約なら費用はかかりません。その後も、次の更新日の前日までに解約すれば、次の分はかかりません。</dd></div>
+        <div class="st-faq__item"><dt>会社の経費で参加できますか？</dt>
+          <dd>できます。お申し込み後、Stripeで適格領収書を表示できます。法人で3名以上のご参加なら、請求書の発行と後日のお振込にも対応します。</dd></div>
       </dl>
     </div>
   </section>

@@ -907,15 +907,15 @@ body:has(.st) .md-main { background: #fff; }
 .home-landing.st { background: #fff; font-size: 16px; line-height: 1.85; color: var(--ink); }
 .st .st-wrap { max-width: 1160px; margin: 0 auto; padding: 0 20px; }
 .st h1, .st h2, .st h3 { word-break: keep-all; overflow-wrap: anywhere; text-wrap: balance; }
-.home-landing.st h2 { font-family: var(--serif); font-size: 25px; line-height: 1.5; color: var(--teal); margin: 0 0 22px; letter-spacing: .01em; }
+.home-landing.st h2 { font-family: var(--serif); font-size: 25px; line-height: 1.5; color: var(--teal); margin: 0 0 18px; letter-spacing: .01em; }
 .home-landing.st h3 { font-size: 18px; line-height: 1.55; color: #0f2f37; margin: 0 0 8px; }
 .home-landing.st .st-h3 { font-family: var(--serif); font-size: 19px; color: var(--teal); margin-bottom: 16px; }
 .st .st-text { font-size: 16px; line-height: 1.95; color: #2b3a3f; }
 .st .st-note { font-size: 13px; line-height: 1.75; color: var(--muted); margin-top: 14px; }
 .st .st-note--tight { margin-top: 2px; }
-.st .st-block { padding: 64px 0; scroll-margin-top: 56px; }
+.st .st-block { padding: 48px 0; scroll-margin-top: 56px; }
 .st .st-block--pale { background: var(--pale); }
-.st .st-two { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; }
+.st .st-two { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; }
 .st [id] { scroll-margin-top: 56px; }
 
 /* 画面の写真の枠（ホームの .shot と同じ質感） */
@@ -929,7 +929,9 @@ body:has(.st) .md-main { background: #fff; }
 .st .st-stack--tall > .st-shot--float { width: 30%; bottom: -4%; }
 .st .st-row__media { margin: 0; }
 .st .st-row__media figcaption, .st .st-recent__media figcaption { font-size: 12.5px; line-height: 1.6; color: var(--muted); margin-top: 12px; }
-.st .st-row__media--narrow .st-shot { max-width: 480px; }
+/* 「得られるもの」の画像は 16:9 の枠に揃える（形がまちまちな画面写真を、同じ大きさに切り取って並べる） */
+.st .st-shot--frame { aspect-ratio: 16 / 9; }
+.st .st-shot--frame img { width: 100%; height: 100%; object-fit: cover; object-position: var(--focus, 50% 0%); }
 
 /* buttons（申込はティール／最後の帯では白） */
 .st .st-btn {
@@ -959,13 +961,14 @@ body:has(.st) .md-main { background: #fff; }
 .st .st-bar__join:hover { background: var(--pale); color: var(--teal); }
 
 /* ① 最初の画面（ホームのヒーローと同じ、明るい地に明朝の見出し） */
-.st .st-hero { background: linear-gradient(180deg, #f2f7f7 0%, #fff 100%); padding: 32px 0 48px;
+.st .st-hero { background: linear-gradient(180deg, #f2f7f7 0%, #fff 100%); padding: 24px 0 36px;
   border-bottom: 1px solid #e3ecee; }
-.st .st-hero__grid { display: grid; grid-template-columns: minmax(0, 1fr); row-gap: 24px;
-  grid-template-areas: "head" "visual" "foot"; }
+.st .st-hero__grid { display: grid; grid-template-columns: minmax(0, 1fr); row-gap: 20px;
+  grid-template-areas: "head" "visual" "trust" "act"; }
 .st .st-hero__head { grid-area: head; }
 .st .st-hero__visual { grid-area: visual; }
-.st .st-hero__foot { grid-area: foot; }
+.st .st-hero__trust { grid-area: trust; }
+.st .st-hero__act { grid-area: act; }
 .st .st-eyebrow { display: flex; align-items: center; gap: 8px; font-size: 13px; letter-spacing: .03em;
   color: var(--muted); margin-bottom: 14px; }
 .st .st-eyebrow .cmark { width: 22px; height: 15px; flex: none; }
@@ -975,23 +978,23 @@ body:has(.st) .md-main { background: #fff; }
 .st .st-mark { background: linear-gradient(transparent 72%, rgba(28,110,124,.16) 72%); }
 .st .st-hero__lead { font-size: 16px; line-height: 1.95; color: #2b3a3f; margin-top: 16px; }
 .st .st-hero__visual { margin: 0; }
-.st .st-stack--hero { padding-bottom: 20%; }
-.st .st-stack--hero > .st-shot:first-child { width: 90%; }
-.st .st-stack--hero > .st-shot--float { width: 40%; box-shadow: 0 16px 36px -18px rgba(0,48,57,.6); }
+.st .st-stack--hero { padding-bottom: 22%; }
+.st .st-stack--hero > .st-shot:first-child { width: 94%; }
+.st .st-stack--hero > .st-shot--float { width: 42%; box-shadow: 0 16px 36px -18px rgba(0,48,57,.6); }
 .st .st-hero__visual figcaption { font-size: 12px; line-height: 1.55; color: var(--muted); margin-top: 12px; }
 .st .st-hero__host { display: flex; gap: 14px; align-items: center; }
 .st .st-hero__host img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; flex: none;
   border: 2px solid #fff; box-shadow: 0 4px 14px -6px rgba(0,48,57,.5); }
 .st .st-hero__host p { font-size: 13.5px; line-height: 1.7; color: #2b3a3f; }
 .home-landing.st .st-hero__host strong { display: block; color: #0f2f37; font-size: 14.5px; }
-.st .st-hero__stats { list-style: none; margin: 18px 0 0; padding: 0; display: grid;
+.st .st-hero__stats { list-style: none; margin: 14px 0 0; padding: 0; display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .st .st-hero__stats li[data-next-wrap] { grid-column: 1 / -1; flex-direction: row; justify-content: center; gap: 10px; }
 .st .st-hero__stats li { background: #fff; border: 1px solid #dbe7e9; border-radius: 10px; padding: 10px 8px;
   display: flex; flex-direction: column; align-items: center; text-align: center; gap: 2px; }
 .st .st-hero__stats b { font-family: var(--serif); font-size: 18px; line-height: 1.3; color: var(--teal); }
 .st .st-hero__stats span { font-size: 12px; line-height: 1.45; color: var(--muted); }
-.st .st-hero__cta { margin-top: 20px; }
+.st .st-hero__cta { margin: 0; }
 .st .st-hero__note { font-size: 14px; line-height: 1.75; color: #3d5258; margin-top: 10px; }
 .st .st-hero__links { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
 .st .st-hero__links a { font-size: 14px; line-height: 1.6; color: var(--teal2); }
@@ -1027,7 +1030,7 @@ body:has(.st) .md-main { background: #fff; }
   color: var(--teal2); grid-row: 1 / span 2; }
 .st .st-features li h3 { font-family: var(--serif); font-size: 19px; color: var(--teal); }
 .st .st-features p { font-size: 15.5px; line-height: 1.85; color: #2b3a3f; }
-.home-landing.st .st-map { margin: 44px 0 0; background: #fff; border-radius: 16px; padding: 20px 16px 22px; border: 1px solid #d7e4e6; }
+.home-landing.st .st-map { margin: 32px 0 0; background: #fff; border-radius: 16px; padding: 20px 16px 22px; border: 1px solid #d7e4e6; }
 .st .st-map figcaption { font-family: var(--serif); font-size: 17px; font-weight: 700; color: var(--teal); margin-bottom: 14px; }
 /* 4つの象限。軸は線で、端に名前 */
 .st .st-map__plane { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -1052,8 +1055,8 @@ body:has(.st) .md-main { background: #fff; }
 .st .st-map__q--br { grid-column: 2; grid-row: 2; }
 
 /* ④ 得られるもの：画面の写真と文を交互に */
-.st .st-rows { display: flex; flex-direction: column; gap: 56px; }
-.st .st-row { display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; align-items: center; }
+.st .st-rows { display: flex; flex-direction: column; gap: 40px; }
+.st .st-row { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; align-items: start; }
 .st .st-row__body { display: flex; flex-direction: column; gap: 10px; }
 .home-landing.st .st-row__body h3 { font-family: var(--serif); font-size: 21px; line-height: 1.55; color: var(--teal); margin: 0; }
 .st .st-row__body p { font-size: 16px; line-height: 1.95; color: #2b3a3f; }
@@ -1077,7 +1080,7 @@ body:has(.st) .md-main { background: #fff; }
 .st .st-host__bio { font-size: 14px; line-height: 1.9; color: var(--muted); margin-top: 16px; }
 
 /* ⑥ 実際の回から・次回 */
-.st .st-recent { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; }
+.st .st-recent { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; }
 .st .st-recent__media { margin: 0; }
 .st .st-recent__media figcaption { font-size: 13px; line-height: 1.6; color: var(--muted); margin-top: 10px; }
 .st .st-recent__k { font-size: 13px; font-weight: 700; color: var(--teal2); letter-spacing: .04em; }
@@ -1110,7 +1113,7 @@ body:has(.st) .md-main { background: #fff; }
 .sch-up--band .sch-up__empty { color: rgba(255,255,255,.85); }
 
 /* ③ 参加すると、何が変わるか（参加者の声と満足度をここに） */
-.st .st-change__head { display: flex; flex-direction: column; gap: 4px; margin-bottom: 24px; }
+.st .st-change__head { display: flex; flex-direction: column; gap: 4px; margin-bottom: 20px; }
 .home-landing.st .st-change__head h2 { margin: 0; }
 .st .st-score { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 10px; }
 .st .st-score strong { font-family: var(--serif); font-size: 48px; line-height: 1.1; color: var(--teal); }
@@ -1131,7 +1134,7 @@ body:has(.st) .md-main { background: #fff; }
 
 /* ⑤ 1回の流れ */
 .st .st-flow__meta { display: inline-block; font-size: 14px; font-weight: 700; color: var(--teal); background: #fff;
-  border: 1px solid #d7e4e6; border-radius: 999px; padding: 4px 14px; margin: -8px 0 20px; }
+  border: 1px solid #d7e4e6; border-radius: 999px; padding: 4px 14px; margin: -6px 0 14px; }
 .st .st-flow__gain { font-size: 15px; line-height: 1.8; color: #2b3a3f; margin: 0 0 18px; max-width: 760px; }
 .st .st-flow { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; counter-reset: none; }
 .st .st-flow li { position: relative; background: #fff; border-radius: 14px; padding: 18px 18px 18px 64px; border: 1px solid #d7e4e6; }
@@ -1150,7 +1153,7 @@ body:has(.st) .md-main { background: #fff; }
 .st .st-flow__facts .lp-check { width: 20px; height: 20px; margin-top: 3px; color: var(--teal); flex: none; }
 
 /* ⑥ 得られるもの：冒頭の一文 */
-.st .st-lead { font-size: 16.5px; line-height: 1.95; color: #2b3a3f; max-width: 760px; margin: -6px 0 34px; }
+.st .st-lead { font-size: 16.5px; line-height: 1.95; color: #2b3a3f; max-width: 760px; margin: -4px 0 28px; }
 
 /* ⑦ 主催者：経歴 */
 .st .st-career { list-style: none; margin: 16px 0 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
@@ -1159,7 +1162,7 @@ body:has(.st) .md-main { background: #fff; }
   border-radius: 6px; text-align: center; padding: 1px 4px; align-self: start; }
 
 /* ⑧ これまでの回の並び */
-.st .st-history { margin-top: 44px; padding-top: 28px; border-top: 1px solid #e1eaec; }
+.st .st-history { margin-top: 36px; padding-top: 24px; border-top: 1px solid #e1eaec; }
 .st .st-history__k { font-family: var(--serif); font-size: 19px; font-weight: 700; color: var(--teal); margin-bottom: 14px; }
 .st .st-history__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
 .st .st-history__list li { display: grid; grid-template-columns: auto auto minmax(0, 1fr); gap: 4px 10px; align-items: baseline;
@@ -1211,15 +1214,17 @@ body:has(.st) .md-main { background: #fff; }
 .st .st-form .lp-btn { min-height: 54px; font-size: 16px; }
 
 /* ⑩ よくあるご質問 */
-.st .st-faqwrap { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
-.st .st-faq { margin: 0; border-top: 1px solid #dfe6e7; }
-.st .st-faq dt { position: relative; font-size: 16.5px; font-weight: 700; color: #0f2f37; padding: 20px 2px 6px 34px; }
-.st .st-faq dt::before { content: "Q"; position: absolute; left: 2px; top: 19px; font-family: var(--serif); font-size: 19px; color: var(--teal2); }
-.st .st-faq dd { margin: 0; padding: 0 2px 20px 34px; font-size: 15.5px; line-height: 1.9; color: #2b3a3f; border-bottom: 1px solid #dfe6e7; }
-.st .st-faq__more { display: flex; flex-direction: column; gap: 10px; font-size: 14px; line-height: 1.65; margin-bottom: 14px; }
+.st .st-faq__head { margin-bottom: 6px; }
+.st .st-faq__more { display: flex; flex-direction: column; gap: 6px; font-size: 14px; line-height: 1.65; margin: -6px 0 10px; }
+.st .st-faq { margin: 0; }
+.st .st-faq__item { break-inside: avoid; border-top: 1px solid #dfe6e7; }
+.st .st-faq__item:last-child { border-bottom: 1px solid #dfe6e7; }
+.st .st-faq dt { position: relative; font-size: 16.5px; font-weight: 700; color: #0f2f37; padding: 18px 2px 6px 34px; }
+.st .st-faq dt::before { content: "Q"; position: absolute; left: 2px; top: 17px; font-family: var(--serif); font-size: 19px; color: var(--teal2); }
+.st .st-faq dd { margin: 0; padding: 0 2px 18px 34px; font-size: 15.5px; line-height: 1.9; color: #2b3a3f; }
 
 /* ⑪ 最後の帯 */
-.st .st-final { background: var(--teal); color: #fff; padding: 64px 0 68px; text-align: center; }
+.st .st-final { background: var(--teal); color: #fff; padding: 48px 0 52px; text-align: center; }
 .home-landing.st .st-final h2 { color: #fff; font-size: 26px; margin-bottom: 18px; }
 .st .st-final__next { margin: 0 auto 24px; max-width: 560px; text-align: left; }
 .st .st-final__k { font-size: 13px; font-weight: 700; color: rgba(255,255,255,.78); }
@@ -1252,8 +1257,8 @@ body:has(.st) .md-main { background: #fff; }
 }
 @media (min-width: 760px) {
   .st .st-wrap { padding: 0 32px; }
-  .st .st-block { padding: 88px 0; }
-  .home-landing.st h2 { font-size: 30px; margin-bottom: 30px; }
+  .st .st-block { padding: 64px 0; }
+  .home-landing.st h2 { font-size: 30px; margin-bottom: 24px; }
   .st .st-bar__in { min-height: 64px; }
   .st .st-bar__brand img { height: 32px; }
   .st .st-bar__nav { display: flex; }
@@ -1264,7 +1269,7 @@ body:has(.st) .md-main { background: #fff; }
   .st .st-map__q span { font-size: 13.5px; padding: 7px 12px; }
   .st .st-map__ax { font-size: 13.5px; }
   .home-landing.st .st-map__q--us strong { font-size: 20px; }
-  .st .st-row { grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); gap: 48px; }
+  .st .st-row { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 44px; }
   .st .st-row:nth-child(even) .st-row__media { order: 2; }
   .st .st-row--open { padding: 36px 36px; }
   .st .st-change { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
@@ -1273,31 +1278,41 @@ body:has(.st) .md-main { background: #fff; }
   .st .st-flow__facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .st .st-history__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .st .st-hero__cta .st-btn { display: inline-flex; }
-  .st .st-host { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 52px; align-items: start; }
+  .st .st-host { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 44px; align-items: start; }
   .st .st-host__who { flex-direction: column; align-items: flex-start; gap: 14px; }
-  .st .st-host__who img { width: 240px; height: 240px; border-radius: 18px; }
+  .st .st-host__who img { width: 200px; height: 200px; border-radius: 16px; }
   .st .st-host__quote { font-size: 19px; padding: 30px 32px; }
-  .st .st-recent { grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr); gap: 52px; align-items: start; }
+  .st .st-recent { grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: 44px; align-items: start; }
   .st .st-recent--noimg { grid-template-columns: minmax(0, 760px); }
   .st .st-join { grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr); gap: 28px; align-items: start; }
   .st .st-plan { padding: 34px 36px; }
   .st .st-watch { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; align-items: center; }
   .st .st-watch__form { padding: 26px 26px 22px; }
-  .st .st-faqwrap { grid-template-columns: minmax(0, .8fr) minmax(0, 1.6fr); gap: 56px; align-items: start; }
-  .st .st-faqwrap__side { position: sticky; top: 96px; }
-  .st .st-final { padding: 88px 0 92px; }
+  .st .st-faq__head { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px 32px; flex-wrap: wrap; margin-bottom: 18px; }
+  .home-landing.st .st-faq__head h2 { margin: 0; }
+  .st .st-faq__more { align-items: flex-end; margin: 0; }
+  .st .st-faq { columns: 2; column-gap: 56px; }
+  .st .st-faq__item:last-child { border-bottom: 0; }
+  .st .st-final { padding: 64px 0 68px; }
   .home-landing.st .st-final h2 { font-size: 34px; }
 }
 @media (min-width: 1080px) {
-  .st .st-hero { padding: 64px 0 80px; }
-  .st .st-hero__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 52px; row-gap: 28px;
-    grid-template-areas: "head visual" "foot visual"; align-items: start; }
-  .st .st-hero__foot { align-self: start; }
+  .st .st-hero { padding: 44px 0 40px; }
+  .st .st-hero__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); column-gap: 56px; row-gap: 22px;
+    grid-template-areas: "head visual" "act visual" "trust trust"; }
+  .st .st-hero__head { align-self: end; }
+  .st .st-hero__act { align-self: start; }
+  /* 主催者と実績：横一列の帯（写真と見出しの下を、左右いっぱいに使う） */
+  .st .st-hero__trust { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.8fr); align-items: center; gap: 24px;
+    margin-top: 10px; background: #fff; border: 1px solid #dbe7e9; border-radius: 14px; padding: 16px 20px;
+    box-shadow: 0 14px 34px -30px rgba(0,48,57,.6); }
+  .st .st-hero__trust .st-hero__stats { margin: 0; max-width: none; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; }
+  .st .st-hero__trust .st-hero__stats li { background: none; border: 0; border-left: 1px solid #e1eaec; border-radius: 0; padding: 4px 8px; }
+  .st .st-hero__trust .st-hero__stats b { font-size: 21px; }
   .home-landing.st .st-hero h1 { font-size: 42px; line-height: 1.45; }
   .st .st-hero__lead { font-size: 17px; margin-top: 22px; }
-  .st .st-hero__visual { margin-top: 8px; align-self: center; }
+  .st .st-hero__visual { margin: 0; align-self: center; }
   .st .st-stack--hero > .st-shot:first-child { transform: rotate(.4deg); }
-  .st .st-hero__stats { max-width: 520px; }
   .st .st-hero__links { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 12px 22px; }
   .st .st-two--pain { grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); gap: 64px; align-items: start; }
   .st .st-era__row { grid-template-columns: minmax(0, 1fr) 96px minmax(0, 1fr); gap: 10px; }
