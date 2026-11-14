@@ -915,6 +915,24 @@ body:has(.st) .md-main { background: #fff; }
 .st .st-note--tight { margin-top: 2px; }
 .st .st-block { padding: 48px 0; scroll-margin-top: 56px; }
 .st .st-block--pale { background: var(--pale); }
+.st .st-block--rule { border-top: 1px solid #e3ecee; }
+
+/* ② 心当たり：役割ごとの1文（携帯は縦、PC は3列）。最後の一文で「得られるもの」へつなぐ */
+.st .st-who { padding: 36px 0 40px; }
+.home-landing.st .st-who h2 { margin-bottom: 16px; }
+.st .st-who__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+.st .st-who__list li { background: #fff; border: 1px solid #d7e4e6; border-radius: 12px; padding: 14px 16px 16px;
+  display: flex; flex-direction: column; gap: 6px; }
+.st .st-who__role { align-self: flex-start; font-size: 12.5px; font-weight: 700; line-height: 1.6; color: var(--teal);
+  border: 1px solid var(--teal); border-radius: 999px; padding: 0 10px; background: #fff; }
+.home-landing.st .st-who__list p { font-family: var(--serif); font-size: 17px; line-height: 1.7; font-weight: 600; color: #0f2f37; }
+.st .st-who__bridge { margin-top: 16px; font-size: 15.5px; line-height: 1.85; color: #2b3a3f; }
+.st .st-who__bridge b { color: var(--teal); }
+
+/* ④ 主催者の節の 1990年代との相似形（淡い地の上なので、枠の色を白に） */
+.st .st-era-wrap.st-host__era { background: none; margin-top: 32px; padding-top: 28px; border-top: 1px solid #d7e4e6; }
+.st .st-host__era .st-era__c { background: #fff; }
+.st .st-host__era .st-era { margin-bottom: 0; }
 .st .st-two { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; }
 .st [id] { scroll-margin-top: 56px; }
 
@@ -1004,7 +1022,6 @@ body:has(.st) .md-main { background: #fff; }
 .st .st-checks li { display: flex; gap: 12px; align-items: flex-start; font-size: 16px; line-height: 1.75; color: #2b3a3f;
   background: #fff; }
 .st .st-checks .lp-check { width: 20px; height: 20px; margin-top: 4px; color: var(--teal); flex: none; }
-.st #pain .st-checks li { border: 1px solid #e1eaec; border-radius: 10px; padding: 12px 14px; background: #fbfdfd; }
 .st .st-era-wrap { background: #fff; }
 .st .st-era { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
 .st .st-era__row { display: grid; grid-template-columns: minmax(0, 1fr) 68px minmax(0, 1fr); gap: 8px; align-items: stretch; }
@@ -1020,39 +1037,6 @@ body:has(.st) .md-main { background: #fff; }
 .st .st-era__q { background: #fff; border: 2px dashed var(--teal); color: var(--teal); justify-content: center;
   font-weight: 700; font-size: 20px; letter-spacing: .14em; }
 
-/* ③ 4つの特徴・位置づけの図 */
-.st .st-features { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
-.st .st-features li { background: #fff; border-radius: 14px; padding: 18px 18px 18px; border: 1px solid #d7e4e6;
-  box-shadow: 0 12px 30px -26px rgba(0,48,57,.6); }
-.st .st-features li { display: grid; grid-template-columns: 46px minmax(0, 1fr); column-gap: 8px; }
-.st .st-features li p { grid-column: 2; }
-.st .st-features__n { font-family: var(--serif); font-size: 26px; font-weight: 700; line-height: 1.2;
-  color: var(--teal2); grid-row: 1 / span 2; }
-.st .st-features li h3 { font-family: var(--serif); font-size: 19px; color: var(--teal); }
-.st .st-features p { font-size: 15.5px; line-height: 1.85; color: #2b3a3f; }
-.home-landing.st .st-map { margin: 32px 0 0; background: #fff; border-radius: 16px; padding: 20px 16px 22px; border: 1px solid #d7e4e6; }
-.st .st-map figcaption { font-family: var(--serif); font-size: 17px; font-weight: 700; color: var(--teal); margin-bottom: 14px; }
-/* 4つの象限。軸は線で、端に名前 */
-.st .st-map__plane { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  grid-template-rows: 1fr 1fr; gap: 30px 22px; padding: 30px 0 30px; } /* 上下の段を同じ高さにして、横の軸を段のあいだに通す */
-.st .st-map__plane::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 2px; background: var(--teal); opacity: .55; }
-.st .st-map__plane::after { content: ""; position: absolute; top: 22px; bottom: 22px; left: 50%; width: 2px; background: var(--teal); opacity: .55; }
-.st .st-map__ax { position: absolute; font-size: 12.5px; font-weight: 700; color: var(--teal); background: #fff; padding: 0 6px; z-index: 1; line-height: 1.4; }
-.st .st-map__ax--top { top: 0; left: 50%; transform: translateX(-50%); }
-.st .st-map__ax--bottom { bottom: 0; left: 50%; transform: translateX(-50%); }
-.st .st-map__ax--left { left: 0; top: 50%; transform: translateY(-50%); }
-.st .st-map__ax--right { right: 0; top: 50%; transform: translateY(-50%); }
-.st .st-map__q { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 6px; align-self: center; }
-.st .st-map__q span { background: #e2eef0; border-radius: 6px; padding: 6px 9px; font-size: 12.5px; line-height: 1.5; color: #1f2d31; text-align: center; }
-.st .st-map__q--us { align-self: stretch; justify-content: center; align-items: center; text-align: center; gap: 8px;
-  background: rgba(28,110,124,.08); border: 2px dashed var(--teal); border-radius: 12px; padding: 16px 10px; min-height: 130px; }
-.st .st-map__q--us small { font-size: 12px; font-weight: 700; color: #fff; background: var(--teal); border-radius: 999px; padding: 2px 12px; }
-.home-landing.st .st-map__q--us strong { font-family: var(--serif); font-size: 16px; line-height: 1.5; color: var(--teal);
-  word-break: keep-all; overflow-wrap: anywhere; }
-.st .st-map__q--tl { grid-column: 1; grid-row: 1; }
-.st .st-map__q--tr { grid-column: 2; grid-row: 1; }
-.st .st-map__q--bl { grid-column: 1; grid-row: 2; }
-.st .st-map__q--br { grid-column: 2; grid-row: 2; }
 
 /* ④ 得られるもの：画面の写真と文を交互に */
 .st .st-rows { display: flex; flex-direction: column; gap: 40px; }
@@ -1112,7 +1096,7 @@ body:has(.st) .md-main { background: #fff; }
 .sch-up--band .sch-day.is-held { display: none; }
 .sch-up--band .sch-up__empty { color: rgba(255,255,255,.85); }
 
-/* ③ 参加すると、何が変わるか（参加者の声と満足度をここに） */
+/* ⑤ 参加者の声（声と満足度） */
 .st .st-change__head { display: flex; flex-direction: column; gap: 4px; margin-bottom: 20px; }
 .home-landing.st .st-change__head h2 { margin: 0; }
 .st .st-score { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 10px; }
@@ -1122,15 +1106,7 @@ body:has(.st) .md-main { background: #fff; }
 .st .st-change__item { background: #fff; border: 1px solid #d7e4e6; border-radius: 16px; padding: 22px 20px 20px;
   display: flex; flex-direction: column; gap: 14px; box-shadow: 0 12px 30px -26px rgba(0,48,57,.6); }
 .home-landing.st .st-change__item h3 { font-family: var(--serif); font-size: 19px; line-height: 1.55; color: var(--teal); margin: 0; }
-.st .st-change__ba { display: flex; flex-direction: column; gap: 6px; }
-.st .st-change__ba p { display: flex; gap: 10px; align-items: baseline; font-size: 15px; line-height: 1.7; color: var(--muted); }
-.st .st-change__ba .st-change__after { color: #1f2d31; font-weight: 700; }
-.st .st-change__k { flex: none; font-size: 12px; font-weight: 700; line-height: 1.6; border-radius: 4px; padding: 0 7px;
-  background: #e8eef0; color: var(--muted); }
-.st .st-change__after .st-change__k { background: var(--teal); color: #fff; }
-.st .st-change__voice { margin: auto 0 0; padding: 14px 0 0; border: 0; border-top: 1px dashed #cfdde0;
-  font-size: 14.5px; line-height: 1.85; color: #2b3a3f; }
-.st .st-change__voice span { display: block; font-size: 12px; font-weight: 700; color: var(--teal2); margin-bottom: 2px; }
+.st .st-change__voice { margin: 0; padding: 0; border: 0; font-size: 15.5px; line-height: 1.85; color: #2b3a3f; }
 
 /* ⑤ 1回の流れ */
 .st .st-flow__meta { display: inline-block; font-size: 14px; font-weight: 700; color: var(--teal); background: #fff;
@@ -1263,16 +1239,13 @@ body:has(.st) .md-main { background: #fff; }
   .st .st-bar__brand img { height: 32px; }
   .st .st-bar__nav { display: flex; }
   .st .st-bar__join { margin-left: 8px; padding: 7px 18px; }
-  .st .st-features { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
-  .st .st-map { padding: 28px 32px 30px; }
-  .st .st-map__plane { gap: 34px 120px; padding: 34px 0; }
-  .st .st-map__q span { font-size: 13.5px; padding: 7px 12px; }
-  .st .st-map__ax { font-size: 13.5px; }
-  .home-landing.st .st-map__q--us strong { font-size: 20px; }
   .st .st-row { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 44px; }
   .st .st-row:nth-child(even) .st-row__media { order: 2; }
   .st .st-row--open { padding: 36px 36px; }
   .st .st-change { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+  .st .st-who { padding: 44px 0 48px; }
+  .st .st-who__list { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+  .st .st-who__list li { padding: 18px 20px 20px; }
   .st .st-change__head { flex-direction: row; align-items: baseline; justify-content: space-between; flex-wrap: wrap; }
   .st .st-flow { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
   .st .st-flow__facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -1281,6 +1254,8 @@ body:has(.st) .md-main { background: #fff; }
   .st .st-host { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 44px; align-items: start; }
   .st .st-host__who { flex-direction: column; align-items: flex-start; gap: 14px; }
   .st .st-host__who img { width: 200px; height: 200px; border-radius: 16px; }
+  /* 1990年代の表は、主催者の言葉の列に揃える（左の写真の列の下を空けない） */
+  .st .st-era-wrap.st-host__era { margin-left: 244px; }
   .st .st-host__quote { font-size: 19px; padding: 30px 32px; }
   .st .st-recent { grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: 44px; align-items: start; }
   .st .st-recent--noimg { grid-template-columns: minmax(0, 760px); }
@@ -1303,10 +1278,11 @@ body:has(.st) .md-main { background: #fff; }
   .st .st-hero__head { align-self: end; }
   .st .st-hero__act { align-self: start; }
   /* 主催者と実績：横一列の帯（写真と見出しの下を、左右いっぱいに使う） */
-  .st .st-hero__trust { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.8fr); align-items: center; gap: 24px;
+  .st .st-hero__trust { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.6fr); align-items: center; gap: 24px;
     margin-top: 10px; background: #fff; border: 1px solid #dbe7e9; border-radius: 14px; padding: 16px 20px;
     box-shadow: 0 14px 34px -30px rgba(0,48,57,.6); }
-  .st .st-hero__trust .st-hero__stats { margin: 0; max-width: none; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; }
+  .st .st-hero__trust .st-hero__stats { margin: 0; max-width: none; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.35fr); gap: 0; }
+  .st .st-hero__trust .st-hero__stats b { white-space: nowrap; }
   .st .st-hero__trust .st-hero__stats li { background: none; border: 0; border-left: 1px solid #e1eaec; border-radius: 0; padding: 4px 8px; }
   .st .st-hero__trust .st-hero__stats b { font-size: 21px; }
   .home-landing.st .st-hero h1 { font-size: 42px; line-height: 1.45; }
@@ -1314,11 +1290,9 @@ body:has(.st) .md-main { background: #fff; }
   .st .st-hero__visual { margin: 0; align-self: center; }
   .st .st-stack--hero > .st-shot:first-child { transform: rotate(.4deg); }
   .st .st-hero__links { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 12px 22px; }
-  .st .st-two--pain { grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); gap: 64px; align-items: start; }
   .st .st-era__row { grid-template-columns: minmax(0, 1fr) 96px minmax(0, 1fr); gap: 10px; }
   .st .st-era__k { font-size: 13.5px; }
   .st .st-era__c { font-size: 15px; padding: 14px 16px; }
-  .st .st-features { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .st .st-flow { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .st .st-flow__afters { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
   .st .st-flow li { padding: 64px 20px 20px; }
@@ -1326,8 +1300,6 @@ body:has(.st) .md-main { background: #fff; }
   .st .st-history__list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .st .st-history__list li { grid-template-columns: auto minmax(0, 1fr); }
   .st .st-history__t { grid-column: 1 / -1; }
-  .st .st-features li { display: block; padding: 24px 22px; }
-  .st .st-features__n { display: block; font-size: 32px; margin-bottom: 12px; }
   .st .st-hero__stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .st .st-hero__stats li[data-next-wrap] { grid-column: auto; flex-direction: column; gap: 2px; }
 }

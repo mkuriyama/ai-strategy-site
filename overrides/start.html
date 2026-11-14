@@ -47,7 +47,7 @@
     <div class="st-wrap st-hero__grid">
       <div class="st-hero__head">
         <p class="st-eyebrow">{{ lp.cmark() }}<span>ツールとしてのAI</span><span aria-hidden="true">→</span><b>戦略としてのAI</b></p>
-        <h1>{{ "AI前提で事業を構想し、" | phrase }}<br><span class="st-mark">{{ "実現できる人へ。" | phrase }}</span></h1>
+        <h1><span class="st-mark">{{ "AI前提で事業を構想し、" | phrase }}</span><br>{{ "実現できる人へ。" | phrase }}</h1>
         <p class="st-hero__lead">AIを便利な道具として使うだけで終わらせない。月に一度、自社の問いを持ち寄り、AIで実際に作り、事業戦略に戻す実践の場です。</p>
       </div>
       {%- if img.hero %}
@@ -63,7 +63,7 @@
       <div class="st-hero__trust">
         <div class="st-hero__host">
           <img src="{{ 'assets/profile.jpg' | url }}" alt="栗山 実" width="60" height="60">
-          <p><strong>主催 栗山 実</strong>マッキンゼー出身。AIソリューションの VISITS Technologies を共同創業。多摩大学経営大学院 特任教授、グロービス経営大学院 教員。</p>
+          <p><strong>主催 栗山 実</strong>マッキンゼー出身。大手企業へのAI戦略助言、AI関連スタートアップの共同創業、AI技術開発などを歴任。グロービス経営大学院 教員、多摩大学経営大学院 特任教授。</p>
         </div>
         <ul class="st-hero__stats">
           <li><b>{{ st.paid_members }}</b><span>有償メンバー</span></li>
@@ -81,171 +81,32 @@
           <p class="st-hero__note">いつからでも参加できます。合わなければ、初回のお支払い日の前日までの解約で費用はかかりません。以降は月額{{ pr.early_monthly_incl }}円（税込）。いまの月額（{{ pr.early_label }}）は、お申し込みのあとも据え置きです。</p>
         </div>
         <p class="st-hero__links">
-          <a href="{{ library_url }}" target="_blank" rel="noopener" data-ga="click_library" data-ga-pos="hero">毎朝更新のAI戦略ライブラリーを見る（登録不要）→</a>
           <a href="#watch">まずは様子を見る：開催の報告をメールで →</a>
+          <a href="{{ library_url }}" target="_blank" rel="noopener" data-ga="click_library" data-ga-pos="hero">毎朝更新のAI戦略ライブラリーを見る（登録不要）→</a>
         </p>
       </div>
     </div>
   </section>
 
-  {# ② 心当たり ＋ 1990年代との相似形 #}
-  <section class="st-block" id="pain" data-lp-section="pain">
-    <div class="st-wrap st-two st-two--pain">
-      <div>
-        <h2>{{ "こんな状況に、" | phrase }}<br>{{ "心当たりはありませんか。" | phrase }}</h2>
-        <ul class="st-checks">
-          {%- for t in [
-            "AIの進化が速すぎて、何を追えばよいのか分からない。",
-            "社内のAIは、相談相手か業務効率化どまり。事業の勝ち筋は変わっていない。",
-            "経営はAIのビジョンを掲げるが、現場はどう動けばよいか手探り。",
-            "経営者として、AIにどこまで賭けるべきか、判断の材料がない。",
-            "このままで、自社も自分も大丈夫なのか、ふと不安になる。",
-          ] %}
-          <li>{{ lp.check() }}<span>{{ t }}</span></li>
-          {%- endfor %}
-        </ul>
-      </div>
-      <div class="st-era-wrap">
-        <h3 class="st-h3">{{ "「失われた30年」が始まった1990年代と、" | phrase }}{{ "いまはよく似ています。" | phrase }}</h3>
-        <div class="st-era" role="table" aria-label="1990年代と2020年代の比較">
-          <div class="st-era__row st-era__row--head" role="row">
-            <span class="st-era__h" role="columnheader">1990年代</span>
-            <span role="columnheader" class="st-era__gap"></span>
-            <span class="st-era__h" role="columnheader">2020年代</span>
-          </div>
-          {%- for k, a, b in [
-            ("登場したもの", "PC・インターネット", "生成AI"),
-            ("多くの人は", "ExcelやWordの活用講座へ", "ツールとしてのAI活用、社内の生産性改善へ"),
-            ("世界を変えたのは", "インターネット前提の新サービス（Amazon、Google、Netflix…）", "？？？"),
-          ] %}
-          <div class="st-era__row" role="row">
-            <span class="st-era__c" role="cell">{{ a }}</span>
-            <span class="st-era__k" role="rowheader">{{ k }}</span>
-            <span class="st-era__c{% if loop.last %} st-era__q{% endif %}" role="cell">{{ b }}</span>
-          </div>
-          {%- endfor %}
-        </div>
-        <p class="st-text">ツールとしての活用は、放っておいても広がります。差がつくのは、AI前提で事業を構想し、実際に動かせるかどうかです。</p>
-      </div>
-    </div>
-  </section>
-
-  {# ③ 参加すると、何が変わるか（参加者の声を、変化の証拠として添える。満足度と注記もここ） #}
-  <section class="st-block st-block--pale" id="change" data-lp-section="change">
+  {# ② 心当たり（「あるある」で自分ごとにする入口）。役割ごとに1つずつ置き、自分の一文を見つけやすくする。
+     最後の一文で「得られるもの」へつなぐ #}
+  <section class="st-block st-block--pale st-who" id="who" data-lp-section="who">
     <div class="st-wrap">
-      <div class="st-change__head">
-        <h2>{{ "参加すると、" | phrase }}{{ "何が変わるか" | phrase }}</h2>
-        <p class="st-score"><strong>{{ st.satisfaction }}</strong><span>が「参加して良かった」</span></p>
-      </div>
-      <div class="st-change">
-        {%- for h, before, after, voice in [
-          ("「AIの話」が、自社の事業の話になる", "AIの話は、業務効率化の話","AI前提で、自社の事業と業界の打ち手を考える",
-           "AIは議事録や資料づくりの便利ツールだと思っていました。事業の戦略や意思決定に組み込むという発想そのものが新鮮でした。"),
-          ("考えるだけでなく、自分の手で動かせる", "考えは、資料と会議の中だけ","AIに仕組みを作らせ、手元で動く試作をもとに考える",
-           "普段はAIに相談する程度でしたが、AIに仕組みを作らせて手元で動かす体験ができました。"),
-          ("社内に持ち帰り、広げられる", "学んだことが、自分の中で止まる", "使った指示文やファイル、考え方を、社内での提案や推進に生かす",
-           "身近な題材で考え方を体験でき、社内での広げ方のヒントになりました。"),
+      <h2>{{ "こんな状況に、" | phrase }}{{ "心当たりはありませんか。" | phrase }}</h2>
+      <ul class="st-who__list">
+        {%- for role, t in [
+          ("AI推進・DXの担当", "社内のAIは、相談相手か業務効率化どまり。事業の勝ち筋は変わっていない。"),
+          ("経営企画・事業開発", "経営はAIのビジョンを掲げるが、現場はどう動けばよいか手探り。"),
+          ("経営者", "AIにどこまで賭けるべきか、判断の材料がない。"),
         ] %}
-        <article class="st-change__item">
-          <h3>{{ h }}</h3>
-          <div class="st-change__ba">
-            <p><span class="st-change__k">前</span>{{ before }}</p>
-            <p class="st-change__after"><span class="st-change__k">後</span>{{ after }}</p>
-          </div>
-          <blockquote class="st-change__voice"><span>参加者の声</span>{{ voice }}</blockquote>
-        </article>
-        {%- endfor %}
-      </div>
-      <p class="st-note">※ {{ st.satisfaction }}は、{{ st.satisfaction_note }}</p>
-      <p class="st-note st-note--tight">参加者の声は、第1〜5回の参加者アンケートの自由記述をもとに、趣旨を変えずに要約・再構成しています。</p>
-    </div>
-  </section>
-
-  {# ④ この場の4つの特徴 ＋ 位置づけの図（HTML。携帯でも文字が読める大きさ） #}
-  <section class="st-block" id="features" data-lp-section="features">
-    <div class="st-wrap">
-      <h2>{{ "この場の4つの特徴" | phrase }}</h2>
-      <ol class="st-features">
-        {%- for h, t in [
-          ("戦略としてのAI", "ツールの使い方ではなく、AI前提・AI駆動の事業構想に焦点を当てます。"),
-          ("手を動かす", "知る・考えるだけでなく、実際に動くものを作り、戦略と実装を結びつけます。"),
-          ("WHYから始める", "AIで「どうやるか」が容易になるほど、「何を問うか」が差になります。解くべき課題から始めます。"),
-          ("最新を追い続ける", "決まったカリキュラムで終わらず、毎月の新しいテーマで、AI戦略の引き出しを積み重ねます。"),
-        ] %}
-        <li><span class="st-features__n">{{ "%02d" | format(loop.index) }}</span><h3>{{ h }}</h3><p>{{ t }}</p></li>
-        {%- endfor %}
-      </ol>
-      <figure class="st-map">
-        <figcaption>AIに関わる場の位置づけ</figcaption>
-        <div class="st-map__plane">
-          <span class="st-map__ax st-map__ax--top">実践・実装</span>
-          <span class="st-map__ax st-map__ax--bottom">理解・知識</span>
-          <span class="st-map__ax st-map__ax--left">← ツールとしてのAI</span>
-          <span class="st-map__ax st-map__ax--right">戦略としてのAI →</span>
-          <div class="st-map__q st-map__q--tl">
-            <span>ツールのAI導入・活用勉強会</span>
-            <span>SIer等によるAI受託開発</span>
-          </div>
-          <div class="st-map__q st-map__q--tr st-map__q--us">
-            <small>埋めたい領域</small>
-            <strong>AI戦略実践プロジェクト</strong>
-          </div>
-          <div class="st-map__q st-map__q--bl">
-            <span>AI展示会での各社ツールの説明・試用</span>
-            <span>AI勉強カリキュラム・資格試験</span>
-            <span>カンファレンス等の活用事例紹介</span>
-          </div>
-          <div class="st-map__q st-map__q--br">
-            <span>コンサル会社による戦略分析・助言</span>
-            <span>経営大学院・ビジネススクール</span>
-          </div>
-        </div>
-      </figure>
-    </div>
-  </section>
-
-  {# ⑤ 1回の流れ（/sessions/ の「各セッションの構成例」と、extra.participation から。新しい約束は書かない） #}
-  <section class="st-block st-block--pale" id="flow" data-lp-section="flow">
-    <div class="st-wrap">
-      <h2>{{ "月に一度の回は、" | phrase }}{{ "こう進みます" | phrase }}</h2>
-      <p class="st-flow__meta">20:00〜22:30ごろ・オンライン（Zoom）</p>
-      <p class="st-flow__gain">2時間半で、毎回、新しい体験と知識、次に考える問い、資料集、持ち帰りのファイルまで得られるように組んでいます。</p>
-      <ol class="st-flow">
-        {%- for h, t in [
-          ("問いから始める", "その回のテーマが、なぜ戦略的に重要か。自分の事業・業界の文脈で言葉にし、AIにも同じ問いを考えさせて比べます。"),
-          ("AIで動かす、作る", "AIとの対話から始めて、AIに仕組みやコンテンツを作らせ、動くところまで進めます。作るのは主にAI。ITが苦手でも、その場で一緒に進めます。"),
-          ("戦略に戻る", "作ったものをもとに、自社にどう効くか、産業や組織の構造がどう変わるかを考えます。"),
-          ("まとめ", "持ち帰るファイル一式を確かめ、次の回を予告します。本編は、おおむね22:30までです。"),
-        ] %}
-        <li><span class="st-flow__n">{{ loop.index }}</span><h3>{{ h }}</h3><p>{{ t }}</p></li>
-        {%- endfor %}
-      </ol>
-      <div class="st-flow__afters">
-        <div class="st-flow__after">
-          <h3>本編のあと（自由参加）</h3>
-          <p>質問と交流の時間です（最大60分ほど）。途中で抜けても大丈夫です。録画に残さない時間で、質問に答えたり議論したりするなかで、いまのAIの潮流の本質に話が及ぶこともあります。参加できる方は、ぜひ。</p>
-        </div>
-        <div class="st-flow__after">
-          <h3>終わったあとも</h3>
-          <p>録画と資料に加えて、各回を場面ごとに見返せるビューアがあります。出られなかった回の中身も分かり、出た回の見返したい場面や、数か月前のあの話も、すぐに見つかります。それでも、参加者同士の気づきの交換や、その場の空気感は、当日ならではです。</p>
-        </div>
-      </div>
-      <ul class="st-flow__facts">
-        {%- for t in [
-          "各回は独立したテーマ。途中の回から参加できます",
-          "A・Bの2日程は同じ内容。どちらかに参加すれば十分です",
-          "カメラや発言は必須ではありません",
-          "事前課題はありません",
-          "用意するもの：Zoomが使えるパソコン、個人のGoogleアカウント（Gmail）、無料版でよいので ChatGPT・Claude・Gemini・Copilot などいずれかのAIのアカウント",
-          "追加の費用なしで、どの体験もできるように用意しています",
-        ] %}
-        <li>{{ lp.check() }}<span>{{ t }}</span></li>
+        <li><span class="st-who__role">{{ role }}</span><p>{{ t }}</p></li>
         {%- endfor %}
       </ul>
+      <p class="st-who__bridge">ツールとしての活用は、放っておいても広がります。差がつくのは、<b>AI前提で事業を構想し、実際に動かせるかどうか</b>です。</p>
     </div>
   </section>
 
-  {# ⑥ このプロジェクトで得られるもの（5つ。画面の写真と文を交互に並べる） #}
+  {# ③ このプロジェクトで得られるもの（5つ。画面の写真と文を交互に並べる） #}
   <section class="st-block" id="benefits" data-lp-section="benefits">
     <div class="st-wrap">
       <h2>{{ "このプロジェクトで得られるもの" | phrase }}</h2>
@@ -323,35 +184,10 @@
     </div>
   </section>
 
-  {# ⑦ 主催者から（経歴は第7回の紹介スライドの自己紹介から。大学院の表記は「多摩大学経営大学院」） #}
-  <section class="st-block st-block--pale" id="host" data-lp-section="host">
-    <div class="st-wrap">
-      <h2>主催者から</h2>
-      <div class="st-host">
-        <div class="st-host__who">
-          <img src="{{ 'assets/profile.jpg' | url }}" alt="栗山 実" width="240" height="240" loading="lazy">
-          <div>
-            <p class="st-host__name">栗山 実</p>
-            <p class="st-host__role">株式会社アンテカニス 代表取締役／多摩大学経営大学院 特任教授／グロービス経営大学院 教員</p>
-          </div>
-        </div>
-        <div class="st-host__body">
-          <blockquote class="st-host__quote">AIの使い方や効率化の話は、たくさんあります。でも、それで十分でしょうか。インターネットの普及期に世界を変えたのは、Excel教室に通った人ではなく、GoogleやAmazonを生み出した人たちでした。戦略を考える視点と、実際に手を動かす実践。その両方を、毎月、参加者と一緒に試しています。</blockquote>
-          <p class="st-host__bio">データサイエンティスト・起業家・戦略アドバイザー。マッキンゼー・アンド・カンパニー等を経て独立。大企業のデータ活用やAI戦略の助言から、データ技術を基盤としたスタートアップの立ち上げと経営まで手がける。東京大学理学部卒・同大学院修了（素粒子論）。</p>
-          <ul class="st-career">
-            <li><b>共同創業</b><span>VISITS Technologies（AIソリューション）取締役・共同創業者／souco（倉庫共有サービス）取締役・共同創業者</span></li>
-            <li><b>大学院</b><span>グロービス経営大学院 教員（ビジネス・アナリティクス、AI＆データサイエンス）／多摩大学経営大学院 特任教授（データドリブン経営の実践論）</span></li>
-            <li><b>顧問</b><span>D Capital（DX×PEファンド）、サイキンソー（細菌叢検査サービス。創業期から参加）ほか</span></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  {# ⑧ 実際の回から（直近の回は extra.history の先頭、次回は extra.schedule から）＋ これまでの回の並び #}
+  {# ③ 実際の回から（直近の回は extra.history の先頭、次回は extra.schedule から）＋ これまでの回の並び #}
   {%- set recent_img = img.recent or latest.highlight_image -%}
   {%- set recent_text = L.recent_text if (L.recent_round == latest.round and L.recent_text) else (latest.highlight or latest.summary) -%}
-  <section class="st-block" id="recent" data-lp-section="recent">
+  <section class="st-block st-block--rule" id="recent" data-lp-section="recent">
     <div class="st-wrap">
       <h2>実際の回から</h2>
       <div class="st-recent{% if not recent_img %} st-recent--noimg{% endif %}">
@@ -393,8 +229,123 @@
     </div>
   </section>
 
-  {# ⑨ メンバーとして参加する（料金は税込を必ず出す：総額表示） #}
-  <section class="st-block st-block--pale" id="join" data-lp-section="join">
+  {# ④ 主催者から（1990年代との相似形もここに。経歴は第7回の紹介スライドの自己紹介から。大学院の表記は「多摩大学経営大学院」） #}
+  <section class="st-block st-block--pale" id="host" data-lp-section="host">
+    <div class="st-wrap">
+      <h2>主催者から</h2>
+      <div class="st-host">
+        <div class="st-host__who">
+          <img src="{{ 'assets/profile.jpg' | url }}" alt="栗山 実" width="240" height="240" loading="lazy">
+          <div>
+            <p class="st-host__name">栗山 実</p>
+            <p class="st-host__role">株式会社アンテカニス 代表取締役／多摩大学経営大学院 特任教授／グロービス経営大学院 教員</p>
+          </div>
+        </div>
+        <div class="st-host__body">
+          <blockquote class="st-host__quote">AIの使い方や効率化の話は、たくさんあります。でも、それで十分でしょうか。インターネットの普及期に世界を変えたのは、Excel教室に通った人ではなく、GoogleやAmazonを生み出した人たちでした。戦略を考える視点と、実際に手を動かす実践。その両方を、毎月、参加者と一緒に試しています。</blockquote>
+          <p class="st-host__bio">データサイエンティスト・起業家・戦略アドバイザー。マッキンゼー・アンド・カンパニー等を経て独立。大企業のデータ活用やAI戦略の助言から、データ技術を基盤としたスタートアップの立ち上げと経営まで手がける。東京大学理学部卒・同大学院修了（素粒子論）。</p>
+          <ul class="st-career">
+            <li><b>共同創業</b><span>VISITS Technologies（AIソリューション）取締役・共同創業者／souco（倉庫共有サービス）取締役・共同創業者</span></li>
+            <li><b>大学院</b><span>グロービス経営大学院 教員（ビジネス・アナリティクス、AI＆データサイエンス）／多摩大学経営大学院 特任教授（データドリブン経営の実践論）</span></li>
+            <li><b>顧問</b><span>D Capital（DX×PEファンド）、サイキンソー（細菌叢検査サービス。創業期から参加）ほか</span></li>
+          </ul>
+        </div>
+      </div>
+      {#- 1990年代との相似形（主催者の言葉の裏づけとして） #}
+      <div class="st-era-wrap st-host__era">
+        <h3 class="st-h3">{{ "「失われた30年」が始まった1990年代と、" | phrase }}{{ "いまはよく似ています。" | phrase }}</h3>
+        <div class="st-era" role="table" aria-label="1990年代と2020年代の比較">
+          <div class="st-era__row st-era__row--head" role="row">
+            <span class="st-era__h" role="columnheader">1990年代</span>
+            <span role="columnheader" class="st-era__gap"></span>
+            <span class="st-era__h" role="columnheader">2020年代</span>
+          </div>
+          {%- for k, a, b in [
+            ("登場したもの", "PC・インターネット", "生成AI"),
+            ("多くの人は", "ExcelやWordの活用講座へ", "ツールとしてのAI活用、社内の生産性改善へ"),
+            ("世界を変えたのは", "インターネット前提の新サービス（Amazon、Google、Netflix…）", "？？？"),
+          ] %}
+          <div class="st-era__row" role="row">
+            <span class="st-era__c" role="cell">{{ a }}</span>
+            <span class="st-era__k" role="rowheader">{{ k }}</span>
+            <span class="st-era__c{% if loop.last %} st-era__q{% endif %}" role="cell">{{ b }}</span>
+          </div>
+          {%- endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# ⑤ 参加者の声（声と満足度だけ。前・後はやめた） #}
+  <section class="st-block st-voices" id="voices" data-lp-section="voices">
+    <div class="st-wrap">
+      <div class="st-change__head">
+        <h2>参加者の声</h2>
+        <p class="st-score"><strong>{{ st.satisfaction }}</strong><span>が「参加して良かった」</span></p>
+      </div>
+      <div class="st-change">
+        {%- for h, voice in [
+          ("「AIの話」が、自社の事業の話になる",
+           "AIは議事録や資料づくりの便利ツールだと思っていました。事業の戦略や意思決定に組み込むという発想そのものが新鮮でした。"),
+          ("考えるだけでなく、自分の手で動かせる",
+           "普段はAIに相談する程度でしたが、AIに仕組みを作らせて手元で動かす体験ができました。"),
+          ("社内に持ち帰り、広げられる",
+           "身近な題材で考え方を体験でき、社内での広げ方のヒントになりました。"),
+        ] %}
+        <article class="st-change__item">
+          <h3>{{ h }}</h3>
+          <blockquote class="st-change__voice">{{ voice }}</blockquote>
+        </article>
+        {%- endfor %}
+      </div>
+      <p class="st-note">※ {{ st.satisfaction }}は、{{ st.satisfaction_note }}</p>
+      <p class="st-note st-note--tight">参加者の声は、第1〜5回の参加者アンケートの自由記述をもとに、趣旨を変えずに要約・再構成しています。</p>
+    </div>
+  </section>
+
+  {# ⑥ 1回の流れ（/sessions/ の「各セッションの構成例」と、extra.participation から。新しい約束は書かない） #}
+  <section class="st-block st-block--pale" id="flow" data-lp-section="flow">
+    <div class="st-wrap">
+      <h2>{{ "月に一度の回は、" | phrase }}{{ "こう進みます" | phrase }}</h2>
+      <p class="st-flow__meta">20:00〜22:30ごろ・オンライン（Zoom）</p>
+      <p class="st-flow__gain">2時間半で、毎回、新しい体験と知識、次に考える問い、資料集、持ち帰りのファイルまで得られるように組んでいます。</p>
+      <ol class="st-flow">
+        {%- for h, t in [
+          ("問いから始める", "その回のテーマが、なぜ戦略的に重要か。自分の事業・業界の文脈で言葉にし、AIにも同じ問いを考えさせて比べます。"),
+          ("AIで動かす、作る", "AIとの対話から始めて、AIに仕組みやコンテンツを作らせ、動くところまで進めます。作るのは主にAI。ITが苦手でも、その場で一緒に進めます。"),
+          ("戦略に戻る", "作ったものをもとに、自社にどう効くか、産業や組織の構造がどう変わるかを考えます。"),
+          ("まとめ", "持ち帰るファイル一式を確かめ、次の回を予告します。本編は、おおむね22:30までです。"),
+        ] %}
+        <li><span class="st-flow__n">{{ loop.index }}</span><h3>{{ h }}</h3><p>{{ t }}</p></li>
+        {%- endfor %}
+      </ol>
+      <div class="st-flow__afters">
+        <div class="st-flow__after">
+          <h3>本編のあと（自由参加）</h3>
+          <p>質問と交流の時間です（最大60分ほど）。途中で抜けても大丈夫です。録画に残さない時間で、質問に答えたり議論したりするなかで、いまのAIの潮流の本質に話が及ぶこともあります。参加できる方は、ぜひ。</p>
+        </div>
+        <div class="st-flow__after">
+          <h3>終わったあとも</h3>
+          <p>録画と資料に加えて、各回を場面ごとに見返せるビューアがあります。出られなかった回の中身も分かり、出た回の見返したい場面や、数か月前のあの話も、すぐに見つかります。それでも、参加者同士の気づきの交換や、その場の空気感は、当日ならではです。</p>
+        </div>
+      </div>
+      <ul class="st-flow__facts">
+        {%- for t in [
+          "各回は独立したテーマ。途中の回から参加できます",
+          "A・Bの2日程は同じ内容。どちらかに参加すれば十分です",
+          "カメラや発言は必須ではありません",
+          "事前課題はありません",
+          "用意するもの：Zoomが使えるパソコン、個人のGoogleアカウント（Gmail）、無料版でよいので ChatGPT・Claude・Gemini・Copilot などいずれかのAIのアカウント",
+          "追加の費用なしで、どの体験もできるように用意しています",
+        ] %}
+        <li>{{ lp.check() }}<span>{{ t }}</span></li>
+        {%- endfor %}
+      </ul>
+    </div>
+  </section>
+
+  {# ⑦ メンバーとして参加する（料金は税込を必ず出す：総額表示） #}
+  <section class="st-block" id="join" data-lp-section="join">
     <div class="st-wrap">
       <h2>メンバーとして参加する</h2>
       <div class="st-join">
@@ -442,37 +393,7 @@
     </div>
   </section>
 
-  {# ⑩ まずは様子を見たい方へ（報告メール。「無料」「メール」は前面に出さない。お名前は登録直後の画面で任意に聞く） #}
-  <section class="st-block" id="watch" data-lp-section="watch">
-    <div class="st-wrap st-watch">
-      <div class="st-watch__text">
-        <h2>まずは様子を見たい方へ</h2>
-        <p class="st-text">開催ごとの報告と次回の案内を、月2回ほどメールでお届けします。参加するかどうかは、読んでから決められます。</p>
-      </div>
-      <div class="st-watch__form">
-      {%- if fm.turnstile_sitekey %}
-      <form id="watch-form" class="lp-form st-form" data-aisia-form="subscribe" data-lead-name="start"
-            data-endpoint="{{ fm.api_base }}/api/subscribe"
-            data-success="{{ 'start/thanks/' | url }}"
-            data-sitekey="{{ fm.turnstile_sitekey }}">
-        <div class="lp-field">
-          <label for="watch-email">メールアドレス</label>
-          <input id="watch-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required maxlength="254">
-        </div>
-        {{ lp.hidden_fields() }}
-        <button type="submit" class="lp-btn lp-btn--outline lp-btn--block" data-busy-label="送信しています…">報告メールに登録する</button>
-        <p class="lp-form__error" role="alert" hidden></p>
-        <p class="st-note">登録は無料。配信停止はいつでも。ご入力の情報は、本プロジェクトのご案内にのみ使用します。<a href="https://www.antecanis.com/privacy/" target="_blank" rel="noopener">プライバシーポリシー</a></p>
-      </form>
-      <noscript><p class="st-note">登録には JavaScript が必要です。<a href="{{ fm.noscript_url }}">こちらのページからも登録できます</a>。</p></noscript>
-      {%- else %}
-      <a class="lp-btn lp-btn--outline" href="{{ fm.noscript_url }}">報告メールに登録する</a>
-      {%- endif %}
-      </div>
-    </div>
-  </section>
-
-  {# ⑪ よくあるご質問（カメラと発言・自社の情報の答えは栗山さんの説明から） #}
+  {# ⑧ よくあるご質問（カメラと発言・自社の情報の答えは栗山さんの説明から） #}
   <section class="st-block st-block--pale" id="faq" data-lp-section="faq">
     <div class="st-wrap">
       <div class="st-faq__head">
@@ -506,7 +427,37 @@
     </div>
   </section>
 
-  {# ⑫ 最後の帯 #}
+  {# ⑨ まずは様子を見たい方へ（報告メール。「無料」「メール」は前面に出さない。お名前は登録直後の画面で任意に聞く） #}
+  <section class="st-block" id="watch" data-lp-section="watch">
+    <div class="st-wrap st-watch">
+      <div class="st-watch__text">
+        <h2>まずは様子を見たい方へ</h2>
+        <p class="st-text">開催ごとの報告と次回の案内を、月2回ほどメールでお届けします。参加するかどうかは、読んでから決められます。</p>
+      </div>
+      <div class="st-watch__form">
+      {%- if fm.turnstile_sitekey %}
+      <form id="watch-form" class="lp-form st-form" data-aisia-form="subscribe" data-lead-name="start"
+            data-endpoint="{{ fm.api_base }}/api/subscribe"
+            data-success="{{ 'start/thanks/' | url }}"
+            data-sitekey="{{ fm.turnstile_sitekey }}">
+        <div class="lp-field">
+          <label for="watch-email">メールアドレス</label>
+          <input id="watch-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required maxlength="254">
+        </div>
+        {{ lp.hidden_fields() }}
+        <button type="submit" class="lp-btn lp-btn--outline lp-btn--block" data-busy-label="送信しています…">報告メールに登録する</button>
+        <p class="lp-form__error" role="alert" hidden></p>
+        <p class="st-note">登録は無料。配信停止はいつでも。ご入力の情報は、本プロジェクトのご案内にのみ使用します。<a href="https://www.antecanis.com/privacy/" target="_blank" rel="noopener">プライバシーポリシー</a></p>
+      </form>
+      <noscript><p class="st-note">登録には JavaScript が必要です。<a href="{{ fm.noscript_url }}">こちらのページからも登録できます</a>。</p></noscript>
+      {%- else %}
+      <a class="lp-btn lp-btn--outline" href="{{ fm.noscript_url }}">報告メールに登録する</a>
+      {%- endif %}
+      </div>
+    </div>
+  </section>
+
+  {# ⑩ 最後の帯 #}
   <section class="st-final" id="final" data-lp-section="final">
     <div class="st-wrap">
       <h2>{{ "AI前提の事業構想を、" | phrase }}{{ "次の回から。" | phrase }}</h2>
