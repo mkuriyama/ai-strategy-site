@@ -59,6 +59,8 @@ hooks:
   - hooks/tracking.py
   # 見出しの日本語を句の切れ目で改行する（テンプレートのフィルター phrase。BudouX）
   - hooks/phrases.py
+  # 広告用LP の画像に幅と高さを書く（テンプレートの img_attrs。読み込みで文がずれないように）
+  - hooks/img_size.py
 
 # 日本語検索対応（CJK 分割に対応）
 plugins:
@@ -171,6 +173,8 @@ nav:
   # B への導線は「プロジェクトについて」の本文とフッタに置く（下記 §導線の方針）。
 
 extra:
+  # フッターの「Made with Material for MkDocs」を出さない（2026-11-14、栗山さん）
+  generator: false
   # GA4（Material の標準の組み込み）。広告のタグは下の tracking:
   analytics:
     provider: google
@@ -232,23 +236,45 @@ extra:
   #   practice_example … 「得られるもの」の毎月の実践の回。直近の回と次の回を1文ずつ
   #   recent_text      … 「実際の回から」の短い紹介。recent_round が extra.history の先頭の回と
   #                      違うときは使わず、history の highlight（無ければ summary）を出す
+  #   recent_prompt    … 「実際の回から」のお題（任意。recent_round が先頭の回と同じときだけ出す）
   # ────────────────────────────────────────────────────────────
   lp:
-    practice_example: "第6回は、全員が同じ問いでAIと対話し、深まりを1往復ごとに点数化して比べました。第7回は、各自がAIでウェブサイトを作って公開し、開発のコストが消えた後の戦略を議論します。"
+    practice_example: "第6回は、全員が同じ問いでAIと対話し、深まりを1往復ごとに点数化して比べました。第7回は、ユーザーに価値を届けるサービスを各自がAIで作り、URLを知っている人なら使える形で公開します。その経験をもとに、開発のコストが消えた後の戦略を議論します。"
     recent_round: 6
     recent_text: "全員が同じ強さのAIを相手に、同じ問いで対話し、その深まりを1往復ごとに点数化して比べました。分かれ目は入力の長さではなく、問いの立て方でした。"
+    recent_prompt: "社長の次の問い「AIへの張り方を絞る。」（張る軸／失うもの／順番）"
     # 課題の棚の件数（増えていくので「〜超」で書く）
     issues_count: "2,000件超"
     # 「毎朝のAIニュース解釈」（メンバー）と、ライブラリー（登録不要）の違いの一言。空なら出さない
     news_member_note: "コミュニティでは、届いた読み解きをもとに、メンバー同士で考えを交わせます。"
     # 画像（docs/ からの相対パス）。空なら、その枠を出さない（届くまで）。
     # ⚠ 参加者の名前・アイコンが写っていないことを確かめてから置く
-    images:
-      hero: ""        # AI戦略スタジオの画面（最初の画面）
-      hero_sp: ""     # 同じ画面の携帯用の切り出し（任意。無ければ hero）
-      practice: ""    # AI集合知ボードの画面（毎月の実践の回）
-      space: ""       # 課題の棚の画面（メンバースペース）
-      recent: ""      # 対話アリーナの画面（実際の回から。空なら extra.history の先頭の highlight_image）
+    images:   # 空にした枠は出さない。⚠ 参加者の名前・アイコン・会員限定の情報（ボードのコード等）が写っていないかを確かめてから置く
+      hero: "assets/img/start/studio.jpg"            # 最初の画面（AI戦略スタジオ）
+      hero2: "assets/img/start/app-demo.jpg"         # 最初の画面に重ねる（AIで作った業務アプリの例）
+      practice: "assets/img/start/reports.jpg"       # 毎月の実践の回（第5回で生成したレポート）
+      practice2: "assets/img/start/board-s06b.jpg"   # 同上に重ねる（第6回の対話アリーナ）
+      space: "assets/img/start/space-viewer.jpg"     # メンバースペース（場面ごとのビューア。動画の中のURLはぼかし済み）
+      space2: "assets/img/start/kadai.jpg"           # 同上に重ねる（課題の棚）
+      news: "assets/img/start/news-circle.jpg"       # 毎朝のAIニュース解釈（コミュニティの投稿）
+      library: "assets/img/start/library-digest.jpg" # AI戦略ライブラリー（今日のダイジェスト）
+      library2: "assets/img/start/library-companies.jpg" # 同上に重ねる（戦略の棚）
+      peers: "assets/img/start/gallery.jpg"          # 仲間（第5回のシナリオ・ギャラリー）
+      recent: "assets/img/start/arena-s06a.jpg"      # 実際の回から（空なら extra.history の先頭の highlight_image）
+      recent2: "assets/img/start/graph3d.jpg"        # 同上に重ねる（全員の対話の軌跡）
+    # 「得られるもの」の画像は 16:9 の枠に切り取って揃える。どこを見せるか（object-position。空なら上の中央）
+    focus:
+      practice: "0% 50%"   # レポートの一覧の左（表紙）
+      library: "0% 50%"    # 今日のダイジェストの左
+      peers: "0% 50%"      # ギャラリーの左の画面
+    captions:  # 画像の下の短い説明（空なら出さない）
+      hero: "左：AI戦略スタジオで、チームで事業の案をつくる。右下：AIで作った業務アプリの例"
+      practice: "第5回：AIと書いた未来シナリオのレポート（右下は第6回の対話アリーナ）"
+      space: "メンバースペース：各回を場面ごとに見返す（右下は課題の棚：AIで解決に挑戦できるテーマ集）"
+      news: "毎朝のAIニュース解釈：メンバーのコミュニティに届く投稿"
+      library: "AI戦略ライブラリー：今日のダイジェスト（右下は戦略の棚：主要企業のAI戦略の発表など）"
+      peers: "第5回のシナリオ・ギャラリー：参加者がAIと作った223本のシナリオを、全員で見比べる"
+      recent: "第6回の対話アリーナ：同じ問いでAIと対話し、深まりを1往復ごとに点数で見る（右下は全員の対話の軌跡）"
   # 実績数値（/subscribe/・/join/corporate/ の実績帯とチップが参照）。
   # satisfaction は新しい回のアンケートが加わるたびに再計算する（未回答も分母に含める）
   stats:

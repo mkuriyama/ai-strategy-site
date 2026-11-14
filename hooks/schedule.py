@@ -26,6 +26,8 @@
 - `schedule_list_html(extra)` … 全回の一覧（/sessions/ の「開催予定」）
 - `payment_table_html(extra)` … お申し込みの時期ごとの、初回のお支払い日と、無料で参加できる回
   （申込用 GAS の COHORT_SCHEDULE と同じ決まり。`payment_windows()` の説明を参照）
+- `pay_now_html(extra, detail)` … 「今日お申し込みの場合」の一文（広告用LP）。同じ決まりで、
+  いまの受付の回・無料で参加できる日程・初回のお支払い日を出す。切り替えは前の回の B日程の翌日
 - `participation_html(extra, title)` … 参加の前に（`extra.participation`）
 
 テンプレートでは `on_env` が登録する同名の関数（`schedule_upcoming(2)` など）、Markdown では
@@ -194,6 +196,7 @@ def on_env(env, config, files):
         schedule_upcoming=lambda n=2, variant="": upcoming_html(extra, n, variant),
         schedule_list=lambda: schedule_list_html(extra),
         payment_table=lambda: payment_table_html(extra),
+        pay_now=lambda detail=False: pay_now_html(extra, detail),
         participation=lambda title="有償メンバーとして参加する前に": participation_html(extra, title),
     )
     return env
@@ -325,6 +328,51 @@ def payment_table_html(extra, rows: int = 3) -> str:
     out.append('<p class="pay-months__none" data-pay-empty hidden>次の回の日程は、決まりしだいお知らせします。</p>')
     out.append('<p class="pay-months__note">お申し込みの時期は、前の回の B日程の翌日で切り替わります。'
                "日付は日本時間で数えます。</p>")
+    out.append("</div>")
+    return "\n".join(out)
+
+
+PAY_NOW_FALLBACK = "お申し込みのあと最初の回は無料で参加でき、初回のお支払いはその回のあとの15日です。"
+
+
+def pay_now_html(extra, detail: bool = False, rows: int = 4) -> str:
+    """「今日お申し込みの場合」の一文（広告用LP の最初の画面と料金の枠）。
+
+    `payment_windows()` と同じ決まり（＝申込用 GAS の COHORT_SCHEDULE）で、いまの受付の回を選ぶ。
+    受付の切り替えは前の回の B日程の**翌日 0時**。ビルドとビルドの間に切り替わっても、
+    schedule.js が同じ決まりで出し直す（行に `data-now-start`・`data-now-end`）。そのために、
+    いまの受付から rows 回ぶんの行を入れておく（2行目からは `hidden`）。
+
+    - 無料で参加できる日程は、まだ済んでいないものだけ出す（A日程が済んだら B日程だけ）。
+      両方済んだあと（B日程の夜）は、その部分（`data-now-free`）を隠す
+    - detail=True：解約の期限（初回のお支払い日の前日）と、毎月15日の更新も書く
+    - どの受付にも当たらないとき（次の回が未定）は、日付のない一文（`data-now-fallback`）
+    """
+    when = now()
+    ws = [w for w in payment_windows(extra) if when < w["end"]][:rows]
+    tail = "合わなければ、{dl}までの解約で費用はかかりません。以降は毎月15日に更新します。"
+    out = ['<div class="pay-now" data-pay-now>']
+    current_found = False
+    for w in ws:
+        r = w["round"]
+        on = not current_found and (w["start"] is None or when >= w["start"])
+        current_found = current_found or on
+        free = [d for d in r["days"] if not held(d["at"], when)]
+        ds = []
+        for i, d in enumerate(r["days"]):
+            if i:
+                ds.append('<span class="pay-now__sep">か</span>')
+            h = held(d["at"], when)
+            ds.append(f'<span class="pay-now__d{" is-held" if h else ""}" data-at="{_iso(d["at"])}">'
+                      f'{_e(md(d["at"], when))}</span>')
+        attrs = (f' data-now-start="{_iso(w["start"])}"' if w["start"] else "") + f' data-now-end="{_iso(w["end"])}"'
+        out.append(f'<p class="pay-now__row"{attrs}{"" if on else " hidden"}>今日お申し込みの場合、'
+                   f'<span data-now-free{"" if free else " hidden"}>第{r["round"]}回（{"".join(ds)}）に'
+                   f'無料で参加でき、</span>初回のお支払いは<b>{_e(md(w["pay"], when))}</b>です。'
+                   + (tail.format(dl=_e(md(w["pay"] - dt.timedelta(days=1), when))) if detail else "")
+                   + "</p>")
+    fb = PAY_NOW_FALLBACK + (tail.format(dl="初回のお支払い日の前日") if detail else "")
+    out.append(f'<p class="pay-now__row" data-now-fallback{" hidden" if current_found else ""}>{_e(fb)}</p>')
     out.append("</div>")
     return "\n".join(out)
 

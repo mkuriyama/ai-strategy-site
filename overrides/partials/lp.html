@@ -53,3 +53,27 @@
 <div class="lp-hp" aria-hidden="true"><label>ウェブサイト（入力しないでください）<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
 <div class="lp-turnstile"></div>
 {%- endmacro %}
+
+{#- 広告用LP（/start/・/start/thanks/）の先頭の帯。ロゴ・ページ内の移動・「参加する」（料金の枠へ）。
+    外のページへのナビは置かない。nav=False でロゴだけ（登録直後の画面） -#}
+{% macro st_bar(home="#top", nav=True) -%}
+<header class="st-bar">
+  <div class="st-wrap st-bar__in">
+    <a class="st-bar__brand" href="{{ home }}"><img src="{{ 'assets/logo-mincho-white.svg' | url }}" alt="AI戦略実践プロジェクト" width="227" height="34"></a>
+    {%- if nav %}
+    <nav class="st-bar__nav" aria-label="このページの中">
+      <a href="#benefits">得られるもの</a>
+      <a href="#recent">実際の回</a>
+      <a href="#flow">1回の流れ</a>
+      <a href="#faq">よくある質問</a>
+    </nav>
+    <a class="st-bar__join" href="#join">参加する</a>
+    {%- endif %}
+  </div>
+</header>
+{%- endmacro %}
+
+{#- 画面の写真の枠（ホームの .shot と同じ質感）。src が空なら何も出さない -#}
+{% macro shot(src, alt, cls="", lazy=true, focus="") -%}
+{%- if src %}<div class="st-shot {{ cls }}"{% if focus %} style="--focus: {{ focus }}"{% endif %}><img src="{{ src | url }}" {{ img_attrs(src) }} alt="{{ alt }}"{% if lazy %} loading="lazy"{% else %} fetchpriority="high"{% endif %}></div>{% endif -%}
+{%- endmacro %}
