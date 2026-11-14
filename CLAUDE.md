@@ -231,6 +231,8 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
    - `practice_example`（得られるもの・毎月の実践の回：直近の回と次の回を1文ずつ）を書き換える
    - `extra.history` の先頭に新しい回を足したら、`recent_round` と `recent_text`（実際の回から）も
      その回に合わせる。合っていないあいだは、`extra.history` の先頭の `highlight`（無ければ `summary`）が出る
+   - `recent_prompt`（実際の回からの「お題」。任意）も、その回のお題に替える。`recent_round` が先頭の回と
+     違うあいだは出ない
    - 次回の日程・料金・実績は `extra.schedule`・`extra.pricing`・`extra.stats` から自動
 7. **日付スタンプ**の確認
    - `docs/glossary.md` 末尾「◯年◯月時点」
@@ -585,6 +587,13 @@ B 側**（`ai-strategy-news-app` の `content/guide/*.md`）。本サイトに�
     録画に残さない時間で、いまのAIの潮流の本質に話が及ぶこともある ―― 参加できる人はぜひ、という位置づけ
   - **早期参加枠**：「いまの月額（早期参加枠）は、お申し込みのあとも据え置き」「割引の幅は段階的に小さくなる」まで
     は書く。**いつ変わるか**は書かない（下の「料金改定の運用」）
+  - **事実（栗山さん、2026-11-14）**：請求書の発行と振込払いは**法人で3名以上**。**追加の費用なし**でどの体験も
+    できるように用意している（AIは無料版のアカウントで足りる。費用をかけるとできることが増える場面もある）。
+    用意してもらうのは、Zoom が使えるパソコン・個人の Google アカウント（Gmail。Colab を使うため）・いずれかの
+    AIのアカウント（無料版で可）。会社のパソコンは私用をすすめる（`extra.participation` と同じ）。入会した日から、
+    第1回からのすべての記録（A・B日程それぞれの録画と音声・文字起こし・ダイジェスト記事・スライド・使ったファイルと
+    指示文）を見られる。第7回の「公開」は、URLを知っている人なら使える形（GitHub Pages）まで
+  - サービス名（ChatGPT・Claude・Gemini・Copilot）は書いてよい。**モデル名・バージョン**は書かない
   - 5×5×5 の枠組みは、いまは主には使っていないので LP には出さない
 - **料金は税込を必ず出す**（総額表示）。`extra.pricing` の `early_monthly_incl` と `early_monthly`
 - **見出しの改行**：テンプレートで `{{ "…" | phrase }}`（`hooks/phrases.py`）。CSS は keep-all
@@ -685,6 +694,7 @@ python3 scripts/check_mobile.py        # 携帯の幅で崩れていないか（
   （リストにするとボタンと、以前の選択を localStorage から戻すスクリプトが復活する）
 - **フッタの規約リンク**（プライバシー/キャンセル/利用規約/特商法/お問い合わせ）は
   `mkdocs.yml` の `copyright:` にHTMLで記載。URLは `https://www.antecanis.com/...`。
+  「Made with Material for MkDocs」は出さない（`extra.generator: false`。2026-11-14〜）
 - **決済（Stripe）リンクは `docs/join/index.md` の「お申し込み」節にのみ掲載**（URLは
   `extra.join_url` が単一ソース）。例外は /subscribe/ の「有償メンバー」カード1か所（価格・初月無料・
   更新日の条件が同じカードに並んでいるため）。他ページから直リンクは張らず、ホーム等は join ページへ

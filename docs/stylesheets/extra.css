@@ -1082,6 +1082,10 @@ body:has(.st) .md-main { background: #fff; }
 .st .st-recent__media figcaption { font-size: 13px; line-height: 1.6; color: var(--muted); margin-top: 10px; }
 .st .st-recent__k { font-size: 13px; font-weight: 700; color: var(--teal2); letter-spacing: .04em; }
 .home-landing.st .st-recent__body h3 { font-family: var(--serif); font-size: 22px; color: var(--teal); margin: 2px 0 12px; }
+.st .st-recent__q { font-size: 15.5px; line-height: 1.75; font-weight: 600; color: #1f2d31; background: var(--pale);
+  border-left: 4px solid var(--teal2); border-radius: 0 10px 10px 0; padding: 10px 14px; margin: 0 0 14px; }
+.st .st-recent__q span { display: inline-block; font-size: 12px; font-weight: 700; color: #fff; background: var(--teal);
+  border-radius: 999px; padding: 0 10px; margin-right: 8px; vertical-align: 1px; }
 .st .st-next { margin-top: 22px; background: var(--pale); border-radius: 14px; padding: 18px 18px 20px; }
 .st .st-next__k { font-size: 13px; font-weight: 700; color: var(--teal2); }
 .st .st-next__note { font-size: 13.5px; line-height: 1.7; color: var(--muted); margin-top: 8px; }
