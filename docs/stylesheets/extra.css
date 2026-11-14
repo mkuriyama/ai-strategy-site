@@ -1091,8 +1091,10 @@ body:has(.st) .md-main { background: #fff; }
 .st .st-next__note { font-size: 13.5px; line-height: 1.7; color: var(--muted); margin-top: 8px; }
 .sch-up--start, .sch-up--band { margin: 4px 0 0; }
 .sch-up--start .sch-round, .sch-up--band .sch-round { background: none; border: 0; padding: 0; }
-.sch-up--start .sch-round__q, .sch-up--start .sch-round__same,
+.sch-up--start .sch-round__same,
 .sch-up--band .sch-round__q, .sch-up--band .sch-round__same { display: none; }
+/* 広告用LP の「次回」では、その回の問いも出す（何を考える回かが分かるように） */
+.sch-up--start .sch-round__q { margin: 6px 0 10px; font-size: 14.5px; line-height: 1.75; color: #2b3a3f; }
 .sch-up--start .sch-round__theme { font-size: 19px; }
 .sch-up--start .sch-day { background: #fff; }
 .sch-up--start .sch-day__k, .sch-up--band .sch-day__k { font-size: 12.5px; }
@@ -1130,6 +1132,7 @@ body:has(.st) .md-main { background: #fff; }
 /* ⑤ 1回の流れ */
 .st .st-flow__meta { display: inline-block; font-size: 14px; font-weight: 700; color: var(--teal); background: #fff;
   border: 1px solid #d7e4e6; border-radius: 999px; padding: 4px 14px; margin: -8px 0 20px; }
+.st .st-flow__gain { font-size: 15px; line-height: 1.8; color: #2b3a3f; margin: 0 0 18px; max-width: 760px; }
 .st .st-flow { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; counter-reset: none; }
 .st .st-flow li { position: relative; background: #fff; border-radius: 14px; padding: 18px 18px 18px 64px; border: 1px solid #d7e4e6; }
 .st .st-flow__n { position: absolute; left: 18px; top: 18px; width: 32px; height: 32px; border-radius: 50%;
