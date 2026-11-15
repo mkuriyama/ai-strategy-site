@@ -139,8 +139,10 @@
           </figure>
           <div class="st-row__body">
             <span class="st-tag">メンバー</span>
-            <h3>{{ "毎月の実践の回：" | phrase }}{{ "自社の問いを、AIで形にする" | phrase }}</h3>
-            <p>戦略の問いから始め、AIで動くものを作り、自社の戦略に戻す。{{ L.practice_example or "" }}</p>
+            {#- 問いが目的で、作る・動かすはその材料（栗山さん、2026-11-15）。「自社の問いを持ち寄る」とは書かない。
+                「公開」「コードは書きません」も書かない（技術の話が多い場だと思わせる） #}
+            <h3>{{ "毎月の実践の回：" | phrase }}{{ "AIを動かして、戦略を考える" | phrase }}</h3>
+            <p>{{ "AI時代の戦略の分かれ目を考える問いから始め、その材料として、AIで実際に作り、動かします。" | phrase }}{{ "机上の空論ではなく、AIの動きや限界を体験したうえで戦略を考えます。" | phrase }}{{ L.practice_example or "" }}</p>
           </div>
         </article>
         <article class="st-row">
@@ -225,6 +227,9 @@
           <p class="st-recent__q"><span>お題</span>{{ L.recent_prompt }}</p>
           {%- endif %}
           <p class="st-text">{{ recent_text }}</p>
+          {%- if L.recent_quote and L.recent_round == latest.round %}
+          <blockquote class="st-recent__quote"><p>{{ L.recent_quote | phrase }}</p>{% if L.recent_quote_note %}<cite>{{ L.recent_quote_note }}</cite>{% endif %}</blockquote>
+          {%- endif %}
           <div class="st-next">
             <p class="st-next__k">次回</p>
             {{ schedule_upcoming(1, "start") }}
@@ -329,7 +334,7 @@
       <ol class="st-flow">
         {%- for h, t in [
           ("問いから始める", "その回のテーマが、なぜ戦略的に重要か。自分の事業・業界の文脈で言葉にし、AIにも同じ問いを考えさせて比べます。"),
-          ("AIで動かす、作る", "AIとの対話から始めて、AIに仕組みやコンテンツを作らせ、動くところまで進めます。作るのは主にAI。ITが苦手でも、その場で一緒に進めます。"),
+          ("AIで動かす、作る", "AIとの対話から始めて、AIに仕組みやコンテンツを作らせ、動くところまで進めます。作るのは主にAI。手順はすべて画面を共有しながら進め、手順のガイドもあるので、ITが苦手でも進められます。"),
           ("戦略に戻る", "作ったものをもとに、自社にどう効くか、産業や組織の構造がどう変わるかを考えます。"),
           ("まとめ", "持ち帰るファイル一式を確かめ、次の回を予告します。本編は、おおむね22:30までです。"),
         ] %}
@@ -352,7 +357,7 @@
           "A・Bの2日程は同じ内容。どちらかに参加すれば十分です",
           "カメラや発言は必須ではありません",
           "事前課題はありません",
-          "用意するもの：Zoomが使えるパソコン、個人のGoogleアカウント（Gmail）、無料版でよいので ChatGPT・Claude・Gemini・Copilot などいずれかのAIのアカウント",
+          "用意するもの：Zoomが使えるパソコン、個人のGoogleアカウント（Gmail。Google Colab と資料の共有に使います）、無料版でよいので ChatGPT・Claude・Gemini・Copilot などいずれかのAIのアカウント",
           "追加の費用なしで、どの体験もできるように用意しています",
         ] %}
         <li>{{ lp.check() }}<span>{{ t }}</span></li>
@@ -370,7 +375,7 @@
           <div class="st-plan__top">
             <span class="st-badge">初月無料</span>
             <p class="st-plan__price"><span class="st-plan__k">月額</span><strong>{{ pr.early_monthly_incl }}円</strong><span class="st-plan__tax">（税込）</span></p>
-            <p class="st-plan__sub">{{ pr.early_monthly }}・{{ pr.early_label }}</p>
+            <p class="st-plan__sub">{{ pr.early_monthly }}（早期参加の割引価格）</p>
             <p class="st-plan__keep">早期参加の割引は、今後、段階的に小さくなる予定です。お申し込みの時点の割引は、その後も継続して適用されます。</p>
           </div>
           <ul class="st-checks st-checks--plan">
@@ -385,6 +390,7 @@
           </ul>
           <div class="st-plan__cond">{{ pay_now(true) }}</div>
           <a class="st-btn st-btn--teal st-plan__cta" href="{{ ex.join_url }}" data-cta="plan">{{ join_label }}</a>
+          <p class="st-plan__org">運営：株式会社アンテカニス（代表取締役 栗山 実）</p>
         </div>
         <div class="st-join__side">
           {# お申し込みの流れ（カード番号は Stripe が管理し、運営は受け取らない。招待と当日の案内は /welcome/ と同じ） #}
@@ -392,9 +398,9 @@
             <h3>お申し込みの流れ</h3>
             <ol>
               {%- for h, t in [
-                ("お申し込み", "Stripe の画面で、メールアドレスとクレジットカードなどを入力します。カード番号は Stripe が管理し、運営は受け取りません。この時点では、お支払いはありません。"),
-                ("最初の回に無料で参加", "コミュニティ（Circle）への招待を、メールでお送りします。当日の Zoom のリンクや資料は、Circle でご案内します。"),
-                ("初回のお支払いと更新", "初回のお支払いは、その回のあとの15日です。以降は毎月15日に更新します。解約は Stripe のカスタマーポータルから、ご自身でいつでもできます。"),
+                ("お申し込み", "Stripe（カード決済の会社）の画面で、メールアドレスとクレジットカードなどを入力します。カード番号は Stripe が管理し、運営は受け取りません。この時点では、お支払いはありません。"),
+                ("最初の回に無料で参加", "メンバーのコミュニティ（Circle）への招待を、メールでお送りします。当日の Zoom のリンクや資料は、Circle でご案内します。"),
+                ("初回のお支払いと更新", "初回のお支払いは、その回のあとの15日です。以降は毎月15日に更新します。解約は、Stripe の会員用の画面（カスタマーポータル。入口はメールでもご案内します）から、ご自身でいつでもできます。"),
               ] %}
               <li><span class="st-steps__n">{{ loop.index }}</span><div><b>{{ h }}</b><p>{{ t }}</p></div></li>
               {%- endfor %}
@@ -423,9 +429,11 @@
       {#- PC では2段に流す（左の空きをなくす）。dl の中の div は1問ずつのまとまり #}
       <dl class="st-faq">
         <div class="st-faq__item"><dt>AIツールの使い方を学ぶ場ですか？</dt>
-          <dd>いいえ。個別ツールの勉強会は、ほかにも数多くあります。ここでは、AI前提の事業構想と、その実践に焦点を当てます。</dd></div>
+          <dd>いいえ。個別ツールの勉強会は、ほかにも数多くあります。ここでは、AI前提の事業構想と、その実践に焦点を当てます。実践で使うAIの操作は、その場で画面を共有しながら一緒に進めます。</dd></div>
         <div class="st-faq__item"><dt>ITが苦手でも参加できますか？</dt>
-          <dd>できます。作るのは主にAIで、その場で一緒に進めます。用意していただくのは、Zoomが使えるパソコン、個人のGoogleアカウント（Gmail）、無料版でよいのでいずれかのAIのアカウント（ChatGPT・Claude・Gemini・Copilot など）です。会社のパソコンは、セキュリティの設定でつながらないサイトが多いことがあるので、私用のパソコンをおすすめします。</dd></div>
+          <dd>できます。作るのは主にAIで、手順はすべて画面を共有しながら進め、初めての方向けの手順のガイドもあります。用意していただくのは、Zoomが使えるパソコン、個人のGoogleアカウント（Gmail。Google Colab と資料の共有に使います）、無料版でよいのでいずれかのAIのアカウント（ChatGPT・Claude・Gemini・Copilot など）です。</dd></div>
+        <div class="st-faq__item"><dt>会社のパソコンや、会社のアカウントで参加できますか？</dt>
+          <dd>参加はできます。ただ、会社のパソコンやアカウントは、セキュリティの設定で使えないサイトやサービスがあることが多いので、私用のパソコンと個人のアカウントをおすすめします。</dd></div>
         <div class="st-faq__item"><dt>追加の費用はかかりますか？</dt>
           <dd>かかりません。月額のほかに費用をかけなくても、どの体験もできるように用意しています（AIは無料版のアカウントで足ります）。少し費用をかけると、有料のサービスで画像を作るなど、できることが増える場面もあり、その方法もご案内します。</dd></div>
         <div class="st-faq__item"><dt>途中の回からでも参加できますか？</dt>
@@ -437,7 +445,7 @@
         <div class="st-faq__item"><dt>自社の情報を話す必要はありますか？</dt>
           <dd>いいえ。Zoomのチャットで「自社ではどんなAIを使っていますか」などとうかがうことはありますが、答えるかどうかは自由です。自分の業界で考えてみる場面でも、自社にしづらい方は、なじみのある別の業界で考えていただけます。</dd></div>
         <div class="st-faq__item"><dt>合わなかったら？</dt>
-          <dd>初回のお支払い日の前日までの解約なら費用はかかりません。その後も、次の更新日の前日までに解約すれば、次の分はかかりません。</dd></div>
+          <dd>初回のお支払い日の前日までの解約なら費用はかかりません。その後も、次の更新日の前日までに解約すれば、次の分はかかりません。解約は、Stripe（カード決済の会社）の会員用の画面から、ご自身でいつでもできます。</dd></div>
         <div class="st-faq__item"><dt>会社の経費で参加できますか？</dt>
           <dd>できます。お申し込み後、Stripeで適格領収書を表示できます。法人で3名以上のご参加なら、請求書の発行と後日のお振込にも対応します。</dd></div>
       </dl>

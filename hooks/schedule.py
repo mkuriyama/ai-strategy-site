@@ -358,7 +358,7 @@ def pay_now_html(extra, detail: bool = False, rows: int = 4, ph=None, cancel: bo
     t = (lambda x: str(ph(x))) if ph else _e
 
     def tail(dl: str, renew: bool = True) -> str:
-        s = t("合わなければ、") + dl + t("までの解約で費用はかかりません。")
+        s = t("合わなければ、") + dl + t("までの解約で") + '<b class="pay-now__ok">' + t("費用はかかりません") + "</b>。"
         return s + (t("以降は毎月15日に更新します。") if renew else "")
 
     def after(dl: str) -> str:

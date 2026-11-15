@@ -1205,7 +1205,17 @@ body:has(.st) .md-main { background: #fff; }
 .st .pay-now b { color: var(--teal); white-space: nowrap; }
 .st .st-hero__cta .pay-now { margin-top: 12px; }
 .st .st-hero__cta .pay-now__row { font-size: 15px; line-height: 1.75; font-weight: 600; color: var(--ink); }
-.st .st-hero__cta .pay-now__sub { display: block; font-size: 14px; font-weight: 400; color: #3d5258; margin-top: 2px; }
+/* 解約の期限の行：上の行と同じ濃さで（老眼の方が読み飛ばさないように。栗山さん、2026-11-15） */
+.st .st-hero__cta .pay-now__sub { display: block; font-size: 15px; font-weight: 400; color: var(--ink); margin-top: 2px; }
+.st .pay-now b.pay-now__ok { color: var(--ink); white-space: normal; }
+/* 実際の回から：画面の中の一文を文字で（AIの応答の引用） */
+.st .st-recent__quote { margin: 14px 0 0; padding: 14px 18px; border-left: 3px solid var(--teal); background: #f2f7f7;
+  border-radius: 0 10px 10px 0; }
+.st .st-recent__quote p { margin: 0; font-family: var(--serif); font-size: 16px; line-height: 1.8; color: #0f2f37;
+  word-break: keep-all; overflow-wrap: anywhere; }
+.st .st-recent__quote cite { display: block; margin-top: 6px; font-style: normal; font-size: 12.5px; color: var(--muted); }
+/* 料金の枠：運営会社 */
+.st .st-plan__org { margin: 12px 0 0; font-size: 12.5px; color: var(--muted); text-align: center; }
 /* お申し込みの流れ（料金の枠の横。携帯では下） */
 .st .st-join__side { display: flex; flex-direction: column; gap: 18px; }
 .st .st-steps { background: #fff; border: 1px solid #d7e4e6; border-radius: 16px; padding: 22px 20px 24px; }
