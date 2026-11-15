@@ -10,6 +10,9 @@
     申込ボタンは主催者と実績の下に置く ―― 「新しい人を迎えている」「自分も入ってよい」と分かる合図として。
     言葉は「いつからでも参加できます」（月額の会なので「募集」「第N回の参加者」とは言わない）。
     ほかの導線は、帯の「参加費・お申し込み」（いつも見える。料金の枠へ）・料金の枠・最後の帯・携帯の固定ボタン（最初の画面を過ぎてから出す）
+  - 回は開催月で呼ぶ（「11月の回」。round_month()・schedule_upcoming(month=true)・pay_now()）。「第7回」は、
+    連続ものの途中から入る印象を与えるため（栗山さん、2026-11-15）。入会後の案内は第N回なので、
+    次回の枠にだけ「（第7回）」を小さく添える（bridge=true）。extra.lp の文も月で書く
   - 言葉：「プログラミング経験は前提にしない」とは書かない（技術の話が多い場だと思わせる）。「ITが苦手でも」の調子で。
     録画は「追いつく」ためではない（各回は独立したテーマ）。欠席した回を知る・見返す・探すためのもの
   - 各回はその月の A・B の2日程だけで、同じ回をあとで開かない。参加者同士の気づきの交換や空気感は当日ならでは
@@ -34,6 +37,8 @@
 {%- set cap = L.captions or {} -%}
 {%- set fx = L.focus or {} -%}
 {%- set latest = ex.history[0] -%}
+{%- set first_a = (ex.schedule | first).a -%}
+{%- set since = first_a[:4] ~ "年" ~ (first_a[5:7] | int) ~ "月" -%}
 {%- set library_url = ex.news_site_url | replace('/d/', '/') -%}
 {#- 折り返すときは「（初月無料）」の前で（ボタンは keep-all） -#}
 {%- set join_label = "メンバーとして参加する<wbr>（初月無料）" | safe -%}
@@ -156,7 +161,7 @@
           <div class="st-row__body">
             <span class="st-tag">メンバー</span>
             <h3>{{ "メンバースペース：" | phrase }}{{ "いつでも見返せる、戦略の引き出し" | phrase }}</h3>
-            <p>入会した日から、第1回からのすべての回を見返せます（A・B日程それぞれの録画と音声、文字起こし、ダイジェスト記事、スライド、使ったファイルと指示文）。各回を場面ごとに見返せるビューア、「必見だけ20分」の見方、第1回からの記録を言葉で探して聞ける機能、社内の会議でそのまま使えるツール。製造業・金融・官公庁・物流・小売・建設など、業界×業務で並べた課題の棚（AIで解決に挑戦できるテーマ集。{{ L.issues_count or "2,000件超" }}）も。</p>
+            <p>入会した日から、{{ since }}以降のすべての回を見返せます（A・B日程それぞれの録画と音声、文字起こし、ダイジェスト記事、スライド、使ったファイルと指示文）。各回を場面ごとに見返せるビューア、「必見だけ20分」の見方、これまでの記録を言葉で探して聞ける機能、社内の会議でそのまま使えるツール。製造業・金融・官公庁・物流・小売・建設など、業界×業務で並べた課題の棚（AIで解決に挑戦できるテーマ集。{{ L.issues_count or "2,000件超" }}）も。</p>
           </div>
         </article>
         <article class="st-row">
@@ -213,15 +218,15 @@
         {%- if recent_img %}
         <figure class="st-recent__media">
           <div class="st-stack">
-            {{ lp.shot(recent_img, "第" ~ latest.round ~ "回の対話アリーナの画面") }}
-            {{ lp.shot(img.recent2, "第" ~ latest.round ~ "回の全員の対話の軌跡", "st-shot--float") }}
+            {{ lp.shot(recent_img, round_month(latest.round) ~ "の対話アリーナの画面") }}
+            {{ lp.shot(img.recent2, round_month(latest.round) ~ "の全員の対話の軌跡", "st-shot--float") }}
           </div>
           {%- set rc = cap.recent if img.recent else latest.highlight_caption -%}
           {%- if rc %}<figcaption>{{ rc }}</figcaption>{% endif %}
         </figure>
         {%- endif %}
         <div class="st-recent__body">
-          <p class="st-recent__k">第{{ latest.round }}回{% if latest.month %}（{{ latest.month }}）{% endif %}</p>
+          <p class="st-recent__k">{{ round_month(latest.round) }}</p>
           <h3>{{ latest.title.split(' ── ')[0] }}</h3>
           {%- if L.recent_prompt and L.recent_round == latest.round %}
           <p class="st-recent__q"><span>お題</span>{{ L.recent_prompt }}</p>
@@ -232,18 +237,20 @@
           {%- endif %}
           <div class="st-next">
             <p class="st-next__k">次回</p>
-            {{ schedule_upcoming(1, "start") }}
+            {{ schedule_upcoming(1, "start", month=true, bridge=true) }}
             <p class="st-next__note">オンライン（Zoom）・20:00〜22:30ごろ。AとBは同じ内容で、この回を開くのは、この2日程だけです。途中の回から参加できます。</p>
           </div>
         </div>
       </div>
-      {%- set first_a = (ex.schedule | first).a -%}
+      {#- 回は開催月で（A日程の月）。年は見出しにあるので、年が変わった回にだけ添える（2027年1月） #}
       <div class="st-history">
-        <p class="st-history__k">{{ first_a[:4] }}年{{ first_a[5:7] | int }}月から、毎月開いています</p>
+        <p class="st-history__k">{{ since }}から、毎月開いています</p>
         <ol class="st-history__list">
+          {%- set ns = namespace(y=first_a[:4]) %}
           {%- for r in ex.history | reverse %}
           {%- set sch = ex.schedule | selectattr("round", "equalto", r.round) | first %}
-          <li><span class="st-history__no">第{{ r.round }}回</span>{% if sch %}<span class="st-history__m">{{ sch.a[5:7] | int }}月</span>{% endif %}<span class="st-history__t">{{ r.title.split(' ── ')[0] }}</span></li>
+          {%- if sch %}{% set y = sch.a[:4] %}{% endif %}
+          <li>{% if sch %}<span class="st-history__m">{% if y != ns.y %}{{ y }}年{% endif %}{{ sch.a[5:7] | int }}月</span>{% set ns.y = y %}{% endif %}<span class="st-history__t">{{ r.title.split(' ── ')[0] | phrase }}</span></li>
           {%- endfor %}
         </ol>
         <p class="st-history__more"><a href="{{ 'sessions/history/' | url }}" target="_blank" rel="noopener">各回の発見は、開催履歴で読めます →</a></p>
@@ -329,7 +336,7 @@
         {%- endfor %}
       </div>
       <p class="st-note">※ {{ st.satisfaction }}は、{{ st.satisfaction_note }}</p>
-      <p class="st-note st-note--tight">参加者の声は、第1〜6回の参加者アンケートの自由記述で多かった趣旨をまとめ直したものです（個々の回答の引用ではありません）。立場は、自由記述に書かれていたものの例です。</p>
+      <p class="st-note st-note--tight">参加者の声は、同じアンケートの自由記述で多かった趣旨をまとめ直したものです（個々の回答の引用ではありません）。立場は、自由記述に書かれていたものの例です。</p>
     </div>
   </section>
 
@@ -389,7 +396,7 @@
           <ul class="st-checks st-checks--plan">
             {%- for t in [
               "毎月の実践の回（A・Bの2日程、同じ内容）",
-              "第1回からのすべての記録（録画・文字起こし・スライド・使ったファイルや指示文）",
+              "これまでのすべての回の記録（録画・文字起こし・スライド・使ったファイルや指示文）",
               "メンバースペース（すべての記録、探す・聞く、ツール、課題の棚）",
               "毎朝のAIニュース解釈と、メンバー限定のコミュニティ",
             ] %}
@@ -496,7 +503,7 @@
       <h2>{{ "AI前提の事業構想を、" | phrase }}{{ "次の回から。" | phrase }}</h2>
       <div class="st-final__next">
         <span class="st-final__k">次回</span>
-        {{ schedule_upcoming(1, "band") }}
+        {{ schedule_upcoming(1, "band", month=true) }}
       </div>
       <a class="st-btn st-btn--light" href="{{ ex.join_url }}" data-cta="final">{{ join_label }}</a>
       <p class="st-final__price">初月無料・以降は月額{{ pr.early_monthly_incl }}円（税込）</p>

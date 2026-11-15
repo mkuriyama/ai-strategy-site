@@ -814,6 +814,9 @@ a.chip:hover { border-color: var(--teal2); background: var(--pale); }
   background: var(--teal2); border-radius: 20px; padding: 1px 10px; }
 .sch-round__theme { font-family: var(--serif); font-weight: 700; color: var(--teal); font-size: 16.5px; line-height: 1.45; }
 .sch-round__theme--tbd { font-family: var(--sans); font-weight: 500; color: var(--muted); font-size: 14px; }
+/* 広告用LP の次回の枠：回を月で呼び、入会後の呼び方（第7回）を小さく添える（hooks/schedule.py の bridge） */
+.sch-round__alt { font-family: var(--sans); font-weight: 500; font-size: 13px; color: var(--muted);
+  letter-spacing: 0; margin-left: 4px; white-space: nowrap; }
 .md-typeset .sch-round__q, .sch-round__q { margin-top: 4px; font-size: 13.5px; line-height: 1.6; color: #33474c; }
 .md-typeset .sch-round__same, .sch-round__same { margin-top: 8px; font-size: 12.5px; color: var(--muted); }
 .sch-up__empty { font-size: 14px; color: var(--muted); }
@@ -1179,11 +1182,12 @@ body:has(.st) .md-main { background: #fff; }
 .st .st-history { margin-top: 36px; padding-top: 24px; border-top: 1px solid #e1eaec; }
 .st .st-history__k { font-family: var(--serif); font-size: 19px; font-weight: 700; color: var(--teal); margin-bottom: 14px; }
 .st .st-history__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
-.st .st-history__list li { display: grid; grid-template-columns: auto auto minmax(0, 1fr); gap: 4px 10px; align-items: baseline;
-  background: var(--pale); border-radius: 10px; padding: 12px 14px; }
-.st .st-history__no { font-size: 12.5px; font-weight: 700; color: #fff; background: var(--teal); border-radius: 999px; padding: 1px 10px; }
-.st .st-history__m { font-size: 13px; font-weight: 700; color: var(--teal2); }
-.st .st-history__t { font-size: 14.5px; line-height: 1.6; color: #1f2d31; }
+.st .st-history__list li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 10px; align-items: baseline;
+  align-content: start; background: var(--pale); border-radius: 10px; padding: 12px 14px; }
+/* 回は開催月で（「第N回」は出さない。年が変わった回だけ「2027年1月」）。5月と10月で幅を揃え、題の頭を揃える */
+.st .st-history__m { font-size: 12.5px; font-weight: 700; color: #fff; background: var(--teal); border-radius: 999px;
+  padding: 1px 10px; min-width: 4.2em; text-align: center; white-space: nowrap; justify-self: start; }
+.st .st-history__t { font-size: 14.5px; line-height: 1.6; color: #1f2d31; word-break: keep-all; overflow-wrap: anywhere; }
 .st .st-history__more { margin-top: 14px; font-size: 14px; }
 
 /* ⑧ メンバーとして参加する */

@@ -47,7 +47,7 @@
 
       <div class="st-nextread">
         <h2>次に読むもの</h2>
-        <p><a href="{{ 'sessions/history/' | url }}">第{{ latest.round }}回の発見を読む（開催履歴）→</a></p>
+        <p><a href="{{ 'sessions/history/' | url }}">{{ round_month(latest.round) }}の発見を読む（開催履歴）→</a></p>
         <p><a href="{{ ex.news_site_url }}" target="_blank" rel="noopener" data-ga="click_library" data-ga-pos="thanks">今朝のAI戦略ライブラリーを見る →</a></p>
       </div>
     </div>
