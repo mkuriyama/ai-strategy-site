@@ -1167,6 +1167,7 @@ body:has(.st) .md-main { background: #fff; }
 .st .st-flow__afters .st-flow__after { margin-top: 0; }
 .st .st-flow__facts { list-style: none; margin: 18px 0 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px 24px; }
 .st .st-flow__facts li { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; line-height: 1.7; color: #2b3a3f; }
+.st .st-flow__facts li > span { word-break: keep-all; overflow-wrap: anywhere; }   /* 句の切れ目で改行（phrase） */
 .st .st-flow__facts .lp-check { width: 20px; height: 20px; margin-top: 3px; color: var(--teal); flex: none; }
 
 /* ⑥ 得られるもの：冒頭の一文 */

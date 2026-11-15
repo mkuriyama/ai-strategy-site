@@ -238,7 +238,7 @@
           <div class="st-next">
             <p class="st-next__k">次回</p>
             {{ schedule_upcoming(1, "start", month=true, bridge=true) }}
-            <p class="st-next__note">オンライン（Zoom）・20:00〜22:30ごろ。AとBは同じ内容で、この回を開くのは、この2日程だけです。途中の回から参加できます。</p>
+            <p class="st-next__note">オンライン（Zoom）・20:00〜22:30ごろ。AとBは同じ内容で、この回を開くのは、この2日程だけです。各回は独立したテーマで、いつからでも参加できます。</p>
           </div>
         </div>
       </div>
@@ -368,14 +368,14 @@
       </div>
       <ul class="st-flow__facts">
         {%- for t in [
-          "各回は独立したテーマ。途中の回から参加できます",
+          "各回は独立したテーマ。いつからでも参加できます",
           "A・Bの2日程は同じ内容。どちらかに参加すれば十分です",
           "カメラや発言は必須ではありません",
           "事前課題はありません",
           "用意するもの：Zoomが使えるパソコン、個人のGoogleアカウント（Gmail。Google Colab と資料の共有に使います）、無料版でよいので ChatGPT・Claude・Gemini・Copilot などいずれかのAIのアカウント",
           "追加の費用なしで、どの体験もできるように用意しています",
         ] %}
-        <li>{{ lp.check() }}<span>{{ t }}</span></li>
+        <li>{{ lp.check() }}<span>{{ t | phrase }}</span></li>
         {%- endfor %}
       </ul>
     </div>
