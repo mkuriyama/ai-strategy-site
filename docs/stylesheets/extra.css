@@ -1138,7 +1138,13 @@ body:has(.st) .md-main { background: #fff; }
 .st .st-change__item { background: #fff; border: 1px solid #d7e4e6; border-radius: 16px; padding: 22px 20px 20px;
   display: flex; flex-direction: column; gap: 14px; box-shadow: 0 12px 30px -26px rgba(0,48,57,.6); }
 .home-landing.st .st-change__item h3 { font-family: var(--serif); font-size: 19px; line-height: 1.55; color: var(--teal); margin: 0; }
-.st .st-change__voice { margin: 0; padding: 0; border: 0; font-size: 15.5px; line-height: 1.85; color: #2b3a3f; }
+.st .st-change__voice { margin: 0; padding: 0; border: 0; font-size: 15.5px; line-height: 1.85; color: #2b3a3f;
+  word-break: keep-all; overflow-wrap: anywhere; }
+.st .st-change__tag { margin: 0 0 6px; display: inline-block; align-self: flex-start; width: fit-content; font-size: 12px; font-weight: 700; color: var(--teal);
+  background: #e3eff1; border-radius: 999px; padding: 1px 10px; }
+.st .st-change__who { margin: 12px 0 0; padding-top: 10px; border-top: 1px dashed #d7e4e6; font-size: 13px; line-height: 1.7; color: #3d5258;
+  word-break: keep-all; overflow-wrap: anywhere; }
+.st .st-change__who span { display: block; font-size: 12px; font-weight: 700; letter-spacing: .04em; color: var(--teal); margin-bottom: 2px; }
 
 /* ⑤ 1回の流れ */
 .st .st-flow__meta { display: inline-block; font-size: 14px; font-weight: 700; color: var(--teal); background: #fff;
