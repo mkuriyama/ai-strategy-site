@@ -54,7 +54,7 @@
 <div class="lp-turnstile"></div>
 {%- endmacro %}
 
-{#- 広告用LP（/start/・/start/thanks/）の先頭の帯。ロゴ・ページ内の移動・「参加する」（料金の枠へ）。
+{#- 広告用LP（/start/・/start/thanks/）の先頭の帯。ロゴ・ページ内の移動・「参加費・お申し込み」（料金の枠へ）。
     外のページへのナビは置かない。nav=False でロゴだけ（登録直後の画面） -#}
 {% macro st_bar(home="#top", nav=True) -%}
 <header class="st-bar">
@@ -64,10 +64,12 @@
     <nav class="st-bar__nav" aria-label="このページの中">
       <a href="#benefits">得られるもの</a>
       <a href="#recent">実際の回</a>
+      <a href="#host">主催者</a>
       <a href="#flow">1回の流れ</a>
       <a href="#faq">よくある質問</a>
     </nav>
-    <a class="st-bar__join" href="#join">参加する</a>
+    {#- 料金の枠へ移るだけ（押すと決済が始まりそう、と読まれないように。栗山さん、2026-11-15）。狭い携帯では短く #}
+    <a class="st-bar__join" href="#join"><span class="st-bar__long">参加費・お申し込み</span><span class="st-bar__short">参加費・申込</span></a>
     {%- endif %}
   </div>
 </header>

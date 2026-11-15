@@ -968,34 +968,44 @@ body:has(.st) .md-main { background: #fff; }
 /* 先頭の帯：ロゴ・ページ内の移動・「参加する」。スクロールしても上に残る */
 .st .st-bar { position: sticky; top: 0; z-index: 4; background: var(--teal);
   box-shadow: 0 6px 18px -14px rgba(0,30,36,.9); }
-.st .st-bar__in { display: flex; align-items: center; gap: 20px; min-height: 52px; }
+.st .st-bar__in { display: flex; align-items: center; gap: 16px; min-height: 52px; }
 .st .st-bar__brand { display: flex; align-items: center; }
-.st .st-bar__brand img { display: block; height: 26px; width: auto; }
+.st .st-bar__brand img { display: block; height: 24px; width: auto; }
 .st .st-bar__nav { display: none; margin-left: auto; gap: 26px; }
-.st .st-bar__nav a { font-size: 14px; color: rgba(255,255,255,.86); }
+.st .st-bar__nav a { font-size: 14px; color: rgba(255,255,255,.86); white-space: nowrap; }
 .st .st-bar__nav a:hover { color: #fff; }
 .st .st-bar__join { margin-left: auto; font-size: 14px; font-weight: 700; color: var(--teal); background: #fff;
   padding: 5px 14px; border-radius: 6px; line-height: 1.6; }
 .st .st-bar__join:hover { background: var(--pale); color: var(--teal); }
+.st .st-bar__join { white-space: nowrap; font-size: 13.5px; padding: 5px 12px; }
+.st .st-bar__short { display: none; }
+/* 幅370px未満の携帯では「参加費・申込」に縮め、ロゴも少し小さくする（370px〜は「参加費・お申し込み」が収まる） */
+@media (max-width: 369px) {
+  .st .st-bar__long { display: none; }
+  .st .st-bar__short { display: inline; }
+  .st .st-bar__in { gap: 12px; }
+  .st .st-bar__brand img { height: 22px; }
+  .st .st-bar__join { font-size: 13px; padding: 5px 10px; }
+}
 
 /* ① 最初の画面（ホームのヒーローと同じ、明るい地に明朝の見出し） */
-.st .st-hero { background: linear-gradient(180deg, #f2f7f7 0%, #fff 100%); padding: 24px 0 36px;
+.st .st-hero { background: linear-gradient(180deg, #f2f7f7 0%, #fff 100%); padding: 14px 0 32px;
   border-bottom: 1px solid #e3ecee; }
-.st .st-hero__grid { display: grid; grid-template-columns: minmax(0, 1fr); row-gap: 20px;
-  grid-template-areas: "head" "facts" "visual" "trust" "act"; }
+.st .st-hero__grid { display: grid; grid-template-columns: minmax(0, 1fr); row-gap: 14px;
+  grid-template-areas: "head" "visual" "trust" "facts" "act"; }
 .st .st-hero__head { grid-area: head; }
 .st .st-hero__visual { grid-area: visual; }
 .st .st-hero__trust { grid-area: trust; }
 .st .st-hero__act { grid-area: act; }
 .st .st-hero__facts { grid-area: facts; }
 .st .st-eyebrow { display: flex; align-items: center; gap: 8px; font-size: 13px; letter-spacing: .03em;
-  color: var(--muted); margin-bottom: 14px; }
+  color: var(--muted); margin-bottom: 8px; }
 .st .st-eyebrow .cmark { width: 22px; height: 15px; flex: none; }
 .st .st-eyebrow b { color: var(--teal); font-weight: 700; }
-.home-landing.st .st-hero h1 { font-family: var(--serif); color: var(--teal); font-size: 31px; line-height: 1.5;
+.home-landing.st .st-hero h1 { font-family: var(--serif); color: var(--teal); font-size: 31px; line-height: 1.42;
   margin: 0; letter-spacing: .01em; font-weight: 700; }
 .st .st-mark { background: linear-gradient(transparent 72%, rgba(28,110,124,.16) 72%); }
-.st .st-hero__lead { font-size: 16px; line-height: 1.95; color: #2b3a3f; margin-top: 16px;
+.st .st-hero__lead { font-size: 16px; line-height: 1.78; color: #2b3a3f; margin-top: 12px;
   word-break: keep-all; overflow-wrap: anywhere; text-wrap: pretty; }
 /* 開催のかたち（Zoom・2日程・録画）。補足のすぐ下に、札と短い一文で */
 .st .st-hero__facts { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
@@ -1005,14 +1015,16 @@ body:has(.st) .md-main { background: #fff; }
 .st .st-hero__facts dd { margin: 0; font-size: 14px; line-height: 1.65; color: #2b3a3f;
   word-break: keep-all; overflow-wrap: anywhere; }
 .st .st-hero__visual { margin: 0; }
-.st .st-stack--hero { padding-bottom: 22%; }
+.st .st-stack--hero { padding-bottom: 2%; }
 .st .st-stack--hero > .st-shot:first-child { width: 94%; }
-.st .st-stack--hero > .st-shot--float { width: 42%; box-shadow: 0 16px 36px -18px rgba(0,48,57,.6); }
-.st .st-hero__visual figcaption { font-size: 12px; line-height: 1.55; color: var(--muted); margin-top: 12px; }
+.st .st-stack--hero > .st-shot--float { width: 40%; box-shadow: 0 16px 36px -18px rgba(0,48,57,.6); }
+.st .st-hero__visual figcaption { font-size: 12px; line-height: 1.55; color: var(--muted); margin-top: 8px; }
+/* 携帯は短い説明（1行）、760px〜は長い説明 */
+.st .st-cap--pc { display: none; }
 .st .st-hero__host { display: flex; gap: 14px; align-items: center; }
 .st .st-hero__host img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; flex: none;
   border: 2px solid #fff; box-shadow: 0 4px 14px -6px rgba(0,48,57,.5); }
-.st .st-hero__host p { font-size: 13.5px; line-height: 1.7; color: #2b3a3f; }
+.st .st-hero__host p { font-size: 13.5px; line-height: 1.62; color: #2b3a3f; }
 .home-landing.st .st-hero__host strong { display: block; color: #0f2f37; font-size: 14.5px; }
 .st .st-hero__stats { list-style: none; margin: 14px 0 0; padding: 0; display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
@@ -1022,7 +1034,12 @@ body:has(.st) .md-main { background: #fff; }
 .st .st-hero__stats b { font-family: var(--serif); font-size: 18px; line-height: 1.3; color: var(--teal); }
 .st .st-hero__stats span { font-size: 12px; line-height: 1.45; color: var(--muted); }
 .st .st-hero__cta { margin: 0; }
-.st .st-hero__note { font-size: 14px; line-height: 1.75; color: #3d5258; margin-top: 10px;
+.st .st-hero__buy { display: flex; flex-direction: column; gap: 8px; }
+.st .st-hero__price { margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: center; gap: 0 10px; }
+.st .st-hero__price span { font-size: 13px; color: var(--muted); }
+.home-landing.st .st-hero__price b { font-size: 17px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+.st .st-hero__price small { font-size: 12.5px; font-weight: 400; color: var(--muted); }
+.st .st-hero__note { font-size: 13.5px; line-height: 1.7; color: #3d5258; margin-top: 8px;
   word-break: keep-all; overflow-wrap: anywhere; text-wrap: pretty; }
 .home-landing.st .st-hero__note b { color: var(--ink); font-weight: 700; }
 .st .st-hero__links { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
@@ -1188,6 +1205,7 @@ body:has(.st) .md-main { background: #fff; }
 .st .pay-now b { color: var(--teal); white-space: nowrap; }
 .st .st-hero__cta .pay-now { margin-top: 12px; }
 .st .st-hero__cta .pay-now__row { font-size: 15px; line-height: 1.75; font-weight: 600; color: var(--ink); }
+.st .st-hero__cta .pay-now__sub { display: block; font-size: 14px; font-weight: 400; color: #3d5258; margin-top: 2px; }
 /* お申し込みの流れ（料金の枠の横。携帯では下） */
 .st .st-join__side { display: flex; flex-direction: column; gap: 18px; }
 .st .st-steps { background: #fff; border: 1px solid #d7e4e6; border-radius: 16px; padding: 22px 20px 24px; }
@@ -1248,9 +1266,13 @@ body:has(.st) .md-main { background: #fff; }
   .st .st-sticky .st-btn { min-height: 48px; font-size: 15.5px; }
   .st .st-sticky.is-hidden { transform: translateY(120%); }
 }
-/* 幅375pxの携帯（iPhone SE・mini）でも、見出しの1行目を折り返さない */
+/* 幅360〜375pxの携帯（iPhone SE・mini・小さめの Android）でも、見出しの1行目を折り返さず、補足を4行に収める */
 @media (max-width: 384px) {
-  .home-landing.st .st-hero h1 { font-size: 29px; }
+  .home-landing.st .st-hero h1 { font-size: 28px; }
+  .st .st-hero__lead { font-size: 15px; }
+}
+@media (max-width: 340px) {
+  .home-landing.st .st-hero h1 { font-size: 25px; }
 }
 @media (min-width: 760px) {
   .st .st-wrap { padding: 0 32px; }
@@ -1258,8 +1280,7 @@ body:has(.st) .md-main { background: #fff; }
   .home-landing.st h2 { font-size: 30px; margin-bottom: 24px; }
   .st .st-bar__in { min-height: 64px; }
   .st .st-bar__brand img { height: 32px; }
-  .st .st-bar__nav { display: flex; }
-  .st .st-bar__join { margin-left: 8px; padding: 7px 18px; }
+  .st .st-bar__join { font-size: 14px; padding: 7px 18px; }
   .st .st-row { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 44px; }
   .st .st-row:nth-child(even) .st-row__media { order: 2; }
   .st .st-row--open { padding: 36px 36px; }
@@ -1272,6 +1293,10 @@ body:has(.st) .md-main { background: #fff; }
   .st .st-flow__facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .st .st-history__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .st .st-hero__cta .st-btn { display: inline-flex; }
+  .st .st-hero__buy { flex-direction: row; align-items: center; gap: 18px; }
+  .st .st-cap--sp { display: none; }
+  .st .st-cap--pc { display: inline; }
+  .st .st-hero__price { flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 0; line-height: 1.45; }
   .st .st-host { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 44px; align-items: start; }
   .st .st-host__who { flex-direction: column; align-items: flex-start; gap: 14px; }
   .st .st-host__who img { width: 200px; height: 200px; border-radius: 16px; }
@@ -1292,9 +1317,14 @@ body:has(.st) .md-main { background: #fff; }
   .st .st-final { padding: 64px 0 68px; }
   .home-landing.st .st-final h2 { font-size: 34px; }
 }
+/* 帯のページ内の移動（5項目）は、1行に収まる 1024px から。それより狭い幅はロゴとボタンだけ */
+@media (min-width: 1024px) {
+  .st .st-bar__nav { display: flex; }
+  .st .st-bar__join { margin-left: 8px; }
+}
 @media (min-width: 1080px) {
-  .st .st-hero { padding: 44px 0 40px; }
-  .st .st-hero__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); column-gap: 56px; row-gap: 22px;
+  .st .st-hero { padding: 32px 0 36px; }
+  .st .st-hero__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); column-gap: 56px; row-gap: 18px;
     grid-template-areas: "head visual" "act visual" "act facts" "trust trust"; }
   /* 開催のかたちは、PC では画面の写真の下（左の列は見出し・補足・申込ボタンのまま。最初の画面に主催者と実績の帯まで収める） */
   .st .st-hero__facts { align-self: start; }
@@ -1302,14 +1332,14 @@ body:has(.st) .md-main { background: #fff; }
   .st .st-hero__act { align-self: start; }
   /* 主催者と実績：横一列の帯（写真と見出しの下を、左右いっぱいに使う） */
   .st .st-hero__trust { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.6fr); align-items: center; gap: 24px;
-    margin-top: 10px; background: #fff; border: 1px solid #dbe7e9; border-radius: 14px; padding: 16px 20px;
+    margin-top: 4px; background: #fff; border: 1px solid #dbe7e9; border-radius: 14px; padding: 16px 20px;
     box-shadow: 0 14px 34px -30px rgba(0,48,57,.6); }
   .st .st-hero__trust .st-hero__stats { margin: 0; max-width: none; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.35fr); gap: 0; }
   .st .st-hero__trust .st-hero__stats b { white-space: nowrap; }
   .st .st-hero__trust .st-hero__stats li { background: none; border: 0; border-left: 1px solid #e1eaec; border-radius: 0; padding: 4px 8px; }
   .st .st-hero__trust .st-hero__stats b { font-size: 21px; }
   .home-landing.st .st-hero h1 { font-size: 42px; line-height: 1.45; }
-  .st .st-hero__lead { font-size: 17px; margin-top: 22px; }
+  .st .st-hero__lead { font-size: 17px; line-height: 1.9; margin-top: 18px; }
   .st .st-hero__facts dd { font-size: 15px; }
   .st .st-hero__visual { margin: 0; align-self: center; }
   .st .st-stack--hero > .st-shot:first-child { transform: rotate(.4deg); }

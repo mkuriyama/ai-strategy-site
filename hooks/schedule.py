@@ -197,7 +197,7 @@ def on_env(env, config, files):
         schedule_list=lambda: schedule_list_html(extra),
         payment_table=lambda: payment_table_html(extra),
         # phrase（hooks/phrases.py）は後の hook が登録する。呼ばれる時（ページを描くとき）に取りに行く
-        pay_now=lambda detail=False: pay_now_html(extra, detail, ph=env.filters.get("phrase")),
+        pay_now=lambda detail=False, cancel=False: pay_now_html(extra, detail, ph=env.filters.get("phrase"), cancel=cancel),
         participation=lambda title="有償メンバーとして参加する前に": participation_html(extra, title),
     )
     return env
@@ -336,7 +336,7 @@ def payment_table_html(extra, rows: int = 3) -> str:
 PAY_NOW_FALLBACK = "お申し込みのあと最初の回は無料で参加でき、初回のお支払いはその回のあとの15日です。"
 
 
-def pay_now_html(extra, detail: bool = False, rows: int = 4, ph=None) -> str:
+def pay_now_html(extra, detail: bool = False, rows: int = 4, ph=None, cancel: bool = False) -> str:
     """「今日お申し込みの場合」の一文（広告用LP の最初の画面と料金の枠）。
 
     `payment_windows()` と同じ決まり（＝申込用 GAS の COHORT_SCHEDULE）で、いまの受付の回を選ぶ。
@@ -348,6 +348,7 @@ def pay_now_html(extra, detail: bool = False, rows: int = 4, ph=None) -> str:
       2つ残っているあいだは「（11/17(火)・11/30(月)の都合のよい方）」（`data-now-either`）。
       両方済んだあと（B日程の夜）は、その部分（`data-now-free`）を隠す
     - detail=True：解約の期限（初回のお支払い日の前日）と、毎月15日の更新も書く
+    - cancel=True：解約の期限だけを、次の行（`pay-now__sub`）に書く（広告用LP の最初の画面）
     - どの受付にも当たらないとき（次の回が未定）は、日付のない一文（`data-now-fallback`）
     - ph：句の切れ目に改行位置（<wbr>）を入れる関数（テンプレートのフィルター `phrase`。hooks/phrases.py）。
       行は CSS で keep-all にしてあるので、文の部分はすべて ph を通す（日付は nowrap の span）
@@ -356,8 +357,16 @@ def pay_now_html(extra, detail: bool = False, rows: int = 4, ph=None) -> str:
     ws = [w for w in payment_windows(extra) if when < w["end"]][:rows]
     t = (lambda x: str(ph(x))) if ph else _e
 
-    def tail(dl: str) -> str:
-        return t("合わなければ、") + dl + t("までの解約で費用はかかりません。") + t("以降は毎月15日に更新します。")
+    def tail(dl: str, renew: bool = True) -> str:
+        s = t("合わなければ、") + dl + t("までの解約で費用はかかりません。")
+        return s + (t("以降は毎月15日に更新します。") if renew else "")
+
+    def after(dl: str) -> str:
+        if detail:
+            return tail(dl)
+        if cancel:
+            return f'<span class="pay-now__sub">{tail(dl, renew=False)}</span>'
+        return ""
     out = ['<div class="pay-now" data-pay-now>']
     current_found = False
     for w in ws:
@@ -380,9 +389,9 @@ def pay_now_html(extra, detail: bool = False, rows: int = 4, ph=None) -> str:
         out.append(f'<p class="pay-now__row"{attrs}{"" if on else " hidden"}>{t("今日お申し込みの場合、")}'
                    f'<span data-now-free{"" if free else " hidden"}>第{r["round"]}回（{"".join(ds)}）'
                    f'{t("に無料で参加でき、")}</span>{t("初回のお支払いは")}<b>{_e(md(w["pay"], when))}</b>{t("です。")}'
-                   + (tail(dl) if detail else "")
+                   + after(dl)
                    + "</p>")
-    fb = t(PAY_NOW_FALLBACK) + (tail(t("初回のお支払い日の前日")) if detail else "")
+    fb = t(PAY_NOW_FALLBACK) + after(t("初回のお支払い日の前日"))
     out.append(f'<p class="pay-now__row" data-now-fallback{" hidden" if current_found else ""}>{fb}</p>')
     out.append("</div>")
     return "\n".join(out)
