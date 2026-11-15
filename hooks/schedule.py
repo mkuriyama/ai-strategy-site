@@ -196,7 +196,8 @@ def on_env(env, config, files):
         schedule_upcoming=lambda n=2, variant="": upcoming_html(extra, n, variant),
         schedule_list=lambda: schedule_list_html(extra),
         payment_table=lambda: payment_table_html(extra),
-        pay_now=lambda detail=False: pay_now_html(extra, detail),
+        # phrase（hooks/phrases.py）は後の hook が登録する。呼ばれる時（ページを描くとき）に取りに行く
+        pay_now=lambda detail=False: pay_now_html(extra, detail, ph=env.filters.get("phrase")),
         participation=lambda title="有償メンバーとして参加する前に": participation_html(extra, title),
     )
     return env
@@ -335,7 +336,7 @@ def payment_table_html(extra, rows: int = 3) -> str:
 PAY_NOW_FALLBACK = "お申し込みのあと最初の回は無料で参加でき、初回のお支払いはその回のあとの15日です。"
 
 
-def pay_now_html(extra, detail: bool = False, rows: int = 4) -> str:
+def pay_now_html(extra, detail: bool = False, rows: int = 4, ph=None) -> str:
     """「今日お申し込みの場合」の一文（広告用LP の最初の画面と料金の枠）。
 
     `payment_windows()` と同じ決まり（＝申込用 GAS の COHORT_SCHEDULE）で、いまの受付の回を選ぶ。
@@ -344,13 +345,19 @@ def pay_now_html(extra, detail: bool = False, rows: int = 4) -> str:
     いまの受付から rows 回ぶんの行を入れておく（2行目からは `hidden`）。
 
     - 無料で参加できる日程は、まだ済んでいないものだけ出す（A日程が済んだら B日程だけ）。
+      2つ残っているあいだは「（11/17(火)・11/30(月)の都合のよい方）」（`data-now-either`）。
       両方済んだあと（B日程の夜）は、その部分（`data-now-free`）を隠す
     - detail=True：解約の期限（初回のお支払い日の前日）と、毎月15日の更新も書く
     - どの受付にも当たらないとき（次の回が未定）は、日付のない一文（`data-now-fallback`）
+    - ph：句の切れ目に改行位置（<wbr>）を入れる関数（テンプレートのフィルター `phrase`。hooks/phrases.py）。
+      行は CSS で keep-all にしてあるので、文の部分はすべて ph を通す（日付は nowrap の span）
     """
     when = now()
     ws = [w for w in payment_windows(extra) if when < w["end"]][:rows]
-    tail = "合わなければ、{dl}までの解約で費用はかかりません。以降は毎月15日に更新します。"
+    t = (lambda x: str(ph(x))) if ph else _e
+
+    def tail(dl: str) -> str:
+        return t("合わなければ、") + dl + t("までの解約で費用はかかりません。") + t("以降は毎月15日に更新します。")
     out = ['<div class="pay-now" data-pay-now>']
     current_found = False
     for w in ws:
@@ -361,18 +368,22 @@ def pay_now_html(extra, detail: bool = False, rows: int = 4) -> str:
         ds = []
         for i, d in enumerate(r["days"]):
             if i:
-                ds.append('<span class="pay-now__sep">か</span>')
+                ds.append('<span class="pay-now__sep">・</span>')
             h = held(d["at"], when)
             ds.append(f'<span class="pay-now__d{" is-held" if h else ""}" data-at="{_iso(d["at"])}">'
                       f'{_e(md(d["at"], when))}</span>')
+        # 2日程が残っているあいだは「の都合のよい方」を添える（日程が未定なのではなく、どちらかを選ぶ。
+        # 「11/17(火)か11/30(月)」は未定と読まれうる。栗山さん、2026-11-15）。1つになったら schedule.js が隠す
+        ds.append(f'<span class="pay-now__either" data-now-either{"" if len(free) > 1 else " hidden"}>{t("の都合のよい方")}</span>')
         attrs = (f' data-now-start="{_iso(w["start"])}"' if w["start"] else "") + f' data-now-end="{_iso(w["end"])}"'
-        out.append(f'<p class="pay-now__row"{attrs}{"" if on else " hidden"}>今日お申し込みの場合、'
-                   f'<span data-now-free{"" if free else " hidden"}>第{r["round"]}回（{"".join(ds)}）に'
-                   f'無料で参加でき、</span>初回のお支払いは<b>{_e(md(w["pay"], when))}</b>です。'
-                   + (tail.format(dl=_e(md(w["pay"] - dt.timedelta(days=1), when))) if detail else "")
+        dl = f'<span class="pay-now__nw">{_e(md(w["pay"] - dt.timedelta(days=1), when))}</span>'
+        out.append(f'<p class="pay-now__row"{attrs}{"" if on else " hidden"}>{t("今日お申し込みの場合、")}'
+                   f'<span data-now-free{"" if free else " hidden"}>第{r["round"]}回（{"".join(ds)}）'
+                   f'{t("に無料で参加でき、")}</span>{t("初回のお支払いは")}<b>{_e(md(w["pay"], when))}</b>{t("です。")}'
+                   + (tail(dl) if detail else "")
                    + "</p>")
-    fb = PAY_NOW_FALLBACK + (tail.format(dl="初回のお支払い日の前日") if detail else "")
-    out.append(f'<p class="pay-now__row" data-now-fallback{" hidden" if current_found else ""}>{_e(fb)}</p>')
+    fb = t(PAY_NOW_FALLBACK) + (tail(t("初回のお支払い日の前日")) if detail else "")
+    out.append(f'<p class="pay-now__row" data-now-fallback{" hidden" if current_found else ""}>{fb}</p>')
     out.append("</div>")
     return "\n".join(out)
 

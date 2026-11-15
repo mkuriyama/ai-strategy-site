@@ -48,8 +48,17 @@
       <div class="st-hero__head">
         <p class="st-eyebrow">{{ lp.cmark() }}<span>ツールとしてのAI</span><span aria-hidden="true">→</span><b>戦略としてのAI</b></p>
         <h1><span class="st-mark">{{ "AI前提で事業を構想し、" | phrase }}</span><br>{{ "実現できる人へ。" | phrase }}</h1>
-        <p class="st-hero__lead">AIを便利な道具として使うだけで終わらせない。月に一度、自社の問いを持ち寄り、AIで実際に作り、事業戦略に戻す実践の場です。</p>
+        {#- 補足：テーマは主催者が毎回立てる（参加者が問いを持ち寄る手順はない）。作るだけでなく、動かして初めて分かることを
+            起点に戦略を考える（栗山さん、2026-11-15。第6回は、AI対話の人による差を目の当たりにしてから戦略への影響を考えた） #}
+        <p class="st-hero__lead">{{ "AIを便利な道具として使うだけで終わらせない。" | phrase }}{{ "月に一度、新しいテーマでAIを実際に動かし、そこで初めて分かることを事業戦略に持ち帰る実践の場です。" | phrase }}</p>
       </div>
+      {#- 開催のかたち（最初の画面で伝える。栗山さん、2026-11-15）：Zoom・時刻／同じ内容の2日程（未定ではなく、都合のよい方を選ぶ）／
+          参加できない回の録画。時刻は 1回の流れ・次回の枠と同じ。録画は「追いつく」ためではなく、参加できなかった回を知るためのもの #}
+      <dl class="st-hero__facts">
+        <div><dt>開催</dt><dd>{{ "Zoom・20:00〜22:30ごろ" | phrase }}</dd></div>
+        <div><dt>日程</dt><dd>{{ "同じ内容を曜日違いの2日程で。どちらかに" | phrase }}</dd></div>
+        <div><dt>録画</dt><dd>{{ "参加できない回も、あとから見返せる" | phrase }}</dd></div>
+      </dl>
       {%- if img.hero %}
       <figure class="st-hero__visual">
         <div class="st-stack st-stack--hero">
@@ -78,11 +87,14 @@
         <div class="st-hero__cta">
           <a class="st-btn st-btn--teal" id="hero-cta" href="{{ ex.join_url }}" data-cta="hero">{{ join_label }}</a>
           {{ pay_now() }}
-          <p class="st-hero__note">いつからでも参加できます。合わなければ、初回のお支払い日の前日までの解約で費用はかかりません。以降は月額{{ pr.early_monthly_incl }}円（税込）。いまの月額（{{ pr.early_label }}）は、お申し込みのあとも据え置きです。</p>
+          {#- 月額が早期参加の割引価格だと分かるように、金額と「割引価格」を同じ文に（栗山さん、2026-11-15）。
+              定価を並べる二重価格の表示はしない。いつ変わるかも書かない #}
+          <p class="st-hero__note">月額<b>{{ pr.early_monthly_incl }}円</b>{{ "（税込）は早期参加の割引価格で、お申し込みのあとも据え置きです。" | phrase }}{{ "いつからでも参加でき、合わなければ、初回のお支払い日の前日までの解約で費用はかかりません。" | phrase }}</p>
         </div>
+        {#- 副の導線は文字のリンクのまま（主のボタンと競わせない）。矢印で行き先の違いを示す：↓ このページの下へ／↗ 別のタブ #}
         <p class="st-hero__links">
-          <a href="#watch">まずは様子を見る：開催の報告をメールで →</a>
-          <a href="{{ library_url }}" target="_blank" rel="noopener" data-ga="click_library" data-ga-pos="hero">毎朝更新のAI戦略ライブラリーを見る（登録不要）→</a>
+          <a href="#watch">{{ "まずは様子を見る：開催の報告をメールで" | phrase }}<span class="st-hero__arrow" aria-hidden="true">↓</span></a>
+          <a href="{{ library_url }}" target="_blank" rel="noopener" data-ga="click_library" data-ga-pos="hero">{{ "毎朝更新のAI戦略ライブラリーを見る（登録不要）" | phrase }}<span class="st-hero__arrow" aria-hidden="true">↗</span></a>
         </p>
       </div>
     </div>

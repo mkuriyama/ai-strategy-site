@@ -982,11 +982,12 @@ body:has(.st) .md-main { background: #fff; }
 .st .st-hero { background: linear-gradient(180deg, #f2f7f7 0%, #fff 100%); padding: 24px 0 36px;
   border-bottom: 1px solid #e3ecee; }
 .st .st-hero__grid { display: grid; grid-template-columns: minmax(0, 1fr); row-gap: 20px;
-  grid-template-areas: "head" "visual" "trust" "act"; }
+  grid-template-areas: "head" "facts" "visual" "trust" "act"; }
 .st .st-hero__head { grid-area: head; }
 .st .st-hero__visual { grid-area: visual; }
 .st .st-hero__trust { grid-area: trust; }
 .st .st-hero__act { grid-area: act; }
+.st .st-hero__facts { grid-area: facts; }
 .st .st-eyebrow { display: flex; align-items: center; gap: 8px; font-size: 13px; letter-spacing: .03em;
   color: var(--muted); margin-bottom: 14px; }
 .st .st-eyebrow .cmark { width: 22px; height: 15px; flex: none; }
@@ -994,7 +995,15 @@ body:has(.st) .md-main { background: #fff; }
 .home-landing.st .st-hero h1 { font-family: var(--serif); color: var(--teal); font-size: 31px; line-height: 1.5;
   margin: 0; letter-spacing: .01em; font-weight: 700; }
 .st .st-mark { background: linear-gradient(transparent 72%, rgba(28,110,124,.16) 72%); }
-.st .st-hero__lead { font-size: 16px; line-height: 1.95; color: #2b3a3f; margin-top: 16px; }
+.st .st-hero__lead { font-size: 16px; line-height: 1.95; color: #2b3a3f; margin-top: 16px;
+  word-break: keep-all; overflow-wrap: anywhere; text-wrap: pretty; }
+/* 開催のかたち（Zoom・2日程・録画）。補足のすぐ下に、札と短い一文で */
+.st .st-hero__facts { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.st .st-hero__facts > div { display: grid; grid-template-columns: 42px minmax(0, 1fr); gap: 10px; align-items: baseline; }
+.st .st-hero__facts dt { margin: 0; font-size: 12px; line-height: 1.7; font-weight: 700; letter-spacing: .06em; text-align: center;
+  color: var(--teal); background: #e3eff1; border-radius: 4px; }
+.st .st-hero__facts dd { margin: 0; font-size: 14px; line-height: 1.65; color: #2b3a3f;
+  word-break: keep-all; overflow-wrap: anywhere; }
 .st .st-hero__visual { margin: 0; }
 .st .st-stack--hero { padding-bottom: 22%; }
 .st .st-stack--hero > .st-shot:first-child { width: 94%; }
@@ -1013,9 +1022,15 @@ body:has(.st) .md-main { background: #fff; }
 .st .st-hero__stats b { font-family: var(--serif); font-size: 18px; line-height: 1.3; color: var(--teal); }
 .st .st-hero__stats span { font-size: 12px; line-height: 1.45; color: var(--muted); }
 .st .st-hero__cta { margin: 0; }
-.st .st-hero__note { font-size: 14px; line-height: 1.75; color: #3d5258; margin-top: 10px; }
+.st .st-hero__note { font-size: 14px; line-height: 1.75; color: #3d5258; margin-top: 10px;
+  word-break: keep-all; overflow-wrap: anywhere; text-wrap: pretty; }
+.home-landing.st .st-hero__note b { color: var(--ink); font-weight: 700; }
 .st .st-hero__links { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
-.st .st-hero__links a { font-size: 14px; line-height: 1.6; color: var(--teal2); }
+.st .st-hero__links a { font-size: 14px; line-height: 1.6; color: var(--teal2); word-break: keep-all; overflow-wrap: anywhere;
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px;
+  text-decoration-color: rgba(28,110,124,.35); }
+.st .st-hero__links a:hover { text-decoration-color: currentColor; }
+.st .st-hero__arrow { display: inline-block; margin-left: .3em; text-decoration: none; }
 
 /* ② 心当たり・1990年代との相似形（紹介スライドの図を HTML で） */
 .st .st-checks { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
@@ -1166,8 +1181,10 @@ body:has(.st) .md-main { background: #fff; }
 /* 今日お申し込みの場合（hooks/schedule.py の pay_now。最初の画面と料金の枠。schedule.js がその日に合わせて出し直す） */
 .pay-now [hidden], .pay-now[hidden] { display: none !important; }
 .pay-now__d.is-held, .pay-now__d.is-held + .pay-now__sep { display: none; }
-.pay-now__d { white-space: nowrap; }
-.pay-now__sep { margin: 0 .2em; }
+.pay-now__d, .pay-now__nw { white-space: nowrap; }
+/* 文は句の切れ目でだけ改行する（hooks/schedule.py が <wbr> を入れる） */
+.pay-now__row { word-break: keep-all; overflow-wrap: anywhere; }
+.pay-now__sep { margin: 0; }
 .st .pay-now b { color: var(--teal); white-space: nowrap; }
 .st .st-hero__cta .pay-now { margin-top: 12px; }
 .st .st-hero__cta .pay-now__row { font-size: 15px; line-height: 1.75; font-weight: 600; color: var(--ink); }
@@ -1231,6 +1248,10 @@ body:has(.st) .md-main { background: #fff; }
   .st .st-sticky .st-btn { min-height: 48px; font-size: 15.5px; }
   .st .st-sticky.is-hidden { transform: translateY(120%); }
 }
+/* 幅375pxの携帯（iPhone SE・mini）でも、見出しの1行目を折り返さない */
+@media (max-width: 384px) {
+  .home-landing.st .st-hero h1 { font-size: 29px; }
+}
 @media (min-width: 760px) {
   .st .st-wrap { padding: 0 32px; }
   .st .st-block { padding: 64px 0; }
@@ -1274,7 +1295,9 @@ body:has(.st) .md-main { background: #fff; }
 @media (min-width: 1080px) {
   .st .st-hero { padding: 44px 0 40px; }
   .st .st-hero__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); column-gap: 56px; row-gap: 22px;
-    grid-template-areas: "head visual" "act visual" "trust trust"; }
+    grid-template-areas: "head visual" "act visual" "act facts" "trust trust"; }
+  /* 開催のかたちは、PC では画面の写真の下（左の列は見出し・補足・申込ボタンのまま。最初の画面に主催者と実績の帯まで収める） */
+  .st .st-hero__facts { align-self: start; }
   .st .st-hero__head { align-self: end; }
   .st .st-hero__act { align-self: start; }
   /* 主催者と実績：横一列の帯（写真と見出しの下を、左右いっぱいに使う） */
@@ -1287,6 +1310,7 @@ body:has(.st) .md-main { background: #fff; }
   .st .st-hero__trust .st-hero__stats b { font-size: 21px; }
   .home-landing.st .st-hero h1 { font-size: 42px; line-height: 1.45; }
   .st .st-hero__lead { font-size: 17px; margin-top: 22px; }
+  .st .st-hero__facts dd { font-size: 15px; }
   .st .st-hero__visual { margin: 0; align-self: center; }
   .st .st-stack--hero > .st-shot:first-child { transform: rotate(.4deg); }
   .st .st-hero__links { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 12px 22px; }

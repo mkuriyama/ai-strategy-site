@@ -12,7 +12,8 @@
  * - [data-window-end]   … 申込の時期ごとの表の行。受付が終わったら隠し、次の行を繰り上げる。
  *                         残りの日程が無ければ [data-pay-none] を出す
  * - [data-pay-now]      … 「今日お申し込みの場合」（広告用LP）。[data-now-start]〜[data-now-end] に
- *                         いまが入る行だけを出す。無料の日程が残っていなければ [data-now-free] を隠す
+ *                         いまが入る行だけを出す。無料の日程が残っていなければ [data-now-free] を隠す。
+ *                         残りが1つになったら「の都合のよい方」（[data-now-either]）を隠す
  * - [data-next-session] … 直近の日程の表記（"md" なら 11/6(金)、無指定なら 11/6(金) 20:00〜）
  * - [data-next-label]   … 直近の日程の回（第6回 B日程）
  * - [data-next-wrap]    … 直近の日程が無くなったら隠す
@@ -86,6 +87,8 @@
         current = row;
         var left = row.querySelectorAll("[data-at]:not(.is-held)").length;
         each("[data-now-free]", function (x) { x.hidden = left === 0; }, row);
+        // 「の都合のよい方」は、選べる日程が2つ以上残っているあいだだけ
+        each("[data-now-either]", function (x) { x.hidden = left < 2; }, row);
       }, box);
       each("[data-now-fallback]", function (x) { x.hidden = !!current; }, box);
     });
