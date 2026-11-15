@@ -172,6 +172,27 @@
     </div>
   </section>
 
+  {# ⑥' 参加者の声（LP と同じ。文は extra.voices、満足度は extra.stats。97% の根拠は最初の画面の下の注記） #}
+  <section class="block" id="voices">
+    <div class="wrap">
+      <div class="read">
+        <div class="seyebrow">参加者の声</div>
+        <h2>{{ config.extra.stats.satisfaction }}が「参加して良かった」。</h2>
+      </div>
+      <div class="voices">
+        {%- for v in config.extra.voices.cards %}
+        <article class="voice">
+          {%- if v.top %}<p class="voice__tag">いちばん多かった声</p>{% endif %}
+          <h3>{{ v.title | phrase }}</h3>
+          <blockquote>「{{ v.voice | phrase }}」</blockquote>
+          <p class="voice__who"><span>多かった立場</span>{{ v.who | phrase }}</p>
+        </article>
+        {%- endfor %}
+      </div>
+      <p class="muted-note">{{ config.extra.voices.note }}</p>
+    </div>
+  </section>
+
   {# ⑦ 参加費とリスクのなさ #}
   <section class="block" id="join">
     <div class="wrap">

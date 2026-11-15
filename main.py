@@ -84,6 +84,22 @@ def define_env(env):
         return "../" * depth + target
 
     @env.macro
+    def faq_list(ids=None):
+        """よくあるご質問。文の正本は `extra.faq`（広告用LP と同じ問答）。
+        ⚠ 名前を faq にしない（mkdocs-macros は extra: のキーを同じ名前の変数として出すので、ぶつかる）。
+
+        ids（例 ["it", "camera"]）を渡すとその順で、無ければ全部。Material の折りたたみ（`??? question`）で返す。
+        """
+        items = extra.get("faq") or []
+        by_id = {f.get("id"): f for f in items}
+        chosen = [by_id[i] for i in ids if i in by_id] if ids else items
+        out = [""]
+        for f in chosen:
+            q = str(f.get("q", "")).replace('"', "＂")
+            out += [f'??? question "{q}"', "", f"    {f.get('a', '')}", ""]
+        return "\n".join(out)
+
+    @env.macro
     def session_flow():
         """1回の流れ（/sessions/）。文の正本は `extra.flow`（広告用LP の「月に一度の回は、こう進みます」と同じ）。
 

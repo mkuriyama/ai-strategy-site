@@ -265,7 +265,9 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
 | 参加の前に（いつからでも・A/B・録画・事前課題・カメラ・用意するもの・費用） | **`mkdocs.yml` の `extra.participation`**（/subscribe/ の有償メンバーのカードの下と、/join/ のお申し込みの前に同じ内容で出る） |
 | 開催のかたち（開催・日程・録画） | **`mkdocs.yml` の `extra.format`**（広告用LP とホームの最初の画面） |
 | 1回の流れ（時間・4つの段・本編のあと・終わったあとも・箇条） | **`mkdocs.yml` の `extra.flow`**（広告用LP の「月に一度の回は、こう進みます」と、/sessions/ の「1回の流れ」＝`{{ session_flow() }}`） |
-| 主催者の紹介（最初の画面の一行・肩書き・言葉・経歴） | **`mkdocs.yml` の `extra.host`**（広告用LP とホームの最初の画面・主催者の節）。プロフィールのページ（/about/profile/）は別に持っている |
+| 主催者の紹介（最初の画面の一行・肩書き・言葉・経歴・共同創業／大学院／顧問） | **`mkdocs.yml` の `extra.host`**（広告用LP・ホームの最初の画面と主催者の節・/about/profile/）。登壇の回数など、プロフィールのページだけの文はそのページに |
+| 参加者の声（多かった3つ・立場の例・注記） | **`mkdocs.yml` の `extra.voices`**（広告用LP・ホーム・/subscribe/）。⚠ 一覧のキーは `cards`（`items` にすると、テンプレートで辞書の `items` とぶつかる） |
+| よくあるご質問 | **`mkdocs.yml` の `extra.faq`**（`id`・`q`・`a`）。広告用LP は全部、/join/ は全部（`{{ faq_list() }}`）、/sessions/ は参加のしかたの問い（`{{ faq_list([...]) }}`）、/subscribe/ はメール登録の問いのあとに5つ。⚠ マクロ名を `faq` にしない（mkdocs-macros は `extra:` のキーを同じ名前の変数として出すので、ぶつかる） |
 | 画面の写真（`assets/img/start/`） | 広告用LP（`extra.lp.images`）に加えて、ホーム（最初の画面は `extra.lp.images.hero`・`hero2`、ほかの節はテンプレートに直接）・/sessions/・/about/ でも使う。写真を差し替えたら、使っている場所の説明（月の呼び方）も直す |
 | 広告の計測タグの ID | **`mkdocs.yml` の `extra.tracking`**（空なら読み込まない。後述「計測」）。ライブラリー（B）は B の `frontend/shared/site.js` に別に持つ |
 | 直近の回の紹介 | `extra.history` の**先頭の回**の `highlight`（2〜4文）・`highlight_image`・`highlight_caption`・`month`（いずれも任意）→ /subscribe/ の「直近の回から」。`highlight` が無ければ `summary`、画像が無ければ画像なしで出る |
@@ -749,6 +751,8 @@ B 側**（`ai-strategy-news-app` の `content/guide/*.md`）。本サイトに�
 | ダイジェストや料金図のSVGが極端に小さい | Material の `figure{width:fit-content}` が、`viewBox` だけで幅指定のないinline SVGを潰す。`extra.css` の `.md-typeset figure{width:100%}` で対処済み（消さないこと） |
 | 用語集の見出しを文字列grepしても一致しない | 見出し内の用語が `<abbr>` で囲まれ文字列が分断されるため。検証は用語単体か `<abbr title=...>` で行う。**サイト名「AI戦略ライブラリー」も同じ理由で grep に引っかからないことがある** |
 | サイト名「AI戦略ライブラリー」の途中にツールチップが出る | `abbreviations.md` に「ライブラリ」があると名前の中に一致する（「セル」＝「キャンセル」と同じ）。2026年9月にツールチップから外した（用語集には残している） |
+| マクロを呼ぶと `'SuperList' object is not callable` | マクロ名が `extra:` のキーと同じ（例：`faq`）。mkdocs-macros は `extra:` のキーを同じ名前の変数として出すので、マクロが隠れる。マクロ名を変える（`faq_list`） |
+| テンプレートで `'builtin_function_or_method' object is not iterable` | `extra:` の中のキーに `items`・`keys`・`values` を使った（Jinja は辞書のメソッドを先に見る）。`cards` など別の語にする |
 | ローカルで `mkdocs: command not found` | コンテナ再起動で依存が消えている。`pip install -q -r requirements.txt` で復旧（`python3 -m mkdocs` で実行） |
 | `git push origin main` が rejected | 別セッションの変更が先に入っている。**force push は禁止**。`git fetch` → 差分確認 → `git merge` で統合してから push（過去に実際に発生し、マージで解決） |
 | テンプレートの HTML コメントに書いた内容が公開される／`TemplateSyntaxError: tag name expected` | `overrides/*.html` の `<!-- -->` は**そのまま公開ページのソースに出る**。しかも Jinja はコメントの中の `{%` も解釈する。内部の事情（非公開リポジトリ・運用の詳細）を書くなら `{# #}` の Jinja コメントにする |
