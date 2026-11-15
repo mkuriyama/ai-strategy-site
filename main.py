@@ -84,6 +84,21 @@ def define_env(env):
         return "../" * depth + target
 
     @env.macro
+    def session_flow():
+        """1回の流れ（/sessions/）。文の正本は `extra.flow`（広告用LP の「月に一度の回は、こう進みます」と同じ）。
+
+        Markdown の定義リストで返す（このページのほかの節と同じ見た目にするため）。
+        """
+        fl = extra.get("flow") or {}
+        out = [f"**{fl.get('time', '')}**。{fl.get('gain', '')}", ""]
+        for i, st in enumerate(fl.get("steps") or [], 1):
+            out += [f"**{i}. {st.get('title', '')}**", f":   {st.get('text', '')}", ""]
+        for a in fl.get("afters") or []:
+            out += [f"**{a.get('title', '')}**", f":   {a.get('text', '')}", ""]
+        out += [f"- {t}" for t in (fl.get("facts") or [])]
+        return "\n".join(out)
+
+    @env.macro
     def history_cards():
         """開催履歴（sessions/history.md）。`extra.history` を新しい順にカードで描画する。
 

@@ -61,9 +61,9 @@
           携帯は主催者と実績（次回）の下 ―― 主催者を最初の画面に残すため。PC は画面の写真の下。
           時刻は 1回の流れ・次回の枠と同じ。録画は「追いつく」ためではなく、参加できなかった回を知るためのもの #}
       <dl class="st-hero__facts">
-        <div><dt>開催</dt><dd>{{ "Zoom・20:00〜22:30ごろ" | phrase }}</dd></div>
-        <div><dt>日程</dt><dd>{{ "同じ内容を曜日違いの2日程で。どちらかに" | phrase }}</dd></div>
-        <div><dt>録画</dt><dd>{{ "参加できない回も、あとから見返せる" | phrase }}</dd></div>
+        {%- for f in ex.format %}
+        <div><dt>{{ f.k }}</dt><dd>{{ f.v | phrase }}</dd></div>
+        {%- endfor %}
       </dl>
       {%- if img.hero %}
       <figure class="st-hero__visual">
@@ -78,7 +78,7 @@
       <div class="st-hero__trust">
         <div class="st-hero__host">
           <img src="{{ 'assets/profile.jpg' | url }}" alt="栗山 実" width="60" height="60">
-          <p><strong>主催 栗山 実</strong>マッキンゼー出身。大手企業へのAI戦略助言、AI関連スタートアップの共同創業、AI技術開発などを歴任。グロービス経営大学院 教員、多摩大学経営大学院 特任教授。</p>
+          <p><strong>主催 栗山 実</strong>{{ ex.host.short }}</p>
         </div>
         <ul class="st-hero__stats">
           <li><b>{{ st.paid_members }}</b><span>有償メンバー</span></li>
@@ -267,12 +267,12 @@
           <img src="{{ 'assets/profile.jpg' | url }}" alt="栗山 実" width="240" height="240" loading="lazy">
           <div>
             <p class="st-host__name">栗山 実</p>
-            <p class="st-host__role">株式会社アンテカニス 代表取締役／多摩大学経営大学院 特任教授／グロービス経営大学院 教員</p>
+            <p class="st-host__role">{{ ex.host.role }}</p>
           </div>
         </div>
         <div class="st-host__body">
-          <blockquote class="st-host__quote">AIの使い方や効率化の話は、たくさんあります。でも、それで十分でしょうか。インターネットの普及期に世界を変えたのは、Excel教室に通った人ではなく、GoogleやAmazonを生み出した人たちでした。戦略を考える視点と、実際に手を動かす実践。その両方を、毎月、参加者と一緒に試しています。</blockquote>
-          <p class="st-host__bio">データサイエンティスト・起業家・戦略アドバイザー。マッキンゼー・アンド・カンパニー等を経て独立。大企業のデータ活用やAI戦略の助言から、データ技術を基盤としたスタートアップの立ち上げと経営まで手がける。東京大学理学部卒・同大学院修了（素粒子論）。</p>
+          <blockquote class="st-host__quote">{{ ex.host.quote }}</blockquote>
+          <p class="st-host__bio">{{ ex.host.bio }}</p>
           <ul class="st-career">
             <li><b>共同創業</b><span>VISITS Technologies（AIソリューション）取締役・共同創業者／souco（倉庫共有サービス）取締役・共同創業者</span></li>
             <li><b>大学院</b><span>グロービス経営大学院 教員（ビジネス・アナリティクス、AI＆データサイエンス）／多摩大学経営大学院 特任教授（データドリブン経営の実践論）</span></li>
@@ -340,41 +340,28 @@
     </div>
   </section>
 
-  {# ⑥ 1回の流れ（/sessions/ の「各セッションの構成例」と、extra.participation から。新しい約束は書かない） #}
+  {# ⑥ 1回の流れ（文は extra.flow。/sessions/ の「1回の流れ」と同じ正本。新しい約束は書かない） #}
   <section class="st-block st-block--pale" id="flow" data-lp-section="flow">
     <div class="st-wrap">
       <h2>{{ "月に一度の回は、" | phrase }}{{ "こう進みます" | phrase }}</h2>
-      <p class="st-flow__meta">20:00〜22:30ごろ・オンライン（Zoom）</p>
-      <p class="st-flow__gain">2時間半で、毎回、新しい体験と知識、次に考える問い、資料集、持ち帰りのファイルまで得られるように組んでいます。</p>
+      {%- set fl = ex.flow %}
+      <p class="st-flow__meta">{{ fl.time }}</p>
+      <p class="st-flow__gain">{{ fl.gain }}</p>
       <ol class="st-flow">
-        {%- for h, t in [
-          ("問いから始める", "その回のテーマが、なぜ戦略的に重要か。自分の事業・業界の文脈で言葉にし、AIにも同じ問いを考えさせて比べます。"),
-          ("AIで動かす、作る", "AIとの対話から始めて、AIに仕組みやコンテンツを作らせ、動くところまで進めます。作るのは主にAI。手順はすべて画面を共有しながら進め、手順のガイドもあるので、ITが苦手でも進められます。"),
-          ("戦略に戻る", "作ったものをもとに、自社にどう効くか、産業や組織の構造がどう変わるかを考えます。"),
-          ("まとめ", "持ち帰るファイル一式を確かめ、次の回を予告します。本編は、おおむね22:30までです。"),
-        ] %}
-        <li><span class="st-flow__n">{{ loop.index }}</span><h3>{{ h }}</h3><p>{{ t }}</p></li>
+        {%- for st_ in fl.steps %}
+        <li><span class="st-flow__n">{{ loop.index }}</span><h3>{{ st_.title }}</h3><p>{{ st_.text }}</p></li>
         {%- endfor %}
       </ol>
       <div class="st-flow__afters">
+        {%- for a in fl.afters %}
         <div class="st-flow__after">
-          <h3>本編のあと（自由参加）</h3>
-          <p>質問と交流の時間です（最大60分ほど）。途中で抜けても大丈夫です。録画に残さない時間で、質問に答えたり議論したりするなかで、いまのAIの潮流の本質に話が及ぶこともあります。参加できる方は、ぜひ。</p>
+          <h3>{{ a.title }}</h3>
+          <p>{{ a.text }}</p>
         </div>
-        <div class="st-flow__after">
-          <h3>終わったあとも</h3>
-          <p>録画と資料に加えて、各回を場面ごとに見返せるビューアがあります。出られなかった回の中身も分かり、出た回の見返したい場面や、数か月前のあの話も、すぐに見つかります。それでも、参加者同士の気づきの交換や、その場の空気感は、当日ならではです。</p>
-        </div>
+        {%- endfor %}
       </div>
       <ul class="st-flow__facts">
-        {%- for t in [
-          "各回は独立したテーマ。いつからでも参加できます",
-          "A・Bの2日程は同じ内容。どちらかに参加すれば十分です",
-          "カメラや発言は必須ではありません",
-          "事前課題はありません",
-          "用意するもの：Zoomが使えるパソコン、個人のGoogleアカウント（Gmail。Google Colab と資料の共有に使います）、無料版でよいので ChatGPT・Claude・Gemini・Copilot などいずれかのAIのアカウント",
-          "追加の費用なしで、どの体験もできるように用意しています",
-        ] %}
+        {%- for t in fl.facts %}
         <li>{{ lp.check() }}<span>{{ t | phrase }}</span></li>
         {%- endfor %}
       </ul>

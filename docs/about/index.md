@@ -75,6 +75,11 @@ ChatGPT・Gemini・Claudeの普及により、誰もがシステムを実装で�
 ビジネス・AIニュースを、過去のセッションで実際に語られた論点につないで読み解き、
 読み解いたものを棚に積んでいます。
 
+<figure markdown="span">
+![AI戦略ライブラリーの今日のダイジェストの画面](../assets/img/start/library-digest.jpg){ loading=lazy }
+<figcaption>AI戦略ライブラリー：今日のダイジェスト</figcaption>
+</figure>
+
 - [課題の棚](https://ai-strategy-library.antecanis.com/issues/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" } — AIで取り組める課題の案を、業務の場と業界ごとに
 - [道具の棚](https://ai-strategy-library.antecanis.com/tools/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" } — AIの道具ごとの、使う条件の変化
 - [戦略の棚](https://ai-strategy-library.antecanis.com/companies/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" } — 会社ごとのAIの取り組み

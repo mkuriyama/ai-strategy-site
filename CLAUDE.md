@@ -89,9 +89,11 @@ docs/
     ├─ profile.jpg               主催者写真（最適化済・ホームの主催者カードでも使用）
     ├─ flyer.html                A4印刷用チラシ（スタンドアロン・**単一ソース非連動＝手動更新**）
     ├─ img/                      ホーム/各ページ用の画像・図
-    │   ├─ session-build.png       事業デザイン対抗戦の制作画面（ヒーロー/セッション）
-    │   ├─ session-result.png      AI戦略対抗戦の合議結果画面（セッション/テーマ）
-    │   ├─ community-circle.png    参加者コミュニティ(Circle)。※日付写込みあり＝GitHub Pages専用
+    │   ├─ start/                  画面の写真（広告用LP で使い始め、ホーム・/sessions/・/about/ でも使う）。
+    │   │                          参加者の名前・アイコン・会員限定の情報が写っていないことを確かめてある
+    │   ├─ session-build.png       AI事業デザインゲームの制作画面（/sessions/・/subscribe/）
+    │   ├─ session-result.png      ゲーム形式の戦略づくり（戦略案を複数のAIが評価・合議）の結果画面（/sessions/ ほか）
+    │   ├─ community-circle.png    参加者コミュニティ(Circle)。※日付写込みあり＝GitHub Pages専用。いまはどこからも使っていない
     │   ├─ history/vol-0N.svg       開催履歴の図。各回ダイジェスト（A日程）の図1を切り出したもの
     │   └─ pricing-flow.svg / pricing-tiers.svg  料金図の**元SVG。現在どこからも参照されていない**
     │                              （join の図は2026年10月から HTML。`main.py` の payment_flow() /
@@ -237,6 +239,8 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
      違うあいだは出ない。`recent_quote`・`recent_quote_note`（画面の中の一文を文字で引用。任意）も同じ扱い。
      引用するのは主催者の画面・AIの応答などで、参加者の文は使わない
    - 次回の日程・料金・実績は `extra.schedule`・`extra.pricing`・`extra.stats` から自動
+   - 写真の説明は、ホーム（④の2枚）と /sessions/（「セッションで使うアプリ」）にも月の呼び方で書いてある
+     （「10月の回の対話アリーナ」）。写真を差し替えたら直し、翌年になったら「2026年10月の回」のように年を足す
 7. **日付スタンプ**の確認
    - `docs/glossary.md` 末尾「◯年◯月時点」
    - ガイドの `updated:`（ライブラリー（B）の `content/guide/*.md` の前書き）
@@ -258,7 +262,11 @@ requirements.txt                material[imaging] / macros / glightbox / redirec
 | 実績数値 | **`mkdocs.yml` の `extra.stats` の1か所だけ**（/subscribe/ のチップと実績帯、/join/corporate/ の実績帯、/start/）。`satisfaction` は新しい回のアンケートが加わるたびに再計算する（延べ回答のうち「参加・視聴して良かった」が「とても／ややそう思う」の割合。未回答も分母に含める。**A・B 両日程の回答を入れ、小数点以下は切り捨て**）。注記（`satisfaction_note`）の範囲は「2026年5月〜10月の各回」のように月で書き、件数も直す。開催の回数（`rounds_label`・`rounds_note`）は `hooks/schedule.py` が日程から作る。年代など、ファクトチェックしていない属性は書かない |
 | これからの回のテーマ | `extra.schedule[].theme`・`question`（**任意**。決まるまで省いてよい） |
 | 初回のお支払いと解約の文 | **`mkdocs.yml` の `extra.billing`**（join の図1・お申し込みの前の注記・ホームの「いつでも自分で解約」・/subscribe/ のカードと FAQ・llms.txt へ自動反映）＋ **`docs/welcome/index.html`**（静的HTML。手で揃える）。「無料期間中の解約」と「お支払い開始後の解約」を**分けて書く**（後述「料金改定の運用」） |
-| 参加の前に（途中参加・A/B・録画・事前課題・準備・費用） | **`mkdocs.yml` の `extra.participation`**（/subscribe/ の有償メンバーのカードの下と、/join/ のお申し込みの前に同じ内容で出る） |
+| 参加の前に（いつからでも・A/B・録画・事前課題・カメラ・用意するもの・費用） | **`mkdocs.yml` の `extra.participation`**（/subscribe/ の有償メンバーのカードの下と、/join/ のお申し込みの前に同じ内容で出る） |
+| 開催のかたち（開催・日程・録画） | **`mkdocs.yml` の `extra.format`**（広告用LP とホームの最初の画面） |
+| 1回の流れ（時間・4つの段・本編のあと・終わったあとも・箇条） | **`mkdocs.yml` の `extra.flow`**（広告用LP の「月に一度の回は、こう進みます」と、/sessions/ の「1回の流れ」＝`{{ session_flow() }}`） |
+| 主催者の紹介（最初の画面の一行・肩書き・言葉・経歴） | **`mkdocs.yml` の `extra.host`**（広告用LP とホームの最初の画面・主催者の節）。プロフィールのページ（/about/profile/）は別に持っている |
+| 画面の写真（`assets/img/start/`） | 広告用LP（`extra.lp.images`）に加えて、ホーム（最初の画面は `extra.lp.images.hero`・`hero2`、ほかの節はテンプレートに直接）・/sessions/・/about/ でも使う。写真を差し替えたら、使っている場所の説明（月の呼び方）も直す |
 | 広告の計測タグの ID | **`mkdocs.yml` の `extra.tracking`**（空なら読み込まない。後述「計測」）。ライブラリー（B）は B の `frontend/shared/site.js` に別に持つ |
 | 直近の回の紹介 | `extra.history` の**先頭の回**の `highlight`（2〜4文）・`highlight_image`・`highlight_caption`・`month`（いずれも任意）→ /subscribe/ の「直近の回から」。`highlight` が無ければ `summary`、画像が無ければ画像なしで出る |
 | 広告用LP の回ごとの文と画像 | **`mkdocs.yml` の `extra.lp`**（`practice_example`・`recent_round`・`recent_text`・`issues_count`・`news_member_note`・`images`）。構成と文面は `overrides/start.html` の中 |
@@ -409,6 +417,12 @@ B 側**（`ai-strategy-news-app` の `content/guide/*.md`）。本サイトに�
 - **ホーム**は `overrides/home.html`（`base→main→home` の継承）。`docs/index.md` は front-matter
   （`template: home.html` と `hide: [navigation, toc]`、`description`）のみ。セクションのコピーは
   テンプレート内、スタイルは `extra.css` の `.home-landing` 配下。
+  **最初の画面は広告用LP と同じ組み**（2026-11-15〜、栗山さんが案2を選んだ）：目印「ツールとしてのAI → 戦略としてのAI」・
+  見出し「AI前提で事業を構想し、実現できる人へ。」・補足文・画面の写真2枚（`extra.lp.images.hero`・`hero2`）・
+  主催者（`extra.host.short`）と実績・開催のかたち（`extra.format`）・3つのボタン（金・ティール・アウトライン）。
+  携帯は 見出し → 写真 → 主催者と実績 → 開催のかたち → ボタン（ボタンが最初の画面の下に来るので、携帯の固定ボタンが出る）、
+  PC は左に見出しとボタン、右に写真、下に主催者と実績の帯（`.hero--lp`。1280×800 で帯まで入る）。
+  見出しと補足文を変えるときは LP も揃える（栗山さんに確認）
 - **お知らせバーCTA**は `overrides/main.html` の `announce` ブロックで表示（/subscribe/ 配下では
   行き先が自分自身になるので出さない）。
 - **ランディング系ページ**（/subscribe/・/subscribe/thanks/・/join/corporate/）もホームと同じ方式
@@ -627,7 +641,7 @@ B 側**（`ai-strategy-news-app` の `content/guide/*.md`）。本サイトに�
   - **回は開催月で呼ぶ**（サイト全体の決まり。下の「文言の方針」）。LP では、次回の枠（`schedule_upcoming()`。
     「（第7回）」を小さく添える）・最後の帯（`bridge=false`）・「今日お申し込みの場合」（`pay_now()`）・実際の回から
     （`round_month()`）・回の並び（月の札。年が変わった回だけ「2027年1月」）が自動
-  - 「プログラミング経験は前提にしない」とは書かない（技術の話が多い場だと思わせる）。「ITが苦手でも」の調子で
+  - 「プログラミング経験は前提にしない」とは書かない（サイト全体の決まり。下の「文言の方針」）。「ITが苦手でも」の調子で
   - 録画は「追いつく」ためではない（各回は独立したテーマ）。欠席した回を知る・見返す・数か月前の話を探すためのもの
   - **各回はその月の A・B の2日程だけ**で、同じ回をあとで開かない。録画やビューアはあっても、参加者同士の気づきの
     交換や空気感は当日ならでは（栗山さん、2026-11-14）。「次回」の枠と FAQ で伝える
@@ -705,6 +719,10 @@ B 側**（`ai-strategy-news-app` の `content/guide/*.md`）。本サイトに�
   「ゲーム形式の戦略づくり（戦略案を複数のAIが評価・合議して採点する）」と書く。メンバー向けの場所の名前はそのまま
 - **「途中の回から参加できます」と書かない**。「各回は独立したテーマで、いつからでも参加できます」。FAQ の問い
   「途中の回からでも参加できますか？」だけは、実際に出る疑問なので残す
+- **「プログラミング経験は前提にしない」と書かない**（技術の話が多い場だと思わせる）。「作るのは主にAI。手順はすべて
+  画面を共有しながら進め、手順のガイドもあるので、ITが苦手でも進められます」の調子で（2026-11-15 に LP からサイト全体へ）
+- **参加者がすることを「コード」「公開」で書かない**（「サンプルコード」「コード不要」「作って公開する」など）。
+  「使ったファイルと指示文」「AIで動く仕組みを作る」と書く。用語集の技術用語（「Webアプリの公開（ホスティング）」など）は別
 
 ### 用語ルール（2026年9月〜）
 
