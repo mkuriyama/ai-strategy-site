@@ -10,9 +10,9 @@
     申込ボタンは主催者と実績の下に置く ―― 「新しい人を迎えている」「自分も入ってよい」と分かる合図として。
     言葉は「いつからでも参加できます」（月額の会なので「募集」「第N回の参加者」とは言わない）。
     ほかの導線は、帯の「参加費・お申し込み」（いつも見える。料金の枠へ）・料金の枠・最後の帯・携帯の固定ボタン（最初の画面を過ぎてから出す）
-  - 回は開催月で呼ぶ（「11月の回」。round_month()・schedule_upcoming(month=true)・pay_now()）。「第7回」は、
-    連続ものの途中から入る印象を与えるため（栗山さん、2026-11-15）。入会後の案内は第N回なので、
-    次回の枠にだけ「（第7回）」を小さく添える（bridge=true）。extra.lp の文も月で書く
+  - 回は開催月で呼ぶ（「11月の回」。round_month()・schedule_upcoming()・pay_now()。サイト全体の決まり）。
+    「第7回」は、連続ものの途中から入る印象を与えるため（栗山さん、2026-11-15）。入会後の案内は第N回なので、
+    次回の枠にだけ「（第7回）」を小さく添える（最後の帯は bridge=false）。extra.lp の文も月で書く
   - 言葉：「プログラミング経験は前提にしない」とは書かない（技術の話が多い場だと思わせる）。「ITが苦手でも」の調子で。
     録画は「追いつく」ためではない（各回は独立したテーマ）。欠席した回を知る・見返す・探すためのもの
   - 各回はその月の A・B の2日程だけで、同じ回をあとで開かない。参加者同士の気づきの交換や空気感は当日ならでは
@@ -237,7 +237,7 @@
           {%- endif %}
           <div class="st-next">
             <p class="st-next__k">次回</p>
-            {{ schedule_upcoming(1, "start", month=true, bridge=true) }}
+            {{ schedule_upcoming(1, "start") }}
             <p class="st-next__note">オンライン（Zoom）・20:00〜22:30ごろ。AとBは同じ内容で、この回を開くのは、この2日程だけです。各回は独立したテーマで、いつからでも参加できます。</p>
           </div>
         </div>
@@ -503,7 +503,7 @@
       <h2>{{ "AI前提の事業構想を、" | phrase }}{{ "次の回から。" | phrase }}</h2>
       <div class="st-final__next">
         <span class="st-final__k">次回</span>
-        {{ schedule_upcoming(1, "band", month=true) }}
+        {{ schedule_upcoming(1, "band", bridge=false) }}
       </div>
       <a class="st-btn st-btn--light" href="{{ ex.join_url }}" data-cta="final">{{ join_label }}</a>
       <p class="st-final__price">初月無料・以降は月額{{ pr.early_monthly_incl }}円（税込）</p>

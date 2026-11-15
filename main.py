@@ -94,9 +94,12 @@ def define_env(env):
         import html as _html
 
         rounds = extra.get("history", []) or []
+        sched = _schedule()
         out = ['<div class="history">']
         for r in rounds:
             no = r.get("round", "")
+            # 回は開催月で呼ぶ（「10月の回」。hooks/schedule.py の「回の呼び方」）
+            label = _html.escape(sched.round_month_html(extra, no))
             title = _html.escape(str(r.get("title", "")))
             area = _html.escape(str(r.get("area", "")))
             # 日付は hooks/schedule.py が extra.schedule から作る（「開催予定」はブラウザ側でも外れる）
@@ -110,13 +113,13 @@ def define_env(env):
                 svg = str(image).endswith(".svg")
                 out.append(
                     f'<div class="history-card__fig{" history-card__fig--svg" if svg else ""}">'
-                    f'<img src="{_rel(image)}" alt="第{no}回の図" loading="lazy"></div>'
+                    f'<img src="{_rel(image)}" alt="{label}の図" loading="lazy"></div>'
                 )
                 if svg:
                     out.append('<p class="history-card__hint">図は横にスクロールできます →</p>')
             out.append('<div class="history-card__body">')
             out.append(
-                f'<div class="history-card__meta"><span class="history-card__no">第{no}回</span>'
+                f'<div class="history-card__meta"><span class="history-card__no">{label}</span>'
                 f'<span class="history-card__dates">{dates}</span></div>'
             )
             out.append(f'<h3 class="history-card__title">{title}</h3>')

@@ -288,8 +288,7 @@ extra:
   # satisfaction は新しい回のアンケートが加わるたびに再計算する（未回答も分母に含める。小数点以下は切り捨て）。
   stats:
     paid_members: "80名超"
-    rounds_label: "第6回"
-    rounds_note: "まで開催（2026年5月〜）"
+    # rounds_label・rounds_note（「6回」「開催（2026年5月から毎月）」）は hooks/schedule.py が日程から作る
     subscribers: "約200名"
     satisfaction: "97%"
     satisfaction_note: "2026年5月〜10月の各回の参加者アンケート（延べ133件）で「参加・視聴して良かった」に「とてもそう思う」「ややそう思う」と回答した割合。"
@@ -347,9 +346,9 @@ extra:
       a: "2027-03-16T20:00:00+09:00"
       b: "2027-04-02T20:00:00+09:00"
   # ホーム「新着」の先頭リンク（新しい回が終わったらここを更新）
+  # label（「10月の回までの開催履歴を公開中」）は hooks/schedule.py が extra.history の先頭の回から作る
   latest_digest:
     url: "sessions/history/"
-    label: "第6回までの開催履歴を公開中"
   # 開催履歴（sessions/history.md が history_cards() で描画。新しい回が終わったら先頭に追加）
   # image は docs/ 基準のパス。各回ダイジェストの図1を assets/img/history/ に切り出してある。
   # digests は**リンクではなく対応表**。公開ページからは外してあり、
@@ -388,7 +387,7 @@ extra:
     - round: 2
       title: "AIと共に、戦略の大転換を考える"
       area: "[3A] 顧客価値／[3B] 顧客接点／[3C] 差別化資産のシフト"
-      summary: "AI戦略対抗戦とAI事業デザインゲームの2つを通じて、競争のルール（顧客価値・顧客接点・差別化資産）がAIでどう書き換わるかを体験。戦略を「AIと共に、AIを前提に」描き直した回。"
+      summary: "戦略案を複数のAIが採点するゲームと、AI事業デザインゲームの2つを通じて、競争のルール（顧客価値・顧客接点・差別化資産）がAIでどう書き換わるかを体験。戦略を「AIと共に、AIを前提に」描き直した回。"
       image: "assets/img/history/vol-02.svg"
       digests: ["digests/vol-02.md", "digests/vol-02b.md"]
     - round: 1
@@ -427,7 +426,7 @@ extra:
     portal_url: "https://billing.stripe.com/p/login/7sYdR81K82Aw1Jh3cCcwg00"
   # 有償メンバーとして参加する前に（/subscribe/ の有償メンバーのカードの下・/join/ のお申し込みの前）
   participation:
-    - title: "途中の回から参加できます。"
+    - title: "いつからでも参加できます。"
       text: "各回は独立したテーマで、前の回の知識は前提にしません。"
     - title: "A日程とB日程は同じ内容です。"
       text: "ご都合のよい日程を選べます。"

@@ -36,8 +36,8 @@
         </div>
       </div>
       <figure class="lp-hero__shot">
-        <img src="{{ 'assets/img/session-build.png' | url }}" alt="実践アプリ「事業デザイン対抗戦」の画面" width="956" height="683">
-        <figcaption>実践アプリ「事業デザイン対抗戦」。市場の声を聞き、AIと案を作り込む。</figcaption>
+        <img src="{{ 'assets/img/session-build.png' | url }}" alt="実践アプリ「AI事業デザインゲーム」の画面" width="956" height="683">
+        <figcaption>実践アプリ「AI事業デザインゲーム」。市場の声を聞き、AIと案を作り込む。</figcaption>
       </figure>
       <div class="lp-hero__host">
         <img src="{{ 'assets/profile.jpg' | url }}" alt="栗山 実" width="52" height="52">
@@ -123,7 +123,7 @@
         </div>
       </div>
       {# 有償メンバーのカードのすぐ下に、申込の判断に要ること：これからの開催（回・テーマ・A/B は同じ内容・
-         開催済み）と、参加の前に（途中参加・録画・事前課題・準備・費用）。どちらも /join/ と同じ部品 #}
+         開催済み）と、参加の前に（いつからでも参加・録画・事前課題・準備・費用）。どちらも /join/ と同じ部品 #}
       <div class="lp-plandetail">
         <div class="lp-card">
           <p class="lp-plan__k">これからの開催（各回 20:00〜・Zoom）</p>
@@ -134,7 +134,7 @@
       <div class="lp-corpband">
         <div>
           <strong>法人でのご利用をご検討の方へ</strong>
-          <span>複数名でのご参加や、請求書払い（適格請求書の発行）のご相談を承ります。</span>
+          <span>複数名でのご参加や、請求書払い（法人で3名以上。適格請求書を発行します）のご相談を承ります。</span>
         </div>
         <a class="lp-btn lp-btn--outline" href="{{ 'join/corporate/' | url }}">法人のお問い合わせ →</a>
       </div>
@@ -168,8 +168,8 @@
           <div class="phase"><div class="n">戦</div><div><h3>戦略視座に立ち戻る</h3><p>作ったものを自社にどう適用し、競争のルールがどう変わるかまで考えます。</p></div></div>
         </div>
         <figure class="lp-fig">
-          <img src="{{ 'assets/img/session-result.png' | url }}" alt="AI戦略対抗戦の合議結果画面" loading="lazy">
-          <figcaption>AI戦略対抗戦。複数のAI（Gemini／Claude／GPT）が多視点で評価・合議し、戦略案を採点する。</figcaption>
+          <img src="{{ 'assets/img/session-result.png' | url }}" alt="戦略案を複数のAIが評価・合議した結果の画面" loading="lazy">
+          <figcaption>ゲーム形式の戦略づくり。複数のAI（Gemini／Claude／GPT）が多視点で評価・合議し、戦略案を採点する。</figcaption>
         </figure>
       </div>
 
@@ -177,10 +177,10 @@
       <div class="lp-latest{% if not hl_img %} lp-latest--noimg{% endif %}">
         <div class="lp-latest__text">
           <span class="lp-latest__k">直近の回から</span>
-          <h3>第{{ latest.round }}回「{{ latest.title }}」{% if latest.month %}（{{ latest.month }}）{% endif %}</h3>
+          <h3>{{ round_month(latest.round) }}「{{ latest.title }}」</h3>
           {%- if hl_img %}
           <figure class="lp-latest__fig lp-latest__fig--sp">
-            <img src="{{ hl_img | url }}" alt="{{ latest.highlight_caption or ('第' ~ latest.round ~ '回の画面') }}" loading="lazy">
+            <img src="{{ hl_img | url }}" alt="{{ latest.highlight_caption or (round_month(latest.round) ~ 'の画面') }}" loading="lazy">
             {%- if latest.highlight_caption %}<figcaption>{{ latest.highlight_caption }}</figcaption>{% endif %}
           </figure>
           {%- endif %}
@@ -189,7 +189,7 @@
         </div>
         {%- if hl_img %}
         <figure class="lp-latest__fig lp-latest__fig--pc">
-          <img src="{{ hl_img | url }}" alt="{{ latest.highlight_caption or ('第' ~ latest.round ~ '回の画面') }}" loading="lazy">
+          <img src="{{ hl_img | url }}" alt="{{ latest.highlight_caption or (round_month(latest.round) ~ 'の画面') }}" loading="lazy">
           {%- if latest.highlight_caption %}<figcaption>{{ latest.highlight_caption }}</figcaption>{% endif %}
         </figure>
         {%- endif %}
@@ -215,7 +215,7 @@
   <section class="lp-block">
     <div class="wrap">
       <h2>参加者の声</h2>
-      <p class="lp-muted lp-small lp-voices__note">第1〜5回の参加者アンケートの自由記述をもとに、趣旨を変えずに要約・再構成しています。</p>
+      <p class="lp-muted lp-small lp-voices__note">2026年5月〜9月の各回の参加者アンケートの自由記述をもとに、趣旨を変えずに要約・再構成しています。</p>
       <div class="lp-voices">
         {%- for h, t in [
           ("「便利ツール」から「戦略」へ", "AIは議事録や資料づくりの便利ツールだと思っていました。事業の戦略や意思決定に組み込むという発想そのものが新鮮でした。"),
@@ -262,7 +262,7 @@
         <dt>Q. 途中の回から参加できますか？</dt>
         <dd>できます。各回は独立したテーマで、前の回の知識は前提にしません。A日程とB日程は同じ内容なので、都合のよい日程を選べます。当日参加できない回は、録画と資料で取り組めます。</dd>
         <dt>Q. 法人として利用できますか？</dt>
-        <dd>複数名でのご参加や、請求書払い（適格請求書の発行）のご相談を承ります。<a href="{{ 'join/corporate/' | url }}">法人のお問い合わせ</a>からご連絡ください。</dd>
+        <dd>複数名でのご参加や、請求書払い（法人で3名以上。適格請求書を発行します）のご相談を承ります。<a href="{{ 'join/corporate/' | url }}">法人のお問い合わせ</a>からご連絡ください。</dd>
       </dl>
     </div>
   </section>

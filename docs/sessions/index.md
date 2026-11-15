@@ -4,8 +4,8 @@ description: セッションの進め方と各回で手元に残るもの、今�
 
 # セッションの進め方と開催予定
 
-各回は独立したテーマとし、前回までの知識は前提としない形式で進めます。途中からの
-ご参加も歓迎します。各回は **A日程・B日程の2日程で、同じ内容** を開催します。
+各回は独立したテーマとし、前回までの知識は前提としない形式で進めます。いつからでも
+ご参加いただけます。各回は **A日程・B日程の2日程で、同じ内容** を開催します。
 進め方・手元に残るもの・今後の開催予定をまとめています。
 
 ## 各セッションの構成例（約2〜2.5時間 ＋ 交流タイム）
@@ -89,13 +89,13 @@ description: セッションの進め方と各回で手元に残るもの、今�
 画面例です（クリックで拡大）。
 
 <figure markdown="span">
-![事業デザイン対抗戦アプリの制作画面](../assets/img/session-build.png)
-<figcaption>事業デザイン対抗戦 ── 市場の声を聞き、AIとキービジュアル・コピー・プロトタイプを作り込む。</figcaption>
+![AI事業デザインゲームの制作画面](../assets/img/session-build.png)
+<figcaption>AI事業デザインゲーム ── 市場の声を聞き、AIとキービジュアル・コピー・プロトタイプを作り込む。</figcaption>
 </figure>
 
 <figure markdown="span">
-![AI戦略対抗戦の合議結果画面](../assets/img/session-result.png)
-<figcaption>AI戦略対抗戦 ── 複数のAI（Gemini／Claude／GPT）が多視点で評価・合議し、戦略案を採点する。</figcaption>
+![戦略案を複数のAIが評価・合議した結果の画面](../assets/img/session-result.png)
+<figcaption>ゲーム形式の戦略づくり ── 複数のAI（Gemini／Claude／GPT）が多視点で評価・合議し、戦略案を採点する。</figcaption>
 </figure>
 
 

@@ -49,7 +49,7 @@ def on_post_build(config):
     lines.append(f"> {config.get('site_description', '')}")
     lines.append("")
     lines.append("主催: 栗山実／株式会社アンテカニス（https://www.antecanis.com/）")
-    lines.append("形式: オンライン（Zoom）・月次開催。各回は独立したテーマで、途中参加可。")
+    lines.append("形式: オンライン（Zoom）・月次開催。各回は独立したテーマで、いつからでも参加できる。")
 
     # これから開催される日程（hooks/schedule.py が extra.schedule から作る。近い順）
     sessions = extra.get("sessions") or []
