@@ -84,6 +84,37 @@ def define_env(env):
         return "../" * depth + target
 
     @env.macro
+    def faq_list(ids=None):
+        """よくあるご質問。文の正本は `extra.faq`（広告用LP と同じ問答）。
+        ⚠ 名前を faq にしない（mkdocs-macros は extra: のキーを同じ名前の変数として出すので、ぶつかる）。
+
+        ids（例 ["it", "camera"]）を渡すとその順で、無ければ全部。Material の折りたたみ（`??? question`）で返す。
+        """
+        items = extra.get("faq") or []
+        by_id = {f.get("id"): f for f in items}
+        chosen = [by_id[i] for i in ids if i in by_id] if ids else items
+        out = [""]
+        for f in chosen:
+            q = str(f.get("q", "")).replace('"', "＂")
+            out += [f'??? question "{q}"', "", f"    {f.get('a', '')}", ""]
+        return "\n".join(out)
+
+    @env.macro
+    def session_flow():
+        """1回の流れ（/sessions/）。文の正本は `extra.flow`（広告用LP の「月に一度の回は、こう進みます」と同じ）。
+
+        Markdown の定義リストで返す（このページのほかの節と同じ見た目にするため）。
+        """
+        fl = extra.get("flow") or {}
+        out = [f"**{fl.get('time', '')}**。{fl.get('gain', '')}", ""]
+        for i, st in enumerate(fl.get("steps") or [], 1):
+            out += [f"**{i}. {st.get('title', '')}**", f":   {st.get('text', '')}", ""]
+        for a in fl.get("afters") or []:
+            out += [f"**{a.get('title', '')}**", f":   {a.get('text', '')}", ""]
+        out += [f"- {t}" for t in (fl.get("facts") or [])]
+        return "\n".join(out)
+
+    @env.macro
     def history_cards():
         """開催履歴（sessions/history.md）。`extra.history` を新しい順にカードで描画する。
 
@@ -94,9 +125,12 @@ def define_env(env):
         import html as _html
 
         rounds = extra.get("history", []) or []
+        sched = _schedule()
         out = ['<div class="history">']
         for r in rounds:
             no = r.get("round", "")
+            # 回は開催月で呼ぶ（「10月の回」。hooks/schedule.py の「回の呼び方」）
+            label = _html.escape(sched.round_month_html(extra, no))
             title = _html.escape(str(r.get("title", "")))
             area = _html.escape(str(r.get("area", "")))
             # 日付は hooks/schedule.py が extra.schedule から作る（「開催予定」はブラウザ側でも外れる）
@@ -110,13 +144,13 @@ def define_env(env):
                 svg = str(image).endswith(".svg")
                 out.append(
                     f'<div class="history-card__fig{" history-card__fig--svg" if svg else ""}">'
-                    f'<img src="{_rel(image)}" alt="第{no}回の図" loading="lazy"></div>'
+                    f'<img src="{_rel(image)}" alt="{label}の図" loading="lazy"></div>'
                 )
                 if svg:
                     out.append('<p class="history-card__hint">図は横にスクロールできます →</p>')
             out.append('<div class="history-card__body">')
             out.append(
-                f'<div class="history-card__meta"><span class="history-card__no">第{no}回</span>'
+                f'<div class="history-card__meta"><span class="history-card__no">{label}</span>'
                 f'<span class="history-card__dates">{dates}</span></div>'
             )
             out.append(f'<h3 class="history-card__title">{title}</h3>')

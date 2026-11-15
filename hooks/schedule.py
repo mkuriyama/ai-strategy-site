@@ -36,11 +36,11 @@
 
 ## 回の呼び方
 
-ふだんは「第7回」。**広告用LP（/start/）だけは開催月で呼ぶ**（「11月の回」）―― 初めて来た人に
-「連続ものの途中から入る」と思わせないため（栗山さん、2026-11-15）。月は **A日程の月**
-（12月の回＝12/15・1/6）。年が「いま」と違うときだけ年を添える（日付の 2027/1/6 と同じ決まり）。
-入会後の案内（メール・Circle・メンバースペース）とデータ（rounds.json・schedule.json）は第N回の
-ままなので、LP の次回の枠にだけ「（第7回）」を小さく添えて橋渡しする（`bridge=True`）。
+**サイトでは回を開催月で呼ぶ**（「11月の回」）―― 初めて来た人に「連続ものの途中から入る」と
+思わせないため（栗山さん、2026-11-15。広告用LP で始め、同じ日にサイト全体へ広げた）。月は
+**A日程の月**（12月の回＝12/15・1/6）。年が「いま」と違うときだけ年を添える（日付の 2027/1/6 と
+同じ決まり）。入会後の案内（メール・Circle・メンバースペース）とデータ（rounds.json・schedule.json）
+は第N回のままなので、「これからの開催」の枠にだけ「（第7回）」を小さく添えて橋渡しする（`bridge`）。
 
 ## 「開催済み」の決まり
 
@@ -105,11 +105,13 @@ def rounds(extra) -> list[dict]:
         if not r.get("a"):
             raise PluginError(f"{where}: 第{no}回の a（A日程の開始）がありません")
         days = []
+        a_at = _parse(r["a"], f"{where}.a")
         for key in ("a", "b"):
             if r.get(key):
                 at = _parse(r[key], f"{where}.{key}")
+                # 表示の名前は開催月で（「11月の回 A日程」）。データ（schedule.json）は round と slot で渡す
                 days.append({"round": no, "day": key, "at": at,
-                             "label": f"第{no}回 {DAY_NAME[key]}"})
+                             "label": f"{_month(a_at, now())} {DAY_NAME[key]}"})
         if len(days) == 2 and days[1]["at"] <= days[0]["at"]:
             raise PluginError(f"{where}: 第{no}回の B日程が A日程より前になっています")
         theme = str(r.get("theme") or "").strip() or _short_title(history.get(no, {}).get("title", ""))
@@ -137,11 +139,14 @@ def full(d: dt.datetime, ref: dt.datetime | None = None) -> str:
     return f"{md(d, ref)} {d:%H:%M}〜"
 
 
-def month_label(r: dict, ref: dt.datetime | None = None, suffix: str = "の回") -> str:
-    """11月の回。年が「いま」と違うときは 2027年1月の回。月は A日程の月（広告用LP の呼び方）。"""
-    a = r["days"][0]["at"]
+def _month(a: dt.datetime, ref: dt.datetime | None = None, suffix: str = "の回") -> str:
     y = f"{a.year}年" if ref is not None and a.year != ref.year else ""
     return f"{y}{a.month}月{suffix}"
+
+
+def month_label(r: dict, ref: dt.datetime | None = None, suffix: str = "の回") -> str:
+    """11月の回。年が「いま」と違うときは 2027年1月の回。月は A日程の月（上の「回の呼び方」）。"""
+    return _month(r["days"][0]["at"], ref, suffix)
 
 
 def round_month_html(extra, no, suffix: str = "の回") -> str:
@@ -175,10 +180,10 @@ def on_config(config):
     sessions = []
     for d in upcoming:
         r = by_round[d["round"]]
-        note = f"第{r['round']}回" + (f"「{r['theme']}」" if r["theme"] else "") + "。"
+        note = month_label(r, when) + (f"「{r['theme']}」" if r["theme"] else "") + "。"
         if len(r["days"]) == 2:
             note += "A日程・B日程は同じ内容（どちらか一方に参加）。"
-        note += "オンライン（Zoom）。各回は独立したテーマで、途中の回から参加できます。"
+        note += "オンライン（Zoom）。各回は独立したテーマで、いつからでも参加できます。"
         sessions.append({"label": d["label"], "kind": "main" if d["day"] == "a" else "sub",
                          "date": full(d["at"], when), "start": _iso(d["at"]),
                          "theme": r["theme"], "note": note})
@@ -204,6 +209,19 @@ def on_config(config):
         h["dates"] = "・".join(texts)
         h["dates_html"] = "・".join(spans)
 
+    # 実績の「6回 開催（2026年5月から毎月）」と、ホームの新着「10月の回までの開催履歴を公開中」。
+    # 回のたびに手で直していたので、日程と開催履歴から作る（書いても上書きされる）
+    done = [r for r in rs if held(r["end"], when)]
+    first_a = rs[0]["days"][0]["at"] if rs else None
+    stats = extra.get("stats")
+    if isinstance(stats, dict) and first_a:
+        stats["rounds_label"] = f"{len(done)}回"
+        stats["rounds_note"] = f"開催（{first_a.year}年{first_a.month}月から毎月）"
+    digest = extra.get("latest_digest")
+    hist = [h for h in (extra.get("history") or []) if isinstance(h, dict) and h.get("round") in by_round]
+    if isinstance(digest, dict) and hist:
+        digest["label"] = f"{month_label(by_round[hist[0]['round']], when)}までの開催履歴を公開中"
+
     extra["schedule_client"] = [
         {"at": _iso(d["at"]), "label": d["label"], "md": md(d["at"]), "full": full(d["at"])}
         for d in days
@@ -215,7 +233,7 @@ def on_env(env, config, files):
     """テーマのテンプレート（overrides/*.html）から部品を呼べるようにする。"""
     extra = config["extra"]
     env.globals.update(
-        schedule_upcoming=lambda n=2, variant="", month=False, bridge=False: upcoming_html(extra, n, variant, month, bridge),
+        schedule_upcoming=lambda n=2, variant="", month=True, bridge=True: upcoming_html(extra, n, variant, month, bridge),
         round_month=lambda no, suffix="の回": round_month_html(extra, no, suffix),
         schedule_list=lambda: schedule_list_html(extra),
         payment_table=lambda: payment_table_html(extra),
@@ -245,12 +263,12 @@ def _theme(r: dict, bridge: bool = False) -> str:
     return f'<span class="sch-round__theme sch-round__theme--tbd">{NO_THEME}{alt}</span>'
 
 
-def upcoming_html(extra, n: int = 2, variant: str = "", month: bool = False, bridge: bool = False) -> str:
+def upcoming_html(extra, n: int = 2, variant: str = "", month: bool = True, bridge: bool = True) -> str:
     """これからの開催（全日程が済んでいない回を近い順に n 回）。
 
     n 回より後ろの回も `hidden` で入れておく ―― ブラウザで先頭の回が済んだとき、
     schedule.js が繰り上げて出す。
-    month=True：回を開催月で呼ぶ（広告用LP）。bridge=True：テーマのあとに「（第7回）」を小さく添える
+    month：回を開催月で呼ぶ（既定）。bridge：テーマのあとに「（第7回）」を小さく添える（既定。広告用LP の最後の帯では外す）
     """
     when = now()
     rs = [r for r in rounds(extra) if not held(r["end"], when)][: n + 2]
@@ -280,7 +298,7 @@ def schedule_list_html(extra) -> str:
     for r in rounds(extra):
         h = held(r["end"], when)
         out.append(f'<div class="sch-all__row{" is-held" if h else ""}" data-round-end="{_iso(r["end"])}">')
-        out.append(f'<p class="sch-round__head"><span class="sch-round__no">第{r["round"]}回</span>{_theme(r)}</p>')
+        out.append(f'<p class="sch-round__head"><span class="sch-round__no">{_e(month_label(r, when))}</span>{_theme(r)}</p>')
         out.append('<ul class="sch-days">' + "".join(
             _day_li(d["at"], DAY_NAME[d["day"]], when) for d in r["days"]) + "</ul>")
         out.append("</div>")

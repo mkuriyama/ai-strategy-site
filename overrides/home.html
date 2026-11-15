@@ -11,29 +11,56 @@
 <main class="md-main" data-md-component="main">
 <div class="home-landing">
 
-  {# ① ヒーロー #}
-  <section class="hero">
+  {# ① ヒーロー（2026-11-15〜。広告用LP の最初の画面と同じ組み：見出し・画面の写真・主催者と実績・開催のかたち・ボタン）。
+      携帯は 見出し → 写真 → 主催者と実績 → 開催のかたち → ボタン、PC は左に見出しとボタン、右に写真、下に主催者と実績の帯。
+      文は LP と同じ正本（見出しと補足文はここ、開催のかたち＝extra.format、主催者＝extra.host、写真＝extra.lp.images） #}
+  {%- set ex = config.extra -%}
+  {%- set L = ex.lp or {} -%}
+  {%- set img = L.images or {} -%}
+  {%- set cap = L.captions or {} -%}
+  <section class="hero hero--lp">
     <div class="wrap">
-      <div>
+      <div class="hero__head">
         <span class="eyebrow">
           <svg class="cmark" viewBox="-1 -1 71 46" aria-hidden="true"><line x1="10" y1="34.04" x2="64.53" y2="4.0" stroke="#1C6E7C" stroke-width="3" stroke-linecap="round"/><circle cx="10" cy="34.04" r="10" fill="#1C6E7C"/><circle cx="64.53" cy="4.0" r="4.4" fill="#1C6E7C"/></svg>
-          <span class="was">AI as a tool</span> <span class="arw">→</span> <span class="now">AI as a strategy</span>
+          <span class="was">ツールとしてのAI</span> <span class="arw">→</span> <span class="now">戦略としてのAI</span>
         </span>
-        <h1>「AIを<span class="was">使う</span>」から、<br>「AI前提で<span class="now">事業戦略を作る</span>」へ。</h1>
-        <p class="lead">事業を動かす方々のための、AI戦略実装の「型」を月次で作り、動かす実践の場です。各回、戦略上の問いから出発し、AIを組み込んで動く仕組みを作り、自社・自業界の競争前提がどう書き換わるかまで踏み込みます。</p>
-        <div class="actions">
-          <a class="btn btn-gold" href="{{ config.extra.register_url | url }}">案内メールを受け取る（無料のメール登録）</a>
-          <a class="btn btn-teal" href="join/">有償メンバーに申し込む →</a>
-          <a class="btn btn-outline" href="sessions/">セッションの中身と日程を見る</a>
+        <h1><span class="now">{{ "AI前提で事業を構想し、" | phrase }}</span><br>{{ "実現できる人へ。" | phrase }}</h1>
+        <p class="lead">{{ "AIを便利な道具として使うだけで終わらせない。" | phrase }}{{ "毎月、AI×戦略の新しいテーマでAIを実際に動かし、動かして初めて分かることを事業戦略に持ち帰る実践の場です。" | phrase }}</p>
+      </div>
+      {%- if img.hero %}
+      <figure class="hero__visual">
+        <div class="hero__stack">
+          <a class="glightbox" href="{{ img.hero | url }}" data-title="{{ cap.hero_sp or cap.hero }}"><img src="{{ img.hero | url }}" {{ img_attrs(img.hero) }} alt="AI戦略スタジオの画面" fetchpriority="high"></a>
+          {%- if img.hero2 %}<img class="hero__float" src="{{ img.hero2 | url }}" {{ img_attrs(img.hero2) }} alt="AIで作った業務アプリの例">{% endif %}
         </div>
-        <div class="host">主催：栗山 実 ／ 株式会社アンテカニス</div>
+        {%- if cap.hero_sp or cap.hero %}<figcaption>{{ cap.hero_sp or cap.hero }}</figcaption>{% endif %}
+      </figure>
+      {%- endif %}
+      <div class="hero__trust">
+        <div class="hero__host">
+          <img src="{{ 'assets/profile.jpg' | url }}" alt="栗山 実" width="52" height="52">
+          <p><strong>主催 栗山 実</strong>{{ ex.host.short }}</p>
+        </div>
+        <ul class="hero__stats">
+          <li><b>{{ ex.stats.paid_members }}</b><span>有償メンバー</span></li>
+          <li><b>{{ ex.stats.satisfaction }}</b><span>「参加して良かった」</span></li>
+          {%- if ex.next_session_short %}
+          <li data-next-wrap><b data-next-session="md">{{ ex.sessions[0].date.split(' ')[0] }}</b><span>次回（オンライン）</span></li>
+          {%- endif %}
+        </ul>
       </div>
-      <div class="shot">
-        <a class="glightbox" href="assets/img/session-build.png" data-title="事業デザイン対抗戦アプリの制作画面">
-          <img src="assets/img/session-build.png" alt="事業デザイン対抗戦アプリの制作画面">
-        </a>
-        <div class="cap">実践アプリ「事業デザイン対抗戦」。市場の声を聞き、AIと案を作り込む。</div>
+      <dl class="hero__facts">
+        {%- for f in ex.format %}
+        <div><dt>{{ f.k }}</dt><dd>{{ f.v | phrase }}</dd></div>
+        {%- endfor %}
+      </dl>
+      <div class="actions">
+        <a class="btn btn-gold" href="{{ ex.register_url | url }}">案内メールを受け取る（無料のメール登録）</a>
+        <a class="btn btn-teal" href="join/">有償メンバーに申し込む →</a>
+        <a class="btn btn-outline" href="sessions/">セッションの中身と日程を見る</a>
       </div>
+      <p class="hero__note">※ {{ ex.stats.satisfaction }}は、{{ ex.stats.satisfaction_note }}</p>
     </div>
   </section>
 
@@ -69,7 +96,7 @@
       <h2>「便利に使う」の、その先へ。</h2>
       <p>生成AIの普及で「ツールとして便利に使う」用途は急速に広がっています。本プロジェクトが狙うのはその先——<strong>AIを前提に、事業戦略そのものを構想し、実装する</strong>への転換です。</p>
       <p>1990年代、世界を変えたのは「インターネットの使い方講座」ではなく、ネット前提で作られたAmazonやNetflixのようなサービスでした。同じ問いに、いま私たちはAIで直面しています。</p>
-      <p>抽象論で終わらせません。毎回みずから手を動かし、動くものを作り、その戦略インパクトを体感する。AIの進化に合わせて、月次で更新し続ける場です。各回は独立したテーマで、途中からの参加も歓迎します。</p>
+      <p>抽象論で終わらせません。毎回みずから手を動かし、動くものを作り、その戦略インパクトを体感する。AIの進化に合わせて、月次で更新し続ける場です。各回は独立したテーマで、いつからでも参加できます。</p>
       <p><a class="textlink" href="about/">背景と狙いを詳しく →</a></p>
     </div>
   </section>
@@ -80,23 +107,24 @@
       <div class="read">
         <div class="seyebrow">セッションで実際に何をするか</div>
         <h2>問いから始め、作り、戦略に戻す。</h2>
-        <p>各回は「戦略的な問いから出発し、手を動かして仕組みを作り、戦略インパクトを考える」一貫した流れで進みます（約2〜2.5時間＋交流タイム）。</p>
+        <p>各回は「戦略的な問いから出発し、AIを動かして仕組みを作り、戦略インパクトを考える」一貫した流れで進みます（{{ config.extra.flow.time }}。そのあとの質問と交流は自由参加）。</p>
       </div>
       <div class="phase"><div class="n">問</div><div><h3>戦略的な問いから始める</h3><p>その回のテーマがなぜ戦略的に重要かを、自分の事業・業界の文脈で言語化。AIにも同じ問いを解かせ、比較します（Why before How）。</p></div></div>
-      <div class="phase"><div class="n">作</div><div><h3>手を動かして、動く仕組みを作る</h3><p>AIとの対話から、コード・コンテンツ・アプリへと段階的に発展。プログラミング経験は前提としません。各自の事業文脈に合わせて動的に組み立てます。</p></div></div>
+      <div class="phase"><div class="n">作</div><div><h3>AIを動かして、動く仕組みを作る</h3><p>AIとの対話から始めて、AIに仕組みやコンテンツを作らせ、動くところまで進めます。作るのは主にAI。手順はすべて画面を共有しながら進め、手順のガイドもあるので、ITが苦手でも進められます。</p></div></div>
       <div class="phase"><div class="n">戦</div><div><h3>戦略視座に立ち戻る</h3><p>作ったものを自社にどう適用し、産業・組織構造の転換にどう効くかまで視野を広げます。便利使いで終わらせません。</p></div></div>
       <div class="figrow">
-        <div class="fig">
-          <a class="glightbox" href="assets/img/session-build.png" data-title="事業デザイン対抗戦アプリ">
-            <img src="assets/img/session-build.png" alt="事業デザイン対抗戦アプリの制作画面">
+        {#- 写真は広告用LP と同じもの（assets/img/start/）。説明は回を月で書く。年が変わったら「2026年10月の回」に #}
+        <div class="fig fig--frame" style="--focus: 50% 0%">
+          <a class="glightbox" href="assets/img/start/arena-s06a.jpg" data-title="10月の回の対話アリーナ">
+            <img src="assets/img/start/arena-s06a.jpg" {{ img_attrs('assets/img/start/arena-s06a.jpg') }} alt="10月の回の対話アリーナの画面" loading="lazy">
           </a>
-          <div class="cap"><b>事業デザイン対抗戦。</b>市場の声を聞き、AIと一緒にキービジュアル・コピー・プロトタイプを作り込む。</div>
+          <div class="cap"><b>10月の回の対話アリーナ。</b>同じ問いでAIと対話し、深まりを1往復ごとに点数で見る。</div>
         </div>
-        <div class="fig">
-          <a class="glightbox" href="assets/img/session-result.png" data-title="AI戦略対抗戦の合議結果画面">
-            <img src="assets/img/session-result.png" alt="AI戦略対抗戦の合議結果画面">
+        <div class="fig fig--frame" style="--focus: {{ config.extra.lp.focus.practice or '0% 50%' }}">
+          <a class="glightbox" href="assets/img/start/reports.jpg" data-title="9月の回：AIと書いた未来シナリオのレポート">
+            <img src="assets/img/start/reports.jpg" {{ img_attrs('assets/img/start/reports.jpg') }} alt="9月の回のレポートの一覧" loading="lazy">
           </a>
-          <div class="cap"><b>AI戦略対抗戦。</b>複数のAI（Gemini／Claude／GPT）が多視点で評価・合議し、戦略案を採点する。</div>
+          <div class="cap"><b>9月の回。</b>AIと書いた未来シナリオのレポートを、全員で見比べる。</div>
         </div>
       </div>
       <div class="read" style="margin-top:26px"><a class="textlink" href="sessions/">進め方・持ち帰るもの・今後の予定 →</a></div>
@@ -109,14 +137,20 @@
       <div class="seyebrow">持ち帰るもの</div>
       <h2>各回のあとに、手元に残るもの。</h2>
       <div class="chips">
-        <span class="chip"><span class="s"></span>当日の映写資料</span>
-        <span class="chip"><span class="s"></span>実行・改変できるサンプルコード（Python・Colab）</span>
-        <span class="chip"><span class="s"></span>使用したプロンプト・データ一式</span>
+        <span class="chip"><span class="s"></span>当日のスライド</span>
+        <span class="chip"><span class="s"></span>使ったファイルと指示文</span>
+        <span class="chip"><span class="s"></span>A・B日程それぞれの録画と音声・文字起こし</span>
+        <span class="chip"><span class="s"></span>ダイジェスト記事</span>
         <span class="chip"><span class="s"></span>発展版アプリのデモと解説</span>
         <span class="chip"><span class="s"></span>各自で広げる自習ガイド</span>
-        <span class="chip"><span class="s"></span>Zoom録画（有償メンバー全員に共有）</span>
       </div>
-      <p class="muted-note">多忙な方が録画・資料での参加でも、各自のタイミングでAI操作を追体験できるよう設計しています。</p>
+      <p class="muted-note">有償メンバーは、入会した日から、これまでのすべての回の記録を見られます。各回を場面ごとに見返せるビューア、「必見だけ20分」の見方、これまでの記録を言葉で探して聞ける機能、業界×業務で並べた課題の棚（AIで解決に挑戦できるテーマ集。{{ config.extra.lp.issues_count }}）もあります。</p>
+      <div class="fig keep-fig">
+        <a class="glightbox" href="assets/img/start/space-viewer.jpg" data-title="メンバースペース：各回を場面ごとに見返す">
+          <img src="assets/img/start/space-viewer.jpg" {{ img_attrs('assets/img/start/space-viewer.jpg') }} alt="各回を場面ごとに見返す画面" loading="lazy">
+        </a>
+        <div class="cap"><b>メンバースペース。</b>各回を場面ごとに見返す。</div>
+      </div>
     </div>
   </section>
 
@@ -126,15 +160,36 @@
       <div>
         <div class="seyebrow">セッションのあとも続く場</div>
         <h2>一度きりの講座では、ない。</h2>
-        <p>参加者向けコミュニティ（Circle）で、過去回のアーカイブ、AI戦略関連ニュースの解説、参加者同士のディスカッションが続きます。AI時代の戦略の引き出しを、継続して積み重ねる場です。</p>
+        <p>参加者向けコミュニティ（Circle）では、過去回のアーカイブや参加者同士のディスカッションに加えて、毎朝、AIがニュースを集め、これまでの回と結びつけて読み解いた投稿が届き、それをもとにメンバー同士で考えを交わせます。AI時代の戦略の引き出しを、継続して積み重ねる場です。</p>
         <a class="textlink" href="sessions/#community">参加者コミュニティを詳しく →</a>
       </div>
       <div class="fig">
-        <a class="glightbox" href="assets/img/community-circle.png" data-title="参加者向けコミュニティ（Circle）">
-          <img src="assets/img/community-circle.png" alt="参加者向けコミュニティ（Circle）の画面">
+        <a class="glightbox" href="assets/img/start/news-circle.jpg" data-title="毎朝のAIニュース解釈">
+          <img src="assets/img/start/news-circle.jpg" {{ img_attrs('assets/img/start/news-circle.jpg') }} alt="コミュニティに届く、毎朝のAIニュース解釈の投稿" loading="lazy">
         </a>
-        <div class="cap">お知らせ・セッションアーカイブ・AI戦略関連ニュース・ディスカッションのスペースを用意。</div>
+        <div class="cap">{{ config.extra.lp.captions.news }}</div>
       </div>
+    </div>
+  </section>
+
+  {# ⑥' 参加者の声（LP と同じ。文は extra.voices、満足度は extra.stats。97% の根拠は最初の画面の下の注記） #}
+  <section class="block" id="voices">
+    <div class="wrap">
+      <div class="read">
+        <div class="seyebrow">参加者の声</div>
+        <h2>{{ config.extra.stats.satisfaction }}が「参加して良かった」。</h2>
+      </div>
+      <div class="voices">
+        {%- for v in config.extra.voices.cards %}
+        <article class="voice">
+          {%- if v.top %}<p class="voice__tag">いちばん多かった声</p>{% endif %}
+          <h3>{{ v.title | phrase }}</h3>
+          <blockquote>「{{ v.voice | phrase }}」</blockquote>
+          <p class="voice__who"><span>多かった立場</span>{{ v.who | phrase }}</p>
+        </article>
+        {%- endfor %}
+      </div>
+      <p class="muted-note">{{ config.extra.voices.note }}</p>
     </div>
   </section>
 
@@ -170,7 +225,8 @@
         <img class="av-photo" src="assets/profile.jpg" alt="主催者 栗山 実">
         <div>
           <h3>栗山 実 ／ Minoru Kuriyama</h3>
-          <p>株式会社アンテカニス 代表取締役。多摩大学経営大学院特任教授、グロービス経営大学院教員。マッキンゼー・アンド・カンパニーで戦略コンサルティングに従事後、独立。AI・データ戦略の企業助言、人材育成、スタートアップの事業創造・経営に携わる。東京大学理学部物理学科卒・同大学院修士課程修了。</p>
+          <p class="host-card__role">{{ config.extra.host.role }}</p>
+          <p>{{ config.extra.host.bio }}</p>
           <p style="margin-top:8px"><a class="textlink" href="about/profile/">プロフィール詳細 →</a></p>
         </div>
       </div>

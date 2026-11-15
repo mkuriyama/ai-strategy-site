@@ -10,9 +10,9 @@
     申込ボタンは主催者と実績の下に置く ―― 「新しい人を迎えている」「自分も入ってよい」と分かる合図として。
     言葉は「いつからでも参加できます」（月額の会なので「募集」「第N回の参加者」とは言わない）。
     ほかの導線は、帯の「参加費・お申し込み」（いつも見える。料金の枠へ）・料金の枠・最後の帯・携帯の固定ボタン（最初の画面を過ぎてから出す）
-  - 回は開催月で呼ぶ（「11月の回」。round_month()・schedule_upcoming(month=true)・pay_now()）。「第7回」は、
-    連続ものの途中から入る印象を与えるため（栗山さん、2026-11-15）。入会後の案内は第N回なので、
-    次回の枠にだけ「（第7回）」を小さく添える（bridge=true）。extra.lp の文も月で書く
+  - 回は開催月で呼ぶ（「11月の回」。round_month()・schedule_upcoming()・pay_now()。サイト全体の決まり）。
+    「第7回」は、連続ものの途中から入る印象を与えるため（栗山さん、2026-11-15）。入会後の案内は第N回なので、
+    次回の枠にだけ「（第7回）」を小さく添える（最後の帯は bridge=false）。extra.lp の文も月で書く
   - 言葉：「プログラミング経験は前提にしない」とは書かない（技術の話が多い場だと思わせる）。「ITが苦手でも」の調子で。
     録画は「追いつく」ためではない（各回は独立したテーマ）。欠席した回を知る・見返す・探すためのもの
   - 各回はその月の A・B の2日程だけで、同じ回をあとで開かない。参加者同士の気づきの交換や空気感は当日ならでは
@@ -61,9 +61,9 @@
           携帯は主催者と実績（次回）の下 ―― 主催者を最初の画面に残すため。PC は画面の写真の下。
           時刻は 1回の流れ・次回の枠と同じ。録画は「追いつく」ためではなく、参加できなかった回を知るためのもの #}
       <dl class="st-hero__facts">
-        <div><dt>開催</dt><dd>{{ "Zoom・20:00〜22:30ごろ" | phrase }}</dd></div>
-        <div><dt>日程</dt><dd>{{ "同じ内容を曜日違いの2日程で。どちらかに" | phrase }}</dd></div>
-        <div><dt>録画</dt><dd>{{ "参加できない回も、あとから見返せる" | phrase }}</dd></div>
+        {%- for f in ex.format %}
+        <div><dt>{{ f.k }}</dt><dd>{{ f.v | phrase }}</dd></div>
+        {%- endfor %}
       </dl>
       {%- if img.hero %}
       <figure class="st-hero__visual">
@@ -78,7 +78,7 @@
       <div class="st-hero__trust">
         <div class="st-hero__host">
           <img src="{{ 'assets/profile.jpg' | url }}" alt="栗山 実" width="60" height="60">
-          <p><strong>主催 栗山 実</strong>マッキンゼー出身。大手企業へのAI戦略助言、AI関連スタートアップの共同創業、AI技術開発などを歴任。グロービス経営大学院 教員、多摩大学経営大学院 特任教授。</p>
+          <p><strong>主催 栗山 実</strong>{{ ex.host.short }}</p>
         </div>
         <ul class="st-hero__stats">
           <li><b>{{ st.paid_members }}</b><span>有償メンバー</span></li>
@@ -237,7 +237,7 @@
           {%- endif %}
           <div class="st-next">
             <p class="st-next__k">次回</p>
-            {{ schedule_upcoming(1, "start", month=true, bridge=true) }}
+            {{ schedule_upcoming(1, "start") }}
             <p class="st-next__note">オンライン（Zoom）・20:00〜22:30ごろ。AとBは同じ内容で、この回を開くのは、この2日程だけです。各回は独立したテーマで、いつからでも参加できます。</p>
           </div>
         </div>
@@ -267,16 +267,16 @@
           <img src="{{ 'assets/profile.jpg' | url }}" alt="栗山 実" width="240" height="240" loading="lazy">
           <div>
             <p class="st-host__name">栗山 実</p>
-            <p class="st-host__role">株式会社アンテカニス 代表取締役／多摩大学経営大学院 特任教授／グロービス経営大学院 教員</p>
+            <p class="st-host__role">{{ ex.host.role }}</p>
           </div>
         </div>
         <div class="st-host__body">
-          <blockquote class="st-host__quote">AIの使い方や効率化の話は、たくさんあります。でも、それで十分でしょうか。インターネットの普及期に世界を変えたのは、Excel教室に通った人ではなく、GoogleやAmazonを生み出した人たちでした。戦略を考える視点と、実際に手を動かす実践。その両方を、毎月、参加者と一緒に試しています。</blockquote>
-          <p class="st-host__bio">データサイエンティスト・起業家・戦略アドバイザー。マッキンゼー・アンド・カンパニー等を経て独立。大企業のデータ活用やAI戦略の助言から、データ技術を基盤としたスタートアップの立ち上げと経営まで手がける。東京大学理学部卒・同大学院修了（素粒子論）。</p>
+          <blockquote class="st-host__quote">{{ ex.host.quote }}</blockquote>
+          <p class="st-host__bio">{{ ex.host.bio }}</p>
           <ul class="st-career">
-            <li><b>共同創業</b><span>VISITS Technologies（AIソリューション）取締役・共同創業者／souco（倉庫共有サービス）取締役・共同創業者</span></li>
-            <li><b>大学院</b><span>グロービス経営大学院 教員（ビジネス・アナリティクス、AI＆データサイエンス）／多摩大学経営大学院 特任教授（データドリブン経営の実践論）</span></li>
-            <li><b>顧問</b><span>D Capital（DX×PEファンド）、サイキンソー（細菌叢検査サービス。創業期から参加）ほか</span></li>
+            {%- for c in ex.host.career %}
+            <li><b>{{ c.k }}</b><span>{{ c.v }}</span></li>
+            {%- endfor %}
           </ul>
         </div>
       </div>
@@ -316,65 +316,42 @@
           栗山さん、2026-11-15）。立場は、自由記述に本人が書いていたものの例。多かった順：手元で動かして体感（約30件）、
           戦略・事業の視点につながる（約15件）、自社に当てはめて社内に持ち帰る（約10件）。集計は非公開の運用資料の側 #}
       <div class="st-change">
-        {%- for h, voice, who, top in [
-          ("手元で動かして、AIに何ができるかを体感できた",
-           "説明を聞くだけでなく、手元で実際にAIを動かして、何ができるかを体感できた。「こんなことまでできるのか」と驚いた。",
-           "仕事でAI活用に携わる方、AIで何かを作るのは初めての方、従業員20名以下の会社の方 など", true),
-          ("効率化どまりだったAIが、戦略の話につながった",
-           "壁打ちや効率化にとどまっていたAIの使い方が、戦略立案や事業の意思決定の話につながった。道具を作ること自体ではなく、AIをどう生かすべきかを考えさせられた。",
-           "自社の経営戦略をIT側から考える立場の方、AIを組み込む案件のプロジェクトマネージャー、日々の業務でAIを使ってきた方 など", false),
-          ("自社に当てはめ、社内に持ち帰れた",
-           "架空の企業や身近な題材で体験したあと、自社や自分の業界に当てはめて考えられた。社内で広げるヒントや、チームに危機感を伝える材料になった。",
-           "社内のAI活用を推進する方、チームを率いる管理職の方、自社の経営戦略にかかわる方 など", false),
-        ] %}
+        {%- for v in ex.voices.cards %}
         <article class="st-change__item">
-          {%- if top %}<p class="st-change__tag">いちばん多かった声</p>{% endif %}
-          <h3>{{ h | phrase }}</h3>
-          <blockquote class="st-change__voice">「{{ voice | phrase }}」</blockquote>
-          <p class="st-change__who"><span>多かった立場</span>{{ who | phrase }}</p>
+          {%- if v.top %}<p class="st-change__tag">いちばん多かった声</p>{% endif %}
+          <h3>{{ v.title | phrase }}</h3>
+          <blockquote class="st-change__voice">「{{ v.voice | phrase }}」</blockquote>
+          <p class="st-change__who"><span>多かった立場</span>{{ v.who | phrase }}</p>
         </article>
         {%- endfor %}
       </div>
       <p class="st-note">※ {{ st.satisfaction }}は、{{ st.satisfaction_note }}</p>
-      <p class="st-note st-note--tight">参加者の声は、同じアンケートの自由記述で多かった趣旨をまとめ直したものです（個々の回答の引用ではありません）。立場は、自由記述に書かれていたものの例です。</p>
+      <p class="st-note st-note--tight">{{ ex.voices.note }}</p>
     </div>
   </section>
 
-  {# ⑥ 1回の流れ（/sessions/ の「各セッションの構成例」と、extra.participation から。新しい約束は書かない） #}
+  {# ⑥ 1回の流れ（文は extra.flow。/sessions/ の「1回の流れ」と同じ正本。新しい約束は書かない） #}
   <section class="st-block st-block--pale" id="flow" data-lp-section="flow">
     <div class="st-wrap">
       <h2>{{ "月に一度の回は、" | phrase }}{{ "こう進みます" | phrase }}</h2>
-      <p class="st-flow__meta">20:00〜22:30ごろ・オンライン（Zoom）</p>
-      <p class="st-flow__gain">2時間半で、毎回、新しい体験と知識、次に考える問い、資料集、持ち帰りのファイルまで得られるように組んでいます。</p>
+      {%- set fl = ex.flow %}
+      <p class="st-flow__meta">{{ fl.time }}</p>
+      <p class="st-flow__gain">{{ fl.gain }}</p>
       <ol class="st-flow">
-        {%- for h, t in [
-          ("問いから始める", "その回のテーマが、なぜ戦略的に重要か。自分の事業・業界の文脈で言葉にし、AIにも同じ問いを考えさせて比べます。"),
-          ("AIで動かす、作る", "AIとの対話から始めて、AIに仕組みやコンテンツを作らせ、動くところまで進めます。作るのは主にAI。手順はすべて画面を共有しながら進め、手順のガイドもあるので、ITが苦手でも進められます。"),
-          ("戦略に戻る", "作ったものをもとに、自社にどう効くか、産業や組織の構造がどう変わるかを考えます。"),
-          ("まとめ", "持ち帰るファイル一式を確かめ、次の回を予告します。本編は、おおむね22:30までです。"),
-        ] %}
-        <li><span class="st-flow__n">{{ loop.index }}</span><h3>{{ h }}</h3><p>{{ t }}</p></li>
+        {%- for st_ in fl.steps %}
+        <li><span class="st-flow__n">{{ loop.index }}</span><h3>{{ st_.title }}</h3><p>{{ st_.text }}</p></li>
         {%- endfor %}
       </ol>
       <div class="st-flow__afters">
+        {%- for a in fl.afters %}
         <div class="st-flow__after">
-          <h3>本編のあと（自由参加）</h3>
-          <p>質問と交流の時間です（最大60分ほど）。途中で抜けても大丈夫です。録画に残さない時間で、質問に答えたり議論したりするなかで、いまのAIの潮流の本質に話が及ぶこともあります。参加できる方は、ぜひ。</p>
+          <h3>{{ a.title }}</h3>
+          <p>{{ a.text }}</p>
         </div>
-        <div class="st-flow__after">
-          <h3>終わったあとも</h3>
-          <p>録画と資料に加えて、各回を場面ごとに見返せるビューアがあります。出られなかった回の中身も分かり、出た回の見返したい場面や、数か月前のあの話も、すぐに見つかります。それでも、参加者同士の気づきの交換や、その場の空気感は、当日ならではです。</p>
-        </div>
+        {%- endfor %}
       </div>
       <ul class="st-flow__facts">
-        {%- for t in [
-          "各回は独立したテーマ。いつからでも参加できます",
-          "A・Bの2日程は同じ内容。どちらかに参加すれば十分です",
-          "カメラや発言は必須ではありません",
-          "事前課題はありません",
-          "用意するもの：Zoomが使えるパソコン、個人のGoogleアカウント（Gmail。Google Colab と資料の共有に使います）、無料版でよいので ChatGPT・Claude・Gemini・Copilot などいずれかのAIのアカウント",
-          "追加の費用なしで、どの体験もできるように用意しています",
-        ] %}
+        {%- for t in fl.facts %}
         <li>{{ lp.check() }}<span>{{ t | phrase }}</span></li>
         {%- endfor %}
       </ul>
@@ -443,26 +420,10 @@
       </div>
       {#- PC では2段に流す（左の空きをなくす）。dl の中の div は1問ずつのまとまり #}
       <dl class="st-faq">
-        <div class="st-faq__item"><dt>AIツールの使い方を学ぶ場ですか？</dt>
-          <dd>いいえ。個別ツールの勉強会は、ほかにも数多くあります。ここでは、AI前提の事業構想と、その実践に焦点を当てます。実践で使うAIの操作は、その場で画面を共有しながら一緒に進めます。</dd></div>
-        <div class="st-faq__item"><dt>ITが苦手でも参加できますか？</dt>
-          <dd>できます。作るのは主にAIで、手順はすべて画面を共有しながら進め、初めての方向けの手順のガイドもあります。用意していただくのは、Zoomが使えるパソコン、個人のGoogleアカウント（Gmail。Google Colab と資料の共有に使います）、無料版でよいのでいずれかのAIのアカウント（ChatGPT・Claude・Gemini・Copilot など）です。</dd></div>
-        <div class="st-faq__item"><dt>会社のパソコンや、会社のアカウントで参加できますか？</dt>
-          <dd>参加はできます。ただ、会社のパソコンやアカウントは、セキュリティの設定で使えないサイトやサービスがあることが多いので、私用のパソコンと個人のアカウントをおすすめします。</dd></div>
-        <div class="st-faq__item"><dt>追加の費用はかかりますか？</dt>
-          <dd>かかりません。月額のほかに費用をかけなくても、どの体験もできるように用意しています（AIは無料版のアカウントで足ります）。少し費用をかけると、有料のサービスで画像を作るなど、できることが増える場面もあり、その方法もご案内します。</dd></div>
-        <div class="st-faq__item"><dt>途中の回からでも参加できますか？</dt>
-          <dd>できます。各回は独立したテーマで、前の回の知識は前提にしません。</dd></div>
-        <div class="st-faq__item"><dt>当日参加できない回は？</dt>
-          <dd>録画と資料で、ご自身のタイミングで取り組めます。ただ、各回はその月のA・Bの2日程だけで、同じ回をあとで開くことはありません。参加者同士の気づきの交換や、その場の空気感は当日ならではなので、できるだけ当日のご参加をおすすめします。</dd></div>
-        <div class="st-faq__item"><dt>当日、カメラや発言は必要ですか？</dt>
-          <dd>どちらも必須ではありません。カメラは、差し支えなければオンにしていただくと話しやすくなります（参加者の顔は録画に残しません）。ゲーム形式でAIを使う体験では、結果を順位で見ることもあります（ニックネームで参加できます）。特に優れていた方に感想やコツをうかがうことがありますが、声を出せる方にお願いしています。</dd></div>
-        <div class="st-faq__item"><dt>自社の情報を話す必要はありますか？</dt>
-          <dd>いいえ。Zoomのチャットで「自社ではどんなAIを使っていますか」などとうかがうことはありますが、答えるかどうかは自由です。自分の業界で考えてみる場面でも、自社にしづらい方は、なじみのある別の業界で考えていただけます。</dd></div>
-        <div class="st-faq__item"><dt>合わなかったら？</dt>
-          <dd>初回のお支払い日の前日までの解約なら費用はかかりません。その後も、次の更新日の前日までに解約すれば、次の分はかかりません。解約は、Stripe（カード決済の会社）の会員用の画面から、ご自身でいつでもできます。</dd></div>
-        <div class="st-faq__item"><dt>会社の経費で参加できますか？</dt>
-          <dd>できます。お申し込み後、Stripeで適格領収書を表示できます。法人で3名以上のご参加なら、請求書の発行と後日のお振込にも対応します。</dd></div>
+        {%- for f in ex.faq %}
+        <div class="st-faq__item"><dt>{{ f.q }}</dt>
+          <dd>{{ f.a }}</dd></div>
+        {%- endfor %}
       </dl>
     </div>
   </section>
@@ -503,7 +464,7 @@
       <h2>{{ "AI前提の事業構想を、" | phrase }}{{ "次の回から。" | phrase }}</h2>
       <div class="st-final__next">
         <span class="st-final__k">次回</span>
-        {{ schedule_upcoming(1, "band", month=true) }}
+        {{ schedule_upcoming(1, "band", bridge=false) }}
       </div>
       <a class="st-btn st-btn--light" href="{{ ex.join_url }}" data-cta="final">{{ join_label }}</a>
       <p class="st-final__price">初月無料・以降は月額{{ pr.early_monthly_incl }}円（税込）</p>
