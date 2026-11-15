@@ -25,11 +25,34 @@ def _parser():
     return budoux.load_default_japanese_parser()
 
 
+# BudouX が語の途中で切る語。この中では改行させない（例：「据え｜置き」「お支払い｜日」「都合のよい｜方」）
+KEEP = ("据え置き", "お支払い日", "都合のよい方")
+
+
+def _chunks(s: str) -> list[str]:
+    chunks = _parser().parse(s)
+    cuts, pos = set(), 0
+    for c in chunks[:-1]:
+        pos += len(c)
+        cuts.add(pos)
+    for w in KEEP:
+        i = s.find(w)
+        while i >= 0:
+            cuts -= set(range(i + 1, i + len(w)))
+            i = s.find(w, i + 1)
+    out, last = [], 0
+    for c in sorted(cuts):
+        out.append(s[last:c])
+        last = c
+    out.append(s[last:])
+    return out
+
+
 def phrase(text) -> Markup:
     s = str(text or "")
     if not s:
         return Markup("")
-    return Markup("<wbr>").join(escape(c) for c in _parser().parse(s))
+    return Markup("<wbr>").join(escape(c) for c in _chunks(s))
 
 
 def on_env(env, config, files):

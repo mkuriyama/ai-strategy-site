@@ -17,6 +17,8 @@
 <main class="md-main" data-md-component="main">
 <div class="home-landing lp st st--thanks" data-lead-page="start">
 
+  {{ lp.st_bar(home=('start/' | url), nav=False) }}
+
   <section class="st-block st-done">
     <div class="st-wrap st-narrow">
       <div class="st-done__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/><path d="M7.5 12.3l3 3 6-6.3" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
@@ -45,7 +47,7 @@
 
       <div class="st-nextread">
         <h2>次に読むもの</h2>
-        <p><a href="{{ 'sessions/history/' | url }}">第{{ latest.round }}回の発見を読む（開催履歴）→</a></p>
+        <p><a href="{{ 'sessions/history/' | url }}">{{ round_month(latest.round) }}の発見を読む（開催履歴）→</a></p>
         <p><a href="{{ ex.news_site_url }}" target="_blank" rel="noopener" data-ga="click_library" data-ga-pos="thanks">今朝のAI戦略ライブラリーを見る →</a></p>
       </div>
     </div>

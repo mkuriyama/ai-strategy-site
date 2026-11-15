@@ -59,6 +59,8 @@ hooks:
   - hooks/tracking.py
   # 見出しの日本語を句の切れ目で改行する（テンプレートのフィルター phrase。BudouX）
   - hooks/phrases.py
+  # 広告用LP の画像に幅と高さを書く（テンプレートの img_attrs。読み込みで文がずれないように）
+  - hooks/img_size.py
 
 # 日本語検索対応（CJK 分割に対応）
 plugins:
@@ -171,6 +173,8 @@ nav:
   # B への導線は「プロジェクトについて」の本文とフッタに置く（下記 §導線の方針）。
 
 extra:
+  # フッターの「Made with Material for MkDocs」を出さない（2026-11-14、栗山さん）
+  generator: false
   # GA4（Material の標準の組み込み）。広告のタグは下の tracking:
   analytics:
     provider: google
@@ -232,32 +236,63 @@ extra:
   #   practice_example … 「得られるもの」の毎月の実践の回。直近の回と次の回を1文ずつ
   #   recent_text      … 「実際の回から」の短い紹介。recent_round が extra.history の先頭の回と
   #                      違うときは使わず、history の highlight（無ければ summary）を出す
+  #   recent_prompt    … 「実際の回から」のお題（任意。recent_round が先頭の回と同じときだけ出す）
+  #   recent_quote     … 「実際の回から」の引用（任意。画面の中の一文を文字で。recent_round が先頭の回と同じときだけ）
+  #                      recent_quote_note はその出どころ。参加者の文は使わない（主催者の画面・AIの応答など）
+  #   ⚠ 第7回以降も「公開」「コードは書きません」とは書かない。問い（戦略の分かれ目）を先に、作る・動かすはその材料として
+  #   ⚠ LP の文では回を開催月で呼ぶ（「10月の回」。A日程の月）。「第6回」とは書かない（栗山さん、2026-11-15）
   # ────────────────────────────────────────────────────────────
   lp:
-    practice_example: "第6回は、全員が同じ問いでAIと対話し、深まりを1往復ごとに点数化して比べました。第7回は、各自がAIでウェブサイトを作って公開し、開発のコストが消えた後の戦略を議論します。"
+    practice_example: "10月の回は、全員が同じ問いでAIと対話し、深まりを1往復ごとに点数化して比べました（ニックネームで参加できます）。11月の回は、システム開発のコストとハードルが消えたとき、業界の構造と取るべき戦略がどう変わるかを考えます。その材料として、全員がAIに頼んで、顧客が明日使える小さなサービスを作ります。"
     recent_round: 6
     recent_text: "全員が同じ強さのAIを相手に、同じ問いで対話し、その深まりを1往復ごとに点数化して比べました。分かれ目は入力の長さではなく、問いの立て方でした。"
+    recent_prompt: "社長の次の問い「AIへの張り方を絞る。」（張る軸／失うもの／順番）"
+    # 第6回の画面の中のAIの応答（主催者の画面。2026-11-15 に栗山さんが引用を了承）
+    recent_quote: "全社員にAIを配って2年が経ち、資料作成などの『効率化』は達成されました。しかしその結果起きたのは『同業他社との同質化（平均点化）』です。"
+    recent_quote_note: "この回の対話で、AIが返した答えから"
     # 課題の棚の件数（増えていくので「〜超」で書く）
     issues_count: "2,000件超"
     # 「毎朝のAIニュース解釈」（メンバー）と、ライブラリー（登録不要）の違いの一言。空なら出さない
     news_member_note: "コミュニティでは、届いた読み解きをもとに、メンバー同士で考えを交わせます。"
     # 画像（docs/ からの相対パス）。空なら、その枠を出さない（届くまで）。
     # ⚠ 参加者の名前・アイコンが写っていないことを確かめてから置く
-    images:
-      hero: ""        # AI戦略スタジオの画面（最初の画面）
-      hero_sp: ""     # 同じ画面の携帯用の切り出し（任意。無ければ hero）
-      practice: ""    # AI集合知ボードの画面（毎月の実践の回）
-      space: ""       # 課題の棚の画面（メンバースペース）
-      recent: ""      # 対話アリーナの画面（実際の回から。空なら extra.history の先頭の highlight_image）
-  # 実績数値（/subscribe/・/join/corporate/ の実績帯とチップが参照）。
-  # satisfaction は新しい回のアンケートが加わるたびに再計算する（未回答も分母に含める）
+    images:   # 空にした枠は出さない。⚠ 参加者の名前・アイコン・会員限定の情報（ボードのコード等）が写っていないかを確かめてから置く
+      hero: "assets/img/start/studio.jpg"            # 最初の画面（AI戦略スタジオ）
+      hero2: "assets/img/start/app-demo.jpg"         # 最初の画面に重ねる（AIで作った業務アプリの例）
+      practice: "assets/img/start/reports.jpg"       # 毎月の実践の回（第5回で生成したレポート）
+      practice2: "assets/img/start/board-s06b.jpg"   # 同上に重ねる（第6回の対話アリーナ）
+      space: "assets/img/start/space-viewer.jpg"     # メンバースペース（場面ごとのビューア。動画の中のURLはぼかし済み）
+      space2: "assets/img/start/kadai.jpg"           # 同上に重ねる（課題の棚）
+      news: "assets/img/start/news-circle.jpg"       # 毎朝のAIニュース解釈（コミュニティの投稿）
+      library: "assets/img/start/library-digest.jpg" # AI戦略ライブラリー（今日のダイジェスト）
+      library2: "assets/img/start/library-companies.jpg" # 同上に重ねる（戦略の棚）
+      peers: "assets/img/start/gallery.jpg"          # 仲間（第5回のシナリオ・ギャラリー）
+      recent: "assets/img/start/arena-s06a.jpg"      # 実際の回から（空なら extra.history の先頭の highlight_image）
+      recent2: "assets/img/start/graph3d.jpg"        # 同上に重ねる（全員の対話の軌跡）
+    # 「得られるもの」の画像は 16:9 の枠に切り取って揃える。どこを見せるか（object-position。空なら上の中央）
+    focus:
+      practice: "0% 50%"   # レポートの一覧の左（表紙）
+      library: "0% 50%"    # 今日のダイジェストの左
+      peers: "0% 50%"      # ギャラリーの左の画面
+    captions:  # 画像の下の短い説明（空なら出さない）
+      hero: "左：AI戦略スタジオで、チームで事業の案をつくる。右下：AIで作った業務アプリの例"
+      # 携帯の最初の画面では1行に縮める（主催者を最初の画面に入れるため。空なら hero をそのまま出す）
+      hero_sp: "AI戦略スタジオ（左）と、AIで作った業務アプリ（右下）"
+      practice: "9月の回：AIと書いた未来シナリオのレポート（右下は10月の回の対話アリーナ）"
+      space: "メンバースペース：各回を場面ごとに見返す（右下は課題の棚：AIで解決に挑戦できるテーマ集）"
+      news: "毎朝のAIニュース解釈：メンバーのコミュニティに届く投稿（例：「EMSが車載の主役に入り、系列の前提が崩れる日」）"
+      library: "AI戦略ライブラリー：今日のダイジェスト（右下は戦略の棚：主要企業のAI戦略の発表など）"
+      peers: "9月の回のシナリオ・ギャラリー：参加者がAIと作った223本のシナリオを、全員で見比べる"
+      recent: "10月の回の対話アリーナ：同じ問いでAIと対話し、深まりを1往復ごとに点数で見る（右下は全員の対話の軌跡）"
+  # 実績数値（/subscribe/・/join/corporate/・/start/ の実績帯とチップが参照）。
+  # satisfaction は新しい回のアンケートが加わるたびに再計算する（未回答も分母に含める。小数点以下は切り捨て）。
   stats:
     paid_members: "80名超"
     rounds_label: "第6回"
     rounds_note: "まで開催（2026年5月〜）"
     subscribers: "約200名"
     satisfaction: "97%"
-    satisfaction_note: "第1〜5回の参加者アンケート（延べ117件）で「参加・視聴して良かった」に「とてもそう思う」「ややそう思う」と回答した割合。"
+    satisfaction_note: "2026年5月〜10月の各回の参加者アンケート（延べ133件）で「参加・視聴して良かった」に「とてもそう思う」「ややそう思う」と回答した割合。"
   # ニュースサイト（B）。nav の「読む」タブと llms.txt の「関連サイト」が参照する
   news_site_url: https://ai-strategy-library.antecanis.com/d/
   # 申込（Stripe）の直リンク。独自ドメイン配下に統一（リンク先の差し替えはゲートウェイ側で行う）
@@ -301,6 +336,16 @@ extra:
     - round: 8
       a: "2026-12-15T20:00:00+09:00"
       b: "2027-01-06T20:00:00+09:00"
+    # 第9〜11回：第7回の案内メール（2026-11）の日程。テーマが決まったら theme・question を足す
+    - round: 9
+      a: "2027-01-19T20:00:00+09:00"
+      b: "2027-02-01T20:00:00+09:00"
+    - round: 10
+      a: "2027-02-16T20:00:00+09:00"
+      b: "2027-03-01T20:00:00+09:00"
+    - round: 11
+      a: "2027-03-16T20:00:00+09:00"
+      b: "2027-04-02T20:00:00+09:00"
   # ホーム「新着」の先頭リンク（新しい回が終わったらここを更新）
   latest_digest:
     url: "sessions/history/"

@@ -26,7 +26,7 @@
  *   Material の組み込み（dataLayer。?notrack のときは partials/tracking.html が止める）。
  *
  * ## 広告用LP（/start/。2026年11月〜）
- * - 申込ボタンの位置（data-cta：hero／plan／final／sticky）を click_join の position で送る
+ * - 申込ボタンの位置（data-cta：plan／final／sticky）を click_join の position で送る
  * - data-ga のリンク（ライブラリーへの click_library など）は、data-ga-pos を position で送る
  * - 各ブロック（data-lp-section）が画面に入ったら、1回の表示につき1回 GA4 lp_section_view
  * - 報告メールの登録は data-lead-name="start"（完了ページ /start/thanks/ で generate_lead form: start）。

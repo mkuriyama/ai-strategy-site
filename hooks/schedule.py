@@ -26,10 +26,21 @@
 - `schedule_list_html(extra)` … 全回の一覧（/sessions/ の「開催予定」）
 - `payment_table_html(extra)` … お申し込みの時期ごとの、初回のお支払い日と、無料で参加できる回
   （申込用 GAS の COHORT_SCHEDULE と同じ決まり。`payment_windows()` の説明を参照）
+- `pay_now_html(extra, detail)` … 「今日お申し込みの場合」の一文（広告用LP）。同じ決まりで、
+  いまの受付の回・無料で参加できる日程・初回のお支払い日を出す。切り替えは前の回の B日程の翌日
+- `month_label(r, ref)` … 回を開催月で呼ぶ（広告用LP）。「11月の回」、年が違えば「2027年1月の回」
 - `participation_html(extra, title)` … 参加の前に（`extra.participation`）
 
 テンプレートでは `on_env` が登録する同名の関数（`schedule_upcoming(2)` など）、Markdown では
 `main.py` のマクロ（`{{ upcoming_rounds() }}` など）から呼ぶ。
+
+## 回の呼び方
+
+ふだんは「第7回」。**広告用LP（/start/）だけは開催月で呼ぶ**（「11月の回」）―― 初めて来た人に
+「連続ものの途中から入る」と思わせないため（栗山さん、2026-11-15）。月は **A日程の月**
+（12月の回＝12/15・1/6）。年が「いま」と違うときだけ年を添える（日付の 2027/1/6 と同じ決まり）。
+入会後の案内（メール・Circle・メンバースペース）とデータ（rounds.json・schedule.json）は第N回の
+ままなので、LP の次回の枠にだけ「（第7回）」を小さく添えて橋渡しする（`bridge=True`）。
 
 ## 「開催済み」の決まり
 
@@ -126,6 +137,19 @@ def full(d: dt.datetime, ref: dt.datetime | None = None) -> str:
     return f"{md(d, ref)} {d:%H:%M}〜"
 
 
+def month_label(r: dict, ref: dt.datetime | None = None, suffix: str = "の回") -> str:
+    """11月の回。年が「いま」と違うときは 2027年1月の回。月は A日程の月（広告用LP の呼び方）。"""
+    a = r["days"][0]["at"]
+    y = f"{a.year}年" if ref is not None and a.year != ref.year else ""
+    return f"{y}{a.month}月{suffix}"
+
+
+def round_month_html(extra, no, suffix: str = "の回") -> str:
+    """回の番号から開催月の呼び方（テンプレートの round_month）。予定に無い回は「第N回」。"""
+    r = next((x for x in rounds(extra) if x["round"] == no), None)
+    return month_label(r, now(), suffix) if r else f"第{no}回"
+
+
 def _iso(d: dt.datetime) -> str:
     return d.isoformat(timespec="seconds")
 
@@ -191,9 +215,12 @@ def on_env(env, config, files):
     """テーマのテンプレート（overrides/*.html）から部品を呼べるようにする。"""
     extra = config["extra"]
     env.globals.update(
-        schedule_upcoming=lambda n=2, variant="": upcoming_html(extra, n, variant),
+        schedule_upcoming=lambda n=2, variant="", month=False, bridge=False: upcoming_html(extra, n, variant, month, bridge),
+        round_month=lambda no, suffix="の回": round_month_html(extra, no, suffix),
         schedule_list=lambda: schedule_list_html(extra),
         payment_table=lambda: payment_table_html(extra),
+        # phrase（hooks/phrases.py）は後の hook が登録する。呼ばれる時（ページを描くとき）に取りに行く
+        pay_now=lambda detail=False, cancel=False: pay_now_html(extra, detail, ph=env.filters.get("phrase"), cancel=cancel),
         participation=lambda title="有償メンバーとして参加する前に": participation_html(extra, title),
     )
     return env
@@ -211,17 +238,19 @@ def _day_li(d: dt.datetime, name: str, when: dt.datetime, with_time: bool = True
             f'<span class="sch-day__held" data-when-held{"" if h else " hidden"}>開催済み</span></li>')
 
 
-def _theme(r: dict) -> str:
+def _theme(r: dict, bridge: bool = False) -> str:
+    alt = f'<span class="sch-round__alt">（第{r["round"]}回）</span>' if bridge else ""
     if r["theme"]:
-        return f'<span class="sch-round__theme">{_e(r["theme"])}</span>'
-    return f'<span class="sch-round__theme sch-round__theme--tbd">{NO_THEME}</span>'
+        return f'<span class="sch-round__theme">{_e(r["theme"])}{alt}</span>'
+    return f'<span class="sch-round__theme sch-round__theme--tbd">{NO_THEME}{alt}</span>'
 
 
-def upcoming_html(extra, n: int = 2, variant: str = "") -> str:
+def upcoming_html(extra, n: int = 2, variant: str = "", month: bool = False, bridge: bool = False) -> str:
     """これからの開催（全日程が済んでいない回を近い順に n 回）。
 
     n 回より後ろの回も `hidden` で入れておく ―― ブラウザで先頭の回が済んだとき、
     schedule.js が繰り上げて出す。
+    month=True：回を開催月で呼ぶ（広告用LP）。bridge=True：テーマのあとに「（第7回）」を小さく添える
     """
     when = now()
     rs = [r for r in rounds(extra) if not held(r["end"], when)][: n + 2]
@@ -229,7 +258,8 @@ def upcoming_html(extra, n: int = 2, variant: str = "") -> str:
     out = [f'<div class="{cls}" data-sch-up data-max="{n}">']
     for i, r in enumerate(rs):
         out.append(f'<div class="sch-round" data-round-end="{_iso(r["end"])}"{" hidden" if i >= n else ""}>')
-        out.append(f'<p class="sch-round__head"><span class="sch-round__no">第{r["round"]}回</span>{_theme(r)}</p>')
+        no = _e(month_label(r, when)) if month else f'第{r["round"]}回'
+        out.append(f'<p class="sch-round__head"><span class="sch-round__no">{no}</span>{_theme(r, bridge)}</p>')
         if r["question"]:
             out.append(f'<p class="sch-round__q">{_e(r["question"])}</p>')
         out.append('<ul class="sch-days">' + "".join(
@@ -325,6 +355,71 @@ def payment_table_html(extra, rows: int = 3) -> str:
     out.append('<p class="pay-months__none" data-pay-empty hidden>次の回の日程は、決まりしだいお知らせします。</p>')
     out.append('<p class="pay-months__note">お申し込みの時期は、前の回の B日程の翌日で切り替わります。'
                "日付は日本時間で数えます。</p>")
+    out.append("</div>")
+    return "\n".join(out)
+
+
+PAY_NOW_FALLBACK = "お申し込みのあと最初の回は無料で参加でき、初回のお支払いはその回のあとの15日です。"
+
+
+def pay_now_html(extra, detail: bool = False, rows: int = 4, ph=None, cancel: bool = False) -> str:
+    """「今日お申し込みの場合」の一文（広告用LP の最初の画面と料金の枠）。
+
+    `payment_windows()` と同じ決まり（＝申込用 GAS の COHORT_SCHEDULE）で、いまの受付の回を選ぶ。
+    受付の切り替えは前の回の B日程の**翌日 0時**。ビルドとビルドの間に切り替わっても、
+    schedule.js が同じ決まりで出し直す（行に `data-now-start`・`data-now-end`）。そのために、
+    いまの受付から rows 回ぶんの行を入れておく（2行目からは `hidden`）。
+
+    - 回は開催月で呼ぶ（「11月の回（11/17(火)・11/30(月)の都合のよい方）」。上の「回の呼び方」）
+    - 無料で参加できる日程は、まだ済んでいないものだけ出す（A日程が済んだら B日程だけ）。
+      2つ残っているあいだは「（11/17(火)・11/30(月)の都合のよい方）」（`data-now-either`）。
+      両方済んだあと（B日程の夜）は、その部分（`data-now-free`）を隠す
+    - detail=True：解約の期限（初回のお支払い日の前日）と、毎月15日の更新も書く
+    - cancel=True：解約の期限だけを、次の行（`pay-now__sub`）に書く（広告用LP の最初の画面）
+    - どの受付にも当たらないとき（次の回が未定）は、日付のない一文（`data-now-fallback`）
+    - ph：句の切れ目に改行位置（<wbr>）を入れる関数（テンプレートのフィルター `phrase`。hooks/phrases.py）。
+      行は CSS で keep-all にしてあるので、文の部分はすべて ph を通す（日付は nowrap の span）
+    """
+    when = now()
+    ws = [w for w in payment_windows(extra) if when < w["end"]][:rows]
+    t = (lambda x: str(ph(x))) if ph else _e
+
+    def tail(dl: str, renew: bool = True) -> str:
+        s = t("合わなければ、") + dl + t("までの解約で") + '<b class="pay-now__ok">' + t("費用はかかりません") + "</b>。"
+        return s + (t("以降は毎月15日に更新します。") if renew else "")
+
+    def after(dl: str) -> str:
+        if detail:
+            return tail(dl)
+        if cancel:
+            return f'<span class="pay-now__sub">{tail(dl, renew=False)}</span>'
+        return ""
+    out = ['<div class="pay-now" data-pay-now>']
+    current_found = False
+    for w in ws:
+        r = w["round"]
+        on = not current_found and (w["start"] is None or when >= w["start"])
+        current_found = current_found or on
+        free = [d for d in r["days"] if not held(d["at"], when)]
+        ds = []
+        for i, d in enumerate(r["days"]):
+            if i:
+                ds.append('<span class="pay-now__sep">・</span>')
+            h = held(d["at"], when)
+            ds.append(f'<span class="pay-now__d{" is-held" if h else ""}" data-at="{_iso(d["at"])}">'
+                      f'{_e(md(d["at"], when))}</span>')
+        # 2日程が残っているあいだは「の都合のよい方」を添える（日程が未定なのではなく、どちらかを選ぶ。
+        # 「11/17(火)か11/30(月)」は未定と読まれうる。栗山さん、2026-11-15）。1つになったら schedule.js が隠す
+        ds.append(f'<span class="pay-now__either" data-now-either{"" if len(free) > 1 else " hidden"}>{t("の都合のよい方")}</span>')
+        attrs = (f' data-now-start="{_iso(w["start"])}"' if w["start"] else "") + f' data-now-end="{_iso(w["end"])}"'
+        dl = f'<span class="pay-now__nw">{_e(md(w["pay"] - dt.timedelta(days=1), when))}</span>'
+        out.append(f'<p class="pay-now__row"{attrs}{"" if on else " hidden"}>{t("今日お申し込みの場合、")}'
+                   f'<span data-now-free{"" if free else " hidden"}>{_e(month_label(r, when))}（{"".join(ds)}）'
+                   f'{t("に無料で参加でき、")}</span>{t("初回のお支払いは")}<b>{_e(md(w["pay"], when))}</b>{t("です。")}'
+                   + after(dl)
+                   + "</p>")
+    fb = t(PAY_NOW_FALLBACK) + after(t("初回のお支払い日の前日"))
+    out.append(f'<p class="pay-now__row" data-now-fallback{" hidden" if current_found else ""}>{fb}</p>')
     out.append("</div>")
     return "\n".join(out)
 
