@@ -454,6 +454,26 @@
     });
   }
 
+  // ---- 広告用LP：ページ内のリンク（帯の移動・「開催の報告をメールで」など）は、なめらかに移る ----
+  // 一瞬で飛ぶと、ページの中で移ったことが分からないため（栗山さん、2026-11-16）。
+  // 動きを減らす設定の人には、そのまま移す。上の帯の分は、CSS の scroll-margin-top で空けてある
+  function lpAnchors() {
+    var root = document.querySelector(".st");
+    if (!root || root.dataset.anchorReady) return;
+    root.dataset.anchorReady = "1";
+    var still = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // 表示のあとでリンクが完全な URL（…/start/#watch）に書き換わるので、href の書き方ではなく行き先で見分ける
+    root.addEventListener("click", function (e) {
+      var a = e.target.closest ? e.target.closest("a[href]") : null;
+      if (!a || !a.hash || a.origin !== location.origin || a.pathname !== location.pathname) return;
+      var target = document.getElementById(decodeURIComponent(a.hash.slice(1)));
+      if (!target) return;
+      e.preventDefault();
+      target.scrollIntoView({ behavior: still ? "auto" : "smooth", block: "start" });
+      try { history.pushState(null, "", a.hash); } catch (err) { /* 履歴に残せなくても移動はする */ }
+    });
+  }
+
   // ---- 広告用LP：各ブロック（data-lp-section）が画面に入ったら、1回の表示につき1回 ----
   // 画面の上から65%までに入ったら「読まれた」とみなす（縦に長いブロックでも数えられるよう、割合は見ない）
   var sectionObserver = null;
@@ -486,6 +506,7 @@
     libraryEyebrow();
     stickyCta();
     scrollLinks();
+    lpAnchors();
     sectionViews();
   }
 
