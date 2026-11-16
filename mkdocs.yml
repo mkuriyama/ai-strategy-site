@@ -197,7 +197,7 @@ extra:
     google_ads_lead_label: !ENV [GOOGLE_ADS_LEAD_LABEL, "EgymCPnUkLAdEIXNsI1F"]   # メール登録
     google_ads_join_label: !ENV [GOOGLE_ADS_JOIN_LABEL, "XkiDCOiwr7AdEIXNsI1F"]   # 申込（Stripe）ボタンのクリック
     google_ads_inquiry_label: !ENV [GOOGLE_ADS_INQUIRY_LABEL, "hVsDCMG3qbAdEIXNsI1F"]   # 法人問い合わせの送信
-    google_ads_signup_label: !ENV [GOOGLE_ADS_SIGNUP_LABEL, ""]   # 申込完了（Stripe のあとの /welcome/）
+    google_ads_signup_label: !ENV [GOOGLE_ADS_SIGNUP_LABEL, "qPRtCOi3o7kdEIXNsI1F"]   # 申込完了（Stripe のあとの /welcome/）
     # LinkedIn の Insight Tag（パートナー ID・数字）と、コンバージョンの ID（数字）。空なら読み込まない・送らない。
     # 入れるときは、プライバシーポリシーの外部送信の表に LinkedIn を足すこと
     linkedin_partner_id: !ENV [LINKEDIN_PARTNER_ID, ""]
