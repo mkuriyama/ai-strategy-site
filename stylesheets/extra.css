@@ -1300,6 +1300,7 @@ body:has(.st) .md-main { background: #fff; }
   .st .st-block { padding: 64px 0; }
   .home-landing.st h2 { font-size: 30px; margin-bottom: 24px; }
   .st .st-bar__in { min-height: 64px; }
+  .st .st-block, .st [id] { scroll-margin-top: 64px; }   /* 帯が 64px になる幅では、移った先がその下から始まるように */
   .st .st-bar__brand img { height: 32px; }
   .st .st-bar__join { font-size: 14px; padding: 7px 18px; }
   .st .st-row { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 44px; }
