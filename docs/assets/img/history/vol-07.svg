@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 680 230" xmlns="http://www.w3.org/2000/svg" role="img">
+  <g font-family="'Noto Sans JP', sans-serif">
+  <rect x="20" y="20" width="200" height="190" rx="11" fill="#fff" stroke="rgba(0,68,85,.2)"/>
+  <text x="120" y="50" font-size="13" fill="#8a979a" font-weight="700" text-anchor="middle">希少でなくなるもの</text>
+  <text x="120" y="110" font-family="'Noto Serif JP', serif" font-size="22" fill="#5d6b6e" font-weight="700" text-anchor="middle">作ること</text>
+  <text x="120" y="140" font-size="12" fill="#8a979a" text-anchor="middle">コード・画面・機能</text>
+  <line x1="236" y1="115" x2="276" y2="115" stroke="#b88a3e" stroke-width="2"/>
+  <polygon points="276,115 267,110 267,120" fill="#b88a3e"/>
+  <rect x="292" y="20" width="368" height="190" rx="11" fill="#f7f4ee" stroke="rgba(0,68,85,.2)"/>
+  <text x="476" y="50" font-size="13" fill="#004455" font-weight="700" text-anchor="middle">希少になるもの</text>
+  <text x="316" y="84" font-size="13" fill="#004455">・顧客の注意と信頼</text>
+  <text x="316" y="110" font-size="13" fill="#004455">・独自のデータ</text>
+  <text x="316" y="136" font-size="13" fill="#004455">・顧客との接点と流通</text>
+  <text x="316" y="162" font-size="13" fill="#004455">・選ぶ力（審美眼と撤退）</text>
+  <text x="316" y="188" font-size="13" fill="#004455">・学習の速さ</text>
+  </g>
+</svg>
