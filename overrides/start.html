@@ -218,8 +218,9 @@
         {%- if recent_img %}
         <figure class="st-recent__media">
           <div class="st-stack">
-            {{ lp.shot(recent_img, round_month(latest.round) ~ "の対話アリーナの画面") }}
-            {{ lp.shot(img.recent2, round_month(latest.round) ~ "の全員の対話の軌跡", "st-shot--float") }}
+            {# 代替文は回ごとに変わるので、回の中身を決め打ちにしない（「対話アリーナ」は10月の回のもの） #}
+            {{ lp.shot(recent_img, round_month(latest.round) ~ "の画面") }}
+            {{ lp.shot(img.recent2, round_month(latest.round) ~ "の画面（その2）", "st-shot--float") }}
           </div>
           {%- set rc = cap.recent if img.recent else latest.highlight_caption -%}
           {%- if rc %}<figcaption>{{ rc }}</figcaption>{% endif %}
