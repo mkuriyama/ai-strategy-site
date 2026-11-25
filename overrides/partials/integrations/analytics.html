@@ -1,0 +1,17 @@
+{#-
+  Material の partials/integrations/analytics.html を上書きする。
+  GA4（extra.analytics）を、本番のホスト（extra.tracking.hosts）でだけ動かす。手元・プレビュー・
+  別のホスト名で開いたときは gtag.js を読み込まない（数字を汚さないため）。?notrack=1 で印を立てた
+  ブラウザでも読み込まない（印の付け外しは partials/tracking.html と同じ。こちらが先に動く）。
+  cookie_domain は指定しない（既定の auto ＝ antecanis.com。www・ライブラリー・メンバースペースと
+  同じ訪問として数える）。
+-#}
+{% if config.extra.analytics %}
+  {% set provider = config.extra.analytics.provider %}
+{% endif %}
+{% if provider %}
+  {% include "partials/integrations/analytics/" ~ provider ~ ".html" %}
+  {%- set tr = config.extra.tracking or {} -%}
+  {%- set hosts = tr.hosts if (tr.hosts is iterable and tr.hosts is not string) else ((tr.hosts or "") | string).split(",") %}
+  <script>(function(){var h={{ hosts | map("trim") | select | list | tojson }};if(h.indexOf(location.hostname)<0)return;try{var q=new URLSearchParams(location.search).get("notrack");if(q==="1")localStorage.setItem("aisia_notrack","1");if(q==="0")localStorage.removeItem("aisia_notrack");if(localStorage.getItem("aisia_notrack")==="1")return}catch(e){}"undefined"!=typeof __md_analytics&&__md_analytics()})();</script>
+{% endif %}

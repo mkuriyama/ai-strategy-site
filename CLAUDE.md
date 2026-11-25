@@ -517,7 +517,14 @@ B 側**（`ai-strategy-news-app` の `content/guide/*.md`）。本サイトに�
 
 ## 計測（2026年11月〜。広告配信に向けて）
 
-- **GA4**（`extra.analytics`）は Material の標準の組み込み。**Meta ピクセル・Google 広告**は
+- **GA4**（`extra.analytics`）は Material の標準の組み込み。ただし `overrides/partials/integrations/analytics.html`
+  で上書きし、**本番のホスト（`extra.tracking.hosts`）でだけ、`?notrack` の印が無いときだけ** gtag.js を読む
+  （/welcome/・/paused/ も `hooks/tracking.py` で同じ決まり）。`cookie_domain` は指定しない（既定の auto ＝
+  antecanis.com。www・ライブラリー・メンバースペースと同じ訪問として数えるため。指定しないこと）。
+  **自分たちのサイト同士のリンク（www・ライブラリー・メンバースペース）には `utm_*` を付けない**
+  （広告・検索の流入元を上書きしてしまう）。ライブラリーから来た人の見分けは `document.referrer` で行い
+  （`forms.js` の `fromLibrary`。そのタブの間だけ覚える）、メール登録のときだけ `utm_source=library` として
+  送る（Mailchimp の `src:library` のタグは以前と同じ。GA4・URL には何も足さない）。**Meta ピクセル・Google 広告**は
   `extra.tracking` の ID で `overrides/partials/tracking.html` が全ページに入れる。
   **ID が空のタグは一切読み込まない**。`extra.tracking.hosts`（本番ホスト）以外では動かない
 - Material を通らない `/welcome/`（Stripe の決済後）・`/paused/` には `hooks/tracking.py` が同じタグを差し込む

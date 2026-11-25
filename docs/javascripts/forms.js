@@ -102,6 +102,19 @@
     return cur ? cur.v : {};
   }
 
+  // ---- ライブラリーから来たか（document.referrer。このタブの間だけ覚える）----
+  // 自分たちのサイト同士のリンクには UTM を付けない（広告・検索の流入元を上書きするため）。
+  // そのかわり、ライブラリーから来た人は直前のページ（ライブラリーは origin だけを渡す）で見分け、
+  // メール登録のときだけ utm_source=library として送る（ゲートウェイが Mailchimp に src:library を付ける。
+  // 以前の、リンクに付けた utm_source=library と同じ扱い）。GA4・URL には何も足さない
+  var FROM_LIBRARY = "aisia_from_library";
+  function rememberReferrer() {
+    var host = "";
+    try { host = document.referrer ? new URL(document.referrer).hostname : ""; } catch (e) { /* 無視 */ }
+    if (/^ai-strategy-(library|news)\.antecanis\.com$/.test(host)) save(FROM_LIBRARY, 1);
+  }
+  function fromLibrary() { return load(FROM_LIBRARY) === 1; }
+
   // ---- 申込（Stripe）ボタンのリンクに、流入元の印（初回訪問の UTM・広告のクリック ID）を付ける ----
   // ゲートウェイの /ai-strategy-join は受け取ったクエリをそのまま申込用 GAS に渡し、GAS が Stripe の
   // metadata に入れる（URL にすでに同じ名前があれば、そちらを優先する）
@@ -265,6 +278,7 @@
       var blank = form.getAttribute("data-source-blank");
       if (blank !== null && "source" in data && !data.source) data.source = blank;
       var utm = currentUtm();
+      if (!utm.utm_source && fromLibrary()) utm = { utm_source: "library", utm_medium: "referral" };
       UTM_KEYS.forEach(function (k) { data[k] = data[k] || utm[k] || ""; });
       data.turnstile_token = token();
       return data;
@@ -407,11 +421,11 @@
   }
 
   // ---- ライブラリーから来た人向けの小見出し ----
+  // UTM ではなく、直前のページで見分ける（上の fromLibrary）
   function libraryEyebrow() {
     var el = document.querySelector("[data-library-eyebrow]");
     if (!el) return;
-    var src = new URLSearchParams(location.search).get("utm_source") || currentUtm().utm_source;
-    if (src === "library") {
+    if (fromLibrary()) {
       var span = el.querySelector("span") || el;
       span.textContent = el.getAttribute("data-library-eyebrow");
     }
@@ -497,6 +511,7 @@
 
   function init() {
     rememberUtm();
+    rememberReferrer();
     decorateJoinLinks();
     pageView();
     bindClicks();

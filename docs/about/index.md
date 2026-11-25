@@ -80,19 +80,19 @@ ChatGPT・Gemini・Claudeの普及により、誰もがシステムを実装で�
 <figcaption>AI戦略ライブラリー：今日のダイジェスト</figcaption>
 </figure>
 
-- [課題の棚](https://ai-strategy-library.antecanis.com/issues/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" } — AIで取り組める課題の案を、業務の場と業界ごとに
-- [道具の棚](https://ai-strategy-library.antecanis.com/tools/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" } — AIの道具ごとの、使う条件の変化
-- [戦略の棚](https://ai-strategy-library.antecanis.com/companies/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" } — 会社ごとのAIの取り組み
-- [ニュース解釈](https://ai-strategy-library.antecanis.com/stories/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" } — 続いている出来事の流れ
+- [課題の棚](https://ai-strategy-library.antecanis.com/issues/){ target="_blank" rel="noopener" } — AIで取り組める課題の案を、業務の場と業界ごとに
+- [道具の棚](https://ai-strategy-library.antecanis.com/tools/){ target="_blank" rel="noopener" } — AIの道具ごとの、使う条件の変化
+- [戦略の棚](https://ai-strategy-library.antecanis.com/companies/){ target="_blank" rel="noopener" } — 会社ごとのAIの取り組み
+- [ニュース解釈](https://ai-strategy-library.antecanis.com/stories/){ target="_blank" rel="noopener" } — 続いている出来事の流れ
 
-あわせて、[AI関連イベント](https://ai-strategy-library.antecanis.com/events/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" }の一覧・[用語集](https://ai-strategy-library.antecanis.com/terms/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" }・
-[セッションの記録](https://ai-strategy-library.antecanis.com/context/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" }・[参加ガイド](https://ai-strategy-library.antecanis.com/guide/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" }（当日の流れと手元の準備）も
+あわせて、[AI関連イベント](https://ai-strategy-library.antecanis.com/events/){ target="_blank" rel="noopener" }の一覧・[用語集](https://ai-strategy-library.antecanis.com/terms/){ target="_blank" rel="noopener" }・
+[セッションの記録](https://ai-strategy-library.antecanis.com/context/){ target="_blank" rel="noopener" }・[参加ガイド](https://ai-strategy-library.antecanis.com/guide/){ target="_blank" rel="noopener" }（当日の流れと手元の準備）も
 同じ場所に置いています。
 
 セッションで扱った視点が、日々のニュースの読み方としてどう効いてくるか——参加と並行して
 使っていただくためのものですが、申し込み前でもご覧いただけます。
 
-- [AI戦略ライブラリーを見る（今日の読み解き）](https://ai-strategy-library.antecanis.com/d/?utm_source=project-site&utm_medium=referral){ target="_blank" rel="noopener" }
+- [AI戦略ライブラリーを見る（今日の読み解き）](https://ai-strategy-library.antecanis.com/d/){ target="_blank" rel="noopener" }
   （[関連リンク](links.md)に、メンバーサイトや主催会社もまとめています）
 
 ## さらに詳しく
