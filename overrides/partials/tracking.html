@@ -8,8 +8,8 @@
   - extra.tracking.hosts（本番ホスト）以外では動かない。ローカルの確認で数字を汚さないため
   - **自分の閲覧を数えない**：URL に ?notrack=1 を付けて一度開くと、そのブラウザでは以後、GA4・Meta・
     Google 広告・LinkedIn に何も送らない（localStorage の aisia_notrack。?notrack=0 で戻す）。
-    GA4 は Google の決まり（window['ga-disable-<測定ID>']）で止める ―― gtag.js が読み込まれて
-    記録を送るより前（このスクリプトは GA4 の設定の直後に同期で動く）に立てるので、最初のページビューも送らない
+    GA4 は partials/integrations/analytics.html が、本番ホスト以外と印のあるブラウザでは読み込まない。
+    念のため Google の決まり（window['ga-disable-<測定ID>']）でも止める
   - ここで送るのはページビューまで。イベント（Lead・InitiateCheckout・コンバージョン）と、
     instant navigation でのページ移動のページビューは docs/javascripts/forms.js が送る
   - Meta の自動のイベント検出（autoConfig）は切る：ボタンの文字やページの情報を勝手に送らせず、

@@ -20,6 +20,7 @@ Stripe の success URL に `?session_id={CHECKOUT_SESSION_ID}` が付いてい�
 
 from __future__ import annotations
 
+import json
 import os
 import re
 
@@ -52,6 +53,12 @@ _WELCOME_POST = (
 )
 
 
+def _hosts(config) -> list[str]:
+    raw = ((config.get("extra") or {}).get("tracking") or {}).get("hosts") or ""
+    items = raw if isinstance(raw, (list, tuple)) else str(raw).split(",")
+    return [str(h).strip() for h in items if str(h).strip()]
+
+
 def _snippet(config, welcome: bool) -> str:
     env = config.theme.get_env()
     tags = env.get_template("partials/tracking.html").render(config=config)
@@ -61,12 +68,17 @@ def _snippet(config, welcome: bool) -> str:
         head += _WELCOME_PRE
     if _GA.match(ga):
         head += _PRE % {"ga": ga}
+        # 本番のホスト（extra.tracking.hosts）で、?notrack の印が無いときだけ gtag.js を読む
+        # （partials/integrations/analytics.html と同じ決まり）
         head += (
-            f'<script async src="https://www.googletagmanager.com/gtag/js?id={ga}"></script>\n'
             "<script>window.dataLayer=window.dataLayer||[];"
             "function gtag(){dataLayer.push(arguments);}"
-            f"gtag('js',new Date());gtag('config','{ga}');</script>\n"
-        )
+            "(function(){var h=%(hosts)s;if(h.indexOf(location.hostname)<0)return;"
+            "if(window['ga-disable-%(ga)s'])return;"
+            "gtag('js',new Date());gtag('config','%(ga)s');"
+            "var s=document.createElement('script');s.async=true;"
+            "s.src='https://www.googletagmanager.com/gtag/js?id=%(ga)s';document.head.appendChild(s);})();</script>\n"
+        ) % {"ga": ga, "hosts": json.dumps(_hosts(config))}
     tail = _WELCOME_POST if welcome else ""
     return MARK + "\n" + head + tags.strip() + "\n" + tail
 
