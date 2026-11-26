@@ -66,7 +66,7 @@ def define_env(env):
         return f"[{label}]" + _link(url, ".md-button .md-button--gold")
 
     @env.macro
-    def join_button(label="有償メンバーに申し込む（初月無料）"):
+    def join_button(label="メンバーに申し込む（初月無料）"):
         """申込（Stripe）への直リンクボタン。URL は単一ソースから。色はティール。"""
         url = extra.get("join_url", "#")
         return (

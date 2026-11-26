@@ -63,7 +63,7 @@ description: 参加費とお申し込み。早期参加枠の料金、初回の�
 
 </div>
 
-### 有償メンバーに申し込む（Stripe・初月無料）
+### メンバーに申し込む（Stripe・初月無料）
 
 {{ participation_notes() }}
 
