@@ -474,9 +474,6 @@ a.chip:hover { border-color: var(--teal2); background: var(--pale); }
   }
   .home-landing .home-sticky .btn { flex: 1 1 0; justify-content: center; text-align: center;
     min-height: 44px; padding: 8px 10px; font-size: 13px; line-height: 1.35; }
-  /* 申込のボタンだけ、2行になるときは「（初月無料）」の前で折る（<wbr>）。
-     指定しないと「（初／月無料）」と割れる。金（案内メール）は普通の折り返しのままにする */
-  .home-landing .home-sticky .btn-teal { word-break: keep-all; overflow-wrap: anywhere; }
   .home-landing .home-sticky[hidden] { display: none; }
   .home-landing .home-sticky.is-hidden { transform: translateY(120%); }
 }
